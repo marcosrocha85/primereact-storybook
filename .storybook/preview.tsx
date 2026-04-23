@@ -49,11 +49,10 @@ const preview: Preview = {
     options: {
       storySort: {
         order: [
-          'Introducao',
-          'Fundamentos',
+          'Introduction',
+          'Foundation',
           'Components',
-          'Sakai React',
-          ['Button', 'Input', 'Data', 'Panel', 'Overlay, Menu e Message', 'Media, Charts, File e Misc']
+          'Sakai React'
         ]
       }
     },
