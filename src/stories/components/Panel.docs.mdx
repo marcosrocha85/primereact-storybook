@@ -1,0 +1,18 @@
+import { Canvas, Controls, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
+import * as Stories from './Panel.stories';
+
+<Meta title="Components/Panel/Resumo" />
+
+<Title>Panel</Title>
+
+<Subtitle>Container com cabecalho e opcao toggleable.</Subtitle>
+
+## Playground
+
+<Canvas of={Stories.Default} sourceState="hidden" />
+
+<Controls of={Stories.Default} />
+
+## Sakai / Panel
+
+<Canvas of={Stories.SakaiPanel} sourceState="hidden" />

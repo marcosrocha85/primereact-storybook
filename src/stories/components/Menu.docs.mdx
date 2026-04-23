@@ -1,0 +1,22 @@
+import { Canvas, Controls, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
+import * as Stories from './Menu.stories';
+
+<Meta title="Components/Menu/Resumo" />
+
+<Title>Menu</Title>
+
+<Subtitle>Menu vertical simples ou popup.</Subtitle>
+
+## Playground
+
+<Canvas of={Stories.Default} sourceState="hidden" />
+
+<Controls of={Stories.Default} />
+
+## Sakai / Plain Menu
+
+<Canvas of={Stories.SakaiPlainMenu} sourceState="hidden" />
+
+## Sakai / Overlay Menu
+
+<Canvas of={Stories.SakaiOverlayMenu} sourceState="hidden" />

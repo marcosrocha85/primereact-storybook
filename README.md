@@ -23,19 +23,7 @@ Storybook em React + Vite para documentar o template [PrimeFaces Sakai React](ht
 
 O modelo novo, alinhado ao Storybook de referencia, fica em `Components/*`: uma pagina `Resumo` por componente, stories interativas com Controls e `Show code` no Canvas.
 
-Atualmente o `Components/Button` ja segue esse formato completo:
-
-- `Components/Button/Resumo`
-- `Components/Button/Default`
-- `Components/Button/Disabled`
-- `Components/Button/Link`
-- `Components/Button/Severities`
-- `Components/Button/Text`
-- `Components/Button/Outlined`
-- `Components/Button/Icons`
-- `Components/Button/Rounded`
-- `Components/Button/Loading`
-- `Components/Button/SplitButton`
+Foram gerados 67 componentes a partir das paginas do Sakai UI Kit da imagem: Input, Float Label, Invalid State, Button, Table, List, Tree, Panel, Overlay, Media, Menu, Message, File, Chart e Misc. Variacoes repetidas foram mescladas no componente base, por exemplo `Float Label` e `Invalid State` aparecem dentro dos componentes de input correspondentes.
 
 Os grupos `Sakai React/*` cobrem todos os demos de componentes encontrados em `vendor/sakai-react/app/(main)/uikit`, separados por exemplo interno:
 

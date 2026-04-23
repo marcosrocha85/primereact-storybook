@@ -1,0 +1,26 @@
+import { Canvas, Controls, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
+import * as Stories from './Calendar.stories';
+
+<Meta title="Components/Calendar/Resumo" />
+
+<Title>Calendar</Title>
+
+<Subtitle>Selecionador de data.</Subtitle>
+
+## Playground
+
+<Canvas of={Stories.Default} sourceState="hidden" />
+
+<Controls of={Stories.Default} />
+
+## Sakai / Calendar
+
+<Canvas of={Stories.SakaiCalendar} sourceState="hidden" />
+
+## Sakai / Float Label
+
+<Canvas of={Stories.FloatLabelVariants} sourceState="hidden" />
+
+## Sakai / Invalid State
+
+<Canvas of={Stories.InvalidStateVariants} sourceState="hidden" />

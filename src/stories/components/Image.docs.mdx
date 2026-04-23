@@ -1,0 +1,18 @@
+import { Canvas, Controls, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
+import * as Stories from './Image.stories';
+
+<Meta title="Components/Image/Resumo" />
+
+<Title>Image</Title>
+
+<Subtitle>Imagem com preview opcional.</Subtitle>
+
+## Playground
+
+<Canvas of={Stories.Default} sourceState="hidden" />
+
+<Controls of={Stories.Default} />
+
+## Sakai / Image
+
+<Canvas of={Stories.SakaiImage} sourceState="hidden" />

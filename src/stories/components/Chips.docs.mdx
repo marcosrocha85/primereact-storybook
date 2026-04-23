@@ -1,0 +1,26 @@
+import { Canvas, Controls, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
+import * as Stories from './Chips.stories';
+
+<Meta title="Components/Chips/Resumo" />
+
+<Title>Chips</Title>
+
+<Subtitle>Entrada de multiplos valores em formato de chips.</Subtitle>
+
+## Playground
+
+<Canvas of={Stories.Default} sourceState="hidden" />
+
+<Controls of={Stories.Default} />
+
+## Sakai / Chips
+
+<Canvas of={Stories.SakaiChips} sourceState="hidden" />
+
+## Sakai / Float Label
+
+<Canvas of={Stories.FloatLabelVariants} sourceState="hidden" />
+
+## Sakai / Invalid State
+
+<Canvas of={Stories.InvalidStateVariants} sourceState="hidden" />

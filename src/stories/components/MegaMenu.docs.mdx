@@ -1,0 +1,22 @@
+import { Canvas, Controls, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
+import * as Stories from './MegaMenu.stories';
+
+<Meta title="Components/MegaMenu/Resumo" />
+
+<Title>MegaMenu</Title>
+
+<Subtitle>Menu amplo com agrupamentos.</Subtitle>
+
+## Playground
+
+<Canvas of={Stories.Default} sourceState="hidden" />
+
+<Controls of={Stories.Default} />
+
+## Sakai / MegaMenu - Horizontal
+
+<Canvas of={Stories.SakaiMegaMenuHorizontal} sourceState="hidden" />
+
+## Sakai / MegaMenu - Vertical
+
+<Canvas of={Stories.SakaiMegaMenuVertical} sourceState="hidden" />

@@ -1,0 +1,30 @@
+import { Canvas, Controls, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
+import * as Stories from './Badge.stories';
+
+<Meta title="Components/Badge/Resumo" />
+
+<Title>Badge</Title>
+
+<Subtitle>Marcador numerico ou status.</Subtitle>
+
+## Playground
+
+<Canvas of={Stories.Default} sourceState="hidden" />
+
+<Controls of={Stories.Default} />
+
+## Sakai / Numbers
+
+<Canvas of={Stories.SakaiNumbers} sourceState="hidden" />
+
+## Sakai / Positioned Badge
+
+<Canvas of={Stories.SakaiPositionedBadge} sourceState="hidden" />
+
+## Sakai / Button Badge
+
+<Canvas of={Stories.SakaiButtonBadge} sourceState="hidden" />
+
+## Sakai / Sizes
+
+<Canvas of={Stories.SakaiSizes} sourceState="hidden" />

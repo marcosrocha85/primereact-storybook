@@ -1,0 +1,22 @@
+import { Canvas, Controls, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
+import * as Stories from './ConfirmPopup.stories';
+
+<Meta title="Components/ConfirmPopup/Resumo" />
+
+<Title>ConfirmPopup</Title>
+
+<Subtitle>Confirmacao contextual.</Subtitle>
+
+## Playground
+
+<Canvas of={Stories.Default} sourceState="hidden" />
+
+<Controls of={Stories.Default} />
+
+## Sakai / Confirmation
+
+<Canvas of={Stories.SakaiConfirmation} sourceState="hidden" />
+
+## Sakai / ConfirmPopup
+
+<Canvas of={Stories.SakaiConfirmPopup} sourceState="hidden" />

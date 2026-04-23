@@ -1,0 +1,38 @@
+import { Canvas, Controls, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
+import * as Stories from './Chart.stories';
+
+<Meta title="Components/Chart/Resumo" />
+
+<Title>Chart</Title>
+
+<Subtitle>Graficos baseados em Chart.js.</Subtitle>
+
+## Playground
+
+<Canvas of={Stories.Default} sourceState="hidden" />
+
+<Controls of={Stories.Default} />
+
+## Sakai / Linear Chart
+
+<Canvas of={Stories.SakaiLinearChart} sourceState="hidden" />
+
+## Sakai / Bar Chart
+
+<Canvas of={Stories.SakaiBarChart} sourceState="hidden" />
+
+## Sakai / Pie Chart
+
+<Canvas of={Stories.SakaiPieChart} sourceState="hidden" />
+
+## Sakai / Doughnut Chart
+
+<Canvas of={Stories.SakaiDoughnutChart} sourceState="hidden" />
+
+## Sakai / Polar Area Chart
+
+<Canvas of={Stories.SakaiPolarAreaChart} sourceState="hidden" />
+
+## Sakai / Radar Chart
+
+<Canvas of={Stories.SakaiRadarChart} sourceState="hidden" />

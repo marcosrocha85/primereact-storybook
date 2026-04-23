@@ -1,0 +1,26 @@
+import { Canvas, Controls, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
+import * as Stories from './AutoComplete.stories';
+
+<Meta title="Components/AutoComplete/Resumo" />
+
+<Title>AutoComplete</Title>
+
+<Subtitle>Campo com sugestoes e autocomplete.</Subtitle>
+
+## Playground
+
+<Canvas of={Stories.Default} sourceState="hidden" />
+
+<Controls of={Stories.Default} />
+
+## Sakai / AutoComplete
+
+<Canvas of={Stories.SakaiAutoComplete} sourceState="hidden" />
+
+## Sakai / Float Label
+
+<Canvas of={Stories.FloatLabelVariants} sourceState="hidden" />
+
+## Sakai / Invalid State
+
+<Canvas of={Stories.InvalidStateVariants} sourceState="hidden" />

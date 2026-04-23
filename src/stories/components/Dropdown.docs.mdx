@@ -1,0 +1,26 @@
+import { Canvas, Controls, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
+import * as Stories from './Dropdown.stories';
+
+<Meta title="Components/Dropdown/Resumo" />
+
+<Title>Dropdown</Title>
+
+<Subtitle>Selecionador de uma opcao.</Subtitle>
+
+## Playground
+
+<Canvas of={Stories.Default} sourceState="hidden" />
+
+<Controls of={Stories.Default} />
+
+## Sakai / Dropdown
+
+<Canvas of={Stories.SakaiDropdown} sourceState="hidden" />
+
+## Sakai / Float Label
+
+<Canvas of={Stories.FloatLabelVariants} sourceState="hidden" />
+
+## Sakai / Invalid State
+
+<Canvas of={Stories.InvalidStateVariants} sourceState="hidden" />

@@ -1,0 +1,30 @@
+import { Canvas, Controls, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
+import * as Stories from './DataTable.stories';
+
+<Meta title="Components/DataTable/Resumo" />
+
+<Title>DataTable</Title>
+
+<Subtitle>Tabela de dados com filtros, selecao, expansao e agrupamento.</Subtitle>
+
+## Playground
+
+<Canvas of={Stories.Default} sourceState="hidden" />
+
+<Controls of={Stories.Default} />
+
+## Sakai / Filter Menu
+
+<Canvas of={Stories.SakaiFilterMenu} sourceState="hidden" />
+
+## Sakai / Frozen Columns
+
+<Canvas of={Stories.SakaiFrozenColumns} sourceState="hidden" />
+
+## Sakai / Row Expand
+
+<Canvas of={Stories.SakaiRowExpand} sourceState="hidden" />
+
+## Sakai / Subheader Grouping
+
+<Canvas of={Stories.SakaiSubheaderGrouping} sourceState="hidden" />

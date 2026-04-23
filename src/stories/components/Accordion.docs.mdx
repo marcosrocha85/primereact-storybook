@@ -1,0 +1,18 @@
+import { Canvas, Controls, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
+import * as Stories from './Accordion.stories';
+
+<Meta title="Components/Accordion/Resumo" />
+
+<Title>Accordion</Title>
+
+<Subtitle>Conteudo expansivel em abas verticais.</Subtitle>
+
+## Playground
+
+<Canvas of={Stories.Default} sourceState="hidden" />
+
+<Controls of={Stories.Default} />
+
+## Sakai / AccordionPanel
+
+<Canvas of={Stories.SakaiAccordionPanel} sourceState="hidden" />

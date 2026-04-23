@@ -1,0 +1,26 @@
+import { Canvas, Controls, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
+import * as Stories from './InputTextarea.stories';
+
+<Meta title="Components/InputTextarea/Resumo" />
+
+<Title>InputTextarea</Title>
+
+<Subtitle>Campo de texto multilinha.</Subtitle>
+
+## Playground
+
+<Canvas of={Stories.Default} sourceState="hidden" />
+
+<Controls of={Stories.Default} />
+
+## Sakai / Textarea
+
+<Canvas of={Stories.SakaiTextarea} sourceState="hidden" />
+
+## Sakai / Float Label
+
+<Canvas of={Stories.FloatLabelVariants} sourceState="hidden" />
+
+## Sakai / Invalid State
+
+<Canvas of={Stories.InvalidStateVariants} sourceState="hidden" />

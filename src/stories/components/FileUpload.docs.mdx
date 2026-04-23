@@ -1,0 +1,22 @@
+import { Canvas, Controls, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
+import * as Stories from './FileUpload.stories';
+
+<Meta title="Components/FileUpload/Resumo" />
+
+<Title>FileUpload</Title>
+
+<Subtitle>Upload de arquivos basico ou avancado.</Subtitle>
+
+## Playground
+
+<Canvas of={Stories.Default} sourceState="hidden" />
+
+<Controls of={Stories.Default} />
+
+## Sakai / Advanced
+
+<Canvas of={Stories.SakaiAdvanced} sourceState="hidden" />
+
+## Sakai / Basic
+
+<Canvas of={Stories.SakaiBasic} sourceState="hidden" />

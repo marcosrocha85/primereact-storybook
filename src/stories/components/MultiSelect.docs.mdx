@@ -1,0 +1,26 @@
+import { Canvas, Controls, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
+import * as Stories from './MultiSelect.stories';
+
+<Meta title="Components/MultiSelect/Resumo" />
+
+<Title>MultiSelect</Title>
+
+<Subtitle>Selecionador de multiplas opcoes.</Subtitle>
+
+## Playground
+
+<Canvas of={Stories.Default} sourceState="hidden" />
+
+<Controls of={Stories.Default} />
+
+## Sakai / MultiSelect
+
+<Canvas of={Stories.SakaiMultiSelect} sourceState="hidden" />
+
+## Sakai / Float Label
+
+<Canvas of={Stories.FloatLabelVariants} sourceState="hidden" />
+
+## Sakai / Invalid State
+
+<Canvas of={Stories.InvalidStateVariants} sourceState="hidden" />
