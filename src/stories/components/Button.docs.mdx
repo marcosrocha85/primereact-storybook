@@ -1,0 +1,56 @@
+import { Canvas, Controls, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
+import * as ButtonStories from './Button.stories';
+
+<Meta title="Components/Button/Resumo" />
+
+<Title>Button</Title>
+
+<Subtitle>
+  Botao usado pelo Sakai para acoes primarias, secundarias, links, estados de severidade e variacoes com icones.
+</Subtitle>
+
+## Default
+
+<Canvas of={ButtonStories.Default} sourceState="hidden" />
+
+<Controls of={ButtonStories.Default} />
+
+## Disabled
+
+<Canvas of={ButtonStories.Disabled} sourceState="hidden" />
+
+## Link
+
+<Canvas of={ButtonStories.Link} sourceState="hidden" />
+
+## Severities
+
+Use os Controls da story `Severities` para testar atributos comuns do botao em todos os estados de severidade.
+
+<Canvas of={ButtonStories.Severities} sourceState="hidden" />
+
+<Controls of={ButtonStories.Severities} />
+
+## Text
+
+<Canvas of={ButtonStories.Text} sourceState="hidden" />
+
+## Outlined
+
+<Canvas of={ButtonStories.Outlined} sourceState="hidden" />
+
+## Icons
+
+<Canvas of={ButtonStories.Icons} sourceState="hidden" />
+
+## Rounded
+
+<Canvas of={ButtonStories.Rounded} sourceState="hidden" />
+
+## Loading
+
+<Canvas of={ButtonStories.Loading} sourceState="hidden" />
+
+## SplitButton
+
+<Canvas of={ButtonStories.SplitButtonStory} sourceState="hidden" />

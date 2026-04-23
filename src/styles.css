@@ -247,6 +247,55 @@ h3 {
   padding: 1.25rem;
 }
 
+.sakai-storybook-frame {
+  min-height: 100%;
+}
+
+.sakai-component-canvas {
+  min-height: 100vh;
+  padding: 1.5rem;
+  background: var(--surface-ground, #f6f8fb);
+}
+
+.sakai-component-canvas .card {
+  border: 1px solid var(--sakai-line);
+  box-shadow: 0 10px 30px rgb(15 23 42 / 6%);
+}
+
+.sakai-component-canvas .sakai-section-hidden {
+  display: none !important;
+}
+
+.sbdocs.sbdocs-wrapper {
+  background:
+    radial-gradient(circle at 0 0, rgb(15 118 110 / 8%), transparent 22rem),
+    linear-gradient(180deg, #fbfcfe 0%, #f6f8fb 100%);
+}
+
+.sbdocs.sbdocs-content {
+  max-width: 1180px;
+}
+
+.sbdocs-preview {
+  overflow: hidden;
+  border: 1px solid var(--sakai-line) !important;
+  border-radius: 22px !important;
+  box-shadow: 0 18px 60px rgb(15 23 42 / 10%) !important;
+}
+
+.sbdocs-preview .docs-story {
+  background: var(--sakai-bg);
+}
+
+.docblock-source {
+  margin: 0 !important;
+  border-top: 1px solid rgb(148 163 184 / 24%) !important;
+}
+
+.docblock-source pre {
+  max-height: 560px;
+}
+
 .token-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));

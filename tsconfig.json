@@ -11,6 +11,16 @@
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "ignoreDeprecations": "6.0",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["vendor/sakai-react/*"],
+      "next": ["src/next-stubs/next.ts"],
+      "next/head": ["src/next-stubs/head.tsx"],
+      "next/link": ["src/next-stubs/link.tsx"],
+      "next/navigation": ["src/next-stubs/navigation.ts"]
+    },
+    "types": ["node", "vite/client"],
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
