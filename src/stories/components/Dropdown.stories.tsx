@@ -17,7 +17,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Selecionador de uma opcao.'
+        component: 'Single-option selector.'
       }
     }
   },

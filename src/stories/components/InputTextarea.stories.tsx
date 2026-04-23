@@ -15,7 +15,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Campo de texto multilinha.'
+        component: 'Multi-line text field.'
       }
     }
   },

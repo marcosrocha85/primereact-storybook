@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Controle booleano ou selecao multipla.'
+        component: 'Boolean control or multi-selection option.'
       }
     }
   },

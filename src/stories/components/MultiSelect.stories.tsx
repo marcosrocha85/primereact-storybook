@@ -17,7 +17,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Selecionador de multiplas opcoes.'
+        component: 'Multiple-option selector.'
       }
     }
   },

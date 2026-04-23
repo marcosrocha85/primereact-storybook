@@ -13,7 +13,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Lista de selecao.'
+        component: 'Selection list.'
       }
     }
   },

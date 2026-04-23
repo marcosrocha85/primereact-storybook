@@ -17,7 +17,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Botao dividido com acao principal e menu de opcoes.'
+        component: 'Split action button with a primary action and an options menu.'
       }
     }
   },

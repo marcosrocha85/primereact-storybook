@@ -15,7 +15,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Entrada numerica com formatacao.'
+        component: 'Numeric input with formatting.'
       }
     }
   },

@@ -15,7 +15,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Selecionador de data.'
+        component: 'Date picker input.'
       }
     }
   },

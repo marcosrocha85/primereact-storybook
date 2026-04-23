@@ -12,7 +12,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Navegacao por abas.'
+        component: 'Tabbed navigation.'
       }
     }
   },

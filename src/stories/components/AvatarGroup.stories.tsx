@@ -12,7 +12,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Grupo de avatares.'
+        component: 'Avatar group.'
       }
     }
   },

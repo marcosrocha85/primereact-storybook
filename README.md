@@ -1,31 +1,31 @@
 # Sakai Storybook
 
-Storybook em React + Vite para documentar o template [PrimeFaces Sakai React](https://github.com/primefaces/sakai-react) como um design system.
+React + Vite Storybook for documenting the [PrimeFaces Sakai React](https://github.com/primefaces/sakai-react) template as a design system.
 
 ## Scripts
 
-- `npm run storybook`: inicia o Storybook em `http://localhost:6006`.
-- `npm run build-storybook`: gera o build estatico em `storybook-static`.
-- `npm run dev`: abre a landing local em Vite.
-- `npm run build`: valida TypeScript e gera build Vite.
-- `npm run sync:sakai`: baixa ou atualiza o upstream em `vendor/sakai-react`.
+- `npm run storybook`: starts Storybook at `http://localhost:6006`.
+- `npm run build-storybook`: builds the static Storybook into `storybook-static`.
+- `npm run dev`: starts the local Vite landing page.
+- `npm run build`: validates TypeScript and builds the Vite app.
+- `npm run sync:sakai`: downloads or updates the upstream Sakai React repo in `vendor/sakai-react`.
 
-## Estrutura
+## Structure
 
-- `.storybook/`: configuracao do Storybook, preview global e tema do manager.
-- `src/docs/`: paginas MDX de documentacao.
-- `src/stories/Sakai*.stories.tsx`: stories granulares dos componentes do Sakai UI Kit, separadas por exemplo interno como `Button/Default`, `Button/Severities`, `Panel/TabView`, `Data/TreeTable`.
-- `src/stories/sakaiStoryHelpers.tsx`: helper que renderiza o demo original do upstream e isola apenas a secao selecionada.
-- `src/sakai/`: componentes adaptados ou inspirados no Sakai.
-- `scripts/`: automacoes do projeto.
+- `.storybook/`: Storybook configuration, global preview, and manager theme.
+- `src/docs/`: MDX documentation pages.
+- `src/stories/components/`: component-level stories and summary docs.
+- `src/stories/sakaiStoryHelpers.tsx`: helper that renders the original upstream demo and isolates a selected section.
+- `src/sakai/`: local components adapted from or inspired by Sakai.
+- `scripts/`: project automation.
 
-## Componentes cobertos
+## Component Coverage
 
-O modelo novo, alinhado ao Storybook de referencia, fica em `Components/*`: uma pagina `Resumo` por componente, stories interativas com Controls e `Show code` no Canvas.
+The current model is aligned with the reference Storybook: `Components/*` contains one `Summary` page per component, interactive stories with Controls, and `Show code` in the Canvas.
 
-Foram gerados 67 componentes a partir das paginas do Sakai UI Kit da imagem: Input, Float Label, Invalid State, Button, Table, List, Tree, Panel, Overlay, Media, Menu, Message, File, Chart e Misc. Variacoes repetidas foram mescladas no componente base, por exemplo `Float Label` e `Invalid State` aparecem dentro dos componentes de input correspondentes.
+The project generated 67 components from the Sakai UI Kit pages: Input, Float Label, Invalid State, Button, Table, List, Tree, Panel, Overlay, Media, Menu, Message, File, Chart, and Misc. Repeated variations were merged into the base component, for example `Float Label` and `Invalid State` appear under their corresponding input components.
 
-Os grupos `Sakai React/*` cobrem todos os demos de componentes encontrados em `vendor/sakai-react/app/(main)/uikit`, separados por exemplo interno:
+The component catalog is sourced from these upstream demo pages:
 
 - Button
 - Charts
@@ -40,15 +40,22 @@ Os grupos `Sakai React/*` cobrem todos os demos de componentes encontrados em `v
 - Message
 - Misc
 - Overlay
-- Panel, Tabs e Containers
+- Panel, Tabs and Containers
 - Table
 - Tree
 
-Cada story renderiza apenas a secao do componente correspondente e inclui o trecho de codigo do `page.tsx` original no painel Docs/Source para consulta de uso.
+Each story renders the selected component example and includes the relevant upstream usage snippet in the Docs/Source panel.
 
-## Fluxo recomendado
+## Recommended Workflow
 
-1. Rode `npm run sync:sakai` para trazer o codigo upstream.
-2. Rode `npm run storybook`.
-3. Mapeie um componente ou tela em `vendor/sakai-react`.
-4. Crie uma versao documentavel em `src/sakai` e uma story em `src/stories`.
+1. Run `npm run sync:sakai` to fetch the upstream Sakai code.
+2. Run `npm run storybook`.
+3. Map a component or demo in `vendor/sakai-react`.
+4. Update `scripts/generate-component-stories.mjs` when the component set changes.
+5. Run `node scripts/generate-component-stories.mjs` and verify with `npm run build-storybook`.
+
+## GitHub Pages
+
+This repository includes a GitHub Actions workflow that builds Storybook and deploys `storybook-static` to GitHub Pages.
+
+To enable it in GitHub, set **Settings -> Pages -> Build and deployment -> Source** to **GitHub Actions**.

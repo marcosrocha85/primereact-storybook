@@ -13,7 +13,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Graficos baseados em Chart.js.'
+        component: 'Charts powered by Chart.js.'
       }
     }
   },

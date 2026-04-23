@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Marcador numerico ou status.'
+        component: 'Numeric marker or status indicator.'
       }
     }
   },

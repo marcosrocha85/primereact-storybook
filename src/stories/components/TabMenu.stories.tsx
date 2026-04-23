@@ -13,7 +13,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Menu em abas.'
+        component: 'Tabbed menu.'
       }
     }
   },

@@ -12,7 +12,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Barra de acoes.'
+        component: 'Action toolbar.'
       }
     }
   },

@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Controle circular numerico.'
+        component: 'Circular numeric control.'
       }
     }
   },

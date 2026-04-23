@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Mensagem inline.'
+        component: 'Inline message.'
       }
     }
   },

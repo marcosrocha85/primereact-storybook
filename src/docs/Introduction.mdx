@@ -1,30 +1,32 @@
 import { Meta } from '@storybook/addon-docs/blocks';
 
-<Meta title="Introducao/Resumo" />
+<Meta title="Introduction/Summary" />
 
 # Sakai Storybook
 
-Este projeto nasce para documentar o [Sakai React](https://github.com/primefaces/sakai-react) como um design system navegavel: componentes, padroes de layout, tokens visuais, exemplos de composicao e decisoes de uso.
+This project documents [Sakai React](https://github.com/primefaces/sakai-react) as a navigable design system: components, layout patterns, visual tokens, composition examples, and usage decisions.
 
-## Objetivo
+## Goal
 
-Criar uma documentacao parecida com um portal de design system, mas conectada ao ecossistema PrimeReact usado pelo Sakai. A primeira etapa foca em estrutura, identidade visual e historias-guia para receber os componentes reais.
+Create documentation that feels like a design system portal while staying connected to the PrimeReact ecosystem used by Sakai.
 
-## O que ja esta preparado
+## What Is Ready
 
-- Storybook 10 com React + Vite.
-- Documentacao em MDX em portugues.
-- PrimeReact, PrimeIcons e PrimeFlex carregados globalmente.
-- Tema visual inicial para o manager e para o preview.
-- Script `npm run sync:sakai` para baixar ou atualizar o upstream em `vendor/sakai-react`.
+- Storybook 10 with React + Vite.
+- English MDX documentation.
+- PrimeReact, PrimeIcons, and PrimeFlex loaded globally.
+- A custom visual theme for the manager and preview.
+- A component-level documentation model under `Components/*`.
+- A reproducible generator at `scripts/generate-component-stories.mjs`.
+- `npm run sync:sakai` for downloading or updating the upstream repo in `vendor/sakai-react`.
 
-## Proximos marcos
+## Next Milestones
 
-1. Sincronizar o reposititorio Sakai React.
-2. Mapear os componentes e telas mais usados.
-3. Transformar cada padrao em stories com estados, acessibilidade, notas de uso e codigo-fonte visivel.
-4. Publicar o build estatico do Storybook.
+1. Expand hand-written Controls for the most complex PrimeReact components.
+2. Add accessibility notes per component.
+3. Add usage guidelines and do/don't examples.
+4. Publish the static Storybook with GitHub Pages.
 
-## Componentes Sakai
+## Sakai Components
 
-Os grupos `Sakai React/*` documentam os demos de componentes do `uikit` do Sakai em granularidade de exemplo, sem incluir paginas de aplicacao como dashboard, landing ou auth.
+The `Components/*` groups document the Sakai `uikit` demos at the component level without including application pages such as dashboard, landing, or auth.

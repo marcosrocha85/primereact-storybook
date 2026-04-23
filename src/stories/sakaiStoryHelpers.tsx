@@ -132,7 +132,7 @@ export function sourceParameters(source: string, section: string, components: st
   return {
     docs: {
       description: {
-        story: `Exemplo "${section}". Componentes cobertos: ${components}. O codigo fica aberto abaixo do preview para consulta rapida, seguindo o padrao do Sakai original.`
+        story: `Example "${section}". Covered components: ${components}. Use Show code below the preview to inspect the original Sakai usage pattern.`
       },
       source: {
         code: extractSectionSource(source, section),

@@ -8,12 +8,12 @@ export function App() {
           <p className="eyebrow">PrimeFaces Sakai React</p>
           <h1>Sakai Storybook</h1>
           <p>
-            Uma base local para documentar componentes, padroes de layout e decisoes visuais do
-            template Sakai com PrimeReact.
+            A local foundation for documenting components, layout patterns, and visual decisions from
+            the Sakai template with PrimeReact.
           </p>
           <div className="landing-actions">
-            <Button label="Abrir Storybook" icon="pi pi-book" onClick={() => window.open('http://localhost:6006', '_blank')} />
-            <Button label="Sincronizar Sakai" icon="pi pi-github" outlined />
+            <Button label="Open Storybook" icon="pi pi-book" onClick={() => window.open('http://localhost:6006', '_blank')} />
+            <Button label="Sync Sakai" icon="pi pi-github" outlined />
           </div>
         </div>
         <div className="landing-orbit" aria-hidden="true">

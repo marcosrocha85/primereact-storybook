@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Selecionador visual de cor.'
+        component: 'Visual color picker.'
       }
     }
   },

@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Controle de valor por intervalo.'
+        component: 'Range value control.'
       }
     }
   },

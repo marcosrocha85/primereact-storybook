@@ -13,7 +13,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Menu vertical simples ou popup.'
+        component: 'Simple vertical menu or popup menu.'
       }
     }
   },

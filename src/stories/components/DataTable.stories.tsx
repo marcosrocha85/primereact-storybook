@@ -17,7 +17,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Tabela de dados com filtros, selecao, expansao e agrupamento.'
+        component: 'Data table with filtering, selection, expansion, and grouping.'
       }
     }
   },

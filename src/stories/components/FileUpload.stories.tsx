@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Upload de arquivos basico ou avancado.'
+        component: 'Basic or advanced file upload.'
       }
     }
   },

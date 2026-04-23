@@ -13,7 +13,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Menu amplo com agrupamentos.'
+        component: 'Large grouped menu.'
       }
     }
   },

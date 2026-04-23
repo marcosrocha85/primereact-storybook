@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Container de conteudo com titulo, subtitulo e footer.'
+        component: 'Content container with title, subtitle, and footer areas.'
       }
     }
   },

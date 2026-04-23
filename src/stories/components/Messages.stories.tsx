@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Lista de mensagens programaticas.'
+        component: 'Programmatic message list.'
       }
     }
   },

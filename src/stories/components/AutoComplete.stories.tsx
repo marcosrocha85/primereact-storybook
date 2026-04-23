@@ -17,7 +17,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Campo com sugestoes e autocomplete.'
+        component: 'Input field with suggestions and autocomplete behavior.'
       }
     }
   },

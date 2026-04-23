@@ -13,7 +13,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Menu acionado por contexto.'
+        component: 'Context-triggered menu.'
       }
     }
   },

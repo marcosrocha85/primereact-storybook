@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Atalho para voltar ao topo.'
+        component: 'Shortcut to scroll back to the top.'
       }
     }
   },

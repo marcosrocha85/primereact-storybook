@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Painel lateral.'
+        component: 'Side panel.'
       }
     }
   },

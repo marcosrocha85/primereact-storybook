@@ -13,7 +13,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Menu em paineis expansivos.'
+        component: 'Menu with expandable panels.'
       }
     }
   },

@@ -25,7 +25,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Botao do PrimeReact usado pelo Sakai. Os exemplos abaixo foram separados a partir das secoes do UI Kit original.'
+          'PrimeReact button used by Sakai. The examples below were separated from the original UI Kit sections.'
       }
     }
   },

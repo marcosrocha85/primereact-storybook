@@ -13,7 +13,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Carrossel de itens.'
+        component: 'Item carousel.'
       }
     }
   },

@@ -13,7 +13,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Menu horizontal principal.'
+        component: 'Primary horizontal menu.'
       }
     }
   },

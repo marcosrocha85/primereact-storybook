@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Entrada de senha com feedback.'
+        component: 'Password input with feedback.'
       }
     }
   },

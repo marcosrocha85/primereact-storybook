@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Container com cabecalho e opcao toggleable.'
+        component: 'Container with a header and optional toggle behavior.'
       }
     }
   },

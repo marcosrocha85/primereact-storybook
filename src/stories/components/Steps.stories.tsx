@@ -13,7 +13,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Fluxo por etapas.'
+        component: 'Step-based flow.'
       }
     }
   },

@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Alternador booleano.'
+        component: 'Boolean toggle switch.'
       }
     }
   },

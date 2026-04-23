@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Botao liga/desliga.'
+        component: 'On/off toggle button.'
       }
     }
   },

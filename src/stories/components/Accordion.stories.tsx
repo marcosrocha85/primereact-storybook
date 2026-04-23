@@ -12,7 +12,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Conteudo expansivel em abas verticais.'
+        component: 'Expandable content in vertical panels.'
       }
     }
   },

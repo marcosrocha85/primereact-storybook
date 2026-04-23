@@ -12,7 +12,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Dica contextual.'
+        component: 'Contextual hint.'
       }
     }
   },

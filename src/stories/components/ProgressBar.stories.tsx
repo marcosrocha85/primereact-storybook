@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Indicador de progresso.'
+        component: 'Progress indicator.'
       }
     }
   },

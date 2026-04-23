@@ -5,9 +5,9 @@ import { Tag } from 'primereact/tag';
 
 const navItems = [
   ['pi pi-home', 'Dashboard'],
-  ['pi pi-th-large', 'Componentes'],
-  ['pi pi-palette', 'Temas'],
-  ['pi pi-book', 'Documentacao']
+  ['pi pi-th-large', 'Components'],
+  ['pi pi-palette', 'Themes'],
+  ['pi pi-book', 'Documentation']
 ];
 
 export function SakaiShell() {
@@ -33,38 +33,38 @@ export function SakaiShell() {
         <header className="sakai-topbar">
           <div>
             <p className="eyebrow">Workspace</p>
-            <h2 style={{ margin: 0 }}>Visao geral</h2>
+            <h2 style={{ margin: 0 }}>Overview</h2>
           </div>
           <Avatar label="MR" shape="circle" />
         </header>
 
         <div className="sakai-kpis">
           <div className="sakai-kpi">
-            <span>Componentes mapeados</span>
+            <span>Mapped components</span>
             <strong>24</strong>
-            <Tag value="Base inicial" severity="success" />
+            <Tag value="Initial base" severity="success" />
           </div>
           <div className="sakai-kpi">
-            <span>Stories prioritarios</span>
+            <span>Priority stories</span>
             <strong>08</strong>
             <Tag value="Sakai layout" />
           </div>
           <div className="sakai-kpi">
-            <span>Cobertura visual</span>
+            <span>Visual coverage</span>
             <strong>62%</strong>
-            <Tag value="Em progresso" severity="warning" />
+            <Tag value="In progress" severity="warning" />
           </div>
         </div>
 
         <div className="sakai-panel">
           <div className="flex justify-content-between align-items-center gap-3 flex-wrap">
             <div>
-              <h3 style={{ margin: '0 0 .35rem' }}>Primeiro fluxo documentado</h3>
+              <h3 style={{ margin: '0 0 .35rem' }}>First documented flow</h3>
               <p style={{ margin: 0, color: 'var(--sakai-muted)' }}>
-                Layout shell, navegacao, tokens visuais e componentes PrimeReact.
+                Layout shell, navigation, visual tokens, and PrimeReact components.
               </p>
             </div>
-            <Button label="Adicionar story" icon="pi pi-plus" />
+            <Button label="Add story" icon="pi pi-plus" />
           </div>
           <div style={{ marginTop: '1.5rem' }}>
             <ProgressBar value={62} />

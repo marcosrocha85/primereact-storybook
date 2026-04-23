@@ -12,7 +12,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Janela modal.'
+        component: 'Modal window.'
       }
     }
   },

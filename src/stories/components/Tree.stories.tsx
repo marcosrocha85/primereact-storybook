@@ -13,7 +13,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Estrutura hierarquica expansivel.'
+        component: 'Expandable hierarchical structure.'
       }
     }
   },

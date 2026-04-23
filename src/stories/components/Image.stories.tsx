@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Imagem com preview opcional.'
+        component: 'Image with optional preview.'
       }
     }
   },

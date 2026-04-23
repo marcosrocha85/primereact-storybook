@@ -12,7 +12,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Painel flutuante acionado por evento.'
+        component: 'Floating panel triggered by an event.'
       }
     }
   },

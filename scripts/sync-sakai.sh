@@ -13,4 +13,4 @@ else
   git clone --depth 1 "$REPO_URL" "$TARGET_DIR"
 fi
 
-echo "Sakai React sincronizado em $TARGET_DIR"
+echo "Sakai React synced at $TARGET_DIR"

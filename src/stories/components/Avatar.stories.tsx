@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Representacao visual de usuario ou entidade.'
+        component: 'Visual representation of a user or entity.'
       }
     }
   },

@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Area com scroll customizado.'
+        component: 'Area with custom scrolling.'
       }
     }
   },

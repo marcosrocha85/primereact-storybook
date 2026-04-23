@@ -13,7 +13,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Lista ordenavel.'
+        component: 'Orderable list.'
       }
     }
   },

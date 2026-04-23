@@ -13,7 +13,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Trilha de navegacao.'
+        component: 'Navigation breadcrumb.'
       }
     }
   },

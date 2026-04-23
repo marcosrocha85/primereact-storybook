@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Separador visual.'
+        component: 'Visual separator.'
       }
     }
   },

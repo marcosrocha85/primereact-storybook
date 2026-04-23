@@ -13,7 +13,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Transferencia entre listas.'
+        component: 'Transfer items between lists.'
       }
     }
   },

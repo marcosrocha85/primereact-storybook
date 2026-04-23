@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Rotulo de status.'
+        component: 'Status label.'
       }
     }
   },

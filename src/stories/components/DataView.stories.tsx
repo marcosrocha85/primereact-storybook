@@ -13,7 +13,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Visualizacao de colecoes em lista ou grid.'
+        component: 'Collection view in list or grid layout.'
       }
     }
   },

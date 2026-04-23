@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Avaliacao por estrelas.'
+        component: 'Star rating control.'
       }
     }
   },

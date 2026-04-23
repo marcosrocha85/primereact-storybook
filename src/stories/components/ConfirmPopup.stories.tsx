@@ -12,7 +12,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Confirmacao contextual.'
+        component: 'Contextual confirmation.'
       }
     }
   },

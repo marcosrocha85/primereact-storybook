@@ -12,7 +12,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Layout redimensionavel por paineis.'
+        component: 'Resizable panel layout.'
       }
     }
   },

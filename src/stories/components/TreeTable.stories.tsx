@@ -14,7 +14,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Tabela hierarquica.'
+        component: 'Hierarchical table.'
       }
     }
   },

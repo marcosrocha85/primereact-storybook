@@ -15,7 +15,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Campo de texto base usado em formularios, filtros e buscas.'
+        component: 'Base text field used in forms, filters, and search inputs.'
       }
     }
   },

@@ -13,7 +13,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Campo de texto com mascara.'
+        component: 'Text field with an input mask.'
       }
     }
   },

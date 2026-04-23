@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Agrupador semantico com legenda.'
+        component: 'Semantic grouping container with a legend.'
       }
     }
   },

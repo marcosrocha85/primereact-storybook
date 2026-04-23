@@ -11,7 +11,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Opcao unica em grupo.'
+        component: 'Single option within a group.'
       }
     }
   },

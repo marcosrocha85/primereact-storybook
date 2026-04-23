@@ -15,7 +15,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Entrada de multiplos valores em formato de chips.'
+        component: 'Multi-value input rendered as chips.'
       }
     }
   },
