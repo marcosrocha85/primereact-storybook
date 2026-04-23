@@ -1,0 +1,26 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Introducao/Resumo" />
+
+# Sakai Storybook
+
+Este projeto nasce para documentar o [Sakai React](https://github.com/primefaces/sakai-react) como um design system navegavel: componentes, padroes de layout, tokens visuais, exemplos de composicao e decisoes de uso.
+
+## Objetivo
+
+Criar uma documentacao parecida com um portal de design system, mas conectada ao ecossistema PrimeReact usado pelo Sakai. A primeira etapa foca em estrutura, identidade visual e historias-guia para receber os componentes reais.
+
+## O que ja esta preparado
+
+- Storybook 10 com React + Vite.
+- Documentacao em MDX em portugues.
+- PrimeReact, PrimeIcons e PrimeFlex carregados globalmente.
+- Tema visual inicial para o manager e para o preview.
+- Script `npm run sync:sakai` para baixar ou atualizar o upstream em `vendor/sakai-react`.
+
+## Proximos marcos
+
+1. Sincronizar o reposititorio Sakai React.
+2. Mapear os componentes e telas mais usados.
+3. Transformar cada padrao em stories com estados, acessibilidade e notas de uso.
+4. Publicar o build estatico do Storybook.
