@@ -9,7 +9,8 @@ Review every component story set and align it with the Button documentation patt
   - `Summary`: the MDX overview page.
   - `Default`: the interactive story/playground.
 - Do not create one story per visual state, variation, or Sakai example.
-- Keep the `Default` story comprehensive enough for users to explore behavior through controls and editable attributes.
+- Use `Summary` to show curated static examples of important variations such as severities, sizes, icons, states, and common styles.
+- Keep `Default` focused on a single component instance that users can explore through Controls and editable attributes.
 - Keep user-facing documentation text in English.
 - Keep each component under `Components/<Component>`.
 - Preserve Storybook `Show code` behavior by keeping docs Canvas `sourceState="hidden"`.
@@ -23,7 +24,7 @@ Review every component story set and align it with the Button documentation patt
 - [ ] AvatarGroup
 - [ ] Badge
 - [ ] BreadCrumb
-- [ ] Button
+- [x] Button
 - [ ] Calendar
 - [ ] Card
 - [ ] Carousel

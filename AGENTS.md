@@ -12,6 +12,8 @@ This repository documents PrimeFaces Sakai React as a Storybook-based design sys
 - `vendor/sakai-react` is intentionally ignored by Git and treated as source reference material.
 - The primary documentation model lives under `src/stories/components`.
 - Each documented component has a `Components/<Component>/Summary` MDX page and a `Components/<Component>/Default` interactive story.
+- `Summary` pages show curated examples for important visual and behavioral variations.
+- `Default` stories render one controllable component instance for Storybook Controls.
 - Sakai demo variations are merged into the closest base component. For example, Float Label and Invalid State examples are documented under their related input components.
 
 ## Generation Workflow
@@ -19,7 +21,8 @@ This repository documents PrimeFaces Sakai React as a Storybook-based design sys
 - `scripts/generate-component-stories.mjs` generates most component-level `.stories.tsx` and `.docs.mdx` files.
 - Run `node scripts/generate-component-stories.mjs` after changing the component map.
 - The generator intentionally skips `Button`; `Button` is maintained manually as the reference-quality template.
-- Generated stories expose a `Default` playground with Controls plus `Sakai / ...` examples sourced from the upstream demo pages.
+- Generated stories should be reviewed so each component keeps only `Summary` and `Default`.
+- Sakai demo examples should be folded into the `Summary` page as curated examples instead of exported as separate `Sakai / ...` stories.
 - Use `Show code` in Storybook Canvas to inspect the relevant usage snippet.
 
 ## Component Scope
@@ -49,6 +52,8 @@ Do not document application pages such as dashboard, landing, auth, or full-page
 - Keep all user-facing documentation text in English.
 - Keep component docs under `Components/<Component>`.
 - Use `Summary` for MDX overview pages.
+- Use `Summary` to show curated static examples of key variations such as severities, sizes, icons, states, and common styles.
+- Keep `Default` as a single interactive playground instance controlled by Storybook Controls.
 - Preserve `Show code` behavior by keeping docs Canvas `sourceState="hidden"`.
 - Prefer component-level docs over page-level docs.
 - When a Sakai page contains variations of an already documented component, merge them into that component instead of creating a duplicate component page.
