@@ -1,26 +1,52 @@
-import { Canvas, Controls, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
-import * as Stories from './AutoComplete.stories';
+import { Canvas, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import {
+  BasicDemo,
+  DropdownDemo,
+  MultipleDemo,
+  FloatLabelDemo,
+  InvalidStateDemo,
+} from "./AutoComplete.stories";
+import * as Stories from "./AutoComplete.stories";
 
 <Meta title="Components/AutoComplete/Summary" />
 
 <Title>AutoComplete</Title>
 
-<Subtitle>Input field with suggestions and autocomplete behavior.</Subtitle>
+<Subtitle>
+  AutoComplete is an input field that provides real-time suggestions as the user
+  types, supporting single and multiple selection.
+</Subtitle>
+
+## Basic
+
+Type at least one character to filter the suggestion list.
+
+<BasicDemo />
+
+## Dropdown
+
+A dropdown button opens the full suggestion list without typing.
+
+<DropdownDemo />
+
+## Multiple
+
+Multiple mode lets users select more than one item, displayed as removable tokens.
+
+<MultipleDemo />
+
+## Float Label
+
+Wrap the component in `p-float-label` to have the label float above the input on focus or when a value is selected.
+
+<FloatLabelDemo />
+
+## Invalid State
+
+Apply `p-invalid` to the component to communicate a validation error.
+
+<InvalidStateDemo />
 
 ## Playground
 
 <Canvas of={Stories.Default} sourceState="hidden" />
-
-<Controls of={Stories.Default} />
-
-## Sakai / AutoComplete
-
-<Canvas of={Stories.SakaiAutoComplete} sourceState="hidden" />
-
-## Sakai / Float Label
-
-<Canvas of={Stories.FloatLabelVariants} sourceState="hidden" />
-
-## Sakai / Invalid State
-
-<Canvas of={Stories.InvalidStateVariants} sourceState="hidden" />
