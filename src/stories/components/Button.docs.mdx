@@ -1,4 +1,5 @@
 import { Canvas, Controls, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
+import { Button } from 'primereact/button';
 import * as ButtonStories from './Button.stories';
 
 <Meta title="Components/Button/Summary" />
@@ -9,48 +10,49 @@ import * as ButtonStories from './Button.stories';
   Button used by Sakai for primary actions, secondary actions, links, severity states, and icon variations.
 </Subtitle>
 
-## Default
+## Severities
+
+<div className="flex flex-wrap gap-2">
+  <Button label="Primary" />
+  <Button label="Secondary" severity="secondary" />
+  <Button label="Success" severity="success" />
+  <Button label="Info" severity="info" />
+  <Button label="Warning" severity="warning" />
+  <Button label="Help" severity="help" />
+  <Button label="Danger" severity="danger" />
+</div>
+
+## Icons
+
+<div className="flex flex-wrap gap-2">
+  <Button label="Search" icon="pi pi-search" />
+  <Button label="Bookmark" icon="pi pi-bookmark" iconPos="right" />
+  <Button icon="pi pi-check" rounded aria-label="Confirm" />
+  <Button icon="pi pi-times" rounded outlined severity="danger" aria-label="Cancel" />
+</div>
+
+## Sizes
+
+<div className="flex flex-wrap align-items-center gap-2">
+  <Button label="Small" size="small" />
+  <Button label="Normal" />
+  <Button label="Large" size="large" />
+</div>
+
+## Styles
+
+<div className="flex flex-wrap gap-2">
+  <Button label="Raised" raised />
+  <Button label="Rounded" rounded />
+  <Button label="Outlined" outlined />
+  <Button label="Text" text />
+  <Button label="Link" link />
+  <Button label="Loading" icon="pi pi-spinner" loading />
+  <Button label="Disabled" disabled />
+</div>
+
+## Playground
 
 <Canvas of={ButtonStories.Default} sourceState="hidden" />
 
 <Controls of={ButtonStories.Default} />
-
-## Disabled
-
-<Canvas of={ButtonStories.Disabled} sourceState="hidden" />
-
-## Link
-
-<Canvas of={ButtonStories.Link} sourceState="hidden" />
-
-## Severities
-
-Use os Controls da story `Severities` para testar atributos comuns do botao em todos os estados de severidade.
-
-<Canvas of={ButtonStories.Severities} sourceState="hidden" />
-
-<Controls of={ButtonStories.Severities} />
-
-## Text
-
-<Canvas of={ButtonStories.Text} sourceState="hidden" />
-
-## Outlined
-
-<Canvas of={ButtonStories.Outlined} sourceState="hidden" />
-
-## Icons
-
-<Canvas of={ButtonStories.Icons} sourceState="hidden" />
-
-## Rounded
-
-<Canvas of={ButtonStories.Rounded} sourceState="hidden" />
-
-## Loading
-
-<Canvas of={ButtonStories.Loading} sourceState="hidden" />
-
-## SplitButton
-
-<Canvas of={ButtonStories.SplitButtonStory} sourceState="hidden" />

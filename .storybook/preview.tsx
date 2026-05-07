@@ -28,12 +28,14 @@ const preview: Preview = {
   ],
   parameters: {
     actions: { argTypesRegex: '^on[A-Z].*' },
+
     controls: {
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/i
       }
     },
+
     docs: {
       theme: themes.light,
       canvas: {
@@ -46,6 +48,7 @@ const preview: Preview = {
         dark: true
       }
     },
+
     options: {
       storySort: {
         order: [
@@ -56,6 +59,7 @@ const preview: Preview = {
         ]
       }
     },
+
     backgrounds: {
       default: 'sakai',
       values: [
@@ -63,6 +67,13 @@ const preview: Preview = {
         { name: 'surface', value: '#ffffff' },
         { name: 'graphite', value: '#111827' }
       ]
+    },
+
+    a11y: {
+      // 'todo' - show a11y violations in the test UI only
+      // 'error' - fail CI on a11y violations
+      // 'off' - skip a11y checks entirely
+      test: 'todo'
     }
   }
 };
