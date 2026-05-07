@@ -12,7 +12,6 @@ This repository documents PrimeFaces Sakai React as a Storybook-based design sys
 - `vendor/sakai-react` is intentionally ignored by Git and treated as source reference material.
 - The primary documentation model lives under `src/stories/components`.
 - Each documented component has a `Components/<Component>/Summary` MDX page and a `Components/<Component>/Default` interactive story.
-- `Summary` pages show curated examples for important visual and behavioral variations.
 - `Summary` pages must never render Storybook Controls; controls belong only to `Default` stories.
 - `Default` stories render one controllable component instance for Storybook Controls.
 - Sakai demo variations are merged into the closest base component. For example, Float Label and Invalid State examples are documented under their related input components.
