@@ -13,8 +13,11 @@ This repository documents PrimeFaces Sakai React as a Storybook-based design sys
 - The primary documentation model lives under `src/stories/components`.
 - Each documented component has a `Components/<Component>/Summary` MDX page and a `Components/<Component>/Default` interactive story.
 - `Summary` pages show curated examples for important visual and behavioral variations.
+- `Summary` pages must never render Storybook Controls; controls belong only to `Default` stories.
 - `Default` stories render one controllable component instance for Storybook Controls.
 - Sakai demo variations are merged into the closest base component. For example, Float Label and Invalid State examples are documented under their related input components.
+
+Always use https://sakai.primereact.org/ as the source of truth for component behavior, variations, and best practices. The Storybook documentation is a curated subset of that material, not a comprehensive reference. When in doubt, consult the Sakai UI Kit and Sakai React source code.
 
 ## Generation Workflow
 
@@ -53,6 +56,7 @@ Do not document application pages such as dashboard, landing, auth, or full-page
 - Keep component docs under `Components/<Component>`.
 - Use `Summary` for MDX overview pages.
 - Use `Summary` to show curated static examples of key variations such as severities, sizes, icons, states, and common styles.
+- Do not render `<Controls>` in `Summary` MDX pages; only `Default` stories should expose Storybook Controls.
 - Keep `Default` as a single interactive playground instance controlled by Storybook Controls.
 - Preserve `Show code` behavior by keeping docs Canvas `sourceState="hidden"`.
 - Prefer component-level docs over page-level docs.

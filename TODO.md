@@ -10,6 +10,7 @@ Review every component story set and align it with the Button documentation patt
   - `Default`: the interactive story/playground.
 - Do not create one story per visual state, variation, or Sakai example.
 - Use `Summary` to show curated static examples of important variations such as severities, sizes, icons, states, and common styles.
+- Do not render Storybook Controls in `Summary`; controls are allowed only on the `Default` story page.
 - Keep `Default` focused on a single component instance that users can explore through Controls and editable attributes.
 - Keep user-facing documentation text in English.
 - Keep each component under `Components/<Component>`.
@@ -18,7 +19,7 @@ Review every component story set and align it with the Button documentation patt
 
 ## Components
 
-- [ ] Accordion
+- [x] Accordion
 - [ ] AutoComplete
 - [ ] Avatar
 - [ ] AvatarGroup

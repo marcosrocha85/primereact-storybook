@@ -1,9 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Accordion } from 'primereact/accordion';
-import { AccordionTab } from 'primereact/accordion';
-import panelDemo from '../../../vendor/sakai-react/app/(main)/uikit/panel/page';
-import panelSource from '../../../vendor/sakai-react/app/(main)/uikit/panel/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import type { AccordionProps } from 'primereact/accordion';
+import { Accordion, AccordionTab } from 'primereact/accordion';
+
+type AccordionStoryArgs = AccordionProps & {
+  firstHeader?: string;
+  secondHeader?: string;
+  thirdHeader?: string;
+};
 
 const meta = {
   title: 'Components/Accordion',
@@ -12,31 +15,70 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Expandable content in vertical panels.'
+        component:
+          'PrimeReact accordion used by Sakai to organize related content in expandable vertical panels.'
       }
     }
   },
-  args: { activeIndex: 0 },
-  argTypes: { activeIndex: { control: 'number' } }
-} satisfies Meta;
+  args: {
+    activeIndex: 0,
+    multiple: false,
+    expandIcon: undefined,
+    collapseIcon: undefined,
+    firstHeader: 'Header I',
+    secondHeader: 'Header II',
+    thirdHeader: 'Header III'
+  },
+  argTypes: {
+    activeIndex: { control: 'number' },
+    multiple: { control: 'boolean' },
+    expandIcon: {
+      control: 'select',
+      options: [undefined, 'pi pi-chevron-right', 'pi pi-plus', 'pi pi-angle-down']
+    },
+    collapseIcon: {
+      control: 'select',
+      options: [undefined, 'pi pi-chevron-down', 'pi pi-minus', 'pi pi-angle-up']
+    },
+    firstHeader: { control: 'text' },
+    secondHeader: { control: 'text' },
+    thirdHeader: { control: 'text' }
+  }
+} satisfies Meta<AccordionStoryArgs>;
 
 export default meta;
 
-type Story = StoryObj;
+type Story = StoryObj<AccordionStoryArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <Accordion {...args}><AccordionTab header="Header I"><p>Content I</p></AccordionTab><AccordionTab header="Header II"><p>Content II</p></AccordionTab></Accordion>,
+  render: ({ firstHeader, secondHeader, thirdHeader, ...args }) => (
+    <Accordion {...args}>
+      <AccordionTab header={firstHeader}>
+        <p className="m-0 line-height-3">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        </p>
+      </AccordionTab>
+      <AccordionTab header={secondHeader}>
+        <p className="m-0 line-height-3">
+          Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+        </p>
+      </AccordionTab>
+      <AccordionTab header={thirdHeader}>
+        <p className="m-0 line-height-3">
+          At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium.
+        </p>
+      </AccordionTab>
+    </Accordion>
+  ),
   parameters: {
     docs: {
       source: {
-        code: `<Accordion activeIndex={0}><AccordionTab header="Header I">Content</AccordionTab></Accordion>`
+        code: `<Accordion activeIndex={0}>
+  <AccordionTab header="Header I">Content</AccordionTab>
+  <AccordionTab header="Header II">Content</AccordionTab>
+  <AccordionTab header="Header III">Content</AccordionTab>
+</Accordion>`
       }
     }
   }
-};
-
-export const SakaiAccordionPanel: Story = {
-  name: 'Sakai / AccordionPanel',
-  render: () => <SakaiSectionDemo Component={panelDemo} section="AccordionPanel" />,
-  parameters: sourceParameters(panelSource, 'AccordionPanel', 'Accordion')
 };

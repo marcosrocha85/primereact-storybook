@@ -1,18 +1,69 @@
-import { Canvas, Controls, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
+import { Canvas, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
+import { Accordion, AccordionTab } from 'primereact/accordion';
 import * as Stories from './Accordion.stories';
 
 <Meta title="Components/Accordion/Summary" />
 
 <Title>Accordion</Title>
 
-<Subtitle>Expandable content in vertical panels.</Subtitle>
+<Subtitle>
+  Accordion used by Sakai to group related content into vertical panels that can be expanded one at a time or together.
+</Subtitle>
+
+## Basic
+
+<div className="w-full md:w-30rem">
+  <Accordion activeIndex={0}>
+    <AccordionTab header="Header I">
+      <p className="m-0 line-height-3">
+        Use accordions when related details should stay available without taking over the page.
+      </p>
+    </AccordionTab>
+    <AccordionTab header="Header II">
+      <p className="m-0 line-height-3">
+        Each panel has a clear header and reveals supporting content only when opened.
+      </p>
+    </AccordionTab>
+    <AccordionTab header="Header III">
+      <p className="m-0 line-height-3">
+        Sakai uses this pattern in panel documentation and compact settings surfaces.
+      </p>
+    </AccordionTab>
+  </Accordion>
+</div>
+
+## Multiple Panels
+
+<div className="w-full md:w-30rem">
+  <Accordion multiple activeIndex={[0, 1]}>
+    <AccordionTab header="Account">
+      <p className="m-0 line-height-3">Multiple mode keeps more than one panel open at the same time.</p>
+    </AccordionTab>
+    <AccordionTab header="Billing">
+      <p className="m-0 line-height-3">Use it for short sections where users often compare details.</p>
+    </AccordionTab>
+    <AccordionTab header="Security">
+      <p className="m-0 line-height-3">Keep panel content concise so the expanded stack remains scannable.</p>
+    </AccordionTab>
+  </Accordion>
+</div>
+
+## Icons And States
+
+<div className="w-full md:w-30rem">
+  <Accordion activeIndex={0} expandIcon="pi pi-plus" collapseIcon="pi pi-minus">
+    <AccordionTab header="Custom toggle icons">
+      <p className="m-0 line-height-3">Use custom icons when the surrounding interface already uses plus and minus affordances.</p>
+    </AccordionTab>
+    <AccordionTab header="Disabled panel" disabled>
+      <p className="m-0 line-height-3">Disabled panels remain visible but cannot be opened.</p>
+    </AccordionTab>
+    <AccordionTab header="Available panel">
+      <p className="m-0 line-height-3">Available panels keep the standard keyboard and click interaction.</p>
+    </AccordionTab>
+  </Accordion>
+</div>
 
 ## Playground
 
 <Canvas of={Stories.Default} sourceState="hidden" />
-
-<Controls of={Stories.Default} />
-
-## Sakai / AccordionPanel
-
-<Canvas of={Stories.SakaiAccordionPanel} sourceState="hidden" />
