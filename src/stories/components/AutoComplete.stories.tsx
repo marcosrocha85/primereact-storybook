@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { AutoCompleteCompleteEvent, AutoCompleteProps } from 'primereact/autocomplete';
+import type { AutoCompleteCompleteEvent } from 'primereact/autocomplete';
 import { AutoComplete } from 'primereact/autocomplete';
 
 interface Country {
@@ -76,14 +76,17 @@ export function BasicDemo() {
   const [value, setValue] = useState<Country | null>(null);
   const [suggestions, setSuggestions] = useState<Country[]>([]);
   return (
-    <AutoComplete
-      value={value}
-      field="name"
-      suggestions={suggestions}
-      completeMethod={(e: AutoCompleteCompleteEvent) => setSuggestions(filterCountries(e.query))}
-      onChange={(e) => setValue(e.value)}
-      placeholder="Search country"
-    />
+    <div style={{ width: '20rem' }}>
+      <AutoComplete
+        value={value}
+        field="name"
+        suggestions={suggestions}
+        completeMethod={(e: AutoCompleteCompleteEvent) => setSuggestions(filterCountries(e.query))}
+        onChange={(e) => setValue(e.value)}
+        placeholder="Search country"
+        className="w-full"
+      />
+    </div>
   );
 }
 
@@ -91,15 +94,18 @@ export function DropdownDemo() {
   const [value, setValue] = useState<Country | null>(null);
   const [suggestions, setSuggestions] = useState<Country[]>([]);
   return (
-    <AutoComplete
-      value={value}
-      field="name"
-      suggestions={suggestions}
-      completeMethod={(e: AutoCompleteCompleteEvent) => setSuggestions(filterCountries(e.query))}
-      onChange={(e) => setValue(e.value)}
-      dropdown
-      placeholder="Search country"
-    />
+    <div style={{ width: '20rem' }}>
+      <AutoComplete
+        value={value}
+        field="name"
+        suggestions={suggestions}
+        completeMethod={(e: AutoCompleteCompleteEvent) => setSuggestions(filterCountries(e.query))}
+        onChange={(e) => setValue(e.value)}
+        dropdown
+        placeholder="Search country"
+        className="w-full"
+      />
+    </div>
   );
 }
 
@@ -107,16 +113,19 @@ export function MultipleDemo() {
   const [value, setValue] = useState<Country[]>([]);
   const [suggestions, setSuggestions] = useState<Country[]>([]);
   return (
-    <AutoComplete
-      value={value}
-      field="name"
-      suggestions={suggestions}
-      completeMethod={(e: AutoCompleteCompleteEvent) => setSuggestions(filterCountries(e.query))}
-      onChange={(e) => setValue(e.value)}
-      multiple
-      dropdown
-      placeholder="Add countries"
-    />
+    <div style={{ width: '20rem' }}>
+      <AutoComplete
+        value={value}
+        field="name"
+        suggestions={suggestions}
+        completeMethod={(e: AutoCompleteCompleteEvent) => setSuggestions(filterCountries(e.query))}
+        onChange={(e) => setValue(e.value)}
+        multiple
+        dropdown
+        placeholder="Add countries"
+        className="w-full"
+      />
+    </div>
   );
 }
 
@@ -124,17 +133,20 @@ export function FloatLabelDemo() {
   const [value, setValue] = useState<Country | null>(null);
   const [suggestions, setSuggestions] = useState<Country[]>([]);
   return (
-    <span className="p-float-label">
-      <AutoComplete
-        inputId="float-autocomplete"
-        value={value}
-        field="name"
-        suggestions={suggestions}
-        completeMethod={(e: AutoCompleteCompleteEvent) => setSuggestions(filterCountries(e.query))}
-        onChange={(e) => setValue(e.value)}
-      />
-      <label htmlFor="float-autocomplete">Country</label>
-    </span>
+    <div style={{ width: '20rem' }}>
+      <span className="p-float-label">
+        <AutoComplete
+          inputId="float-autocomplete"
+          value={value}
+          field="name"
+          suggestions={suggestions}
+          completeMethod={(e: AutoCompleteCompleteEvent) => setSuggestions(filterCountries(e.query))}
+          onChange={(e) => setValue(e.value)}
+          className="w-full"
+        />
+        <label htmlFor="float-autocomplete">Country</label>
+      </span>
+    </div>
   );
 }
 
@@ -142,24 +154,29 @@ export function InvalidStateDemo() {
   const [value, setValue] = useState<Country | null>(null);
   const [suggestions, setSuggestions] = useState<Country[]>([]);
   return (
-    <AutoComplete
-      value={value}
-      field="name"
-      suggestions={suggestions}
-      completeMethod={(e: AutoCompleteCompleteEvent) => setSuggestions(filterCountries(e.query))}
-      onChange={(e) => setValue(e.value)}
-      className="p-invalid"
-      placeholder="Search country"
-    />
+    <div style={{ width: '20rem' }}>
+      <AutoComplete
+        value={value}
+        field="name"
+        suggestions={suggestions}
+        completeMethod={(e: AutoCompleteCompleteEvent) => setSuggestions(filterCountries(e.query))}
+        onChange={(e) => setValue(e.value)}
+        className="p-invalid w-full"
+        placeholder="Search country"
+      />
+    </div>
   );
 }
 
 // ── Storybook meta ─────────────────────────────────────────────────────────
 
-type AutoCompleteStoryArgs = Pick<
-  AutoCompleteProps,
-  'placeholder' | 'dropdown' | 'multiple' | 'disabled' | 'forceSelection'
->;
+type AutoCompleteStoryArgs = {
+  placeholder?: string;
+  dropdown?: boolean;
+  multiple?: boolean;
+  disabled?: boolean;
+  forceSelection?: boolean;
+};
 
 const meta = {
   title: 'Components/AutoComplete',
@@ -197,17 +214,43 @@ type Story = StoryObj<typeof meta>;
 // ── Playground ─────────────────────────────────────────────────────────────
 
 const AutoCompletePlayground = (args: AutoCompleteStoryArgs) => {
-  const [value, setValue] = useState<Country | Country[] | null>(null);
+  const [singleValue, setSingleValue] = useState<Country | undefined>(undefined);
+  const [multiValue, setMultiValue] = useState<Country[]>([]);
   const [suggestions, setSuggestions] = useState<Country[]>([]);
+  const completeMethod = (e: AutoCompleteCompleteEvent) => setSuggestions(filterCountries(e.query));
+  const { multiple, placeholder, dropdown, disabled, forceSelection } = args;
+
   return (
-    <AutoComplete
-      {...args}
-      value={value}
-      field="name"
-      suggestions={suggestions}
-      completeMethod={(e: AutoCompleteCompleteEvent) => setSuggestions(filterCountries(e.query))}
-      onChange={(e) => setValue(e.value)}
-    />
+    <div style={{ width: '20rem' }}>
+      {multiple ? (
+        <AutoComplete<Country, true>
+          multiple
+          placeholder={placeholder}
+          dropdown={dropdown}
+          disabled={disabled}
+          forceSelection={forceSelection}
+          value={multiValue}
+          field="name"
+          suggestions={suggestions}
+          completeMethod={completeMethod}
+          onChange={(e) => setMultiValue(e.value ?? [])}
+          className="w-full"
+        />
+      ) : (
+        <AutoComplete<Country, false>
+          placeholder={placeholder}
+          dropdown={dropdown}
+          disabled={disabled}
+          forceSelection={forceSelection}
+          value={singleValue}
+          field="name"
+          suggestions={suggestions}
+          completeMethod={completeMethod}
+          onChange={(e) => setSingleValue(e.value)}
+          className="w-full"
+        />
+      )}
+    </div>
   );
 };
 
