@@ -214,7 +214,7 @@ type Story = StoryObj<typeof meta>;
 // ── Playground ─────────────────────────────────────────────────────────────
 
 const AutoCompletePlayground = (args: AutoCompleteStoryArgs) => {
-  const [singleValue, setSingleValue] = useState<Country | undefined>(undefined);
+  const [singleValue, setSingleValue] = useState<Country | null>(null);
   const [multiValue, setMultiValue] = useState<Country[]>([]);
   const [suggestions, setSuggestions] = useState<Country[]>([]);
   const completeMethod = (e: AutoCompleteCompleteEvent) => setSuggestions(filterCountries(e.query));
@@ -237,7 +237,7 @@ const AutoCompletePlayground = (args: AutoCompleteStoryArgs) => {
           className="w-full"
         />
       ) : (
-        <AutoComplete<Country, false>
+        <AutoComplete<Country | null, false>
           placeholder={placeholder}
           dropdown={dropdown}
           disabled={disabled}
@@ -264,7 +264,7 @@ const [suggestions, setSuggestions] = useState([]);
 
 const search = (e) => {
   const q = e.query.toLowerCase();
-  setSuggestions(countries.filter((c) => c.name.toLowerCase().startsWith(q)));
+  setSuggestions(allCountries.filter((c) => c.name.toLowerCase().startsWith(q)));
 };
 
 <AutoComplete
