@@ -1,18 +1,91 @@
-import { Canvas, Controls, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
-import * as Stories from "./Panel.stories";
+import { Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Panel } from "primereact/panel";
+import { Button } from "primereact/button";
 
 <Meta title="Components/Panel/Summary" />
 
 <Title>Panel</Title>
 
-<Subtitle>Container with a header and optional toggle behavior.</Subtitle>
+<Subtitle>
+  Panel used by Sakai as a content container with a titled header and optional
+  collapse toggle.
+</Subtitle>
 
-## Playground
+## Basic
 
-<Canvas of={Stories.Default} sourceState="hidden" />
+<div style={{ width: "30rem" }}>
+  <Panel header="Project Details">
+    <p className="m-0 line-height-3">
+      Use a panel to group related content under a clear heading. The header
+      keeps the section scannable while the body holds the detail.
+    </p>
+  </Panel>
+</div>
 
-<Controls of={Stories.Default} />
+## Toggleable
 
-## Sakai / Panel
+<div style={{ width: "30rem" }}>
+  <Panel header="Summary" toggleable>
+    <p className="m-0 line-height-3">
+      Add <code>toggleable</code> to let users collapse and expand the panel.
+      Use this when content is supplementary and can be hidden without losing
+      context.
+    </p>
+  </Panel>
+</div>
 
-<Canvas of={Stories.SakaiPanel} sourceState="hidden" />
+## Collapsed by Default
+
+<div style={{ width: "30rem" }}>
+  <Panel header="Advanced Settings" toggleable collapsed>
+    <p className="m-0 line-height-3">
+      Set <code>collapsed</code> together with <code>toggleable</code> to start
+      the panel closed. Useful for secondary information that most users will
+      not need immediately.
+    </p>
+  </Panel>
+</div>
+
+## Custom Header
+
+<div style={{ width: "30rem" }}>
+  <Panel
+    header="Notifications"
+    headerTemplate={(options) => {
+      const {
+        className,
+        titleClassName,
+        togglerClassName,
+        togglerIconClassName,
+        onTogglerClick,
+      } = options;
+      return (
+        <div className={className}>
+          <span className={titleClassName}>
+            <i className="pi pi-bell mr-2" />
+            Notifications
+          </span>
+          <div className="flex gap-2">
+            <Button
+              icon="pi pi-cog"
+              text
+              rounded
+              severity="secondary"
+              size="small"
+              aria-label="Settings"
+            />
+            <button className={togglerClassName} onClick={onTogglerClick}>
+              <span className={togglerIconClassName} />
+            </button>
+          </div>
+        </div>
+      );
+    }}
+    toggleable
+  >
+    <p className="m-0 line-height-3">
+      Use <code>headerTemplate</code> to inject custom controls such as action
+      buttons alongside the toggle affordance.
+    </p>
+  </Panel>
+</div>

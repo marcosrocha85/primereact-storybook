@@ -27,6 +27,13 @@ const config: StorybookConfig = {
       ...existingAliases
     ];
 
+    config.css = config.css ?? {};
+    config.css.preprocessorOptions = config.css.preprocessorOptions ?? {};
+    config.css.preprocessorOptions.scss = {
+      ...config.css.preprocessorOptions.scss,
+      silenceDeprecations: ['import']
+    };
+
     return config;
   }
 };

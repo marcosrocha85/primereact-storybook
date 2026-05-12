@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { PanelProps } from 'primereact/panel';
 import { Panel } from 'primereact/panel';
-import panelDemo from '../../../vendor/sakai-react/app/(main)/uikit/panel/page';
-import panelSource from '../../../vendor/sakai-react/app/(main)/uikit/panel/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+
+type PanelStoryArgs = PanelProps & {
+  content?: string;
+};
 
 const meta = {
   title: 'Components/Panel',
@@ -11,31 +13,63 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Container with a header and optional toggle behavior.'
+        component:
+          'PrimeReact Panel used by Sakai as a container with a header and optional toggle behavior.'
       }
     }
   },
-  args: { header: 'Header', toggleable: true },
-  argTypes: { header: { control: 'text' }, toggleable: { control: 'boolean' }, collapsed: { control: 'boolean' } }
-} satisfies Meta;
+  args: {
+    header: 'Panel Header',
+    footer: undefined,
+    toggleable: false,
+    collapsed: false,
+    expandIcon: undefined,
+    collapseIcon: undefined,
+    unstyled: false,
+    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+  },
+  argTypes: {
+    header: { control: 'text' },
+    footer: { control: 'text' },
+    toggleable: { control: 'boolean' },
+    collapsed: {
+      control: 'boolean',
+      if: { arg: 'toggleable', truthy: true }
+    },
+    expandIcon: {
+      control: 'select',
+      options: [undefined, 'pi pi-chevron-down', 'pi pi-plus', 'pi pi-angle-down', 'pi pi-caret-down'],
+      if: { arg: 'toggleable', truthy: true }
+    },
+    collapseIcon: {
+      control: 'select',
+      options: [undefined, 'pi pi-chevron-up', 'pi pi-minus', 'pi pi-angle-up', 'pi pi-caret-up'],
+      if: { arg: 'toggleable', truthy: true }
+    },
+    unstyled: { control: 'boolean' },
+    content: { control: 'text' }
+  }
+} satisfies Meta<PanelStoryArgs>;
 
 export default meta;
 
-type Story = StoryObj;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: (args: any) => <Panel {...args}><p>Panel content.</p></Panel>,
+  render: ({ content, ...args }) => (
+    <div style={{ width: '30rem' }}>
+      <Panel {...args}>
+        <p className="m-0 line-height-3">{content}</p>
+      </Panel>
+    </div>
+  ),
   parameters: {
     docs: {
       source: {
-        code: `<Panel header="Header" toggleable>Content</Panel>`
+        code: `<Panel header="Panel Header">
+  <p>Lorem ipsum dolor sit amet...</p>
+</Panel>`
       }
     }
   }
-};
-
-export const SakaiPanel: Story = {
-  name: 'Sakai / Panel',
-  render: () => <SakaiSectionDemo Component={panelDemo} section="Panel" />,
-  parameters: sourceParameters(panelSource, 'Panel', 'Panel')
 };
