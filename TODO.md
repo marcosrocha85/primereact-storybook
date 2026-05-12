@@ -20,7 +20,7 @@ Review every component story set and align it with the Button documentation patt
 ## Components
 
 - [x] Accordion
-- [ ] AutoComplete
+- [x] AutoComplete
 - [ ] Avatar
 - [ ] AvatarGroup
 - [ ] Badge

@@ -63,6 +63,16 @@ Do not document application pages such as dashboard, landing, auth, or full-page
 - Do not edit files inside `vendor/sakai-react`; update local wrappers, helpers, or the generator instead.
 - Run `npm run build` and `npm run build-storybook` before considering the project ready.
 
+For each reviewed component:
+
+1. Inspect `Button.docs.mdx` and `Button.stories.tsx` as the exact structural reference.
+2. Inspect the current component docs/story files.
+3. Inspect the closest Sakai UI Kit source under `vendor/sakai-react`.
+4. Move Sakai-specific exported stories into curated static examples inside `Summary`.
+5. Keep only `Default` exported from the `.stories.tsx` file.
+6. Do not render `<Controls>` in `Summary`.
+7. Keep `Default` as the only controls playground.
+
 ## GitHub Pages
 
 - GitHub Pages deployment is configured in `.github/workflows/pages.yml`.
