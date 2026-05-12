@@ -1012,8 +1012,8 @@ function createDocs(component) {
     })
     .join('\n\n');
 
-  return `import { Canvas, Controls, Meta, Subtitle, Title } from '@storybook/addon-docs/blocks';
-import * as Stories from './${component.name}.stories';
+  return `import { Canvas, Controls, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import * as Stories from "./${component.name}.stories";
 
 <Meta title="Components/${component.name}/Summary" />
 
