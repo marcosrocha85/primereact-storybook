@@ -55,9 +55,10 @@ Do not document application pages such as dashboard, landing, auth, or full-page
 - Keep component docs under `Components/<Component>`.
 - Use `Summary` for MDX overview pages.
 - Use `Summary` to show curated static examples of key variations such as severities, sizes, icons, states, and common styles.
+- Static `Summary` examples should include a copyable Storybook `<Source>` block with the relevant usage snippet.
 - Do not render `<Controls>` in `Summary` MDX pages; only `Default` stories should expose Storybook Controls.
 - Keep `Default` as a single interactive playground instance controlled by Storybook Controls.
-- Preserve `Show code` behavior by keeping docs Canvas `sourceState="hidden"`.
+- Preserve `Show code` behavior by keeping docs Canvas `sourceState="hidden"`; `Default` stories should expose copyable code through the Canvas source panel, preferably with an explicit `parameters.docs.source.code` snippet when the generated source is not clear.
 - Prefer component-level docs over page-level docs.
 - When a Sakai page contains variations of an already documented component, merge them into that component instead of creating a duplicate component page.
 - Do not edit files inside `vendor/sakai-react`; update local wrappers, helpers, or the generator instead.

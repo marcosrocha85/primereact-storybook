@@ -44,7 +44,7 @@ Review every component story set and align it with the Button documentation patt
 - [ ] Fieldset
 - [ ] FileUpload
 - [ ] Galleria
-- [ ] Image
+- [x] Image
 - [ ] InputMask
 - [ ] InputNumber
 - [ ] InputSwitch

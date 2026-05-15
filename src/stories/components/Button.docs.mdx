@@ -1,4 +1,4 @@
-import { Canvas, Controls, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Canvas, Controls, Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Button } from "primereact/button";
 import * as ButtonStories from "./Button.stories";
 
@@ -22,6 +22,17 @@ import * as ButtonStories from "./Button.stories";
   <Button label="Danger" severity="danger" />
 </div>
 
+<Source
+  code={`<Button label="Primary" />
+<Button label="Secondary" severity="secondary" />
+<Button label="Success" severity="success" />
+<Button label="Info" severity="info" />
+<Button label="Warning" severity="warning" />
+<Button label="Help" severity="help" />
+<Button label="Danger" severity="danger" />`}
+  language="tsx"
+/>
+
 ## Icons
 
 <div className="flex flex-wrap gap-2">
@@ -31,6 +42,14 @@ import * as ButtonStories from "./Button.stories";
   <Button icon="pi pi-times" rounded outlined severity="danger" aria-label="Cancel" />
 </div>
 
+<Source
+  code={`<Button label="Search" icon="pi pi-search" />
+<Button label="Bookmark" icon="pi pi-bookmark" iconPos="right" />
+<Button icon="pi pi-check" rounded aria-label="Confirm" />
+<Button icon="pi pi-times" rounded outlined severity="danger" aria-label="Cancel" />`}
+  language="tsx"
+/>
+
 ## Sizes
 
 <div className="flex flex-wrap align-items-center gap-2">
@@ -38,6 +57,13 @@ import * as ButtonStories from "./Button.stories";
   <Button label="Normal" />
   <Button label="Large" size="large" />
 </div>
+
+<Source
+  code={`<Button label="Small" size="small" />
+<Button label="Normal" />
+<Button label="Large" size="large" />`}
+  language="tsx"
+/>
 
 ## Styles
 
@@ -50,6 +76,17 @@ import * as ButtonStories from "./Button.stories";
   <Button label="Loading" icon="pi pi-spinner" loading />
   <Button label="Disabled" disabled />
 </div>
+
+<Source
+  code={`<Button label="Raised" raised />
+<Button label="Rounded" rounded />
+<Button label="Outlined" outlined />
+<Button label="Text" text />
+<Button label="Link" link />
+<Button label="Loading" icon="pi pi-spinner" loading />
+<Button label="Disabled" disabled />`}
+  language="tsx"
+/>
 
 ## Playground
 

@@ -1,4 +1,4 @@
-import { Canvas, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Canvas, Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Accordion, AccordionTab } from "primereact/accordion";
 import * as Stories from "./Accordion.stories";
 
@@ -32,6 +32,21 @@ import * as Stories from "./Accordion.stories";
   </Accordion>
 </div>
 
+<Source
+  code={`<Accordion activeIndex={0}>
+  <AccordionTab header="Header I">
+    <p>Use accordions when related details should stay available without taking over the page.</p>
+  </AccordionTab>
+  <AccordionTab header="Header II">
+    <p>Each panel has a clear header and reveals supporting content only when opened.</p>
+  </AccordionTab>
+  <AccordionTab header="Header III">
+    <p>Sakai uses this pattern in panel documentation and compact settings surfaces.</p>
+  </AccordionTab>
+</Accordion>`}
+  language="tsx"
+/>
+
 ## Multiple Panels
 
 <div className="w-full md:w-30rem">
@@ -48,6 +63,21 @@ import * as Stories from "./Accordion.stories";
   </Accordion>
 </div>
 
+<Source
+  code={`<Accordion multiple activeIndex={[0, 1]}>
+  <AccordionTab header="Account">
+    <p>Multiple mode keeps more than one panel open at the same time.</p>
+  </AccordionTab>
+  <AccordionTab header="Billing">
+    <p>Use it for short sections where users often compare details.</p>
+  </AccordionTab>
+  <AccordionTab header="Security">
+    <p>Keep panel content concise so the expanded stack remains scannable.</p>
+  </AccordionTab>
+</Accordion>`}
+  language="tsx"
+/>
+
 ## Icons And States
 
 <div className="w-full md:w-30rem">
@@ -63,6 +93,21 @@ import * as Stories from "./Accordion.stories";
     </AccordionTab>
   </Accordion>
 </div>
+
+<Source
+  code={`<Accordion activeIndex={0} expandIcon="pi pi-plus" collapseIcon="pi pi-minus">
+  <AccordionTab header="Custom toggle icons">
+    <p>Use custom icons when the surrounding interface already uses plus and minus affordances.</p>
+  </AccordionTab>
+  <AccordionTab header="Disabled panel" disabled>
+    <p>Disabled panels remain visible but cannot be opened.</p>
+  </AccordionTab>
+  <AccordionTab header="Available panel">
+    <p>Available panels keep the standard keyboard and click interaction.</p>
+  </AccordionTab>
+</Accordion>`}
+  language="tsx"
+/>
 
 ## Playground
 
