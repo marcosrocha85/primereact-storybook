@@ -59,8 +59,8 @@ Review every component story set and align it with the Button documentation patt
 - [ ] Messages
 - [ ] MultiSelect
 - [ ] OrderList
-- [ ] OverlayPanel
-- [ ] Panel
+- [x] OverlayPanel
+- [x] Panel
 - [ ] PanelMenu
 - [ ] Password
 - [ ] PickList
