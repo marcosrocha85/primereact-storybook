@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { ImageProps } from 'primereact/image';
 import { Image } from 'primereact/image';
-import mediaDemo from '../../../vendor/sakai-react/app/(main)/uikit/media/page';
-import mediaSource from '../../../vendor/sakai-react/app/(main)/uikit/media/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+
+type ImageStoryArgs = ImageProps;
 
 const meta = {
   title: 'Components/Image',
@@ -11,31 +11,36 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Image with optional preview.'
+        component: 'PrimeReact image display used by Sakai for media thumbnails with optional preview overlays.'
       }
     }
   },
-  args: { src: '/demo/images/galleria/galleria1.jpg', alt: 'Image', width: '250', preview: true },
-  argTypes: { src: { control: 'text' }, alt: { control: 'text' }, width: { control: 'text' }, preview: { control: 'boolean' } }
-} satisfies Meta;
+  args: {
+    src: '/demo/images/galleria/galleria10.jpg',
+    alt: 'Sakai gallery image',
+    width: '250',
+    preview: true
+  },
+  argTypes: {
+    src: { control: 'text' },
+    alt: { control: 'text' },
+    width: { control: 'text' },
+    preview: { control: 'boolean' },
+    imageClassName: { control: 'text' }
+  }
+} satisfies Meta<ImageStoryArgs>;
 
 export default meta;
 
-type Story = StoryObj;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: (args: any) => <Image {...args} />,
+  render: (args) => <Image {...args} />,
   parameters: {
     docs: {
       source: {
-        code: `<Image src="/demo/images/galleria/galleria1.jpg" alt="Image" width="250" preview />`
+        code: `<Image src="/demo/images/galleria/galleria10.jpg" alt="Sakai gallery image" width="250" preview />`
       }
     }
   }
-};
-
-export const SakaiImage: Story = {
-  name: 'Sakai / Image',
-  render: () => <SakaiSectionDemo Component={mediaDemo} section="Image" />,
-  parameters: sourceParameters(mediaSource, 'Image', 'Image')
 };
