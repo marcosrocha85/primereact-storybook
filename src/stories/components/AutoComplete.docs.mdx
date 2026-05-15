@@ -1,4 +1,4 @@
-import { Canvas, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Canvas, Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import {
   BasicDemo,
   DropdownDemo,
@@ -23,11 +23,39 @@ Type at least one character to filter the suggestion list.
 
 <BasicDemo />
 
+<Source
+  code={`const [value, setValue] = useState(null);
+const [suggestions, setSuggestions] = useState([]);
+
+<AutoComplete
+  value={value}
+  field="name"
+  suggestions={suggestions}
+  completeMethod={(event) => setSuggestions(filterCountries(event.query))}
+  onChange={(event) => setValue(event.value)}
+  placeholder="Search country"
+/>`}
+  language="tsx"
+/>
+
 ## Dropdown
 
 A dropdown button opens the full suggestion list without typing.
 
 <DropdownDemo />
+
+<Source
+  code={`<AutoComplete
+  value={value}
+  field="name"
+  suggestions={suggestions}
+  completeMethod={(event) => setSuggestions(filterCountries(event.query))}
+  onChange={(event) => setValue(event.value)}
+  dropdown
+  placeholder="Search country"
+/>`}
+  language="tsx"
+/>
 
 ## Multiple
 
@@ -35,17 +63,59 @@ Multiple mode lets users select more than one item, displayed as removable token
 
 <MultipleDemo />
 
+<Source
+  code={`<AutoComplete
+  value={value}
+  field="name"
+  suggestions={suggestions}
+  completeMethod={(event) => setSuggestions(filterCountries(event.query))}
+  onChange={(event) => setValue(event.value)}
+  multiple
+  dropdown
+  placeholder="Add countries"
+/>`}
+  language="tsx"
+/>
+
 ## Float Label
 
 Wrap the component in `p-float-label` to have the label float above the input on focus or when a value is selected.
 
 <FloatLabelDemo />
 
+<Source
+  code={`<span className="p-float-label">
+  <AutoComplete
+    inputId="float-autocomplete"
+    value={value}
+    field="name"
+    suggestions={suggestions}
+    completeMethod={(event) => setSuggestions(filterCountries(event.query))}
+    onChange={(event) => setValue(event.value)}
+  />
+  <label htmlFor="float-autocomplete">Country</label>
+</span>`}
+  language="tsx"
+/>
+
 ## Invalid State
 
 Apply `p-invalid` to the component to communicate a validation error.
 
 <InvalidStateDemo />
+
+<Source
+  code={`<AutoComplete
+  value={value}
+  field="name"
+  suggestions={suggestions}
+  completeMethod={(event) => setSuggestions(filterCountries(event.query))}
+  onChange={(event) => setValue(event.value)}
+  className="p-invalid"
+  placeholder="Search country"
+/>`}
+  language="tsx"
+/>
 
 ## Playground
 

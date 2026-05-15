@@ -1,4 +1,4 @@
-import { Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Button } from "primereact/button";
 import { Panel } from "primereact/panel";
 
@@ -22,6 +22,15 @@ import { Panel } from "primereact/panel";
   </Panel>
 </div>
 
+<Source
+  code={`<Panel header="Project Details">
+  <p>
+    Use a panel to group related content under a clear heading.
+  </p>
+</Panel>`}
+  language="tsx"
+/>
+
 ## Toggleable
 
 <div style={{ width: "30rem" }}>
@@ -34,6 +43,15 @@ import { Panel } from "primereact/panel";
   </Panel>
 </div>
 
+<Source
+  code={`<Panel header="Summary" toggleable>
+  <p>
+    Add toggleable to let users collapse and expand the panel.
+  </p>
+</Panel>`}
+  language="tsx"
+/>
+
 ## Collapsed by Default
 
 <div style={{ width: "30rem" }}>
@@ -45,6 +63,15 @@ import { Panel } from "primereact/panel";
     </p>
   </Panel>
 </div>
+
+<Source
+  code={`<Panel header="Advanced Settings" toggleable collapsed>
+  <p>
+    Set collapsed together with toggleable to start the panel closed.
+  </p>
+</Panel>`}
+  language="tsx"
+/>
 
 ## Custom Header
 
@@ -89,3 +116,39 @@ import { Panel } from "primereact/panel";
     </p>
   </Panel>
 </div>
+
+<Source
+  code={`<Panel
+  header="Notifications"
+  headerTemplate={(options) => {
+    const {
+      className,
+      titleClassName,
+      togglerClassName,
+      togglerIconClassName,
+      onTogglerClick,
+    } = options;
+
+    return (
+      <div className={className}>
+        <span className={titleClassName}>
+          <i className="pi pi-bell mr-2" />
+          Notifications
+        </span>
+        <div className="flex gap-2">
+          <Button icon="pi pi-cog" text rounded severity="secondary" size="small" aria-label="Settings" />
+          <button className={togglerClassName} onClick={onTogglerClick}>
+            <span className={togglerIconClassName} />
+          </button>
+        </div>
+      </div>
+    );
+  }}
+  toggleable
+>
+  <p>
+    Use headerTemplate to inject custom controls such as action buttons alongside the toggle affordance.
+  </p>
+</Panel>`}
+  language="tsx"
+/>
