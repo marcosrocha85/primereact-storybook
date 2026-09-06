@@ -11,6 +11,7 @@ GitHub Issues in `marcosrocha85/primereact-storybook` is the authoritative backl
 At the beginning of every session, before choosing implementation work:
 
 1. Read this guide and inspect the working tree. Preserve existing user changes.
+   Whenever the user requests implementation of a new issue, first verify that no local merge or unresolved conflicts remain and that the current issue branch's pull request has been merged. If the merge is still pending, report the blocker; do not merge it without explicit authorization. Once verified, switch to `main`, update it with `git pull --ff-only origin main`, and create the new issue branch from that updated `main` before editing implementation files.
 2. Fetch the current open component-review queue from GitHub, including every page, sorted by issue number ascending:
 
    ```sh

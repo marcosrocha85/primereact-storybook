@@ -10,7 +10,7 @@ const meta = {
   parameters: {
     layout: 'centered',
     controls: { include: ["className","style"] },
-    docs: { description: { component: 'Avatar group.' }, source: { code: exampleSource } }
+    docs: { description: { component: 'Overlapping avatars representing a team, with a final avatar indicating additional members. Configure size and shape on each child Avatar.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
   argTypes: { className: { control: 'text' }, style: { control: 'object' } }

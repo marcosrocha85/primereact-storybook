@@ -654,10 +654,36 @@ import { Badge } from "primereact/badge";`,
     prime: 'avatargroup',
     importName: 'AvatarGroup',
     extraImports: `import { Avatar } from 'primereact/avatar';`,
-    description: 'Avatar group.',
-    args: `{}`,
+    description: 'Overlapping avatars representing a team, with a final avatar indicating additional members. Configure size and shape on each child Avatar.',
+    args: `{ className: '', style: {} }`,
     argTypes: `{ className: { control: 'text' }, style: { control: 'object' } }`,
-    playground: `<AvatarGroup {...args}><Avatar label="A" shape="circle" /><Avatar label="B" shape="circle" /><Avatar label="+2" shape="circle" /></AvatarGroup>`,
+    playground: `<AvatarGroup {...args}>
+    <Avatar image="demo/images/avatar/amyelsner.png" imageAlt="Amy Elsner" size="large" shape="circle" />
+    <Avatar image="demo/images/avatar/asiyajavayant.png" imageAlt="Asiya Javayant" size="large" shape="circle" />
+    <Avatar image="demo/images/avatar/onyamalimba.png" imageAlt="Onyama Limba" size="large" shape="circle" />
+    <Avatar image="demo/images/avatar/ionibowcher.png" imageAlt="Ioni Bowcher" size="large" shape="circle" />
+    <Avatar image="demo/images/avatar/xuxuefeng.png" imageAlt="Xuxue Feng" size="large" shape="circle" />
+    <Avatar label="+2" aria-label="2 additional members" shape="circle" size="large" style={{ backgroundColor: '#9c27b0', color: '#ffffff' }} />
+  </AvatarGroup>`,
+    docsImports: `import { AvatarGroup } from "primereact/avatargroup";
+import { Avatar } from "primereact/avatar";`,
+    docsVariations: [
+      { title: 'Initials', code: `<AvatarGroup>
+  <Avatar label="P" shape="circle" size="large" />
+  <Avatar label="V" shape="circle" size="large" style={{ backgroundColor: '#2196F3', color: '#ffffff' }} />
+  <Avatar label="U" shape="circle" size="large" style={{ backgroundColor: '#9c27b0', color: '#ffffff' }} />
+</AvatarGroup>` },
+      { title: 'Sizes', code: `<AvatarGroup>
+  <Avatar label="P" shape="circle" />
+  <Avatar label="V" shape="circle" />
+  <Avatar label="+2" shape="circle" />
+</AvatarGroup>
+<AvatarGroup>
+  <Avatar label="P" shape="circle" size="xlarge" />
+  <Avatar label="V" shape="circle" size="xlarge" />
+  <Avatar label="+2" shape="circle" size="xlarge" />
+</AvatarGroup>` },
+    ],
   },
   {
     name: 'Tag',
