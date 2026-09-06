@@ -633,6 +633,21 @@ import { menuWithActions } from '../menuExamples';`,
     args: `{ label: 'P', shape: 'circle', size: 'large' }`,
     argTypes: `{ label: { control: 'text' }, icon: { control: 'text' }, shape: { control: 'inline-radio', options: ['square', 'circle'] }, size: { control: 'select', options: ['normal', 'large', 'xlarge'] } }`,
     playground: `<Avatar {...args} />`,
+    docsImports: `import { Avatar } from "primereact/avatar";
+import { Badge } from "primereact/badge";`,
+    docsVariations: [
+      { title: 'Shapes', code: `<Avatar label="P" shape="square" size="large" />
+<Avatar label="P" shape="circle" size="large" />` },
+      { title: 'Sizes', code: `<Avatar label="P" shape="circle" />
+<Avatar label="P" shape="circle" size="large" />
+<Avatar label="P" shape="circle" size="xlarge" />` },
+      { title: 'Colors', code: `<Avatar label="V" size="large" shape="circle" style={{ backgroundColor: '#2196F3', color: '#ffffff' }} />
+<Avatar label="U" size="large" shape="circle" style={{ backgroundColor: '#9c27b0', color: '#ffffff' }} />` },
+      { title: 'Icons', code: `<Avatar icon="pi pi-user" size="large" shape="circle" aria-label="User" />` },
+      { title: 'Icon with badge', code: `<Avatar className="p-overlay-badge" icon="pi pi-user" size="xlarge" aria-label="User with 4 notifications">
+  <Badge value="4" />
+</Avatar>` },
+    ],
   },
   {
     name: 'AvatarGroup',
@@ -767,14 +782,20 @@ function createDocs(component) {
     }
     return [];
   }).slice(0,6);
-  const examples = variations.map(({title,args}) => `### ${title}
+  const examples = component.docsVariations ? component.docsVariations.map(({ title, code }) => `### ${title}
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+${code}
+</div>
+
+<Source code={${JSON.stringify(code)}} language="tsx" />`).join('\n\n') : variations.map(({title,args}) => `### ${title}
 
 <div className="component-example sb-unstyled"><Example initialArgs={${args}} /></div>
 
 <Source code={exampleSource + ${JSON.stringify(`\n// Render this variation:\n<Example initialArgs={${args}} />`)}} language="tsx" />`).join('\n\n');
   return `import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Example } from "./${component.name}.examples";
-import exampleSource from "./${component.name}.examples.tsx?raw";
+import exampleSource from "./${component.name}.examples.tsx?raw";${component.docsImports ? '\n' + component.docsImports : ''}
 
 <Meta title="Components/${component.name}/Summary" />
 

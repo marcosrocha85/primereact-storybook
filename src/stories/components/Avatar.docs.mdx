@@ -1,6 +1,8 @@
 import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Example } from "./Avatar.examples";
 import exampleSource from "./Avatar.examples.tsx?raw";
+import { Avatar } from "primereact/avatar";
+import { Badge } from "primereact/badge";
 
 <Meta title="Components/Avatar/Summary" />
 
@@ -16,35 +18,51 @@ import exampleSource from "./Avatar.examples.tsx?raw";
 
 ## Variations
 
-### square
+### Shapes
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ shape: 'square' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Avatar label="P" shape="square" size="large" />
+<Avatar label="P" shape="circle" size="large" />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ shape: 'square' }} />"} language="tsx" />
+<Source code={"<Avatar label=\"P\" shape=\"square\" size=\"large\" />\n<Avatar label=\"P\" shape=\"circle\" size=\"large\" />"} language="tsx" />
 
-### circle
+### Sizes
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ shape: 'circle' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Avatar label="P" shape="circle" />
+<Avatar label="P" shape="circle" size="large" />
+<Avatar label="P" shape="circle" size="xlarge" />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ shape: 'circle' }} />"} language="tsx" />
+<Source code={"<Avatar label=\"P\" shape=\"circle\" />\n<Avatar label=\"P\" shape=\"circle\" size=\"large\" />\n<Avatar label=\"P\" shape=\"circle\" size=\"xlarge\" />"} language="tsx" />
 
-### normal
+### Colors
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ size: 'normal' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Avatar label="V" size="large" shape="circle" style={{ backgroundColor: '#2196F3', color: '#ffffff' }} />
+<Avatar label="U" size="large" shape="circle" style={{ backgroundColor: '#9c27b0', color: '#ffffff' }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ size: 'normal' }} />"} language="tsx" />
+<Source code={"<Avatar label=\"V\" size=\"large\" shape=\"circle\" style={{ backgroundColor: '#2196F3', color: '#ffffff' }} />\n<Avatar label=\"U\" size=\"large\" shape=\"circle\" style={{ backgroundColor: '#9c27b0', color: '#ffffff' }} />"} language="tsx" />
 
-### large
+### Icons
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ size: 'large' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Avatar icon="pi pi-user" size="large" shape="circle" aria-label="User" />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ size: 'large' }} />"} language="tsx" />
+<Source code={"<Avatar icon=\"pi pi-user\" size=\"large\" shape=\"circle\" aria-label=\"User\" />"} language="tsx" />
 
-### xlarge
+### Icon with badge
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ size: 'xlarge' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Avatar className="p-overlay-badge" icon="pi pi-user" size="xlarge" aria-label="User with 4 notifications">
+  <Badge value="4" />
+</Avatar>
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ size: 'xlarge' }} />"} language="tsx" />
+<Source code={"<Avatar className=\"p-overlay-badge\" icon=\"pi pi-user\" size=\"xlarge\" aria-label=\"User with 4 notifications\">\n  <Badge value=\"4\" />\n</Avatar>"} language="tsx" />
 
 ## Playground
 
