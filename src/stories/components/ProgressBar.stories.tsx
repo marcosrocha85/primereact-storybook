@@ -1,41 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { ProgressBar } from 'primereact/progressbar';
-import miscDemo from '../../../vendor/sakai-react/app/(main)/uikit/misc/page';
-import miscSource from '../../../vendor/sakai-react/app/(main)/uikit/misc/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './ProgressBar.examples';
+import exampleSource from './ProgressBar.examples.tsx?raw';
 
 const meta = {
   title: 'Components/ProgressBar',
   component: ProgressBar,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Progress indicator.'
-      }
-    }
+    controls: { include: ["value","showValue","mode"] },
+    docs: { description: { component: 'Progress indicator.' }, source: { code: exampleSource } }
   },
-  args: { value: 50, showValue: true },
+  args: defaultArgs,
   argTypes: { value: { control: 'number' }, showValue: { control: 'boolean' }, mode: { control: 'select', options: ['determinate', 'indeterminate'] } }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <div style={{ width: '24rem' }}><ProgressBar {...args} /></div>,
-  parameters: {
-    docs: {
-      source: {
-        code: `<ProgressBar value={50} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiProgressBar: Story = {
-  name: 'Sakai / ProgressBar',
-  render: () => <SakaiSectionDemo Component={miscDemo} section="ProgressBar" />,
-  parameters: sourceParameters(miscSource, 'ProgressBar', 'ProgressBar')
 };

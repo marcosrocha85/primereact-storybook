@@ -1,41 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { InputSwitch } from 'primereact/inputswitch';
-import inputDemo from '../../../vendor/sakai-react/app/(main)/uikit/input/page';
-import inputSource from '../../../vendor/sakai-react/app/(main)/uikit/input/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './InputSwitch.examples';
+import exampleSource from './InputSwitch.examples.tsx?raw';
 
 const meta = {
   title: 'Components/InputSwitch',
   component: InputSwitch,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Boolean toggle switch.'
-      }
-    }
+    controls: { include: ["checked","disabled"] },
+    docs: { description: { component: 'Boolean toggle switch.' }, source: { code: exampleSource } }
   },
-  args: { checked: true },
+  args: defaultArgs,
   argTypes: { checked: { control: 'boolean' }, disabled: { control: 'boolean' } }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <InputSwitch {...args} onChange={() => undefined} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<InputSwitch checked={switchValue} onChange={(event) => setSwitchValue(event.value)} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiInputSwitch: Story = {
-  name: 'Sakai / Input Switch',
-  render: () => <SakaiSectionDemo Component={inputDemo} section="Input Switch" />,
-  parameters: sourceParameters(inputSource, 'Input Switch', 'InputSwitch')
 };

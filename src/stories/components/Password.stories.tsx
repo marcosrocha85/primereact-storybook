@@ -1,41 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Password } from 'primereact/password';
-import invalidstateDemo from '../../../vendor/sakai-react/app/(main)/uikit/invalidstate/page';
-import invalidstateSource from '../../../vendor/sakai-react/app/(main)/uikit/invalidstate/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './Password.examples';
+import exampleSource from './Password.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Password',
   component: Password,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Password input with feedback.'
-      }
-    }
+    controls: { include: ["value","placeholder","feedback","toggleMask","disabled"] },
+    docs: { description: { component: 'Password input with feedback.' }, source: { code: exampleSource } }
   },
-  args: { placeholder: 'Password', feedback: true, toggleMask: true },
-  argTypes: { placeholder: { control: 'text' }, feedback: { control: 'boolean' }, toggleMask: { control: 'boolean' }, disabled: { control: 'boolean' } }
-} satisfies Meta;
+  args: defaultArgs,
+  argTypes: { value: { control: 'text' }, placeholder: { control: 'text' }, feedback: { control: 'boolean' }, toggleMask: { control: 'boolean' }, disabled: { control: 'boolean' } }
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <Password {...args} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Password placeholder="Password" feedback toggleMask />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const InvalidStateVariants: Story = {
-  name: 'Sakai / Invalid State',
-  render: () => <SakaiSectionDemo Component={invalidstateDemo} section="Invalid State" />,
-  parameters: sourceParameters(invalidstateSource, 'Invalid State', 'Password')
 };

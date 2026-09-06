@@ -1,12 +1,11 @@
-import { Canvas, Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import {
   BasicDemo,
   DropdownDemo,
   MultipleDemo,
   FloatLabelDemo,
   InvalidStateDemo,
-} from "./AutoComplete.stories";
-import * as Stories from "./AutoComplete.stories";
+} from "./AutoComplete.examples";
 
 <Meta title="Components/AutoComplete/Summary" />
 
@@ -17,11 +16,11 @@ import * as Stories from "./AutoComplete.stories";
   types, supporting single and multiple selection.
 </Subtitle>
 
-## Basic
+## Usage
 
 Type at least one character to filter the suggestion list.
 
-<BasicDemo />
+<div className="component-example sb-unstyled"><BasicDemo /></div>
 
 <Source
   code={`const [value, setValue] = useState(null);
@@ -38,11 +37,13 @@ const [suggestions, setSuggestions] = useState([]);
   language="tsx"
 />
 
-## Dropdown
+## Variations
+
+### Dropdown
 
 A dropdown button opens the full suggestion list without typing.
 
-<DropdownDemo />
+<div className="component-example sb-unstyled"><DropdownDemo /></div>
 
 <Source
   code={`<AutoComplete
@@ -57,11 +58,11 @@ A dropdown button opens the full suggestion list without typing.
   language="tsx"
 />
 
-## Multiple
+### Multiple
 
 Multiple mode lets users select more than one item, displayed as removable tokens.
 
-<MultipleDemo />
+<div className="component-example sb-unstyled"><MultipleDemo /></div>
 
 <Source
   code={`<AutoComplete
@@ -77,11 +78,11 @@ Multiple mode lets users select more than one item, displayed as removable token
   language="tsx"
 />
 
-## Float Label
+### Float Label
 
 Wrap the component in `p-float-label` to have the label float above the input on focus or when a value is selected.
 
-<FloatLabelDemo />
+<div className="component-example sb-unstyled"><FloatLabelDemo /></div>
 
 <Source
   code={`<span className="p-float-label">
@@ -98,11 +99,11 @@ Wrap the component in `p-float-label` to have the label float above the input on
   language="tsx"
 />
 
-## Invalid State
+### Invalid State
 
 Apply `p-invalid` to the component to communicate a validation error.
 
-<InvalidStateDemo />
+<div className="component-example sb-unstyled"><InvalidStateDemo /></div>
 
 <Source
   code={`<AutoComplete
@@ -117,6 +118,7 @@ Apply `p-invalid` to the component to communicate a validation error.
   language="tsx"
 />
 
+
 ## Playground
 
-<Canvas of={Stories.Default} sourceState="hidden" />
+Open [Default](?path=/story/components-autocomplete--default) to change properties with Controls. Examples on this page keep their own state.

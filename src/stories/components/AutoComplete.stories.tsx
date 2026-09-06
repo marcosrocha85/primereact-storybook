@@ -1,172 +1,10 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { AutoCompleteCompleteEvent } from 'primereact/autocomplete';
-import { AutoComplete } from 'primereact/autocomplete';
+import { useArgs } from 'storybook/preview-api';
+import { AutoComplete, type AutoCompleteCompleteEvent } from 'primereact/autocomplete';
+import { filterCountries } from './AutoComplete.examples';
 
-interface Country {
-  name: string;
-  code: string;
-}
-
-const allCountries: Country[] = [
-  { name: 'Afghanistan', code: 'AF' },
-  { name: 'Albania', code: 'AL' },
-  { name: 'Algeria', code: 'DZ' },
-  { name: 'Argentina', code: 'AR' },
-  { name: 'Australia', code: 'AU' },
-  { name: 'Austria', code: 'AT' },
-  { name: 'Belgium', code: 'BE' },
-  { name: 'Brazil', code: 'BR' },
-  { name: 'Canada', code: 'CA' },
-  { name: 'Chile', code: 'CL' },
-  { name: 'China', code: 'CN' },
-  { name: 'Colombia', code: 'CO' },
-  { name: 'Denmark', code: 'DK' },
-  { name: 'Egypt', code: 'EG' },
-  { name: 'Finland', code: 'FI' },
-  { name: 'France', code: 'FR' },
-  { name: 'Germany', code: 'DE' },
-  { name: 'Greece', code: 'GR' },
-  { name: 'Hungary', code: 'HU' },
-  { name: 'India', code: 'IN' },
-  { name: 'Indonesia', code: 'ID' },
-  { name: 'Ireland', code: 'IE' },
-  { name: 'Israel', code: 'IL' },
-  { name: 'Italy', code: 'IT' },
-  { name: 'Japan', code: 'JP' },
-  { name: 'Jordan', code: 'JO' },
-  { name: 'Kenya', code: 'KE' },
-  { name: 'Mexico', code: 'MX' },
-  { name: 'Morocco', code: 'MA' },
-  { name: 'Netherlands', code: 'NL' },
-  { name: 'New Zealand', code: 'NZ' },
-  { name: 'Nigeria', code: 'NG' },
-  { name: 'Norway', code: 'NO' },
-  { name: 'Pakistan', code: 'PK' },
-  { name: 'Peru', code: 'PE' },
-  { name: 'Philippines', code: 'PH' },
-  { name: 'Poland', code: 'PL' },
-  { name: 'Portugal', code: 'PT' },
-  { name: 'Romania', code: 'RO' },
-  { name: 'Russia', code: 'RU' },
-  { name: 'Saudi Arabia', code: 'SA' },
-  { name: 'South Africa', code: 'ZA' },
-  { name: 'South Korea', code: 'KR' },
-  { name: 'Spain', code: 'ES' },
-  { name: 'Sweden', code: 'SE' },
-  { name: 'Switzerland', code: 'CH' },
-  { name: 'Thailand', code: 'TH' },
-  { name: 'Turkey', code: 'TR' },
-  { name: 'Ukraine', code: 'UA' },
-  { name: 'United Kingdom', code: 'GB' },
-  { name: 'United States', code: 'US' },
-  { name: 'Venezuela', code: 'VE' },
-];
-
-function filterCountries(query: string): Country[] {
-  const q = query.toLowerCase();
-  return q
-    ? allCountries.filter((c) => c.name.toLowerCase().startsWith(q))
-    : [...allCountries];
-}
-
-// ── Demo components used in Summary MDX ───────────────────────────────────
-
-export function BasicDemo() {
-  const [value, setValue] = useState<Country | null>(null);
-  const [suggestions, setSuggestions] = useState<Country[]>([]);
-  return (
-    <div style={{ width: '20rem' }}>
-      <AutoComplete
-        value={value}
-        field="name"
-        suggestions={suggestions}
-        completeMethod={(e: AutoCompleteCompleteEvent) => setSuggestions(filterCountries(e.query))}
-        onChange={(e) => setValue(e.value)}
-        placeholder="Search country"
-        className="w-full"
-      />
-    </div>
-  );
-}
-
-export function DropdownDemo() {
-  const [value, setValue] = useState<Country | null>(null);
-  const [suggestions, setSuggestions] = useState<Country[]>([]);
-  return (
-    <div style={{ width: '20rem' }}>
-      <AutoComplete
-        value={value}
-        field="name"
-        suggestions={suggestions}
-        completeMethod={(e: AutoCompleteCompleteEvent) => setSuggestions(filterCountries(e.query))}
-        onChange={(e) => setValue(e.value)}
-        dropdown
-        placeholder="Search country"
-        className="w-full"
-      />
-    </div>
-  );
-}
-
-export function MultipleDemo() {
-  const [value, setValue] = useState<Country[]>([]);
-  const [suggestions, setSuggestions] = useState<Country[]>([]);
-  return (
-    <div style={{ width: '20rem' }}>
-      <AutoComplete
-        value={value}
-        field="name"
-        suggestions={suggestions}
-        completeMethod={(e: AutoCompleteCompleteEvent) => setSuggestions(filterCountries(e.query))}
-        onChange={(e) => setValue(e.value)}
-        multiple
-        dropdown
-        placeholder="Add countries"
-        className="w-full"
-      />
-    </div>
-  );
-}
-
-export function FloatLabelDemo() {
-  const [value, setValue] = useState<Country | null>(null);
-  const [suggestions, setSuggestions] = useState<Country[]>([]);
-  return (
-    <div style={{ width: '20rem' }}>
-      <span className="p-float-label">
-        <AutoComplete
-          inputId="float-autocomplete"
-          value={value}
-          field="name"
-          suggestions={suggestions}
-          completeMethod={(e: AutoCompleteCompleteEvent) => setSuggestions(filterCountries(e.query))}
-          onChange={(e) => setValue(e.value)}
-          className="w-full"
-        />
-        <label htmlFor="float-autocomplete">Country</label>
-      </span>
-    </div>
-  );
-}
-
-export function InvalidStateDemo() {
-  const [value, setValue] = useState<Country | null>(null);
-  const [suggestions, setSuggestions] = useState<Country[]>([]);
-  return (
-    <div style={{ width: '20rem' }}>
-      <AutoComplete
-        value={value}
-        field="name"
-        suggestions={suggestions}
-        completeMethod={(e: AutoCompleteCompleteEvent) => setSuggestions(filterCountries(e.query))}
-        onChange={(e) => setValue(e.value)}
-        className="p-invalid w-full"
-        placeholder="Search country"
-      />
-    </div>
-  );
-}
+interface Country { name: string; code: string; }
 
 // ── Storybook meta ─────────────────────────────────────────────────────────
 
@@ -176,6 +14,7 @@ type AutoCompleteStoryArgs = {
   multiple?: boolean;
   disabled?: boolean;
   forceSelection?: boolean;
+  value?: Country | Country[] | string | null;
 };
 
 const meta = {
@@ -195,14 +34,16 @@ const meta = {
     dropdown: false,
     multiple: false,
     disabled: false,
-    forceSelection: false
+    forceSelection: false,
+    value: null
   },
   argTypes: {
     placeholder: { control: 'text' },
     dropdown: { control: 'boolean' },
     multiple: { control: 'boolean' },
     disabled: { control: 'boolean' },
-    forceSelection: { control: 'boolean' }
+    forceSelection: { control: 'boolean' },
+    value: { control: 'object' }
   },
   includeStories: ['Default']
 } satisfies Meta<AutoCompleteStoryArgs>;
@@ -213,15 +54,15 @@ type Story = StoryObj<typeof meta>;
 
 // ── Playground ─────────────────────────────────────────────────────────────
 
-const AutoCompletePlayground = (args: AutoCompleteStoryArgs) => {
-  const [singleValue, setSingleValue] = useState<Country | null>(null);
-  const [multiValue, setMultiValue] = useState<Country[]>([]);
+const AutoCompletePlayground = ({ args, updateArgs }: { args: AutoCompleteStoryArgs; updateArgs: (changes: Partial<AutoCompleteStoryArgs>) => void }) => {
+  const singleValue = Array.isArray(args.value) ? null : args.value;
+  const multiValue = Array.isArray(args.value) ? args.value : [];
   const [suggestions, setSuggestions] = useState<Country[]>([]);
   const completeMethod = (e: AutoCompleteCompleteEvent) => setSuggestions(filterCountries(e.query));
   const { multiple, placeholder, dropdown, disabled, forceSelection } = args;
 
   return (
-    <div style={{ width: '20rem' }}>
+    <div style={{ width: '20rem', maxWidth: '100%' }}>
       {multiple ? (
         <AutoComplete<Country, true>
           multiple
@@ -233,11 +74,11 @@ const AutoCompletePlayground = (args: AutoCompleteStoryArgs) => {
           field="name"
           suggestions={suggestions}
           completeMethod={completeMethod}
-          onChange={(e) => setMultiValue(e.value ?? [])}
+          onChange={(e) => updateArgs({ value: e.value ?? [] })}
           className="w-full"
         />
       ) : (
-        <AutoComplete<Country | null, false>
+        <AutoComplete<Country | string | null, false>
           placeholder={placeholder}
           dropdown={dropdown}
           disabled={disabled}
@@ -246,7 +87,7 @@ const AutoCompletePlayground = (args: AutoCompleteStoryArgs) => {
           field="name"
           suggestions={suggestions}
           completeMethod={completeMethod}
-          onChange={(e) => setSingleValue(e.value)}
+          onChange={(e) => updateArgs({ value: e.value })}
           className="w-full"
         />
       )}
@@ -255,7 +96,10 @@ const AutoCompletePlayground = (args: AutoCompleteStoryArgs) => {
 };
 
 export const Default: Story = {
-  render: (args) => <AutoCompletePlayground {...args} />,
+  render: function Render() {
+    const [args, updateArgs] = useArgs<AutoCompleteStoryArgs>();
+    return <AutoCompletePlayground args={args} updateArgs={updateArgs} />;
+  },
   parameters: {
     docs: {
       source: {

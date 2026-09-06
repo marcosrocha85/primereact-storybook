@@ -1,49 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { MegaMenu } from 'primereact/megamenu';
-import menuDemo from '../../../vendor/sakai-react/app/(main)/uikit/menu/page';
-import menuSource from '../../../vendor/sakai-react/app/(main)/uikit/menu/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
-
-const items = [{ label: 'Videos', icon: 'pi pi-fw pi-video', items: [[{ label: 'Video 1', items: [{ label: 'Video 1.1' }] }]] }];
+import { defaultArgs, Playground, type ExampleArgs } from './MegaMenu.examples';
+import exampleSource from './MegaMenu.examples.tsx?raw';
 
 const meta = {
   title: 'Components/MegaMenu',
   component: MegaMenu,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Large grouped menu.'
-      }
-    }
+    controls: { include: ["orientation"] },
+    docs: { description: { component: 'Large grouped menu.' }, source: { code: exampleSource } }
   },
-  args: { model: items, orientation: 'horizontal' },
+  args: defaultArgs,
   argTypes: { orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] } }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <MegaMenu {...args} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<MegaMenu model={items} orientation="horizontal" />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiMegaMenuHorizontal: Story = {
-  name: 'Sakai / MegaMenu - Horizontal',
-  render: () => <SakaiSectionDemo Component={menuDemo} section="MegaMenu - Horizontal" />,
-  parameters: sourceParameters(menuSource, 'MegaMenu - Horizontal', 'MegaMenu')
-};
-
-export const SakaiMegaMenuVertical: Story = {
-  name: 'Sakai / MegaMenu - Vertical',
-  render: () => <SakaiSectionDemo Component={menuDemo} section="MegaMenu - Vertical" />,
-  parameters: sourceParameters(menuSource, 'MegaMenu - Vertical', 'MegaMenu')
 };

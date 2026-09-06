@@ -1,43 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Galleria } from 'primereact/galleria';
-import mediaDemo from '../../../vendor/sakai-react/app/(main)/uikit/media/page';
-import mediaSource from '../../../vendor/sakai-react/app/(main)/uikit/media/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
-
-const images = [{ itemImageSrc: '/demo/images/galleria/galleria1.jpg', thumbnailImageSrc: '/demo/images/galleria/galleria1s.jpg', alt: 'Image' }];
+import { defaultArgs, Playground, type ExampleArgs } from './Galleria.examples';
+import exampleSource from './Galleria.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Galleria',
   component: Galleria,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Image gallery.'
-      }
-    }
+    controls: { include: ["numVisible","circular","showItemNavigators"] },
+    docs: { description: { component: 'Image gallery.' }, source: { code: exampleSource } }
   },
-  args: { value: images, numVisible: 1, circular: true, showItemNavigators: true },
+  args: defaultArgs,
   argTypes: { numVisible: { control: 'number' }, circular: { control: 'boolean' }, showItemNavigators: { control: 'boolean' } }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <Galleria {...args} item={(item) => <img src={item.itemImageSrc} alt={item.alt} style={{ width: '100%' }} />} thumbnail={(item) => <img src={item.thumbnailImageSrc} alt={item.alt} />} style={{ maxWidth: '420px' }} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Galleria value={images} item={itemTemplate} thumbnail={thumbnailTemplate} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiGalleria: Story = {
-  name: 'Sakai / Galleria',
-  render: () => <SakaiSectionDemo Component={mediaDemo} section="Galleria" />,
-  parameters: sourceParameters(mediaSource, 'Galleria', 'Galleria')
 };

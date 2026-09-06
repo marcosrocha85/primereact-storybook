@@ -13,7 +13,7 @@ const config: StorybookConfig = {
   },
   staticDirs: ['../public', { from: '../vendor/sakai-react/public', to: '/' }],
   docs: {
-    defaultName: 'Documentacao'
+    defaultName: 'Summary'
   },
   viteFinal: async (config) => {
     config.resolve = config.resolve ?? {};

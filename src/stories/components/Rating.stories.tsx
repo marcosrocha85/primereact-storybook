@@ -1,41 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Rating } from 'primereact/rating';
-import inputDemo from '../../../vendor/sakai-react/app/(main)/uikit/input/page';
-import inputSource from '../../../vendor/sakai-react/app/(main)/uikit/input/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './Rating.examples';
+import exampleSource from './Rating.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Rating',
   component: Rating,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Star rating control.'
-      }
-    }
+    controls: { include: ["value","stars","cancel","disabled"] },
+    docs: { description: { component: 'Star rating control.' }, source: { code: exampleSource } }
   },
-  args: { value: 3, stars: 5, cancel: false },
+  args: defaultArgs,
   argTypes: { value: { control: 'number' }, stars: { control: 'number' }, cancel: { control: 'boolean' }, disabled: { control: 'boolean' } }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <Rating {...args} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Rating value={ratingValue} onChange={(event) => setRatingValue(event.value)} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiRating: Story = {
-  name: 'Sakai / Rating',
-  render: () => <SakaiSectionDemo Component={inputDemo} section="Rating" />,
-  parameters: sourceParameters(inputSource, 'Rating', 'Rating')
 };

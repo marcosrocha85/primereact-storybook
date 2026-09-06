@@ -1,3 +1,4 @@
+import { useArgs } from 'storybook/preview-api';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { PanelProps } from 'primereact/panel';
 import { Panel } from 'primereact/panel';
@@ -56,18 +57,25 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: ({ content, ...args }) => (
-    <div style={{ width: '30rem' }}>
-      <Panel {...args}>
+  render: function Render() {
+    const [values, updateArgs] = useArgs<PanelStoryArgs>();
+    const { content, ...args } = values;
+    return (
+    <div style={{ width: '30rem', maxWidth: '100%' }}>
+      <Panel {...args} onToggle={(event) => { updateArgs({ collapsed: event.value }); args.onToggle?.(event); }}>
         <p className="m-0 line-height-3">{content}</p>
       </Panel>
     </div>
-  ),
+    );
+  },
   parameters: {
     docs: {
       source: {
-        code: `<Panel header="Panel Header">
-  <p>Lorem ipsum dolor sit amet...</p>
+        code: `const [collapsed, setCollapsed] = useState(false);
+
+<Panel header="Panel Header" toggleable collapsed={collapsed}
+  onToggle={(event) => setCollapsed(event.value)}>
+  <p>Panel content.</p>
 </Panel>`
       }
     }

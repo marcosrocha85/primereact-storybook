@@ -1,5 +1,6 @@
-import { Canvas, Controls, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
-import * as Stories from "./Message.stories";
+import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Example } from "./Message.examples";
+import exampleSource from "./Message.examples.tsx?raw";
 
 <Meta title="Components/Message/Summary" />
 
@@ -7,16 +8,38 @@ import * as Stories from "./Message.stories";
 
 <Subtitle>Inline message.</Subtitle>
 
+## Usage
+
+<div className="component-example sb-unstyled"><Example /></div>
+
+<Source code={exampleSource} language="tsx" />
+
+## Variations
+
+### success
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'success' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'success' }} />"} language="tsx" />
+
+### info
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'info' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'info' }} />"} language="tsx" />
+
+### warn
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'warn' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'warn' }} />"} language="tsx" />
+
+### error
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'error' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'error' }} />"} language="tsx" />
+
 ## Playground
 
-<Canvas of={Stories.Default} sourceState="hidden" />
-
-<Controls of={Stories.Default} />
-
-## Sakai / Inline
-
-<Canvas of={Stories.SakaiInline} sourceState="hidden" />
-
-## Sakai / Help Text
-
-<Canvas of={Stories.SakaiHelpText} sourceState="hidden" />
+Open [Default](?path=/story/components-message--default) to change properties with Controls. Examples on this page keep their own state.

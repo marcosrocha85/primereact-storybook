@@ -1,41 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Divider } from 'primereact/divider';
-import panelDemo from '../../../vendor/sakai-react/app/(main)/uikit/panel/page';
-import panelSource from '../../../vendor/sakai-react/app/(main)/uikit/panel/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './Divider.examples';
+import exampleSource from './Divider.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Divider',
   component: Divider,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Visual separator.'
-      }
-    }
+    controls: { include: ["layout","align"] },
+    docs: { description: { component: 'Visual separator.' }, source: { code: exampleSource } }
   },
-  args: { layout: 'horizontal', align: 'center' },
+  args: defaultArgs,
   argTypes: { layout: { control: 'inline-radio', options: ['horizontal', 'vertical'] }, align: { control: 'select', options: ['left', 'center', 'right', 'top', 'bottom'] } }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <div style={{ width: '24rem' }}><span>Before</span><Divider {...args}>Divider</Divider><span>After</span></div>,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Divider align="center">Divider</Divider>`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiDivider: Story = {
-  name: 'Sakai / Divider',
-  render: () => <SakaiSectionDemo Component={panelDemo} section="Divider" />,
-  parameters: sourceParameters(panelSource, 'Divider', 'Divider')
 };

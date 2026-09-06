@@ -1,41 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Skeleton } from 'primereact/skeleton';
-import miscDemo from '../../../vendor/sakai-react/app/(main)/uikit/misc/page';
-import miscSource from '../../../vendor/sakai-react/app/(main)/uikit/misc/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './Skeleton.examples';
+import exampleSource from './Skeleton.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Skeleton',
   component: Skeleton,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Loading placeholder.'
-      }
-    }
+    controls: { include: ["width","height","borderRadius","shape"] },
+    docs: { description: { component: 'Loading placeholder.' }, source: { code: exampleSource } }
   },
-  args: { width: '10rem', height: '2rem', borderRadius: '16px' },
+  args: defaultArgs,
   argTypes: { width: { control: 'text' }, height: { control: 'text' }, borderRadius: { control: 'text' }, shape: { control: 'select', options: [undefined, 'circle'] } }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <Skeleton {...args} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Skeleton width="10rem" height="2rem" />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiStyling: Story = {
-  name: 'Sakai / Styling',
-  render: () => <SakaiSectionDemo Component={miscDemo} section="Styling" />,
-  parameters: sourceParameters(miscSource, 'Styling', 'Skeleton')
 };

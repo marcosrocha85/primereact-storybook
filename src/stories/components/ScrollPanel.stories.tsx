@@ -1,41 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { ScrollPanel } from 'primereact/scrollpanel';
-import miscDemo from '../../../vendor/sakai-react/app/(main)/uikit/misc/page';
-import miscSource from '../../../vendor/sakai-react/app/(main)/uikit/misc/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './ScrollPanel.examples';
+import exampleSource from './ScrollPanel.examples.tsx?raw';
 
 const meta = {
   title: 'Components/ScrollPanel',
   component: ScrollPanel,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Area with custom scrolling.'
-      }
-    }
+    controls: { include: ["style"] },
+    docs: { description: { component: 'Area with custom scrolling.' }, source: { code: exampleSource } }
   },
-  args: { style: { width: '24rem', height: '160px' } },
-  argTypes: {}
-} satisfies Meta;
+  args: defaultArgs,
+  argTypes: { style: { control: 'object' } }
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <ScrollPanel {...args}><p style={{ lineHeight: 1.7 }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel posuere ipsum. Integer porta sem vitae lectus interdum, a dictum dolor tempor.</p></ScrollPanel>,
-  parameters: {
-    docs: {
-      source: {
-        code: `<ScrollPanel style={{ width: '100%', height: '200px' }}>Content</ScrollPanel>`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiStyling: Story = {
-  name: 'Sakai / Styling',
-  render: () => <SakaiSectionDemo Component={miscDemo} section="Styling" />,
-  parameters: sourceParameters(miscSource, 'Styling', 'ScrollPanel')
 };

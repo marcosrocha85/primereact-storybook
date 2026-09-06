@@ -1,3 +1,4 @@
+import { useArgs } from 'storybook/preview-api';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { AccordionProps } from 'primereact/accordion';
 import { Accordion, AccordionTab } from 'primereact/accordion';
@@ -30,7 +31,7 @@ const meta = {
     thirdHeader: 'Header III'
   },
   argTypes: {
-    activeIndex: { control: 'number' },
+    activeIndex: { control: 'object' },
     multiple: { control: 'boolean' },
     expandIcon: {
       control: 'select',
@@ -51,8 +52,11 @@ export default meta;
 type Story = StoryObj<AccordionStoryArgs>;
 
 export const Default: Story = {
-  render: ({ firstHeader, secondHeader, thirdHeader, ...args }) => (
-    <Accordion {...args}>
+  render: function Render() {
+    const [values, updateArgs] = useArgs<AccordionStoryArgs>();
+    const { firstHeader, secondHeader, thirdHeader, ...args } = values;
+    return (
+    <Accordion {...args} activeIndex={args.multiple ? (Array.isArray(args.activeIndex) ? args.activeIndex : [args.activeIndex ?? 0]) : (Array.isArray(args.activeIndex) ? args.activeIndex[0] ?? 0 : args.activeIndex)} onTabChange={(event) => { updateArgs({ activeIndex: event.index }); args.onTabChange?.(event); }}>
       <AccordionTab header={firstHeader}>
         <p className="m-0 line-height-3">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -69,11 +73,14 @@ export const Default: Story = {
         </p>
       </AccordionTab>
     </Accordion>
-  ),
+    );
+  },
   parameters: {
     docs: {
       source: {
-        code: `<Accordion activeIndex={0}>
+        code: `const [activeIndex, setActiveIndex] = useState(0);
+
+<Accordion activeIndex={activeIndex} onTabChange={(event) => setActiveIndex(event.index)}>
   <AccordionTab header="Header I">Content</AccordionTab>
   <AccordionTab header="Header II">Content</AccordionTab>
   <AccordionTab header="Header III">Content</AccordionTab>

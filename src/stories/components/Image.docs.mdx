@@ -10,11 +10,11 @@ import { Image } from "primereact/image";
   overlays.
 </Subtitle>
 
-## Preview
+## Usage
 
-<div className="flex justify-content-center">
+<div className="component-example sb-unstyled flex justify-content-center">
   <Image
-    src="/demo/images/galleria/galleria10.jpg"
+    src="./demo/images/galleria/galleria10.jpg"
     alt="Sakai gallery image"
     width="250"
     preview
@@ -23,7 +23,7 @@ import { Image } from "primereact/image";
 
 <Source
   code={`<Image
-  src="/demo/images/galleria/galleria10.jpg"
+  src="./demo/images/galleria/galleria10.jpg"
   alt="Sakai gallery image"
   width="250"
   preview
@@ -31,23 +31,25 @@ import { Image } from "primereact/image";
   language="tsx"
 />
 
-## Sizes
+## Variations
 
-<div className="flex flex-wrap align-items-end gap-4">
+### Sizes
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-end gap-4">
   <Image
-    src="/demo/images/galleria/galleria1.jpg"
+    src="./demo/images/galleria/galleria1.jpg"
     alt="Small gallery image"
     width="120"
     preview
   />
   <Image
-    src="/demo/images/galleria/galleria2.jpg"
+    src="./demo/images/galleria/galleria2.jpg"
     alt="Medium gallery image"
     width="180"
     preview
   />
   <Image
-    src="/demo/images/galleria/galleria3.jpg"
+    src="./demo/images/galleria/galleria3.jpg"
     alt="Large gallery image"
     width="240"
     preview
@@ -55,29 +57,29 @@ import { Image } from "primereact/image";
 </div>
 
 <Source
-  code={`<Image src="/demo/images/galleria/galleria1.jpg" alt="Small gallery image" width="120" preview />
-<Image src="/demo/images/galleria/galleria2.jpg" alt="Medium gallery image" width="180" preview />
-<Image src="/demo/images/galleria/galleria3.jpg" alt="Large gallery image" width="240" preview />`}
+  code={`<Image src="./demo/images/galleria/galleria1.jpg" alt="Small gallery image" width="120" preview />
+<Image src="./demo/images/galleria/galleria2.jpg" alt="Medium gallery image" width="180" preview />
+<Image src="./demo/images/galleria/galleria3.jpg" alt="Large gallery image" width="240" preview />`}
   language="tsx"
 />
 
-## Styles
+### Styles
 
-<div className="flex flex-wrap align-items-center gap-4">
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-4">
   <Image
-    src="/demo/images/galleria/galleria4.jpg"
+    src="./demo/images/galleria/galleria4.jpg"
     alt="Plain gallery image"
     width="180"
   />
   <Image
-    src="/demo/images/galleria/galleria5.jpg"
+    src="./demo/images/galleria/galleria5.jpg"
     alt="Rounded gallery image"
     width="180"
     className="border-round overflow-hidden"
     preview
   />
   <Image
-    src="/demo/images/galleria/galleria6.jpg"
+    src="./demo/images/galleria/galleria6.jpg"
     alt="Shadowed gallery image"
     width="180"
     imageClassName="shadow-2"
@@ -86,16 +88,16 @@ import { Image } from "primereact/image";
 </div>
 
 <Source
-  code={`<Image src="/demo/images/galleria/galleria4.jpg" alt="Plain gallery image" width="180" />
+  code={`<Image src="./demo/images/galleria/galleria4.jpg" alt="Plain gallery image" width="180" />
 <Image
-  src="/demo/images/galleria/galleria5.jpg"
+  src="./demo/images/galleria/galleria5.jpg"
   alt="Rounded gallery image"
   width="180"
   className="border-round overflow-hidden"
   preview
 />
 <Image
-  src="/demo/images/galleria/galleria6.jpg"
+  src="./demo/images/galleria/galleria6.jpg"
   alt="Shadowed gallery image"
   width="180"
   imageClassName="shadow-2"
@@ -103,3 +105,7 @@ import { Image } from "primereact/image";
 />`}
   language="tsx"
 />
+
+## Playground
+
+Open [Default](?path=/story/components-image--default) to change properties with Controls. Examples on this page keep their own state.

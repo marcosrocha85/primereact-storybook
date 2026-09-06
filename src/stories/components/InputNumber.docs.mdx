@@ -1,5 +1,6 @@
-import { Canvas, Controls, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
-import * as Stories from "./InputNumber.stories";
+import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Example } from "./InputNumber.examples";
+import exampleSource from "./InputNumber.examples.tsx?raw";
 
 <Meta title="Components/InputNumber/Summary" />
 
@@ -7,20 +8,32 @@ import * as Stories from "./InputNumber.stories";
 
 <Subtitle>Numeric input with formatting.</Subtitle>
 
+## Usage
+
+<div className="component-example sb-unstyled"><Example /></div>
+
+<Source code={exampleSource} language="tsx" />
+
+## Variations
+
+### decimal
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ mode: 'decimal' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ mode: 'decimal' }} />"} language="tsx" />
+
+### currency
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ mode: 'currency' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ mode: 'currency' }} />"} language="tsx" />
+
+### Disabled
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+
 ## Playground
 
-<Canvas of={Stories.Default} sourceState="hidden" />
-
-<Controls of={Stories.Default} />
-
-## Sakai / InputNumber
-
-<Canvas of={Stories.SakaiInputNumber} sourceState="hidden" />
-
-## Sakai / Float Label
-
-<Canvas of={Stories.FloatLabelVariants} sourceState="hidden" />
-
-## Sakai / Invalid State
-
-<Canvas of={Stories.InvalidStateVariants} sourceState="hidden" />
+Open [Default](?path=/story/components-inputnumber--default) to change properties with Controls. Examples on this page keep their own state.

@@ -1,5 +1,6 @@
-import { Canvas, Controls, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
-import * as Stories from "./AvatarGroup.stories";
+import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Example } from "./AvatarGroup.examples";
+import exampleSource from "./AvatarGroup.examples.tsx?raw";
 
 <Meta title="Components/AvatarGroup/Summary" />
 
@@ -7,12 +8,16 @@ import * as Stories from "./AvatarGroup.stories";
 
 <Subtitle>Avatar group.</Subtitle>
 
+## Usage
+
+<div className="component-example sb-unstyled"><Example /></div>
+
+<Source code={exampleSource} language="tsx" />
+
+## Variations
+
+The usage example shows the base composition. Use Default to explore the documented properties.
+
 ## Playground
 
-<Canvas of={Stories.Default} sourceState="hidden" />
-
-<Controls of={Stories.Default} />
-
-## Sakai / Avatar Group
-
-<Canvas of={Stories.SakaiAvatarGroup} sourceState="hidden" />
+Open [Default](?path=/story/components-avatargroup--default) to change properties with Controls. Examples on this page keep their own state.

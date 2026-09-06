@@ -1,42 +1,26 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Dialog } from 'primereact/dialog';
-import { Button } from 'primereact/button';
-import overlayDemo from '../../../vendor/sakai-react/app/(main)/uikit/overlay/page';
-import overlaySource from '../../../vendor/sakai-react/app/(main)/uikit/overlay/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './Dialog.examples';
+import exampleSource from './Dialog.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Dialog',
-  component: Dialog,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Modal window.'
-      }
-    }
+    controls: { include: ["header","modal","visible"] },
+    docs: { description: { component: 'Modal window.' }, source: { code: exampleSource } }
   },
-  args: { header: 'Header', modal: true, visible: true, style: { width: '32rem' } },
+  args: defaultArgs,
   argTypes: { header: { control: 'text' }, modal: { control: 'boolean' }, visible: { control: 'boolean' } }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <><Button label="Open" /><Dialog {...args} onHide={() => undefined}><p className="m-0">Dialog content.</p></Dialog></>,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Dialog header="Header" visible={visible} onHide={() => setVisible(false)}>Content</Dialog>`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiDialog: Story = {
-  name: 'Sakai / Dialog',
-  render: () => <SakaiSectionDemo Component={overlayDemo} section="Dialog" />,
-  parameters: sourceParameters(overlaySource, 'Dialog', 'Dialog')
 };

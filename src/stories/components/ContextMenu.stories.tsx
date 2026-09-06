@@ -1,43 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { ContextMenu } from 'primereact/contextmenu';
-import menuDemo from '../../../vendor/sakai-react/app/(main)/uikit/menu/page';
-import menuSource from '../../../vendor/sakai-react/app/(main)/uikit/menu/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
-
-const items = [{ label: 'Save', icon: 'pi pi-save' }, { label: 'Delete', icon: 'pi pi-times' }];
+import { defaultArgs, Playground, type ExampleArgs } from './ContextMenu.examples';
+import exampleSource from './ContextMenu.examples.tsx?raw';
 
 const meta = {
   title: 'Components/ContextMenu',
   component: ContextMenu,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Context-triggered menu.'
-      }
-    }
+    controls: { include: ["model"] },
+    docs: { description: { component: 'Context-triggered menu.' }, source: { code: exampleSource } }
   },
-  args: { model: items },
-  argTypes: {}
-} satisfies Meta;
+  args: defaultArgs,
+  argTypes: { model: { control: 'object' } }
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <div><ContextMenu {...args} /><div className="p-4 border-1 border-round">Right click area</div></div>,
-  parameters: {
-    docs: {
-      source: {
-        code: `<ContextMenu model={items} ref={contextMenu} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiContextMenu: Story = {
-  name: 'Sakai / ContextMenu',
-  render: () => <SakaiSectionDemo Component={menuDemo} section="ContextMenu" />,
-  parameters: sourceParameters(menuSource, 'ContextMenu', 'ContextMenu')
 };

@@ -1,43 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { BreadCrumb } from 'primereact/breadcrumb';
-import menuDemo from '../../../vendor/sakai-react/app/(main)/uikit/menu/page';
-import menuSource from '../../../vendor/sakai-react/app/(main)/uikit/menu/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
-
-const home = { icon: 'pi pi-home', url: '/' }; const items = [{ label: 'Computer' }, { label: 'Notebook' }];
+import { defaultArgs, Playground, type ExampleArgs } from './BreadCrumb.examples';
+import exampleSource from './BreadCrumb.examples.tsx?raw';
 
 const meta = {
   title: 'Components/BreadCrumb',
   component: BreadCrumb,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Navigation breadcrumb.'
-      }
-    }
+    controls: { include: ["model"] },
+    docs: { description: { component: 'Navigation breadcrumb.' }, source: { code: exampleSource } }
   },
-  args: { home, model: items },
-  argTypes: {}
-} satisfies Meta;
+  args: defaultArgs,
+  argTypes: { model: { control: 'object' } }
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <BreadCrumb {...args} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<BreadCrumb home={home} model={items} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiBreadcrumb: Story = {
-  name: 'Sakai / Breadcrumb',
-  render: () => <SakaiSectionDemo Component={menuDemo} section="Breadcrumb" />,
-  parameters: sourceParameters(menuSource, 'Breadcrumb', 'BreadCrumb')
 };

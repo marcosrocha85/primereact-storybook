@@ -1,49 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Menu } from 'primereact/menu';
-import menuDemo from '../../../vendor/sakai-react/app/(main)/uikit/menu/page';
-import menuSource from '../../../vendor/sakai-react/app/(main)/uikit/menu/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
-
-const items = [{ label: 'Save', icon: 'pi pi-save' }, { label: 'Update', icon: 'pi pi-refresh' }];
+import { defaultArgs, Playground, type ExampleArgs } from './Menu.examples';
+import exampleSource from './Menu.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Menu',
   component: Menu,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Simple vertical menu or popup menu.'
-      }
-    }
+    controls: { include: ["popup"] },
+    docs: { description: { component: 'Simple vertical menu or popup menu.' }, source: { code: exampleSource } }
   },
-  args: { model: items },
+  args: defaultArgs,
   argTypes: { popup: { control: 'boolean' } }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <Menu {...args} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Menu model={items} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiPlainMenu: Story = {
-  name: 'Sakai / Plain Menu',
-  render: () => <SakaiSectionDemo Component={menuDemo} section="Plain Menu" />,
-  parameters: sourceParameters(menuSource, 'Plain Menu', 'Menu')
-};
-
-export const SakaiOverlayMenu: Story = {
-  name: 'Sakai / Overlay Menu',
-  render: () => <SakaiSectionDemo Component={menuDemo} section="Overlay Menu" />,
-  parameters: sourceParameters(menuSource, 'Overlay Menu', 'Menu')
 };

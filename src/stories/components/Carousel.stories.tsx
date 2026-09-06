@@ -1,43 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Carousel } from 'primereact/carousel';
-import mediaDemo from '../../../vendor/sakai-react/app/(main)/uikit/media/page';
-import mediaSource from '../../../vendor/sakai-react/app/(main)/uikit/media/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
-
-const products = [{ name: 'Bamboo Watch' }, { name: 'Black Watch' }, { name: 'Blue Band' }];
+import { defaultArgs, Playground, type ExampleArgs } from './Carousel.examples';
+import exampleSource from './Carousel.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Carousel',
   component: Carousel,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Item carousel.'
-      }
-    }
+    controls: { include: ["numVisible","numScroll","circular"] },
+    docs: { description: { component: 'Item carousel.' }, source: { code: exampleSource } }
   },
-  args: { value: products, numVisible: 3, numScroll: 1, circular: false },
+  args: defaultArgs,
   argTypes: { numVisible: { control: 'number' }, numScroll: { control: 'number' }, circular: { control: 'boolean' } }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <Carousel {...args} itemTemplate={(item) => <div className="p-3 text-center">{item.name}</div>} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Carousel value={products} numVisible={3} numScroll={1} itemTemplate={productTemplate} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiCarousel: Story = {
-  name: 'Sakai / Carousel',
-  render: () => <SakaiSectionDemo Component={mediaDemo} section="Carousel" />,
-  parameters: sourceParameters(mediaSource, 'Carousel', 'Carousel')
 };

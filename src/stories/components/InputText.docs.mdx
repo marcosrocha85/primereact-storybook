@@ -1,5 +1,6 @@
-import { Canvas, Controls, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
-import * as Stories from "./InputText.stories";
+import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Example } from "./InputText.examples";
+import exampleSource from "./InputText.examples.tsx?raw";
 
 <Meta title="Components/InputText/Summary" />
 
@@ -7,28 +8,26 @@ import * as Stories from "./InputText.stories";
 
 <Subtitle>Base text field used in forms, filters, and search inputs.</Subtitle>
 
+## Usage
+
+<div className="component-example sb-unstyled"><Example /></div>
+
+<Source code={exampleSource} language="tsx" />
+
+## Variations
+
+### Disabled
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+
+### Invalid
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ invalid: true }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ invalid: true }} />"} language="tsx" />
+
 ## Playground
 
-<Canvas of={Stories.Default} sourceState="hidden" />
-
-<Controls of={Stories.Default} />
-
-## Sakai / InputText
-
-<Canvas of={Stories.SakaiInputText} sourceState="hidden" />
-
-## Sakai / Icons
-
-<Canvas of={Stories.SakaiIcons} sourceState="hidden" />
-
-## Sakai / Float Label
-
-<Canvas of={Stories.SakaiFloatLabel} sourceState="hidden" />
-
-## Sakai / Float Label
-
-<Canvas of={Stories.FloatLabelVariants} sourceState="hidden" />
-
-## Sakai / Invalid State
-
-<Canvas of={Stories.InvalidStateVariants} sourceState="hidden" />
+Open [Default](?path=/story/components-inputtext--default) to change properties with Controls. Examples on this page keep their own state.

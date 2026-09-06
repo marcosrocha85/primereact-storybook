@@ -1,5 +1,6 @@
-import { Canvas, Controls, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
-import * as Stories from "./Toast.stories";
+import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Example } from "./Toast.examples";
+import exampleSource from "./Toast.examples.tsx?raw";
 
 <Meta title="Components/Toast/Summary" />
 
@@ -7,12 +8,44 @@ import * as Stories from "./Toast.stories";
 
 <Subtitle>Temporary notification.</Subtitle>
 
+## Usage
+
+<div className="component-example sb-unstyled"><Example /></div>
+
+<Source code={exampleSource} language="tsx" />
+
+## Variations
+
+### top-right
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'top-right' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'top-right' }} />"} language="tsx" />
+
+### top-left
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'top-left' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'top-left' }} />"} language="tsx" />
+
+### bottom-right
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'bottom-right' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'bottom-right' }} />"} language="tsx" />
+
+### bottom-left
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'bottom-left' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'bottom-left' }} />"} language="tsx" />
+
+### center
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'center' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'center' }} />"} language="tsx" />
+
 ## Playground
 
-<Canvas of={Stories.Default} sourceState="hidden" />
-
-<Controls of={Stories.Default} />
-
-## Sakai / Toast
-
-<Canvas of={Stories.SakaiToast} sourceState="hidden" />
+Open [Default](?path=/story/components-toast--default) to change properties with Controls. Examples on this page keep their own state.

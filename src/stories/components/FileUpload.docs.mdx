@@ -1,5 +1,6 @@
-import { Canvas, Controls, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
-import * as Stories from "./FileUpload.stories";
+import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Example } from "./FileUpload.examples";
+import exampleSource from "./FileUpload.examples.tsx?raw";
 
 <Meta title="Components/FileUpload/Summary" />
 
@@ -7,16 +8,26 @@ import * as Stories from "./FileUpload.stories";
 
 <Subtitle>Basic or advanced file upload.</Subtitle>
 
+## Usage
+
+<div className="component-example sb-unstyled"><Example /></div>
+
+<Source code={exampleSource} language="tsx" />
+
+## Variations
+
+### basic
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ mode: 'basic' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ mode: 'basic' }} />"} language="tsx" />
+
+### advanced
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ mode: 'advanced' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ mode: 'advanced' }} />"} language="tsx" />
+
 ## Playground
 
-<Canvas of={Stories.Default} sourceState="hidden" />
-
-<Controls of={Stories.Default} />
-
-## Sakai / Advanced
-
-<Canvas of={Stories.SakaiAdvanced} sourceState="hidden" />
-
-## Sakai / Basic
-
-<Canvas of={Stories.SakaiBasic} sourceState="hidden" />
+Open [Default](?path=/story/components-fileupload--default) to change properties with Controls. Examples on this page keep their own state.

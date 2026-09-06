@@ -1,42 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { AvatarGroup } from 'primereact/avatargroup';
-import { Avatar } from 'primereact/avatar';
-import miscDemo from '../../../vendor/sakai-react/app/(main)/uikit/misc/page';
-import miscSource from '../../../vendor/sakai-react/app/(main)/uikit/misc/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './AvatarGroup.examples';
+import exampleSource from './AvatarGroup.examples.tsx?raw';
 
 const meta = {
   title: 'Components/AvatarGroup',
   component: AvatarGroup,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Avatar group.'
-      }
-    }
+    controls: { include: ["className","style"] },
+    docs: { description: { component: 'Avatar group.' }, source: { code: exampleSource } }
   },
-  args: {},
-  argTypes: {}
-} satisfies Meta;
+  args: defaultArgs,
+  argTypes: { className: { control: 'text' }, style: { control: 'object' } }
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <AvatarGroup><Avatar label="A" shape="circle" /><Avatar label="B" shape="circle" /><Avatar label="+2" shape="circle" /></AvatarGroup>,
-  parameters: {
-    docs: {
-      source: {
-        code: `<AvatarGroup><Avatar image="..." shape="circle" /></AvatarGroup>`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiAvatarGroup: Story = {
-  name: 'Sakai / Avatar Group',
-  render: () => <SakaiSectionDemo Component={miscDemo} section="Avatar Group" />,
-  parameters: sourceParameters(miscSource, 'Avatar Group', 'AvatarGroup')
 };

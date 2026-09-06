@@ -1,6 +1,5 @@
-import { Canvas, Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Accordion, AccordionTab } from "primereact/accordion";
-import * as Stories from "./Accordion.stories";
 
 <Meta title="Components/Accordion/Summary" />
 
@@ -10,24 +9,24 @@ import * as Stories from "./Accordion.stories";
   Accordion used by Sakai to group related content into vertical panels that can be expanded one at a time or together.
 </Subtitle>
 
-## Basic
+## Usage
 
-<div className="w-full md:w-30rem">
+<div className="component-example sb-unstyled w-full md:w-30rem">
   <Accordion activeIndex={0}>
     <AccordionTab header="Header I">
-      <p className="m-0 line-height-3">
+      <div className="m-0 line-height-3">
         Use accordions when related details should stay available without taking over the page.
-      </p>
+      </div>
     </AccordionTab>
     <AccordionTab header="Header II">
-      <p className="m-0 line-height-3">
+      <div className="m-0 line-height-3">
         Each panel has a clear header and reveals supporting content only when opened.
-      </p>
+      </div>
     </AccordionTab>
     <AccordionTab header="Header III">
-      <p className="m-0 line-height-3">
+      <div className="m-0 line-height-3">
         Sakai uses this pattern in panel documentation and compact settings surfaces.
-      </p>
+      </div>
     </AccordionTab>
   </Accordion>
 </div>
@@ -47,18 +46,20 @@ import * as Stories from "./Accordion.stories";
   language="tsx"
 />
 
-## Multiple Panels
+## Variations
 
-<div className="w-full md:w-30rem">
+### Multiple Panels
+
+<div className="component-example sb-unstyled w-full md:w-30rem">
   <Accordion multiple activeIndex={[0, 1]}>
     <AccordionTab header="Account">
-      <p className="m-0 line-height-3">Multiple mode keeps more than one panel open at the same time.</p>
+      <div className="m-0 line-height-3">Multiple mode keeps more than one panel open at the same time.</div>
     </AccordionTab>
     <AccordionTab header="Billing">
-      <p className="m-0 line-height-3">Use it for short sections where users often compare details.</p>
+      <div className="m-0 line-height-3">Use it for short sections where users often compare details.</div>
     </AccordionTab>
     <AccordionTab header="Security">
-      <p className="m-0 line-height-3">Keep panel content concise so the expanded stack remains scannable.</p>
+      <div className="m-0 line-height-3">Keep panel content concise so the expanded stack remains scannable.</div>
     </AccordionTab>
   </Accordion>
 </div>
@@ -78,18 +79,18 @@ import * as Stories from "./Accordion.stories";
   language="tsx"
 />
 
-## Icons And States
+### Icons And States
 
-<div className="w-full md:w-30rem">
+<div className="component-example sb-unstyled w-full md:w-30rem">
   <Accordion activeIndex={0} expandIcon="pi pi-plus" collapseIcon="pi pi-minus">
     <AccordionTab header="Custom toggle icons">
-      <p className="m-0 line-height-3">Use custom icons when the surrounding interface already uses plus and minus affordances.</p>
+      <div className="m-0 line-height-3">Use custom icons when the surrounding interface already uses plus and minus affordances.</div>
     </AccordionTab>
     <AccordionTab header="Disabled panel" disabled>
-      <p className="m-0 line-height-3">Disabled panels remain visible but cannot be opened.</p>
+      <div className="m-0 line-height-3">Disabled panels remain visible but cannot be opened.</div>
     </AccordionTab>
     <AccordionTab header="Available panel">
-      <p className="m-0 line-height-3">Available panels keep the standard keyboard and click interaction.</p>
+      <div className="m-0 line-height-3">Available panels keep the standard keyboard and click interaction.</div>
     </AccordionTab>
   </Accordion>
 </div>
@@ -109,6 +110,7 @@ import * as Stories from "./Accordion.stories";
   language="tsx"
 />
 
+
 ## Playground
 
-<Canvas of={Stories.Default} sourceState="hidden" />
+Open [Default](?path=/story/components-accordion--default) to change properties with Controls. Examples on this page keep their own state.

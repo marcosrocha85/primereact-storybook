@@ -1,5 +1,6 @@
-import { Canvas, Controls, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
-import * as Stories from "./Messages.stories";
+import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Example } from "./Messages.examples";
+import exampleSource from "./Messages.examples.tsx?raw";
 
 <Meta title="Components/Messages/Summary" />
 
@@ -7,12 +8,16 @@ import * as Stories from "./Messages.stories";
 
 <Subtitle>Programmatic message list.</Subtitle>
 
+## Usage
+
+<div className="component-example sb-unstyled"><Example /></div>
+
+<Source code={exampleSource} language="tsx" />
+
+## Variations
+
+The usage example shows the base composition. Use Default to explore the documented properties.
+
 ## Playground
 
-<Canvas of={Stories.Default} sourceState="hidden" />
-
-<Controls of={Stories.Default} />
-
-## Sakai / Messages
-
-<Canvas of={Stories.SakaiMessages} sourceState="hidden" />
+Open [Default](?path=/story/components-messages--default) to change properties with Controls. Examples on this page keep their own state.

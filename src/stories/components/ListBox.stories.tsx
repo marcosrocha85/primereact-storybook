@@ -1,43 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { ListBox } from 'primereact/listbox';
-import inputDemo from '../../../vendor/sakai-react/app/(main)/uikit/input/page';
-import inputSource from '../../../vendor/sakai-react/app/(main)/uikit/input/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
-
-const cityOptions = [{ name: 'New York', code: 'NY' }, { name: 'Rome', code: 'RM' }, { name: 'London', code: 'LDN' }];
+import { defaultArgs, Playground, type ExampleArgs } from './ListBox.examples';
+import exampleSource from './ListBox.examples.tsx?raw';
 
 const meta = {
   title: 'Components/ListBox',
   component: ListBox,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Selection list.'
-      }
-    }
+    controls: { include: ["value","disabled","filter"] },
+    docs: { description: { component: 'Selection list.' }, source: { code: exampleSource } }
   },
-  args: { options: cityOptions, optionLabel: 'name' },
-  argTypes: { disabled: { control: 'boolean' }, filter: { control: 'boolean' } }
-} satisfies Meta;
+  args: defaultArgs,
+  argTypes: { value: { control: 'object' }, disabled: { control: 'boolean' }, filter: { control: 'boolean' } }
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <ListBox {...args} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<ListBox value={listboxValue} onChange={(event) => setListboxValue(event.value)} options={cities} optionLabel="name" />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiListbox: Story = {
-  name: 'Sakai / Listbox',
-  render: () => <SakaiSectionDemo Component={inputDemo} section="Listbox" />,
-  parameters: sourceParameters(inputSource, 'Listbox', 'ListBox')
 };

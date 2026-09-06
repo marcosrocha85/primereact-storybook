@@ -1,5 +1,6 @@
-import { Canvas, Controls, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
-import * as Stories from "./Chart.stories";
+import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Example } from "./Chart.examples";
+import exampleSource from "./Chart.examples.tsx?raw";
 
 <Meta title="Components/Chart/Summary" />
 
@@ -7,32 +8,50 @@ import * as Stories from "./Chart.stories";
 
 <Subtitle>Charts powered by Chart.js.</Subtitle>
 
+## Usage
+
+<div className="component-example sb-unstyled"><Example /></div>
+
+<Source code={exampleSource} language="tsx" />
+
+## Variations
+
+### line
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ type: 'line' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ type: 'line' }} />"} language="tsx" />
+
+### bar
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ type: 'bar' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ type: 'bar' }} />"} language="tsx" />
+
+### pie
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ type: 'pie' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ type: 'pie' }} />"} language="tsx" />
+
+### doughnut
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ type: 'doughnut' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ type: 'doughnut' }} />"} language="tsx" />
+
+### polarArea
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ type: 'polarArea' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ type: 'polarArea' }} />"} language="tsx" />
+
+### radar
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ type: 'radar' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ type: 'radar' }} />"} language="tsx" />
+
 ## Playground
 
-<Canvas of={Stories.Default} sourceState="hidden" />
-
-<Controls of={Stories.Default} />
-
-## Sakai / Linear Chart
-
-<Canvas of={Stories.SakaiLinearChart} sourceState="hidden" />
-
-## Sakai / Bar Chart
-
-<Canvas of={Stories.SakaiBarChart} sourceState="hidden" />
-
-## Sakai / Pie Chart
-
-<Canvas of={Stories.SakaiPieChart} sourceState="hidden" />
-
-## Sakai / Doughnut Chart
-
-<Canvas of={Stories.SakaiDoughnutChart} sourceState="hidden" />
-
-## Sakai / Polar Area Chart
-
-<Canvas of={Stories.SakaiPolarAreaChart} sourceState="hidden" />
-
-## Sakai / Radar Chart
-
-<Canvas of={Stories.SakaiRadarChart} sourceState="hidden" />
+Open [Default](?path=/story/components-chart--default) to change properties with Controls. Examples on this page keep their own state.

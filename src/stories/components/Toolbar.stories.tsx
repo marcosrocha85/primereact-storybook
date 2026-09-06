@@ -1,42 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Toolbar } from 'primereact/toolbar';
-import { Button } from 'primereact/button';
-import panelDemo from '../../../vendor/sakai-react/app/(main)/uikit/panel/page';
-import panelSource from '../../../vendor/sakai-react/app/(main)/uikit/panel/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './Toolbar.examples';
+import exampleSource from './Toolbar.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Toolbar',
   component: Toolbar,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Action toolbar.'
-      }
-    }
+    controls: { include: ["className","style"] },
+    docs: { description: { component: 'Action toolbar.' }, source: { code: exampleSource } }
   },
-  args: {},
-  argTypes: {}
-} satisfies Meta;
+  args: defaultArgs,
+  argTypes: { className: { control: 'text' }, style: { control: 'object' } }
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <Toolbar start={<Button label="New" icon="pi pi-plus" />} end={<Button label="Save" icon="pi pi-check" />} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Toolbar start={toolbarLeftTemplate} end={toolbarRightTemplate} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiToolbar: Story = {
-  name: 'Sakai / Toolbar',
-  render: () => <SakaiSectionDemo Component={panelDemo} section="Toolbar" />,
-  parameters: sourceParameters(panelSource, 'Toolbar', 'Toolbar')
 };

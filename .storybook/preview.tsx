@@ -37,6 +37,7 @@ const preview: Preview = {
     },
 
     docs: {
+      codePanel: true,
       theme: themes.light,
       canvas: {
         sourceState: 'hidden',

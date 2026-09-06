@@ -1,61 +1,31 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Chips } from 'primereact/chips';
-import inputDemo from '../../../vendor/sakai-react/app/(main)/uikit/input/page';
-import inputSource from '../../../vendor/sakai-react/app/(main)/uikit/input/page.tsx?raw';
-import floatlabelDemo from '../../../vendor/sakai-react/app/(main)/uikit/floatlabel/page';
-import floatlabelSource from '../../../vendor/sakai-react/app/(main)/uikit/floatlabel/page.tsx?raw';
-import invalidstateDemo from '../../../vendor/sakai-react/app/(main)/uikit/invalidstate/page';
-import invalidstateSource from '../../../vendor/sakai-react/app/(main)/uikit/invalidstate/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './Chips.examples';
+import exampleSource from './Chips.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Chips',
   component: Chips,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Multi-value input rendered as chips.'
-      }
-    }
+    controls: { include: ["value","placeholder","separator","disabled"] },
+    docs: { description: { component: 'Multi-value input rendered as chips.' }, source: { code: exampleSource } }
   },
-  args: { placeholder: 'Add item', separator: ',' },
-  argTypes: {
+  args: defaultArgs,
+  argTypes: { value: { control: 'object' },
     placeholder: { control: 'text' },
     separator: { control: 'text' },
     disabled: { control: 'boolean' }
   }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <Chips {...args} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Chips value={chipsValue} onChange={(event) => setChipsValue(event.value ?? [])} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiChips: Story = {
-  name: 'Sakai / Chips',
-  render: () => <SakaiSectionDemo Component={inputDemo} section="Chips" />,
-  parameters: sourceParameters(inputSource, 'Chips', 'Chips')
-};
-
-export const FloatLabelVariants: Story = {
-  name: 'Sakai / Float Label',
-  render: () => <SakaiSectionDemo Component={floatlabelDemo} section="Float Label" />,
-  parameters: sourceParameters(floatlabelSource, 'Float Label', 'Chips')
-};
-
-export const InvalidStateVariants: Story = {
-  name: 'Sakai / Invalid State',
-  render: () => <SakaiSectionDemo Component={invalidstateDemo} section="Invalid State" />,
-  parameters: sourceParameters(invalidstateSource, 'Invalid State', 'Chips')
 };

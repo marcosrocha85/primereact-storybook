@@ -17,7 +17,7 @@ At the beginning of every session, before choosing implementation work:
    gh api --paginate 'repos/marcosrocha85/primereact-storybook/issues?state=open&labels=component-review&sort=created&direction=asc&per_page=100' --jq '.[] | select(.pull_request == null) | {number, title, html_url, assignees, labels}'
    ```
 
-3. Honor an issue or scope explicitly selected by the user. Otherwise, select the lowest-numbered actionable issue from the queue. Read its full body, comments, dependencies, and linked pull requests before editing:
+3. Honor an issue or scope explicitly selected by the user. Otherwise, select actionable issues labeled `priority:highest` before ordinary component reviews, regardless of issue number. Within each priority group, select the lowest-numbered actionable issue. A highest-priority audit that tracks ongoing component fixes remains the entry point: read it first and select its next unresolved linked task instead of starting an unrelated review or duplicating an active fix. Read the selected issue's full body, comments, dependencies, and linked pull requests before editing:
 
    ```sh
    gh issue view <number> --repo marcosrocha85/primereact-storybook --comments
@@ -49,7 +49,8 @@ Always use https://sakai.primereact.org/ as the source of truth for component be
 
 - `scripts/generate-component-stories.mjs` generates most component-level `.stories.tsx` and `.docs.mdx` files.
 - Run `node scripts/generate-component-stories.mjs` after changing the component map.
-- The generator intentionally skips `Button`; `Button` is maintained manually as the reference-quality template.
+- The generator preserves the manually curated `Button`, `Accordion`, `AutoComplete`, `Image`, and `Panel` implementations. `Button` remains the structural reference.
+- Generated `.examples.tsx` files hold typed, self-contained component examples. Update their component map in the generator rather than editing generated output directly.
 - Generated stories should be reviewed so each component keeps only `Summary` and `Default`.
 - Sakai demo examples should be folded into the `Summary` page as curated examples instead of exported as separate `Sakai / ...` stories.
 - Use `Show code` in Storybook Canvas to inspect the relevant usage snippet.
@@ -100,6 +101,18 @@ For each reviewed component:
 5. Keep only `Default` exported from the `.stories.tsx` file.
 6. Do not render `<Controls>` in `Summary`.
 7. Keep `Default` as the only controls playground.
+
+### Shared Documentation and Interaction Pattern
+
+- Every Summary uses `Title`, `Subtitle`, then the same second-level sections in order: `Usage`, `Variations`, `Playground`. Put component-specific variation names under third-level headings.
+- Place examples in `.component-example.sb-unstyled` stages with responsive widths and adjacent copyable `Source` blocks. Do not mount whole upstream pages or hide unrelated components with CSS.
+- Link the Playground section to the component's Default story. Summary examples own their state and never render Controls.
+- Default uses `useArgs` from `storybook/preview-api` to synchronize controlled values with Controls and resets. Keep React state/ref hooks inside a separate React playground component, not in the same function as Storybook hooks.
+- Preserve supplied event callbacks when adding state synchronization. Connect open/close, confirmation, notification, menu and upload actions to observable behavior. Demo uploads are explicitly simulated in the browser.
+- Keep sample assets relative to the Storybook base path so GitHub Pages deployments under a repository path work.
+- Default exposes the Code panel through `parameters.docs.codePanel`; Summary source examples and Default code must describe the actual implementation.
+- Validate the affected behaviors with `node --test tests/component-review.test.mjs` against a running Storybook. Set `STORYBOOK_URL` when using a different port or a static build. The test uses the existing Playwright dependency and requires its Chromium browser and system libraries.
+- The audit evidence and applicable checks for all components are recorded in `docs/component-review-69.md`. Task status and remaining work stay in GitHub Issues.
 
 ## GitHub Pages
 

@@ -1,5 +1,6 @@
-import { Canvas, Controls, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
-import * as Stories from "./Menubar.stories";
+import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Example } from "./Menubar.examples";
+import exampleSource from "./Menubar.examples.tsx?raw";
 
 <Meta title="Components/Menubar/Summary" />
 
@@ -7,12 +8,16 @@ import * as Stories from "./Menubar.stories";
 
 <Subtitle>Primary horizontal menu.</Subtitle>
 
+## Usage
+
+<div className="component-example sb-unstyled"><Example /></div>
+
+<Source code={exampleSource} language="tsx" />
+
+## Variations
+
+The usage example shows the base composition. Use Default to explore the documented properties.
+
 ## Playground
 
-<Canvas of={Stories.Default} sourceState="hidden" />
-
-<Controls of={Stories.Default} />
-
-## Sakai / Menubar
-
-<Canvas of={Stories.SakaiMenubar} sourceState="hidden" />
+Open [Default](?path=/story/components-menubar--default) to change properties with Controls. Examples on this page keep their own state.

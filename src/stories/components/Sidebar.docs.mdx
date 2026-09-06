@@ -1,5 +1,6 @@
-import { Canvas, Controls, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
-import * as Stories from "./Sidebar.stories";
+import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Example } from "./Sidebar.examples";
+import exampleSource from "./Sidebar.examples.tsx?raw";
 
 <Meta title="Components/Sidebar/Summary" />
 
@@ -7,12 +8,38 @@ import * as Stories from "./Sidebar.stories";
 
 <Subtitle>Side panel.</Subtitle>
 
+## Usage
+
+<div className="component-example sb-unstyled"><Example /></div>
+
+<Source code={exampleSource} language="tsx" />
+
+## Variations
+
+### left
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'left' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'left' }} />"} language="tsx" />
+
+### right
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'right' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'right' }} />"} language="tsx" />
+
+### top
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'top' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'top' }} />"} language="tsx" />
+
+### bottom
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'bottom' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'bottom' }} />"} language="tsx" />
+
 ## Playground
 
-<Canvas of={Stories.Default} sourceState="hidden" />
-
-<Controls of={Stories.Default} />
-
-## Sakai / Sidebar
-
-<Canvas of={Stories.SakaiSidebar} sourceState="hidden" />
+Open [Default](?path=/story/components-sidebar--default) to change properties with Controls. Examples on this page keep their own state.

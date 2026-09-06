@@ -1,43 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { PanelMenu } from 'primereact/panelmenu';
-import menuDemo from '../../../vendor/sakai-react/app/(main)/uikit/menu/page';
-import menuSource from '../../../vendor/sakai-react/app/(main)/uikit/menu/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
-
-const items = [{ label: 'Customers', icon: 'pi pi-fw pi-table', items: [{ label: 'New', icon: 'pi pi-fw pi-plus' }] }];
+import { defaultArgs, Playground, type ExampleArgs } from './PanelMenu.examples';
+import exampleSource from './PanelMenu.examples.tsx?raw';
 
 const meta = {
   title: 'Components/PanelMenu',
   component: PanelMenu,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Menu with expandable panels.'
-      }
-    }
+    controls: { include: ["multiple"] },
+    docs: { description: { component: 'Menu with expandable panels.' }, source: { code: exampleSource } }
   },
-  args: { model: items, style: { width: '20rem' } },
-  argTypes: {}
-} satisfies Meta;
+  args: defaultArgs,
+  argTypes: { multiple: { control: 'boolean' } }
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <PanelMenu {...args} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<PanelMenu model={items} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiPanelMenu: Story = {
-  name: 'Sakai / PanelMenu',
-  render: () => <SakaiSectionDemo Component={menuDemo} section="PanelMenu" />,
-  parameters: sourceParameters(menuSource, 'PanelMenu', 'PanelMenu')
 };

@@ -11,14 +11,14 @@ import { Panel } from "primereact/panel";
   collapse toggle.
 </Subtitle>
 
-## Basic
+## Usage
 
-<div style={{ width: "30rem" }}>
+<div className="component-example sb-unstyled" style={{ width: "30rem", maxWidth: "100%" }}>
   <Panel header="Project Details">
-    <p className="m-0 line-height-3">
+    <div className="m-0 line-height-3">
       Use a panel to group related content under a clear heading. The header
       keeps the section scannable while the body holds the detail.
-    </p>
+    </div>
   </Panel>
 </div>
 
@@ -31,15 +31,17 @@ import { Panel } from "primereact/panel";
   language="tsx"
 />
 
-## Toggleable
+## Variations
 
-<div style={{ width: "30rem" }}>
+### Toggleable
+
+<div className="component-example sb-unstyled" style={{ width: "30rem", maxWidth: "100%" }}>
   <Panel header="Summary" toggleable>
-    <p className="m-0 line-height-3">
+    <div className="m-0 line-height-3">
       Add <code>toggleable</code> to let users collapse and expand the panel.
       Use this when content is supplementary and can be hidden without losing
       context.
-    </p>
+    </div>
   </Panel>
 </div>
 
@@ -52,15 +54,15 @@ import { Panel } from "primereact/panel";
   language="tsx"
 />
 
-## Collapsed by Default
+### Collapsed by Default
 
-<div style={{ width: "30rem" }}>
+<div className="component-example sb-unstyled" style={{ width: "30rem", maxWidth: "100%" }}>
   <Panel header="Advanced Settings" toggleable collapsed>
-    <p className="m-0 line-height-3">
+    <div className="m-0 line-height-3">
       Set <code>collapsed</code> together with <code>toggleable</code> to start
       the panel closed. Useful for secondary information that most users will
       not need immediately.
-    </p>
+    </div>
   </Panel>
 </div>
 
@@ -73,9 +75,9 @@ import { Panel } from "primereact/panel";
   language="tsx"
 />
 
-## Custom Header
+### Custom Header
 
-<div style={{ width: "30rem" }}>
+<div className="component-example sb-unstyled" style={{ width: "30rem", maxWidth: "100%" }}>
   <Panel
     header="Notifications"
     headerTemplate={(options) => {
@@ -92,7 +94,7 @@ import { Panel } from "primereact/panel";
             <i className="pi pi-bell mr-2"></i>
             Notifications
           </span>
-          <div className="flex gap-2">
+          <div className="component-example sb-unstyled flex gap-2">
             <Button
               icon="pi pi-cog"
               text
@@ -110,10 +112,10 @@ import { Panel } from "primereact/panel";
     }}
     toggleable
   >
-    <p className="m-0 line-height-3">
+    <div className="m-0 line-height-3">
       Use <code>headerTemplate</code> to inject custom controls such as action
       buttons alongside the toggle affordance.
-    </p>
+    </div>
   </Panel>
 </div>
 
@@ -135,7 +137,7 @@ import { Panel } from "primereact/panel";
           <i className="pi pi-bell mr-2" />
           Notifications
         </span>
-        <div className="flex gap-2">
+        <div className="component-example sb-unstyled flex gap-2">
           <Button icon="pi pi-cog" text rounded severity="secondary" size="small" aria-label="Settings" />
           <button className={togglerClassName} onClick={onTogglerClick}>
             <span className={togglerIconClassName} />
@@ -146,9 +148,13 @@ import { Panel } from "primereact/panel";
   }}
   toggleable
 >
-  <p>
+  <div>
     Use headerTemplate to inject custom controls such as action buttons alongside the toggle affordance.
-  </p>
+  </div>
 </Panel>`}
   language="tsx"
 />
+
+## Playground
+
+Open [Default](?path=/story/components-panel--default) to change properties with Controls. Examples on this page keep their own state.

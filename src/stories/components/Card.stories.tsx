@@ -1,41 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Card } from 'primereact/card';
-import panelDemo from '../../../vendor/sakai-react/app/(main)/uikit/panel/page';
-import panelSource from '../../../vendor/sakai-react/app/(main)/uikit/panel/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './Card.examples';
+import exampleSource from './Card.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Card',
   component: Card,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Content container with title, subtitle, and footer areas.'
-      }
-    }
+    controls: { include: ["title","subTitle"] },
+    docs: { description: { component: 'Content container with title, subtitle, and footer areas.' }, source: { code: exampleSource } }
   },
-  args: { title: 'Card', subTitle: 'Subtitle' },
+  args: defaultArgs,
   argTypes: { title: { control: 'text' }, subTitle: { control: 'text' } }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <Card {...args}><p className="m-0">Card content.</p></Card>,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Card title="Card"><p>Content</p></Card>`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiCard: Story = {
-  name: 'Sakai / Card',
-  render: () => <SakaiSectionDemo Component={panelDemo} section="Card" />,
-  parameters: sourceParameters(panelSource, 'Card', 'Card')
 };

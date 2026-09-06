@@ -1,5 +1,6 @@
-import { Canvas, Controls, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
-import * as Stories from "./SplitButton.stories";
+import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Example } from "./SplitButton.examples";
+import exampleSource from "./SplitButton.examples.tsx?raw";
 
 <Meta title="Components/SplitButton/Summary" />
 
@@ -7,12 +8,50 @@ import * as Stories from "./SplitButton.stories";
 
 <Subtitle>Split action button with a primary action and an options menu.</Subtitle>
 
+## Usage
+
+<div className="component-example sb-unstyled"><Example /></div>
+
+<Source code={exampleSource} language="tsx" />
+
+## Variations
+
+### secondary
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'secondary' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'secondary' }} />"} language="tsx" />
+
+### success
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'success' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'success' }} />"} language="tsx" />
+
+### info
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'info' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'info' }} />"} language="tsx" />
+
+### warning
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'warning' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'warning' }} />"} language="tsx" />
+
+### help
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'help' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'help' }} />"} language="tsx" />
+
+### danger
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'danger' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'danger' }} />"} language="tsx" />
+
 ## Playground
 
-<Canvas of={Stories.Default} sourceState="hidden" />
-
-<Controls of={Stories.Default} />
-
-## Sakai / SplitButton
-
-<Canvas of={Stories.SakaiSplitButton} sourceState="hidden" />
+Open [Default](?path=/story/components-splitbutton--default) to change properties with Controls. Examples on this page keep their own state.

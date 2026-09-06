@@ -1,5 +1,6 @@
-import { Canvas, Controls, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
-import * as Stories from "./Avatar.stories";
+import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Example } from "./Avatar.examples";
+import exampleSource from "./Avatar.examples.tsx?raw";
 
 <Meta title="Components/Avatar/Summary" />
 
@@ -7,20 +8,44 @@ import * as Stories from "./Avatar.stories";
 
 <Subtitle>Visual representation of a user or entity.</Subtitle>
 
+## Usage
+
+<div className="component-example sb-unstyled"><Example /></div>
+
+<Source code={exampleSource} language="tsx" />
+
+## Variations
+
+### square
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ shape: 'square' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ shape: 'square' }} />"} language="tsx" />
+
+### circle
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ shape: 'circle' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ shape: 'circle' }} />"} language="tsx" />
+
+### normal
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ size: 'normal' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ size: 'normal' }} />"} language="tsx" />
+
+### large
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ size: 'large' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ size: 'large' }} />"} language="tsx" />
+
+### xlarge
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ size: 'xlarge' }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ size: 'xlarge' }} />"} language="tsx" />
+
 ## Playground
 
-<Canvas of={Stories.Default} sourceState="hidden" />
-
-<Controls of={Stories.Default} />
-
-## Sakai / Label - Circle
-
-<Canvas of={Stories.SakaiLabelCircle} sourceState="hidden" />
-
-## Sakai / Icon - Badge
-
-<Canvas of={Stories.SakaiIconBadge} sourceState="hidden" />
-
-## Sakai / Image
-
-<Canvas of={Stories.SakaiImage} sourceState="hidden" />
+Open [Default](?path=/story/components-avatar--default) to change properties with Controls. Examples on this page keep their own state.

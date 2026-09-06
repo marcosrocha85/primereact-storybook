@@ -1,43 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { OrderList } from 'primereact/orderlist';
-import listDemo from '../../../vendor/sakai-react/app/(main)/uikit/list/page';
-import listSource from '../../../vendor/sakai-react/app/(main)/uikit/list/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
-
-const products = [{ name: 'Bamboo Watch' }, { name: 'Black Watch' }];
+import { defaultArgs, Playground, type ExampleArgs } from './OrderList.examples';
+import exampleSource from './OrderList.examples.tsx?raw';
 
 const meta = {
   title: 'Components/OrderList',
   component: OrderList,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Orderable list.'
-      }
-    }
+    controls: { include: ["header","filter"] },
+    docs: { description: { component: 'Orderable list.' }, source: { code: exampleSource } }
   },
-  args: { value: products, header: 'Products' },
-  argTypes: {}
-} satisfies Meta;
+  args: defaultArgs,
+  argTypes: { header: { control: 'text' }, filter: { control: 'boolean' } }
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <OrderList {...args} itemTemplate={(item) => <span>{item.name}</span>} onChange={() => undefined} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<OrderList value={products} itemTemplate={itemTemplate} onChange={onChange} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiOrderList: Story = {
-  name: 'Sakai / OrderList',
-  render: () => <SakaiSectionDemo Component={listDemo} section="OrderList" />,
-  parameters: sourceParameters(listSource, 'OrderList', 'OrderList')
 };

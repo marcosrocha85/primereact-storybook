@@ -1,5 +1,6 @@
-import { Canvas, Controls, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
-import * as Stories from "./InputSwitch.stories";
+import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Example } from "./InputSwitch.examples";
+import exampleSource from "./InputSwitch.examples.tsx?raw";
 
 <Meta title="Components/InputSwitch/Summary" />
 
@@ -7,12 +8,20 @@ import * as Stories from "./InputSwitch.stories";
 
 <Subtitle>Boolean toggle switch.</Subtitle>
 
+## Usage
+
+<div className="component-example sb-unstyled"><Example /></div>
+
+<Source code={exampleSource} language="tsx" />
+
+## Variations
+
+### Disabled
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+
 ## Playground
 
-<Canvas of={Stories.Default} sourceState="hidden" />
-
-<Controls of={Stories.Default} />
-
-## Sakai / Input Switch
-
-<Canvas of={Stories.SakaiInputSwitch} sourceState="hidden" />
+Open [Default](?path=/story/components-inputswitch--default) to change properties with Controls. Examples on this page keep their own state.

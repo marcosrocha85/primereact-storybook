@@ -1,41 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { RadioButton } from 'primereact/radiobutton';
-import inputDemo from '../../../vendor/sakai-react/app/(main)/uikit/input/page';
-import inputSource from '../../../vendor/sakai-react/app/(main)/uikit/input/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './RadioButton.examples';
+import exampleSource from './RadioButton.examples.tsx?raw';
 
 const meta = {
   title: 'Components/RadioButton',
   component: RadioButton,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Single option within a group.'
-      }
-    }
+    controls: { include: ["checked","disabled"] },
+    docs: { description: { component: 'Single option within a group.' }, source: { code: exampleSource } }
   },
-  args: { checked: true, value: 'Option 1' },
+  args: defaultArgs,
   argTypes: { checked: { control: 'boolean' }, disabled: { control: 'boolean' } }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <RadioButton {...args} onChange={() => undefined} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<RadioButton value="Option 1" checked={radioValue === 'Option 1'} onChange={(event) => setRadioValue(event.value)} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiRadioButton: Story = {
-  name: 'Sakai / RadioButton',
-  render: () => <SakaiSectionDemo Component={inputDemo} section="RadioButton" />,
-  parameters: sourceParameters(inputSource, 'RadioButton', 'RadioButton')
 };

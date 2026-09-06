@@ -1,41 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { ScrollTop } from 'primereact/scrolltop';
-import miscDemo from '../../../vendor/sakai-react/app/(main)/uikit/misc/page';
-import miscSource from '../../../vendor/sakai-react/app/(main)/uikit/misc/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './ScrollTop.examples';
+import exampleSource from './ScrollTop.examples.tsx?raw';
 
 const meta = {
   title: 'Components/ScrollTop',
   component: ScrollTop,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Shortcut to scroll back to the top.'
-      }
-    }
+    controls: { include: ["threshold","behavior"] },
+    docs: { description: { component: 'Shortcut to scroll back to the top.' }, source: { code: exampleSource } }
   },
-  args: { threshold: 100, behavior: 'smooth' },
+  args: defaultArgs,
   argTypes: { threshold: { control: 'number' }, behavior: { control: 'inline-radio', options: ['smooth', 'auto'] } }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <div style={{ height: '12rem', overflow: 'auto', position: 'relative' }}><div style={{ height: '30rem', padding: '1rem' }}>Scroll down inside this panel.</div><ScrollTop {...args} target="parent" /></div>,
-  parameters: {
-    docs: {
-      source: {
-        code: `<ScrollTop target="parent" threshold={100} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiStyling: Story = {
-  name: 'Sakai / Styling',
-  render: () => <SakaiSectionDemo Component={miscDemo} section="Styling" />,
-  parameters: sourceParameters(miscSource, 'Styling', 'ScrollTop')
 };

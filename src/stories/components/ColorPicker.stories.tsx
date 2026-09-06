@@ -1,44 +1,30 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { ColorPicker } from 'primereact/colorpicker';
-import inputDemo from '../../../vendor/sakai-react/app/(main)/uikit/input/page';
-import inputSource from '../../../vendor/sakai-react/app/(main)/uikit/input/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './ColorPicker.examples';
+import exampleSource from './ColorPicker.examples.tsx?raw';
 
 const meta = {
   title: 'Components/ColorPicker',
   component: ColorPicker,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Visual color picker.'
-      }
-    }
+    controls: { include: ["value","disabled"] },
+    docs: { description: { component: 'Visual color picker.' }, source: { code: exampleSource } }
   },
-  args: { value: '1976D2' },
+  args: defaultArgs,
   argTypes: {
     value: { control: 'text' },
     disabled: { control: 'boolean' }
   }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <ColorPicker {...args} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<ColorPicker value={colorValue} onChange={(event) => setColorValue(event.value)} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiColorPicker: Story = {
-  name: 'Sakai / ColorPicker',
-  render: () => <SakaiSectionDemo Component={inputDemo} section="ColorPicker" />,
-  parameters: sourceParameters(inputSource, 'ColorPicker', 'ColorPicker')
 };

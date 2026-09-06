@@ -1,53 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Tag } from 'primereact/tag';
-import miscDemo from '../../../vendor/sakai-react/app/(main)/uikit/misc/page';
-import miscSource from '../../../vendor/sakai-react/app/(main)/uikit/misc/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './Tag.examples';
+import exampleSource from './Tag.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Tag',
   component: Tag,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Status label.'
-      }
-    }
+    controls: { include: ["value","severity","rounded","icon"] },
+    docs: { description: { component: 'Status label.' }, source: { code: exampleSource } }
   },
-  args: { value: 'Primary', severity: undefined, rounded: false, icon: undefined },
+  args: defaultArgs,
   argTypes: { value: { control: 'text' }, severity: { control: 'select', options: [undefined, 'success', 'info', 'warning', 'danger'] }, rounded: { control: 'boolean' }, icon: { control: 'text' } }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <Tag {...args} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Tag value="Primary" />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiTags: Story = {
-  name: 'Sakai / Tags',
-  render: () => <SakaiSectionDemo Component={miscDemo} section="Tags" />,
-  parameters: sourceParameters(miscSource, 'Tags', 'Tag')
-};
-
-export const SakaiPills: Story = {
-  name: 'Sakai / Pills',
-  render: () => <SakaiSectionDemo Component={miscDemo} section="Pills" />,
-  parameters: sourceParameters(miscSource, 'Pills', 'Tag')
-};
-
-export const SakaiIcons: Story = {
-  name: 'Sakai / Icons',
-  render: () => <SakaiSectionDemo Component={miscDemo} section="Icons" />,
-  parameters: sourceParameters(miscSource, 'Icons', 'Tag')
 };

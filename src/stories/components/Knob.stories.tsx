@@ -1,41 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Knob } from 'primereact/knob';
-import inputDemo from '../../../vendor/sakai-react/app/(main)/uikit/input/page';
-import inputSource from '../../../vendor/sakai-react/app/(main)/uikit/input/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './Knob.examples';
+import exampleSource from './Knob.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Knob',
   component: Knob,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Circular numeric control.'
-      }
-    }
+    controls: { include: ["value","min","max","step","disabled"] },
+    docs: { description: { component: 'Circular numeric control.' }, source: { code: exampleSource } }
   },
-  args: { value: 20, min: 0, max: 100, step: 1 },
+  args: defaultArgs,
   argTypes: { value: { control: 'number' }, min: { control: 'number' }, max: { control: 'number' }, step: { control: 'number' }, disabled: { control: 'boolean' } }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <Knob {...args} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Knob value={knobValue} onChange={(event) => setKnobValue(event.value)} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiKnob: Story = {
-  name: 'Sakai / Knob',
-  render: () => <SakaiSectionDemo Component={inputDemo} section="Knob" />,
-  parameters: sourceParameters(inputSource, 'Knob', 'Knob')
 };

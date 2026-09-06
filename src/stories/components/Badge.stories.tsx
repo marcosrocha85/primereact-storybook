@@ -1,59 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Badge } from 'primereact/badge';
-import miscDemo from '../../../vendor/sakai-react/app/(main)/uikit/misc/page';
-import miscSource from '../../../vendor/sakai-react/app/(main)/uikit/misc/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './Badge.examples';
+import exampleSource from './Badge.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Badge',
   component: Badge,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Numeric marker or status indicator.'
-      }
-    }
+    controls: { include: ["value","severity","size"] },
+    docs: { description: { component: 'Numeric marker or status indicator.' }, source: { code: exampleSource } }
   },
-  args: { value: '2', severity: 'info', size: undefined },
+  args: defaultArgs,
   argTypes: { value: { control: 'text' }, severity: { control: 'select', options: [undefined, 'success', 'info', 'warning', 'danger'] }, size: { control: 'select', options: [undefined, 'large', 'xlarge'] } }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <Badge {...args} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Badge value="2" severity="info" />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiNumbers: Story = {
-  name: 'Sakai / Numbers',
-  render: () => <SakaiSectionDemo Component={miscDemo} section="Numbers" />,
-  parameters: sourceParameters(miscSource, 'Numbers', 'Badge')
-};
-
-export const SakaiPositionedBadge: Story = {
-  name: 'Sakai / Positioned Badge',
-  render: () => <SakaiSectionDemo Component={miscDemo} section="Positioned Badge" />,
-  parameters: sourceParameters(miscSource, 'Positioned Badge', 'Badge')
-};
-
-export const SakaiButtonBadge: Story = {
-  name: 'Sakai / Button Badge',
-  render: () => <SakaiSectionDemo Component={miscDemo} section="Button Badge" />,
-  parameters: sourceParameters(miscSource, 'Button Badge', 'Badge')
-};
-
-export const SakaiSizes: Story = {
-  name: 'Sakai / Sizes',
-  render: () => <SakaiSectionDemo Component={miscDemo} section="Sizes" />,
-  parameters: sourceParameters(miscSource, 'Sizes', 'Badge')
 };

@@ -1,42 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Splitter } from 'primereact/splitter';
-import { SplitterPanel } from 'primereact/splitter';
-import panelDemo from '../../../vendor/sakai-react/app/(main)/uikit/panel/page';
-import panelSource from '../../../vendor/sakai-react/app/(main)/uikit/panel/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './Splitter.examples';
+import exampleSource from './Splitter.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Splitter',
   component: Splitter,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Resizable panel layout.'
-      }
-    }
+    controls: { include: ["layout","gutterSize"] },
+    docs: { description: { component: 'Resizable panel layout.' }, source: { code: exampleSource } }
   },
-  args: { style: { height: '180px', width: '30rem' } },
-  argTypes: {}
-} satisfies Meta;
+  args: defaultArgs,
+  argTypes: { layout: { control: 'inline-radio', options: ['horizontal', 'vertical'] }, gutterSize: { control: 'number' } }
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <Splitter {...args}><SplitterPanel className="flex align-items-center justify-content-center">Panel 1</SplitterPanel><SplitterPanel className="flex align-items-center justify-content-center">Panel 2</SplitterPanel></Splitter>,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Splitter><SplitterPanel>Panel 1</SplitterPanel><SplitterPanel>Panel 2</SplitterPanel></Splitter>`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiSplitter: Story = {
-  name: 'Sakai / Splitter',
-  render: () => <SakaiSectionDemo Component={panelDemo} section="Splitter" />,
-  parameters: sourceParameters(panelSource, 'Splitter', 'Splitter')
 };

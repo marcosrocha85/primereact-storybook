@@ -1,43 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Tree } from 'primereact/tree';
-import treeDemo from '../../../vendor/sakai-react/app/(main)/uikit/tree/page';
-import treeSource from '../../../vendor/sakai-react/app/(main)/uikit/tree/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
-
-const nodes = [{ key: '0', label: 'Documents', children: [{ key: '0-0', label: 'Work' }] }];
+import { defaultArgs, Playground, type ExampleArgs } from './Tree.examples';
+import exampleSource from './Tree.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Tree',
   component: Tree,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Expandable hierarchical structure.'
-      }
-    }
+    controls: { include: ["filter","expandedKeys","selectionKeys"] },
+    docs: { description: { component: 'Expandable hierarchical structure.' }, source: { code: exampleSource } }
   },
-  args: { value: nodes },
-  argTypes: {}
-} satisfies Meta;
+  args: defaultArgs,
+  argTypes: { filter: { control: 'boolean' }, expandedKeys: { control: 'object' }, selectionKeys: { control: 'object' } }
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <Tree {...args} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Tree value={nodes} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiTree: Story = {
-  name: 'Sakai / Tree',
-  render: () => <SakaiSectionDemo Component={treeDemo} section="Tree" />,
-  parameters: sourceParameters(treeSource, 'Tree', 'Tree')
 };

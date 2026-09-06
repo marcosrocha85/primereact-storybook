@@ -1,43 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Menubar } from 'primereact/menubar';
-import menuDemo from '../../../vendor/sakai-react/app/(main)/uikit/menu/page';
-import menuSource from '../../../vendor/sakai-react/app/(main)/uikit/menu/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
-
-const menuItems = [{ label: 'File', icon: 'pi pi-fw pi-file' }, { label: 'Edit', icon: 'pi pi-fw pi-pencil' }];
+import { defaultArgs, Playground, type ExampleArgs } from './Menubar.examples';
+import exampleSource from './Menubar.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Menubar',
   component: Menubar,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Primary horizontal menu.'
-      }
-    }
+    controls: { include: ["style","model"] },
+    docs: { description: { component: 'Primary horizontal menu.' }, source: { code: exampleSource } }
   },
-  args: { model: menuItems },
-  argTypes: {}
-} satisfies Meta;
+  args: defaultArgs,
+  argTypes: { style: { control: 'object' }, model: { control: 'object' } }
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <Menubar {...args} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Menubar model={items} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiMenubar: Story = {
-  name: 'Sakai / Menubar',
-  render: () => <SakaiSectionDemo Component={menuDemo} section="Menubar" />,
-  parameters: sourceParameters(menuSource, 'Menubar', 'Menubar')
 };

@@ -1,49 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { SelectButton } from 'primereact/selectbutton';
-import inputDemo from '../../../vendor/sakai-react/app/(main)/uikit/input/page';
-import inputSource from '../../../vendor/sakai-react/app/(main)/uikit/input/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
-
-const selectOptions = [{ name: 'Option 1', code: 'O1' }, { name: 'Option 2', code: 'O2' }, { name: 'Option 3', code: 'O3' }];
+import { defaultArgs, Playground, type ExampleArgs } from './SelectButton.examples';
+import exampleSource from './SelectButton.examples.tsx?raw';
 
 const meta = {
   title: 'Components/SelectButton',
   component: SelectButton,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Button-based selection control.'
-      }
-    }
+    controls: { include: ["value","multiple","disabled"] },
+    docs: { description: { component: 'Button-based selection control.' }, source: { code: exampleSource } }
   },
-  args: { options: selectOptions, optionLabel: 'name', multiple: false },
-  argTypes: { multiple: { control: 'boolean' }, disabled: { control: 'boolean' } }
-} satisfies Meta;
+  args: defaultArgs,
+  argTypes: { value: { control: 'object' }, multiple: { control: 'boolean' }, disabled: { control: 'boolean' } }
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <SelectButton {...args} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<SelectButton value={value} onChange={(event) => setValue(event.value)} options={options} optionLabel="name" />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiSelectButton: Story = {
-  name: 'Sakai / SelectButton',
-  render: () => <SakaiSectionDemo Component={inputDemo} section="SelectButton" />,
-  parameters: sourceParameters(inputSource, 'SelectButton', 'SelectButton')
-};
-
-export const Multiple: Story = {
-  name: 'Sakai / SelectButton - Multiple',
-  render: () => <SakaiSectionDemo Component={inputDemo} section="SelectButton - Multiple" />,
-  parameters: sourceParameters(inputSource, 'SelectButton - Multiple', 'SelectButton')
 };

@@ -1,5 +1,6 @@
-import { Canvas, Controls, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
-import * as Stories from "./InputTextarea.stories";
+import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Example } from "./InputTextarea.examples";
+import exampleSource from "./InputTextarea.examples.tsx?raw";
 
 <Meta title="Components/InputTextarea/Summary" />
 
@@ -7,20 +8,20 @@ import * as Stories from "./InputTextarea.stories";
 
 <Subtitle>Multi-line text field.</Subtitle>
 
+## Usage
+
+<div className="component-example sb-unstyled"><Example /></div>
+
+<Source code={exampleSource} language="tsx" />
+
+## Variations
+
+### Disabled
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+
 ## Playground
 
-<Canvas of={Stories.Default} sourceState="hidden" />
-
-<Controls of={Stories.Default} />
-
-## Sakai / Textarea
-
-<Canvas of={Stories.SakaiTextarea} sourceState="hidden" />
-
-## Sakai / Float Label
-
-<Canvas of={Stories.FloatLabelVariants} sourceState="hidden" />
-
-## Sakai / Invalid State
-
-<Canvas of={Stories.InvalidStateVariants} sourceState="hidden" />
+Open [Default](?path=/story/components-inputtextarea--default) to change properties with Controls. Examples on this page keep their own state.

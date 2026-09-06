@@ -1,53 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Chip } from 'primereact/chip';
-import miscDemo from '../../../vendor/sakai-react/app/(main)/uikit/misc/page';
-import miscSource from '../../../vendor/sakai-react/app/(main)/uikit/misc/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './Chip.examples';
+import exampleSource from './Chip.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Chip',
   component: Chip,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Text chip with optional icon or image.'
-      }
-    }
+    controls: { include: ["label","icon","removable"] },
+    docs: { description: { component: 'Text chip with optional icon or image.' }, source: { code: exampleSource } }
   },
-  args: { label: 'Action', icon: undefined, removable: false },
+  args: defaultArgs,
   argTypes: { label: { control: 'text' }, icon: { control: 'text' }, removable: { control: 'boolean' } }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <Chip {...args} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Chip label="Action" />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiBasic: Story = {
-  name: 'Sakai / Basic',
-  render: () => <SakaiSectionDemo Component={miscDemo} section="Basic" />,
-  parameters: sourceParameters(miscSource, 'Basic', 'Chip')
-};
-
-export const SakaiIcon: Story = {
-  name: 'Sakai / Icon',
-  render: () => <SakaiSectionDemo Component={miscDemo} section="Icon" />,
-  parameters: sourceParameters(miscSource, 'Icon', 'Chip')
-};
-
-export const SakaiImage: Story = {
-  name: 'Sakai / Image',
-  render: () => <SakaiSectionDemo Component={miscDemo} section="Image" />,
-  parameters: sourceParameters(miscSource, 'Image', 'Chip')
 };

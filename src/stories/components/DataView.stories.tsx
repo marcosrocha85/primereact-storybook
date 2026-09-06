@@ -1,43 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { DataView } from 'primereact/dataview';
-import listDemo from '../../../vendor/sakai-react/app/(main)/uikit/list/page';
-import listSource from '../../../vendor/sakai-react/app/(main)/uikit/list/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
-
-const items = [{ name: 'Bamboo Watch' }, { name: 'Black Watch' }];
+import { defaultArgs, Playground, type ExampleArgs } from './DataView.examples';
+import exampleSource from './DataView.examples.tsx?raw';
 
 const meta = {
   title: 'Components/DataView',
   component: DataView,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Collection view in list or grid layout.'
-      }
-    }
+    controls: { include: ["layout","paginator","rows"] },
+    docs: { description: { component: 'Collection view in list or grid layout.' }, source: { code: exampleSource } }
   },
-  args: { value: items },
-  argTypes: {}
-} satisfies Meta;
+  args: defaultArgs,
+  argTypes: { layout: { control: 'inline-radio', options: ['list', 'grid'] }, paginator: { control: 'boolean' }, rows: { control: 'number' } }
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <DataView {...args} itemTemplate={(item) => <div className="p-3">{item.name}</div>} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<DataView value={products} itemTemplate={itemTemplate} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiDataView: Story = {
-  name: 'Sakai / DataView',
-  render: () => <SakaiSectionDemo Component={listDemo} section="DataView" />,
-  parameters: sourceParameters(listSource, 'DataView', 'DataView')
 };

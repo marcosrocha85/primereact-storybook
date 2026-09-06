@@ -1,5 +1,6 @@
-import { Canvas, Controls, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
-import * as Stories from "./Dropdown.stories";
+import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Example } from "./Dropdown.examples";
+import exampleSource from "./Dropdown.examples.tsx?raw";
 
 <Meta title="Components/Dropdown/Summary" />
 
@@ -7,20 +8,26 @@ import * as Stories from "./Dropdown.stories";
 
 <Subtitle>Single-option selector.</Subtitle>
 
+## Usage
+
+<div className="component-example sb-unstyled"><Example /></div>
+
+<Source code={exampleSource} language="tsx" />
+
+## Variations
+
+### Filter
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ filter: true }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ filter: true }} />"} language="tsx" />
+
+### Disabled
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+
 ## Playground
 
-<Canvas of={Stories.Default} sourceState="hidden" />
-
-<Controls of={Stories.Default} />
-
-## Sakai / Dropdown
-
-<Canvas of={Stories.SakaiDropdown} sourceState="hidden" />
-
-## Sakai / Float Label
-
-<Canvas of={Stories.FloatLabelVariants} sourceState="hidden" />
-
-## Sakai / Invalid State
-
-<Canvas of={Stories.InvalidStateVariants} sourceState="hidden" />
+Open [Default](?path=/story/components-dropdown--default) to change properties with Controls. Examples on this page keep their own state.

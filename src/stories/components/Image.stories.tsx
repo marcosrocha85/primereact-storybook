@@ -16,7 +16,7 @@ const meta = {
     }
   },
   args: {
-    src: '/demo/images/galleria/galleria10.jpg',
+    src: './demo/images/galleria/galleria10.jpg',
     alt: 'Sakai gallery image',
     width: '250',
     preview: true
@@ -39,7 +39,7 @@ export const Default: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<Image src="/demo/images/galleria/galleria10.jpg" alt="Sakai gallery image" width="250" preview />`
+        code: `<Image src="./demo/images/galleria/galleria10.jpg" alt="Sakai gallery image" width="250" preview />`
       }
     }
   }

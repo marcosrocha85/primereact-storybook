@@ -1,43 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { PickList } from 'primereact/picklist';
-import listDemo from '../../../vendor/sakai-react/app/(main)/uikit/list/page';
-import listSource from '../../../vendor/sakai-react/app/(main)/uikit/list/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
-
-const source = [{ name: 'Bamboo Watch' }, { name: 'Black Watch' }];
+import { defaultArgs, Playground, type ExampleArgs } from './PickList.examples';
+import exampleSource from './PickList.examples.tsx?raw';
 
 const meta = {
   title: 'Components/PickList',
   component: PickList,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Transfer items between lists.'
-      }
-    }
+    controls: { include: ["sourceHeader","targetHeader","filter"] },
+    docs: { description: { component: 'Transfer items between lists.' }, source: { code: exampleSource } }
   },
-  args: { source, target: [], sourceHeader: 'Available', targetHeader: 'Selected' },
-  argTypes: {}
-} satisfies Meta;
+  args: defaultArgs,
+  argTypes: { sourceHeader: { control: 'text' }, targetHeader: { control: 'text' }, filter: { control: 'boolean' } }
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <PickList {...args} itemTemplate={(item) => <span>{item.name}</span>} onChange={() => undefined} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<PickList source={source} target={target} itemTemplate={itemTemplate} onChange={onChange} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiPickList: Story = {
-  name: 'Sakai / PickList',
-  render: () => <SakaiSectionDemo Component={listDemo} section="PickList" />,
-  parameters: sourceParameters(listSource, 'PickList', 'PickList')
 };

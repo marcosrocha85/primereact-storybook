@@ -1,42 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Toast } from 'primereact/toast';
-import { Button } from 'primereact/button';
-import messageDemo from '../../../vendor/sakai-react/app/(main)/uikit/message/page';
-import messageSource from '../../../vendor/sakai-react/app/(main)/uikit/message/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './Toast.examples';
+import exampleSource from './Toast.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Toast',
   component: Toast,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Temporary notification.'
-      }
-    }
+    controls: { include: ["position"] },
+    docs: { description: { component: 'Temporary notification.' }, source: { code: exampleSource } }
   },
-  args: { position: 'top-right' },
+  args: defaultArgs,
   argTypes: { position: { control: 'select', options: ['top-right', 'top-left', 'bottom-right', 'bottom-left', 'center'] } }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <><Toast {...args} /><Button label="Show toast" /></>,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Toast ref={toast} /><Button onClick={() => toast.current?.show({ severity: 'success', summary: 'Success' })} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiToast: Story = {
-  name: 'Sakai / Toast',
-  render: () => <SakaiSectionDemo Component={messageDemo} section="Toast" />,
-  parameters: sourceParameters(messageSource, 'Toast', 'Toast')
 };

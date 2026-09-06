@@ -1,53 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Avatar } from 'primereact/avatar';
-import miscDemo from '../../../vendor/sakai-react/app/(main)/uikit/misc/page';
-import miscSource from '../../../vendor/sakai-react/app/(main)/uikit/misc/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './Avatar.examples';
+import exampleSource from './Avatar.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Avatar',
   component: Avatar,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Visual representation of a user or entity.'
-      }
-    }
+    controls: { include: ["label","icon","shape","size"] },
+    docs: { description: { component: 'Visual representation of a user or entity.' }, source: { code: exampleSource } }
   },
-  args: { label: 'P', shape: 'circle', size: 'large' },
+  args: defaultArgs,
   argTypes: { label: { control: 'text' }, icon: { control: 'text' }, shape: { control: 'inline-radio', options: ['square', 'circle'] }, size: { control: 'select', options: ['normal', 'large', 'xlarge'] } }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <Avatar {...args} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Avatar label="P" shape="circle" size="large" />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiLabelCircle: Story = {
-  name: 'Sakai / Label - Circle',
-  render: () => <SakaiSectionDemo Component={miscDemo} section="Label - Circle" />,
-  parameters: sourceParameters(miscSource, 'Label - Circle', 'Avatar')
-};
-
-export const SakaiIconBadge: Story = {
-  name: 'Sakai / Icon - Badge',
-  render: () => <SakaiSectionDemo Component={miscDemo} section="Icon - Badge" />,
-  parameters: sourceParameters(miscSource, 'Icon - Badge', 'Avatar')
-};
-
-export const SakaiImage: Story = {
-  name: 'Sakai / Image',
-  render: () => <SakaiSectionDemo Component={miscDemo} section="Image" />,
-  parameters: sourceParameters(miscSource, 'Image', 'Avatar')
 };

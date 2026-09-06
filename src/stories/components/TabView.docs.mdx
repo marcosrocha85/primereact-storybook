@@ -1,193 +1,23 @@
-import {
-  Canvas,
-  Controls,
-  Meta,
-  Source,
-  Subtitle,
-  Title,
-} from "@storybook/addon-docs/blocks";
-import { TabPanel, TabView } from "primereact/tabview";
-import * as TabViewStories from "./TabView.stories";
+import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Example } from "./TabView.examples";
+import exampleSource from "./TabView.examples.tsx?raw";
 
 <Meta title="Components/TabView/Summary" />
 
 <Title>TabView</Title>
 
-<Subtitle>
-  Organises content into discrete panels switched by labelled tab headers.
-  Supports icons, disabled state, closable tabs, and scrollable navigation.
-</Subtitle>
+<Subtitle>Tabbed navigation.</Subtitle>
 
-## Basic Usage
+## Usage
 
-Three tabs, each with its own body content. Clicking a header activates that panel; only one panel is visible at a time.
+<div className="component-example sb-unstyled"><Example /></div>
 
-<div style={{ width: "680px" }}>
-  <TabView>
-    <TabPanel header="Overview">
-      <p className="m-0">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur.
-      </p>
-    </TabPanel>
-    <TabPanel header="Specifications">
-      <p className="m-0">
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-        accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab
-        illo inventore veritatis et quasi architecto beatae vitae dicta sunt
-        explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut
-        odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
-        voluptatem sequi nesciunt.
-      </p>
-    </TabPanel>
-    <TabPanel header="Reviews">
-      <p className="m-0">
-        At vero eos et accusamus et iusto odio dignissimos ducimus qui
-        blanditiis praesentium voluptatum deleniti atque corrupti quos dolores
-        et quas molestias excepturi sint occaecati cupiditate non provident,
-        similique sunt in culpa qui officia deserunt mollitia animi, id est
-        laborum et dolorum fuga.
-      </p>
-    </TabPanel>
-  </TabView>
-</div>
+<Source code={exampleSource} language="tsx" />
 
-<Source
-  code={`<TabView>
-  <TabPanel header="Overview">
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit…</p>
-  </TabPanel>
-  <TabPanel header="Specifications">
-    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem…</p>
-  </TabPanel>
-  <TabPanel header="Reviews">
-    <p>At vero eos et accusamus et iusto odio dignissimos ducimus…</p>
-  </TabPanel>
-</TabView>`}
-  language="tsx"
-/>
+## Variations
 
-## Icons in Headers
-
-Use `leftIcon` or `rightIcon` on `TabPanel` to pair each tab with a PrimeIcons class. The icon appears alongside the header label and helps users scan tabs at a glance.
-
-<div style={{ width: "680px" }}>
-  <TabView>
-    <TabPanel header="Overview" leftIcon="pi pi-home mr-2">
-      <p className="m-0">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat.
-      </p>
-    </TabPanel>
-    <TabPanel header="Specifications" leftIcon="pi pi-list mr-2">
-      <p className="m-0">
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-        accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab
-        illo inventore veritatis et quasi architecto beatae vitae dicta sunt
-        explicabo.
-      </p>
-    </TabPanel>
-    <TabPanel header="Reviews" leftIcon="pi pi-star mr-2">
-      <p className="m-0">
-        At vero eos et accusamus et iusto odio dignissimos ducimus qui
-        blanditiis praesentium voluptatum deleniti atque corrupti quos dolores
-        et quas molestias excepturi sint occaecati cupiditate non provident.
-      </p>
-    </TabPanel>
-  </TabView>
-</div>
-
-<Source
-  code={`<TabView>
-  <TabPanel header="Overview" leftIcon="pi pi-home mr-2">…</TabPanel>
-  <TabPanel header="Specifications" leftIcon="pi pi-list mr-2">…</TabPanel>
-  <TabPanel header="Reviews" leftIcon="pi pi-star mr-2">…</TabPanel>
-</TabView>`}
-  language="tsx"
-/>
-
-## Disabled Tab
-
-Set `disabled` on a `TabPanel` to prevent the user from navigating to it. Use this when a section is temporarily unavailable — for example, content that requires a completed previous step.
-
-<div style={{ width: "680px" }}>
-  <TabView>
-    <TabPanel header="Overview">
-      <p className="m-0">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat.
-      </p>
-    </TabPanel>
-    <TabPanel header="Specifications">
-      <p className="m-0">
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-        accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab
-        illo inventore veritatis.
-      </p>
-    </TabPanel>
-    <TabPanel header="Reviews (unavailable)" disabled>
-      <p className="m-0">
-        This content is not reachable while the tab is disabled.
-      </p>
-    </TabPanel>
-  </TabView>
-</div>
-
-<Source
-  code={`<TabView>
-  <TabPanel header="Overview">…</TabPanel>
-  <TabPanel header="Specifications">…</TabPanel>
-  <TabPanel header="Reviews (unavailable)" disabled>…</TabPanel>
-</TabView>`}
-  language="tsx"
-/>
-
-## Scrollable Headers
-
-Add `scrollable` to `TabView` when the number of tabs may exceed the available horizontal space. Navigation arrows appear so the user can scroll through the header list without wrapping.
-
-<div style={{ width: "480px" }}>
-  <TabView scrollable>
-    {[
-      "Overview",
-      "Specifications",
-      "Reviews",
-      "Shipping",
-      "Returns",
-      "Support",
-      "Legal",
-    ].map((tab) => (
-      <TabPanel key={tab} header={tab}>
-        <p className="m-0">
-          Content for the <strong>{tab}</strong> tab — Lorem ipsum dolor sit
-          amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-          labore et dolore magna aliqua.
-        </p>
-      </TabPanel>
-    ))}
-  </TabView>
-</div>
-
-<Source
-  code={`<TabView scrollable>
-  <TabPanel header="Overview">…</TabPanel>
-  <TabPanel header="Specifications">…</TabPanel>
-  <TabPanel header="Reviews">…</TabPanel>
-  <TabPanel header="Shipping">…</TabPanel>
-  {/* more tabs… */}
-</TabView>`}
-  language="tsx"
-/>
+The usage example shows the base composition. Use Default to explore the documented properties.
 
 ## Playground
 
-<Canvas of={TabViewStories.Default} sourceState="hidden" />
-
-<Controls of={TabViewStories.Default} />
+Open [Default](?path=/story/components-tabview--default) to change properties with Controls. Examples on this page keep their own state.

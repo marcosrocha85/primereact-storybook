@@ -1,43 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { TabMenu } from 'primereact/tabmenu';
-import menuDemo from '../../../vendor/sakai-react/app/(main)/uikit/menu/page';
-import menuSource from '../../../vendor/sakai-react/app/(main)/uikit/menu/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
-
-const items = [{ label: 'Home', icon: 'pi pi-fw pi-home' }, { label: 'Calendar', icon: 'pi pi-fw pi-calendar' }];
+import { defaultArgs, Playground, type ExampleArgs } from './TabMenu.examples';
+import exampleSource from './TabMenu.examples.tsx?raw';
 
 const meta = {
   title: 'Components/TabMenu',
   component: TabMenu,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Tabbed menu.'
-      }
-    }
+    controls: { include: ["activeIndex"] },
+    docs: { description: { component: 'Tabbed menu.' }, source: { code: exampleSource } }
   },
-  args: { model: items, activeIndex: 0 },
+  args: defaultArgs,
   argTypes: { activeIndex: { control: 'number' } }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <TabMenu {...args} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<TabMenu model={items} activeIndex={activeIndex} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiTabMenu: Story = {
-  name: 'Sakai / TabMenu',
-  render: () => <SakaiSectionDemo Component={menuDemo} section="TabMenu" />,
-  parameters: sourceParameters(menuSource, 'TabMenu', 'TabMenu')
 };

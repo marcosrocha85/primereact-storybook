@@ -1,53 +1,31 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { InputMask } from 'primereact/inputmask';
-import floatlabelDemo from '../../../vendor/sakai-react/app/(main)/uikit/floatlabel/page';
-import floatlabelSource from '../../../vendor/sakai-react/app/(main)/uikit/floatlabel/page.tsx?raw';
-import invalidstateDemo from '../../../vendor/sakai-react/app/(main)/uikit/invalidstate/page';
-import invalidstateSource from '../../../vendor/sakai-react/app/(main)/uikit/invalidstate/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './InputMask.examples';
+import exampleSource from './InputMask.examples.tsx?raw';
 
 const meta = {
   title: 'Components/InputMask',
   component: InputMask,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Text field with an input mask.'
-      }
-    }
+    controls: { include: ["value","mask","placeholder","disabled"] },
+    docs: { description: { component: 'Text field with an input mask.' }, source: { code: exampleSource } }
   },
-  args: { mask: '99/99/9999', placeholder: '99/99/9999' },
-  argTypes: {
+  args: defaultArgs,
+  argTypes: { value: { control: 'text' },
     mask: { control: 'text' },
     placeholder: { control: 'text' },
     disabled: { control: 'boolean' }
   }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <InputMask {...args} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<InputMask mask="99/99/9999" placeholder="99/99/9999" />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const FloatLabelVariants: Story = {
-  name: 'Sakai / Float Label',
-  render: () => <SakaiSectionDemo Component={floatlabelDemo} section="Float Label" />,
-  parameters: sourceParameters(floatlabelSource, 'Float Label', 'InputMask')
-};
-
-export const InvalidStateVariants: Story = {
-  name: 'Sakai / Invalid State',
-  render: () => <SakaiSectionDemo Component={invalidstateDemo} section="Invalid State" />,
-  parameters: sourceParameters(invalidstateSource, 'Invalid State', 'InputMask')
 };

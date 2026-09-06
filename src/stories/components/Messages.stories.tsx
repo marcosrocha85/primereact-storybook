@@ -1,41 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Messages } from 'primereact/messages';
-import messageDemo from '../../../vendor/sakai-react/app/(main)/uikit/message/page';
-import messageSource from '../../../vendor/sakai-react/app/(main)/uikit/message/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
+import { defaultArgs, Playground, type ExampleArgs } from './Messages.examples';
+import exampleSource from './Messages.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Messages',
   component: Messages,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Programmatic message list.'
-      }
-    }
+    controls: { include: ["className","style"] },
+    docs: { description: { component: 'Programmatic message list.' }, source: { code: exampleSource } }
   },
-  args: {},
-  argTypes: {}
-} satisfies Meta;
+  args: defaultArgs,
+  argTypes: { className: { control: 'text' }, style: { control: 'object' } }
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <Messages />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Messages ref={messages} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiMessages: Story = {
-  name: 'Sakai / Messages',
-  render: () => <SakaiSectionDemo Component={messageDemo} section="Messages" />,
-  parameters: sourceParameters(messageSource, 'Messages', 'Messages')
 };

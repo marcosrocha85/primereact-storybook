@@ -1,5 +1,6 @@
-import { Canvas, Controls, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
-import * as Stories from "./Menu.stories";
+import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Example } from "./Menu.examples";
+import exampleSource from "./Menu.examples.tsx?raw";
 
 <Meta title="Components/Menu/Summary" />
 
@@ -7,16 +8,20 @@ import * as Stories from "./Menu.stories";
 
 <Subtitle>Simple vertical menu or popup menu.</Subtitle>
 
+## Usage
+
+<div className="component-example sb-unstyled"><Example /></div>
+
+<Source code={exampleSource} language="tsx" />
+
+## Variations
+
+### Popup
+
+<div className="component-example sb-unstyled"><Example initialArgs={{ popup: true }} /></div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ popup: true }} />"} language="tsx" />
+
 ## Playground
 
-<Canvas of={Stories.Default} sourceState="hidden" />
-
-<Controls of={Stories.Default} />
-
-## Sakai / Plain Menu
-
-<Canvas of={Stories.SakaiPlainMenu} sourceState="hidden" />
-
-## Sakai / Overlay Menu
-
-<Canvas of={Stories.SakaiOverlayMenu} sourceState="hidden" />
+Open [Default](?path=/story/components-menu--default) to change properties with Controls. Examples on this page keep their own state.

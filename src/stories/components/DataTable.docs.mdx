@@ -1,30 +1,23 @@
-import { Canvas, Controls, Meta, Subtitle, Title } from "@storybook/addon-docs/blocks";
-import * as Stories from "./DataTable.stories";
+import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
+import { Example } from "./DataTable.examples";
+import exampleSource from "./DataTable.examples.tsx?raw";
 
 <Meta title="Components/DataTable/Summary" />
 
 <Title>DataTable</Title>
 
-<Subtitle>Data table with filtering, selection, expansion, and grouping.</Subtitle>
+<Subtitle>Data table with sorting, filtering, pagination, and single-row selection.</Subtitle>
+
+## Usage
+
+<div className="component-example sb-unstyled"><Example /></div>
+
+<Source code={exampleSource} language="tsx" />
+
+## Variations
+
+The usage example shows the base composition. Use Default to explore the documented properties.
 
 ## Playground
 
-<Canvas of={Stories.Default} sourceState="hidden" />
-
-<Controls of={Stories.Default} />
-
-## Sakai / Filter Menu
-
-<Canvas of={Stories.SakaiFilterMenu} sourceState="hidden" />
-
-## Sakai / Frozen Columns
-
-<Canvas of={Stories.SakaiFrozenColumns} sourceState="hidden" />
-
-## Sakai / Row Expand
-
-<Canvas of={Stories.SakaiRowExpand} sourceState="hidden" />
-
-## Sakai / Subheader Grouping
-
-<Canvas of={Stories.SakaiSubheaderGrouping} sourceState="hidden" />
+Open [Default](?path=/story/components-datatable--default) to change properties with Controls. Examples on this page keep their own state.

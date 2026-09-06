@@ -1,52 +1,32 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { SplitButton } from 'primereact/splitbutton';
-import buttonDemo from '../../../vendor/sakai-react/app/(main)/uikit/button/page';
-import buttonSource from '../../../vendor/sakai-react/app/(main)/uikit/button/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
-
-const splitItems = [
-  { label: 'Update', icon: 'pi pi-refresh' },
-  { label: 'Delete', icon: 'pi pi-times' },
-  { label: 'Home', icon: 'pi pi-home' }
-];
+import { defaultArgs, Playground, type ExampleArgs } from './SplitButton.examples';
+import exampleSource from './SplitButton.examples.tsx?raw';
 
 const meta = {
   title: 'Components/SplitButton',
   component: SplitButton,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Split action button with a primary action and an options menu.'
-      }
-    }
+    controls: { include: ["label","icon","severity","disabled"] },
+    docs: { description: { component: 'Split action button with a primary action and an options menu.' }, source: { code: exampleSource } }
   },
-  args: { label: 'Save', icon: 'pi pi-check', severity: 'secondary' },
+  args: defaultArgs,
   argTypes: {
     label: { control: 'text' },
     icon: { control: 'text' },
     severity: { control: 'select', options: [undefined, 'secondary', 'success', 'info', 'warning', 'help', 'danger'] },
     disabled: { control: 'boolean' }
   }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <SplitButton {...args} model={splitItems} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<SplitButton label="Save" icon="pi pi-check" model={items} severity="secondary" />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiSplitButton: Story = {
-  name: 'Sakai / SplitButton',
-  render: () => <SakaiSectionDemo Component={buttonDemo} section="SplitButton" />,
-  parameters: sourceParameters(buttonSource, 'SplitButton', 'SplitButton')
 };

@@ -1,43 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Steps } from 'primereact/steps';
-import menuDemo from '../../../vendor/sakai-react/app/(main)/uikit/menu/page';
-import menuSource from '../../../vendor/sakai-react/app/(main)/uikit/menu/page.tsx?raw';
-import { SakaiSectionDemo, sourceParameters } from '../sakaiStoryHelpers';
-
-const items = [{ label: 'Personal' }, { label: 'Seat' }, { label: 'Payment' }];
+import { defaultArgs, Playground, type ExampleArgs } from './Steps.examples';
+import exampleSource from './Steps.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Steps',
   component: Steps,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Step-based flow.'
-      }
-    }
+    controls: { include: ["activeIndex"] },
+    docs: { description: { component: 'Step-based flow.' }, source: { code: exampleSource } }
   },
-  args: { model: items, activeIndex: 0 },
+  args: defaultArgs,
   argTypes: { activeIndex: { control: 'number' } }
-} satisfies Meta;
+} satisfies Meta<ExampleArgs>;
 
 export default meta;
-
-type Story = StoryObj;
+type Story = StoryObj<ExampleArgs>;
 
 export const Default: Story = {
-  render: (args: any) => <Steps {...args} />,
-  parameters: {
-    docs: {
-      source: {
-        code: `<Steps model={items} activeIndex={activeIndex} />`
-      }
-    }
+  render: function Render() {
+    const [args, updateArgs] = useArgs<ExampleArgs>();
+    return <Playground args={args} updateArgs={updateArgs} />;
   }
-};
-
-export const SakaiSteps: Story = {
-  name: 'Sakai / Steps',
-  render: () => <SakaiSectionDemo Component={menuDemo} section="Steps" />,
-  parameters: sourceParameters(menuSource, 'Steps', 'Steps')
 };
