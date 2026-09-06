@@ -52,6 +52,55 @@ for (const name of components) {
   });
 }
 
+test('AvatarGroup: curated compositions, Controls and copyable code', async () => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(`${baseURL}/?path=/docs/components-avatargroup-summary--summary`);
+  const preview = page.frameLocator('#storybook-preview-iframe');
+  await preview.locator('.sbdocs-content h1').waitFor();
+  assert.deepEqual(await preview.locator('.sbdocs-content h3').allTextContents(), ['Initials', 'Sizes']);
+  const groups = preview.locator('.component-example .p-avatar-group');
+  assert.equal(await groups.count(), 4);
+  assert.equal(await groups.first().locator('img').count(), 5);
+  assert.equal(await groups.first().getByLabel('2 additional members').innerText(), '+2');
+  assert.equal(await groups.last().locator('.p-avatar-xl').count(), 3);
+  await preview.getByRole('link', { name: 'Default', exact: true }).click();
+  await preview.locator('#storybook-root .p-avatar-group').waitFor();
+  assert.equal(await preview.locator('#storybook-root .p-avatar-group').count(), 1);
+  await page.getByRole('tab', { name: 'Controls' }).click();
+  await page.locator('#control-className').fill('avatargroup-control-check');
+  await preview.locator('.p-avatar-group.avatargroup-control-check').waitFor();
+  const group = preview.locator('#storybook-root .p-avatar-group');
+  for (const count of [2, 3, 4, 5]) {
+    await page.locator('#control-count').selectOption({ label: String(count) });
+    await group.locator('.p-avatar').nth(count).waitFor();
+    await group.locator('.p-avatar').nth(count + 1).waitFor({ state: 'detached' });
+    assert.equal(await group.locator('.p-avatar').count(), count + 1);
+  }
+  await page.locator('#control-content').selectOption({ label: 'text' });
+  await group.locator('img').first().waitFor({ state: 'detached' });
+  assert.deepEqual(await group.locator('.p-avatar-text').allTextContents(), ['AE', 'AJ', 'OL', 'IB', 'XF', '+2']);
+  await page.locator('#control-content').selectOption({ label: 'mixed' });
+  await group.locator('img').nth(2).waitFor();
+  assert.equal(await group.locator('img').count(), 3);
+  assert.deepEqual(await group.locator('.p-avatar-text').allTextContents(), ['AJ', 'IB', '+2']);
+  await page.locator('#control-content').selectOption({ label: 'image' });
+  await group.locator('img').nth(4).waitFor();
+  assert.equal(await group.locator('img').count(), 5);
+  await page.locator('#control-showOverflow').focus();
+  await page.locator('#control-showOverflow').press('Space');
+  await group.getByLabel('2 additional members').waitFor({ state: 'detached' });
+  assert.equal(await group.locator('.p-avatar').count(), 5);
+  await page.locator('#control-size').selectOption({ label: 'xlarge' });
+  await group.locator('.p-avatar-xl').nth(4).waitFor();
+  await page.getByLabel('square', { exact: true }).focus();
+  await page.getByLabel('square', { exact: true }).press('Space');
+  await group.locator('.p-avatar-circle').first().waitFor({ state: 'detached' });
+  await page.getByRole('tab', { name: 'Code', exact: true }).click();
+  await page.getByRole('button', { name: /Copy/ }).waitFor();
+  assert.match(await page.getByRole('tabpanel').innerText(), /<AvatarGroup \{\.\.\.groupProps\}/);
+  assert.match(await page.getByRole('tabpanel').innerText(), /demo\/images\/avatar\/amyelsner.png/);
+});
+
 test('Avatar: curated Sakai variations and playground code', async () => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto(`${baseURL}/?path=/docs/components-avatar-summary--summary`);
