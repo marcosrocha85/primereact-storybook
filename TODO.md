@@ -1,88 +1,11 @@
-# Component Review TODO
+# Component Review Backlog
 
-Review every component story set and align it with the Button documentation pattern.
+The component-review backlog has moved to [GitHub Issues](https://github.com/marcosrocha85/primereact-storybook/issues?q=is%3Aissue%20is%3Aopen%20label%3Acomponent-review%20sort%3Acreated-asc).
 
-## Review Standard
+GitHub is the source of truth for scope, acceptance criteria, progress, and completion. Do not maintain task checkboxes in this file. Follow the required session-start workflow in [AGENTS.md](AGENTS.md) to fetch and select the next actionable issue.
 
-- Use `Button` as the reference-quality template for component documentation and story structure.
-- Each component should have only:
-  - `Summary`: the MDX overview page.
-  - `Default`: the interactive story/playground.
-- Do not create one story per visual state, variation, or Sakai example.
-- Use `Summary` to show curated static examples of important variations such as severities, sizes, icons, states, and common styles.
-- Do not render Storybook Controls in `Summary`; controls are allowed only on the `Default` story page.
-- Keep `Default` focused on a single component instance that users can explore through Controls and editable attributes.
-- Keep user-facing documentation text in English.
-- Keep each component under `Components/<Component>`.
-- Preserve Storybook `Show code` behavior by keeping docs Canvas `sourceState="hidden"`.
-- Merge related Sakai variations into the closest base component instead of creating duplicate component pages.
+## Migration
 
-## Components
-
-- [x] Accordion
-- [x] AutoComplete
-- [ ] Avatar
-- [ ] AvatarGroup
-- [ ] Badge
-- [ ] BreadCrumb
-- [x] Button
-- [ ] Calendar
-- [ ] Card
-- [ ] Carousel
-- [ ] Chart
-- [ ] Checkbox
-- [ ] Chip
-- [ ] Chips
-- [ ] ColorPicker
-- [ ] ConfirmPopup
-- [ ] ContextMenu
-- [ ] DataTable
-- [ ] DataView
-- [ ] Dialog
-- [ ] Divider
-- [ ] Dropdown
-- [ ] Fieldset
-- [ ] FileUpload
-- [ ] Galleria
-- [x] Image
-- [ ] InputMask
-- [ ] InputNumber
-- [ ] InputSwitch
-- [ ] InputText
-- [ ] InputTextarea
-- [ ] Knob
-- [ ] ListBox
-- [ ] MegaMenu
-- [ ] Menu
-- [ ] Menubar
-- [ ] Message
-- [ ] Messages
-- [ ] MultiSelect
-- [ ] OrderList
-- [x] OverlayPanel
-- [x] Panel
-- [ ] PanelMenu
-- [ ] Password
-- [ ] PickList
-- [ ] ProgressBar
-- [ ] RadioButton
-- [ ] Rating
-- [ ] ScrollPanel
-- [ ] ScrollTop
-- [ ] SelectButton
-- [ ] Sidebar
-- [ ] Skeleton
-- [ ] Slider
-- [ ] SplitButton
-- [ ] Splitter
-- [ ] Steps
-- [ ] TabMenu
-- [ ] TabView
-- [ ] Tag
-- [ ] TieredMenu
-- [ ] Toast
-- [ ] ToggleButton
-- [ ] Toolbar
-- [ ] Tooltip
-- [ ] Tree
-- [ ] TreeTable
+- The 61 previously unchecked components were migrated to individual issues labeled `component-review` and `documentation`, preserving their original order.
+- Each issue includes the review standard, component files, Button and Sakai references, and validation requirements.
+- Previously completed in the original checklist: Accordion, AutoComplete, Button, Image, OverlayPanel, and Panel. These entries are historical records, not new verification of their implementation.

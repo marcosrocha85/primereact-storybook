@@ -4,6 +4,33 @@
 
 This repository documents PrimeFaces Sakai React as a Storybook-based design system. The public artifact is the static Storybook build generated into `storybook-static` and deployed through GitHub Pages.
 
+## Required Session Startup: GitHub Issues
+
+GitHub Issues in `marcosrocha85/primereact-storybook` is the authoritative backlog and task-status source. `TODO.md` is only a migration pointer, not an editable task queue.
+
+At the beginning of every session, before choosing implementation work:
+
+1. Read this guide and inspect the working tree. Preserve existing user changes.
+2. Fetch the current open component-review queue from GitHub, including every page, sorted by issue number ascending:
+
+   ```sh
+   gh api --paginate 'repos/marcosrocha85/primereact-storybook/issues?state=open&labels=component-review&sort=created&direction=asc&per_page=100' --jq '.[] | select(.pull_request == null) | {number, title, html_url, assignees, labels}'
+   ```
+
+3. Honor an issue or scope explicitly selected by the user. Otherwise, select the lowest-numbered actionable issue from the queue. Read its full body, comments, dependencies, and linked pull requests before editing:
+
+   ```sh
+   gh issue view <number> --repo marcosrocha85/primereact-storybook --comments
+   gh pr list --repo marcosrocha85/primereact-storybook --state open --limit 100 --json number,title,body,url
+   ```
+
+4. Skip issues with unresolved dependencies, an active implementation by another contributor, or an open implementing pull request; state the reason and select the next actionable issue. Report the selected issue number and scope before implementation. For a read-only or unrelated request, fetch the queue but keep the user's requested scope.
+5. Treat the selected issue's acceptance criteria and the current code as implementation context. Do not rely on a cached queue or the former TODO checkboxes. If GitHub cannot be read, report the exact blocker instead of guessing the next task. If no actionable issues remain, report that result instead of inventing work.
+
+Use the GitHub connector as an alternative when `gh` is unavailable, preserving the same filtering, pagination, ordering, and full issue inspection.
+
+Keep implementation scoped to the selected issue. When publishing an authorized pull request, link it with `Closes #<number>` and include validation results and blockers. Close the issue only when its acceptance criteria are satisfied and the implementation is merged; local changes alone do not complete an issue. New backlog tasks belong in GitHub Issues, not in a second local checklist. Repository documentation remains the source for architecture and coding conventions; a GitHub Wiki is optional for longer-lived project context.
+
 ## Current Architecture
 
 - Storybook 10 runs on React + Vite.
