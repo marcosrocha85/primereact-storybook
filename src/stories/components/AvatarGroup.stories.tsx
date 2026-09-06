@@ -6,14 +6,13 @@ import exampleSource from './AvatarGroup.examples.tsx?raw';
 
 const meta = {
   title: 'Components/AvatarGroup',
-  component: AvatarGroup,
   parameters: {
     layout: 'centered',
-    controls: { include: ["className","style"] },
-    docs: { description: { component: 'Overlapping avatars representing a team, with a final avatar indicating additional members. Configure size and shape on each child Avatar.' }, source: { code: exampleSource } }
+    controls: { include: ["count","content","size","shape","showOverflow","className","style"] },
+    docs: { description: { component: 'Overlapping avatars representing a team. Explore member count, text, images, mixed content, sizes, shapes, and an optional overflow indicator in Default.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { className: { control: 'text' }, style: { control: 'object' } }
+  argTypes: { count: { control: 'select', options: [2, 3, 4, 5], description: 'Visible members, excluding the +2 indicator.' }, content: { control: 'select', options: ['text', 'image', 'mixed'] }, size: { control: 'select', options: ['normal', 'large', 'xlarge'] }, shape: { control: 'inline-radio', options: ['square', 'circle'] }, showOverflow: { control: 'boolean' }, className: { control: 'text' }, style: { control: 'object' } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;

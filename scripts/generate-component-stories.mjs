@@ -654,16 +654,30 @@ import { Badge } from "primereact/badge";`,
     prime: 'avatargroup',
     importName: 'AvatarGroup',
     extraImports: `import { Avatar } from 'primereact/avatar';`,
-    description: 'Overlapping avatars representing a team, with a final avatar indicating additional members. Configure size and shape on each child Avatar.',
-    args: `{ className: '', style: {} }`,
-    argTypes: `{ className: { control: 'text' }, style: { control: 'object' } }`,
-    playground: `<AvatarGroup {...args}>
-    <Avatar image="demo/images/avatar/amyelsner.png" imageAlt="Amy Elsner" size="large" shape="circle" />
-    <Avatar image="demo/images/avatar/asiyajavayant.png" imageAlt="Asiya Javayant" size="large" shape="circle" />
-    <Avatar image="demo/images/avatar/onyamalimba.png" imageAlt="Onyama Limba" size="large" shape="circle" />
-    <Avatar image="demo/images/avatar/ionibowcher.png" imageAlt="Ioni Bowcher" size="large" shape="circle" />
-    <Avatar image="demo/images/avatar/xuxuefeng.png" imageAlt="Xuxue Feng" size="large" shape="circle" />
-    <Avatar label="+2" aria-label="2 additional members" shape="circle" size="large" style={{ backgroundColor: '#9c27b0', color: '#ffffff' }} />
+    description: 'Overlapping avatars representing a team. Explore member count, text, images, mixed content, sizes, shapes, and an optional overflow indicator in Default.',
+    exampleType: `ComponentProps<typeof AvatarGroup> & {
+  count: 2 | 3 | 4 | 5;
+  content: 'text' | 'image' | 'mixed';
+  size: ComponentProps<typeof Avatar>['size'];
+  shape: ComponentProps<typeof Avatar>['shape'];
+  showOverflow: boolean;
+}`,
+    args: `{ count: 5, content: 'image', size: 'large', shape: 'circle', showOverflow: true, className: '', style: {} }`,
+    argTypes: `{ count: { control: 'select', options: [2, 3, 4, 5], description: 'Visible members, excluding the +2 indicator.' }, content: { control: 'select', options: ['text', 'image', 'mixed'] }, size: { control: 'select', options: ['normal', 'large', 'xlarge'] }, shape: { control: 'inline-radio', options: ['square', 'circle'] }, showOverflow: { control: 'boolean' }, className: { control: 'text' }, style: { control: 'object' } }`,
+    renderPrefix: `const members = [
+  { name: 'Amy Elsner', label: 'AE', image: 'demo/images/avatar/amyelsner.png' },
+  { name: 'Asiya Javayant', label: 'AJ', image: 'demo/images/avatar/asiyajavayant.png' },
+  { name: 'Onyama Limba', label: 'OL', image: 'demo/images/avatar/onyamalimba.png' },
+  { name: 'Ioni Bowcher', label: 'IB', image: 'demo/images/avatar/ionibowcher.png' },
+  { name: 'Xuxue Feng', label: 'XF', image: 'demo/images/avatar/xuxuefeng.png' },
+];`,
+    hooks: `const { count, content, size, shape, showOverflow, ...groupProps } = args;`,
+    playground: `<AvatarGroup {...groupProps}>
+    {members.slice(0, count).map((member, index) => {
+      const useImage = content === 'image' || (content === 'mixed' && index % 2 === 0);
+      return <Avatar key={member.name} image={useImage ? member.image : undefined} imageAlt={useImage ? member.name : undefined} label={useImage ? undefined : member.label} aria-label={member.name} size={size} shape={shape} />;
+    })}
+    {showOverflow && <Avatar label="+2" aria-label="2 additional members" shape={shape} size={size} style={{ backgroundColor: '#9c27b0', color: '#ffffff' }} />}
   </AvatarGroup>`,
     docsImports: `import { AvatarGroup } from "primereact/avatargroup";
 import { Avatar } from "primereact/avatar";`,
@@ -742,7 +756,7 @@ for (const component of components) {
 const manualComponents = new Set(['Button', 'Accordion', 'AutoComplete', 'Image', 'Panel']);
 
 function createExamples(component) {
-  const type = component.name === 'DataTable' ? 'DataTablePropsSingle<typeof products>' : ['Dialog', 'Sidebar'].includes(component.name) ? `Omit<ComponentProps<typeof ${component.importName}>, 'onHide'> & { onHide?: () => void }` : `ComponentProps<typeof ${component.importName}>`;
+  const type = component.exampleType ?? (component.name === 'DataTable' ? 'DataTablePropsSingle<typeof products>' : ['Dialog', 'Sidebar'].includes(component.name) ? `Omit<ComponentProps<typeof ${component.importName}>, 'onHide'> & { onHide?: () => void }` : `ComponentProps<typeof ${component.importName}>`);
   const typeImport = component.name === 'DataTable' ? "import type { DataTablePropsSingle } from 'primereact/datatable';\n" : '';
   return `import { useState${component.hooks?.includes('useRef') ? ', useRef' : ''}${component.hooks?.includes('useId') ? ', useId' : ''}${component.name === 'DataTable' ? '' : ', type ComponentProps'} } from 'react';
 import { ${component.importName} } from 'primereact/${component.prime}';
@@ -776,7 +790,7 @@ import exampleSource from './${component.name}.examples.tsx?raw';
 
 const meta = {
   title: 'Components/${component.name}',
-${['DataTable', 'Dialog', 'Sidebar'].includes(component.name) ? '' : `  component: ${component.importName},\n`}  parameters: {
+${component.exampleType || ['DataTable', 'Dialog', 'Sidebar'].includes(component.name) ? '' : `  component: ${component.importName},\n`}  parameters: {
     layout: 'centered',
     controls: { include: ${JSON.stringify(Object.keys(Function(`return (${component.argTypes ?? commonArgTypes})`)()))} },
     docs: { description: { component: '${component.description}' }, source: { code: exampleSource } }
