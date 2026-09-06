@@ -33,7 +33,7 @@ All 67 components pass the same browser checks at 1280×900 and 390×900: exactl
 | AutoComplete | [#69](https://github.com/marcosrocha85/primereact-storybook/issues/69) | Search filtering; selection; single/multiple values |
 | Avatar | [#8](https://github.com/marcosrocha85/primereact-storybook/issues/8) | Presentation and curated visual variations; state-changing interactions not applicable |
 | AvatarGroup | [#9](https://github.com/marcosrocha85/primereact-storybook/issues/9) | Presentation and curated visual variations; state-changing interactions not applicable |
-| Badge | [#10](https://github.com/marcosrocha85/primereact-storybook/issues/10) | Presentation and curated visual variations; state-changing interactions not applicable |
+| Badge | [#10](https://github.com/marcosrocha85/primereact-storybook/issues/10) | Sakai numbers/severities, positioned counts/dots, button badges and sizes; single-instance placement/value/severity/size/icon Controls; observable button feedback; Summary navigation and copyable Code panel |
 | BreadCrumb | [#11](https://github.com/marcosrocha85/primereact-storybook/issues/11) | Item command feedback; local home action |
 | Button | [#69](https://github.com/marcosrocha85/primereact-storybook/issues/69) | Presentation and curated visual variations; state-changing interactions not applicable |
 | Calendar | [#12](https://github.com/marcosrocha85/primereact-storybook/issues/12) | Date selection and clear button |

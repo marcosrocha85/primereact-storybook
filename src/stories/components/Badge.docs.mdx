@@ -1,12 +1,13 @@
 import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Example } from "./Badge.examples";
 import exampleSource from "./Badge.examples.tsx?raw";
+import { Badge } from "primereact/badge";
 
 <Meta title="Components/Badge/Summary" />
 
 <Title>Badge</Title>
 
-<Subtitle>Numeric marker or status indicator.</Subtitle>
+<Subtitle>Numeric marker or status indicator, displayed on its own, over an icon, or inside a button.</Subtitle>
 
 ## Usage
 
@@ -16,41 +17,55 @@ import exampleSource from "./Badge.examples.tsx?raw";
 
 ## Variations
 
-### success
+### Numbers and severities
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'success' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Badge value="2" />
+<Badge value="8" severity="success" />
+<Badge value="4" severity="info" />
+<Badge value="12" severity="warning" />
+<Badge value="3" severity="danger" />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'success' }} />"} language="tsx" />
+<Source code={"<Badge value=\"2\" />\n<Badge value=\"8\" severity=\"success\" />\n<Badge value=\"4\" severity=\"info\" />\n<Badge value=\"12\" severity=\"warning\" />\n<Badge value=\"3\" severity=\"danger\" />"} language="tsx" />
 
-### info
+### Positioned badges
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'info' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<span className="p-overlay-badge mr-4" role="img" aria-label="2 notifications">
+  <i className="pi pi-bell" style={{ fontSize: '2rem' }} aria-hidden="true" />
+  <Badge value="2" />
+</span>
+<span className="p-overlay-badge mr-4" role="img" aria-label="More than 10 events">
+  <i className="pi pi-calendar" style={{ fontSize: '2rem' }} aria-hidden="true" />
+  <Badge value="10+" severity="danger" />
+</span>
+<span className="p-overlay-badge" role="img" aria-label="New mail">
+  <i className="pi pi-envelope" style={{ fontSize: '2rem' }} aria-hidden="true" />
+  <Badge severity="danger" />
+</span>
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'info' }} />"} language="tsx" />
+<Source code={"<span className=\"p-overlay-badge mr-4\" role=\"img\" aria-label=\"2 notifications\">\n  <i className=\"pi pi-bell\" style={{ fontSize: '2rem' }} aria-hidden=\"true\" />\n  <Badge value=\"2\" />\n</span>\n<span className=\"p-overlay-badge mr-4\" role=\"img\" aria-label=\"More than 10 events\">\n  <i className=\"pi pi-calendar\" style={{ fontSize: '2rem' }} aria-hidden=\"true\" />\n  <Badge value=\"10+\" severity=\"danger\" />\n</span>\n<span className=\"p-overlay-badge\" role=\"img\" aria-label=\"New mail\">\n  <i className=\"pi pi-envelope\" style={{ fontSize: '2rem' }} aria-hidden=\"true\" />\n  <Badge severity=\"danger\" />\n</span>"} language="tsx" />
 
-### warning
+### Button badges
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'warning' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ placement: 'button', label: 'Emails', icon: undefined, value: '8' }} />
+<Example initialArgs={{ placement: 'button', label: 'Messages', icon: 'pi pi-users', value: '8', severity: 'danger' }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'warning' }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ placement: 'button', label: 'Emails', icon: undefined, value: '8' }} />\n<Example initialArgs={{ placement: 'button', label: 'Messages', icon: 'pi pi-users', value: '8', severity: 'danger' }} />"} language="tsx" />
 
-### danger
+### Sizes
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'danger' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Badge value="2" />
+<Badge value="4" size="large" severity="warning" />
+<Badge value="6" size="xlarge" severity="success" />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'danger' }} />"} language="tsx" />
-
-### large
-
-<div className="component-example sb-unstyled"><Example initialArgs={{ size: 'large' }} /></div>
-
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ size: 'large' }} />"} language="tsx" />
-
-### xlarge
-
-<div className="component-example sb-unstyled"><Example initialArgs={{ size: 'xlarge' }} /></div>
-
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ size: 'xlarge' }} />"} language="tsx" />
+<Source code={"<Badge value=\"2\" />\n<Badge value=\"4\" size=\"large\" severity=\"warning\" />\n<Badge value=\"6\" size=\"xlarge\" severity=\"success\" />"} language="tsx" />
 
 ## Playground
 

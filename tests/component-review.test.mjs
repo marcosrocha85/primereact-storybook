@@ -52,6 +52,47 @@ for (const name of components) {
   });
 }
 
+test('Badge: Sakai variations, composition Controls and code', async () => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(`${baseURL}/?path=/docs/components-badge-summary--summary`);
+  const preview = page.frameLocator('#storybook-preview-iframe');
+  await preview.locator('.sbdocs-content h1').waitFor();
+  assert.deepEqual(await preview.locator('.sbdocs-content h3').allTextContents(), ['Numbers and severities', 'Positioned badges', 'Button badges', 'Sizes']);
+  assert.equal(await preview.locator('.component-example .p-overlay-badge').count(), 3);
+  assert.equal(await preview.locator('.component-example .p-badge-dot').count(), 1);
+  await preview.getByRole('button', { name: 'Emails' }).click();
+  await preview.getByRole('status').filter({ hasText: 'Emails opened' }).waitFor();
+  await preview.getByRole('link', { name: 'Default', exact: true }).click();
+  await preview.locator('#storybook-root .p-badge').waitFor();
+  await page.getByRole('tab', { name: 'Controls' }).click();
+  await page.locator('#control-value').fill('10+');
+  await preview.locator('.p-badge').filter({ hasText: '10+' }).waitFor();
+  for (const severity of ['success', 'info', 'warning', 'danger']) {
+    await page.locator('#control-severity').selectOption({ label: severity });
+    await preview.locator(`.p-badge-${severity}`).waitFor();
+  }
+  for (const [size, className] of [['large', 'lg'], ['xlarge', 'xl']]) {
+    await page.locator('#control-size').selectOption({ label: size });
+    await preview.locator(`.p-badge-${className}`).waitFor();
+  }
+  await page.locator('#control-placement').selectOption({ label: 'icon' });
+  await preview.locator('.p-overlay-badge .p-badge').waitFor();
+  await page.locator('#control-icon').selectOption({ label: 'pi pi-search' });
+  await preview.locator('.p-overlay-badge .pi-search').waitFor();
+  await page.locator('#control-value').fill('');
+  await preview.locator('.p-badge-dot').waitFor();
+  await page.locator('#control-placement').selectOption({ label: 'button' });
+  await preview.getByRole('button', { name: 'Notifications' }).click();
+  await preview.getByRole('status').filter({ hasText: 'Notifications opened' }).waitFor();
+  assert.equal(await preview.locator('#storybook-root .p-badge').count(), 1);
+  await page.locator('#control-placement').selectOption({ label: 'standalone' });
+  await preview.locator('.p-button').waitFor({ state: 'detached' });
+  assert.equal(await preview.locator('#storybook-root .p-badge').count(), 1);
+  await page.getByRole('tab', { name: 'Code', exact: true }).click();
+  await page.getByRole('button', { name: /Copy/ }).waitFor();
+  assert.match(await page.getByRole('tabpanel').innerText(), /<Badge \{\.\.\.badgeProps\}/);
+});
+
 test('AvatarGroup: curated compositions, Controls and copyable code', async () => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto(`${baseURL}/?path=/docs/components-avatargroup-summary--summary`);
