@@ -2,6 +2,8 @@
 
 React + Vite Storybook for documenting the [PrimeFaces Sakai React](https://github.com/primefaces/sakai-react) template as a design system.
 
+[View the published Storybook](https://marcosrocha85.github.io/primereact-storybook/).
+
 ## Scripts
 
 - `npm run storybook`: starts Storybook at `http://localhost:6006`.
