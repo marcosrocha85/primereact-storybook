@@ -29,7 +29,15 @@ At the beginning of every session, before choosing implementation work:
 
 Use the GitHub connector as an alternative when `gh` is unavailable, preserving the same filtering, pagination, ordering, and full issue inspection.
 
-Keep implementation scoped to the selected issue. When publishing an authorized pull request, link it with `Closes #<number>` and include validation results and blockers. Close the issue only when its acceptance criteria are satisfied and the implementation is merged; local changes alone do not complete an issue. New backlog tasks belong in GitHub Issues, not in a second local checklist. Repository documentation remains the source for architecture and coding conventions; a GitHub Wiki is optional for longer-lived project context.
+Keep implementation scoped to the selected issue. New backlog tasks belong in GitHub Issues, not in a second local checklist. Repository documentation remains the source for architecture and coding conventions; a GitHub Wiki is optional for longer-lived project context.
+
+### Required Pull Request Delivery
+
+- From now on, every issue implementation must be delivered through a GitHub pull request. Unless the user explicitly limits the task to local files or read-only work, authorization to implement an issue includes creating a dedicated branch, making scoped commits, pushing that branch, and opening or updating its PR; do not request separate confirmation for these delivery steps.
+- After implementation and validation, open or update the PR against the repository's default branch. Include `Closes #<number>` for each issue whose full acceptance criteria the PR satisfies, plus the change summary, validation results, and any blockers. For partial work, use `Refs #<number>` and keep the issue open. Use a draft PR while required work or validation is incomplete.
+- Do not treat local changes, passing tests, commits, or PR creation as issue completion. Keep the issue open until its acceptance criteria are satisfied and the implementing PR is merged; closing keywords should then close it automatically.
+- PR creation does not authorize merging. Leave review and merge to the user unless they explicitly authorize the agent to merge.
+- Report the PR URL when delivering the implementation. If pushing or opening the PR is blocked, report the exact blocker and leave the issue open.
 
 ## Current Architecture
 
