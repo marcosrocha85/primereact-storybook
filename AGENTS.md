@@ -94,6 +94,7 @@ Do not document application pages such as dashboard, landing, auth, or full-page
 - Static `Summary` examples should include a copyable Storybook `<Source>` block with the relevant usage snippet.
 - Do not render `<Controls>` in `Summary` MDX pages; only `Default` stories should expose Storybook Controls.
 - Keep `Default` as a single interactive playground instance controlled by Storybook Controls.
+- Whenever an `icon` property is exposed in Controls, follow `Button.stories.tsx`: use a `select` control with `[undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill']`, including the no-icon option. Do not use a free-text control. Apply this to both manually maintained stories and component entries in the generator.
 - Preserve `Show code` behavior by keeping docs Canvas `sourceState="hidden"`; `Default` stories should expose copyable code through the Canvas source panel, preferably with an explicit `parameters.docs.source.code` snippet when the generated source is not clear.
 - Prefer component-level docs over page-level docs.
 - When a Sakai page contains variations of an already documented component, merge them into that component instead of creating a duplicate component page.

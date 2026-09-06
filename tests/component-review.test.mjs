@@ -52,6 +52,48 @@ for (const name of components) {
   });
 }
 
+test('Avatar: curated Sakai variations and playground code', async () => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(`${baseURL}/?path=/docs/components-avatar-summary--summary`);
+  const preview = page.frameLocator('#storybook-preview-iframe');
+  await preview.locator('.sbdocs-content h1').waitFor();
+  assert.deepEqual(await preview.locator('.sbdocs-content h3').allTextContents(), ['Shapes', 'Sizes', 'Colors', 'Icons', 'Icon with badge']);
+  const stages = preview.locator('.component-example');
+  assert.equal(await stages.locator('.pi-user').count(), 2);
+  assert.equal(await stages.locator('.p-overlay-badge .p-badge').innerText(), '4');
+  assert.deepEqual(await stages.locator('.p-avatar[style]').evaluateAll((avatars) => avatars.map((avatar) => getComputedStyle(avatar).backgroundColor)), ['rgb(33, 150, 243)', 'rgb(156, 39, 176)']);
+  assert.match(await preview.locator('.docblock-source').last().innerText(), /<Badge value="4"/);
+  await preview.getByRole('link', { name: 'Default', exact: true }).click();
+  await preview.locator('#storybook-root .p-avatar').waitFor();
+  assert.equal(await preview.locator('#storybook-root .p-avatar').count(), 1);
+  await open('Avatar', 'label:V;shape:square;size:xlarge');
+  assert.equal(await page.locator('.p-avatar-text').innerText(), 'V');
+  assert.equal(await page.locator('.p-avatar.p-avatar-xl:not(.p-avatar-circle)').count(), 1);
+  await page.goto(`${baseURL}/?path=/story/components-avatar--default`);
+  await page.getByRole('tab', { name: 'Controls' }).click();
+  await page.getByRole('textbox').first().waitFor();
+  await page.getByRole('tab', { name: 'Code', exact: true }).click();
+  await page.getByRole('button', { name: /Copy/ }).waitFor();
+  assert.match(await page.getByRole('tabpanel').innerText(), /<Avatar \{\.\.\.args\}/);
+});
+
+test('icon Controls select and clear PrimeIcons like Button', async () => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  for (const name of ['Avatar', 'Chip', 'SplitButton', 'Tag']) {
+    await page.goto(`${baseURL}/?path=/story/components-${name.toLowerCase()}--default`);
+    await page.getByRole('tab', { name: 'Controls' }).click();
+    if (name === 'Avatar') await page.locator('#control-label').fill('');
+    const icon = page.locator('#control-icon');
+    await icon.waitFor();
+    assert.deepEqual(await icon.locator('option').allTextContents(), ['Choose option...', 'undefined', 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill']);
+    await icon.selectOption({ label: 'pi pi-search' });
+    const preview = page.frameLocator('#storybook-preview-iframe');
+    await preview.locator('#storybook-root .pi-search').waitFor();
+    await icon.selectOption({ label: 'undefined' });
+    await preview.locator('#storybook-root .pi-search').waitFor({ state: 'hidden' });
+  }
+});
+
 test('boolean inputs respond to clicks and keyboard, and respect disabled', async () => {
   for (const name of ['Checkbox', 'InputSwitch', 'ToggleButton', 'RadioButton']) {
     await open(name, 'checked:!false');

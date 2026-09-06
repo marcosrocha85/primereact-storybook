@@ -13,7 +13,7 @@ const meta = {
     docs: { description: { component: 'Visual representation of a user or entity.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { label: { control: 'text' }, icon: { control: 'text' }, shape: { control: 'inline-radio', options: ['square', 'circle'] }, size: { control: 'select', options: ['normal', 'large', 'xlarge'] } }
+  argTypes: { label: { control: 'text' }, icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] }, shape: { control: 'inline-radio', options: ['square', 'circle'] }, size: { control: 'select', options: ['normal', 'large', 'xlarge'] } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;

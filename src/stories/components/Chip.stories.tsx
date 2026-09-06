@@ -13,7 +13,7 @@ const meta = {
     docs: { description: { component: 'Text chip with optional icon or image.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { label: { control: 'text' }, icon: { control: 'text' }, removable: { control: 'boolean' } }
+  argTypes: { label: { control: 'text' }, icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] }, removable: { control: 'boolean' } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;
