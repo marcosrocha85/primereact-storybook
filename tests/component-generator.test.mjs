@@ -31,6 +31,9 @@ test('regeneration preserves manual components and the Summary/Default contract'
         assert.deepEqual([...source.matchAll(/export const (\w+)/g)].map((match) => match[1]), ['Default']);
         assert.doesNotMatch(source, /include: \[\]/, 'Default exposes Controls');
         assert.doesNotMatch(source, /\bany\b/);
+        if (/\bicon: \{/.test(source)) {
+          assert.match(source, /icon: \{ control: 'select', options: \[undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'\] \}/, 'Icon Controls follow Button, including no icon');
+        }
       }
       if (file.endsWith('.docs.mdx')) {
         assert.doesNotMatch(source, /<Controls\b|<Canvas\b/);

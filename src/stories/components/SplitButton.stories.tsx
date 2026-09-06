@@ -15,7 +15,7 @@ const meta = {
   args: defaultArgs,
   argTypes: {
     label: { control: 'text' },
-    icon: { control: 'text' },
+    icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] },
     severity: { control: 'select', options: [undefined, 'secondary', 'success', 'info', 'warning', 'help', 'danger'] },
     disabled: { control: 'boolean' }
   }
