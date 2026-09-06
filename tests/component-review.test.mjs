@@ -320,12 +320,12 @@ test('Controls reflect interaction and reset it', async () => {
   await checkbox.click({ force: true });
   const row = page.getByRole('row').filter({ has: page.getByText('checked', { exact: true }) });
   await row.waitFor();
-  const control = row.locator('input[type="checkbox"]');
+  const control = row.locator('label[aria-label="checked"]');
   await page.waitForFunction(() => [...document.querySelectorAll('tr')].find((row) => row.textContent.includes('checked'))?.querySelector('input[type="checkbox"]')?.checked === false);
-  await control.click({ force: true });
+  await control.click();
   await frame.locator('input[type="checkbox"]:checked').waitFor({ state: 'attached' });
   assert.equal(await checkbox.isChecked(), true);
-  await control.uncheck({ force: true });
+  await control.click();
   await frame.locator('input[type="checkbox"]:not(:checked)').waitFor({ state: 'attached' });
   await page.getByRole('button', { name: 'Reset controls', exact: true }).click();
   await frame.locator('input[type="checkbox"]:checked').waitFor({ state: 'attached' });
