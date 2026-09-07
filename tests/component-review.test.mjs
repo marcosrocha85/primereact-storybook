@@ -52,6 +52,72 @@ for (const name of components) {
   });
 }
 
+test('BreadCrumb: hierarchy, optional Home, disabled items, Controls and code', async () => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(`${baseURL}/?path=/docs/components-breadcrumb-summary--summary`);
+  const preview = page.frameLocator('#storybook-preview-iframe');
+  await preview.locator('.sbdocs-content h1').waitFor();
+  assert.deepEqual(await preview.locator('.sbdocs-content h3').allTextContents(), ['Without Home', 'Disabled item']);
+  const stages = preview.locator('.component-example');
+  assert.equal(await stages.count(), 3);
+  assert.deepEqual(await stages.first().locator('.p-menuitem-text').allTextContents(), ['Home', 'Computer', 'Notebook', 'Accessories', 'Backpacks', 'Item']);
+  assert.equal(await stages.nth(1).locator('.p-breadcrumb-home').count(), 0);
+  await stages.first().getByRole('link', { name: 'Home', exact: true }).click();
+  await stages.first().getByRole('status').filter({ hasText: 'Home selected' }).waitFor();
+  assert.equal(await stages.nth(1).getByRole('status').innerText(), 'No action yet', 'Summary examples keep independent state');
+  const disabled = stages.nth(2).getByRole('link', { name: 'Notebook', exact: true });
+  assert.equal(await disabled.getAttribute('aria-disabled'), 'true');
+  assert.equal(await disabled.getAttribute('tabindex'), '-1');
+  await disabled.dispatchEvent('click');
+  assert.equal(await stages.nth(2).getByRole('status').innerText(), 'No action yet', 'Disabled items do not run commands');
+  await stages.nth(2).getByRole('link', { name: 'Computer', exact: true }).focus();
+  await stages.nth(2).getByRole('link', { name: 'Computer', exact: true }).press('Enter');
+  await stages.nth(2).getByRole('status').filter({ hasText: 'Computer selected' }).waitFor();
+  for (const source of await preview.locator('.docblock-source').all()) {
+    assert.match(await source.innerText(), /item\.command\?\.\(event\)/, 'Copyable examples preserve supplied commands');
+  }
+  await preview.getByRole('link', { name: 'Default', exact: true }).click();
+  await preview.locator('#storybook-root .p-breadcrumb').waitFor();
+  assert.equal(await preview.locator('#storybook-root .p-breadcrumb').count(), 1);
+  await page.getByRole('tab', { name: 'Controls' }).click();
+  await page.locator('#control-className').fill('breadcrumb-control-check');
+  await preview.locator('.p-breadcrumb.breadcrumb-control-check').waitFor();
+  await page.getByRole('switch', { name: 'Edit model as JSON' }).click();
+  const modelRow = page.getByRole('row').filter({ has: page.getByText('model', { exact: true }) });
+  await modelRow.getByRole('textbox').fill('[{"label":"Devices"},{"label":"Item","disabled":true}]');
+  await modelRow.getByRole('textbox').press('Tab');
+  await preview.getByRole('link', { name: 'Devices', exact: true }).waitFor();
+  assert.equal(await preview.locator('.p-menuitem-text').count(), 3, 'Model Controls change path content and depth');
+  assert.equal(await preview.getByRole('link', { name: 'Item', exact: true }).getAttribute('aria-disabled'), 'true');
+  await page.getByRole('button', { name: 'Reset controls', exact: true }).click();
+  await preview.getByRole('link', { name: 'Backpacks', exact: true }).waitFor();
+  await page.locator('#control-showHome').focus();
+  await page.locator('#control-showHome').press('Space');
+  await preview.locator('.p-breadcrumb-home').waitFor({ state: 'detached' });
+  assert.equal(await preview.locator('.p-menuitem-text').count(), 5, 'Hiding Home preserves all path levels');
+  await page.getByRole('button', { name: 'Reset controls', exact: true }).click();
+  await preview.getByRole('link', { name: 'Home', exact: true }).waitFor();
+  await preview.locator('.breadcrumb-control-check').waitFor({ state: 'detached' });
+  await preview.getByRole('link', { name: 'Home', exact: true }).click();
+  await preview.getByRole('status').filter({ hasText: 'Home selected' }).waitFor();
+  await page.getByRole('tab', { name: 'Code', exact: true }).click();
+  await page.getByRole('button', { name: /Copy/ }).waitFor();
+  assert.match(await page.getByRole('tabpanel').innerText(), /home=\{showHome && home \? withAction\(home\) : undefined\}/);
+
+  await page.getByRole('tab', { name: 'Controls' }).click();
+  await page.getByRole('switch', { name: 'Edit home as JSON' }).click();
+  const homeRow = page.getByRole('row').filter({ has: page.getByText('home', { exact: true }) });
+  await homeRow.getByRole('textbox').fill('{"label":"Start"}');
+  await homeRow.getByRole('textbox').press('Tab');
+  await preview.getByRole('link', { name: 'Start', exact: true }).click();
+  await preview.getByRole('status').filter({ hasText: 'Start selected' }).waitFor();
+  await preview.getByRole('link', { name: 'Computer', exact: true }).click();
+  await preview.getByRole('status').filter({ hasText: 'Computer selected' }).waitFor();
+  await homeRow.getByRole('textbox').fill('{"label":"Start","url":"#start"}');
+  await homeRow.getByRole('textbox').press('Tab');
+  await preview.locator('.p-breadcrumb-home a[href="#start"]').waitFor();
+});
+
 test('Badge: Sakai variations, composition Controls and code', async () => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto(`${baseURL}/?path=/docs/components-badge-summary--summary`);
