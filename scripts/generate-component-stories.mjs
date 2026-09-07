@@ -470,7 +470,7 @@ const items: MenuItem[] = [
     playground: `<div style={{ width: '100%', minWidth: 0 }}>
     <BreadCrumb
       aria-label="Breadcrumb"
-      pt={{ icon: { 'aria-hidden': true } }}
+      pt={{ icon: { 'aria-hidden': true }, action: { className: 'gap-2' } }}
       {...breadcrumbProps}
       home={showHome && home ? withAction(home) : undefined}
       model={model?.map(withAction)}
