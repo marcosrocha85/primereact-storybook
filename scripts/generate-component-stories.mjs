@@ -439,13 +439,56 @@ const components = [
     name: 'BreadCrumb',
     prime: 'breadcrumb',
     importName: 'BreadCrumb',
-    hooks: `const [action, setAction] = useState('No action yet');`,
-    extraImports: `import { menuWithActions } from '../menuExamples';`,
-    description: 'Navigation breadcrumb.',
-    renderPrefix: `const home = { icon: 'pi pi-home', url: '/' }; const items = [{ label: 'Computer' }, { label: 'Notebook' }];`,
-    args: `{ home, model: items }`,
-    argTypes: `{ model: { control: 'object' } }`,
-    playground: `<><BreadCrumb {...args} home={{ icon: 'pi pi-home', command: () => setAction('Home selected') }} model={menuWithActions(args.model ?? [], setAction)} /><p role="status">{action}</p></>`,
+    extraImports: `import type { MenuItem } from 'primereact/menuitem';`,
+    description: 'Contextual navigation through the Sakai page hierarchy. Demo commands report the selected destination; supply menu item URLs or commands for application navigation.',
+    exampleType: `ComponentProps<typeof BreadCrumb> & { showHome: boolean }`,
+    renderPrefix: `const home: MenuItem = { icon: 'pi pi-home', label: 'Home' };
+const items: MenuItem[] = [
+  { label: 'Computer' },
+  { label: 'Notebook' },
+  { label: 'Accessories' },
+  { label: 'Backpacks' },
+  { label: 'Item' }
+];`,
+    args: `{ home, model: items, showHome: true, className: '', style: {} }`,
+    argTypes: `{
+    model: { control: 'object', description: 'Ordered path items, excluding Home. Edit labels, add or remove levels, or set disabled on an item.' },
+    showHome: { control: 'boolean', description: 'Show the configured Home item before the path.' },
+    home: { control: 'object', description: 'Home menu item configuration. Its label names the home link; URLs and commands are preserved.' },
+    className: { control: 'text' },
+    style: { control: 'object' }
+  }`,
+    hooks: `const { showHome, home, model, ...breadcrumbProps } = args;
+  const [action, setAction] = useState('No action yet');
+  const withAction = (item: MenuItem): MenuItem => ({
+    ...item,
+    command: (event) => {
+      item.command?.(event);
+      setAction((item.label ?? 'Home') + ' selected');
+    }
+  });`,
+    playground: `<div style={{ width: '100%', minWidth: 0 }}>
+    <BreadCrumb
+      aria-label="Breadcrumb"
+      pt={{ icon: { 'aria-hidden': true } }}
+      {...breadcrumbProps}
+      home={showHome && home ? withAction(home) : undefined}
+      model={model?.map(withAction)}
+    />
+    <p role="status">{action}</p>
+  </div>`,
+    docsVariations: [
+      {
+        title: 'Without Home',
+        code: `<Example initialArgs={{ showHome: false }} />`,
+        source: `exampleSource + '\\n// Render without the Home item:\\n<Example initialArgs={{ showHome: false }} />'`
+      },
+      {
+        title: 'Disabled item',
+        code: `<Example initialArgs={{ model: [{ label: 'Computer' }, { label: 'Notebook', disabled: true }, { label: 'Item' }] }} />`,
+        source: `exampleSource + "\\n// Disable an unavailable destination:\\n<Example initialArgs={{ model: [{ label: 'Computer' }, { label: 'Notebook', disabled: true }, { label: 'Item' }] }} />"`
+      }
+    ],
   },
   {
     name: 'Steps',
@@ -867,13 +910,13 @@ function createDocs(component) {
     }
     return [];
   }).slice(0,6);
-  const examples = component.docsVariations ? component.docsVariations.map(({ title, code }) => `### ${title}
+  const examples = component.docsVariations ? component.docsVariations.map(({ title, code, source }) => `### ${title}
 
 <div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
 ${code}
 </div>
 
-<Source code={${JSON.stringify(code)}} language="tsx" />`).join('\n\n') : variations.map(({title,args}) => `### ${title}
+<Source code={${source ?? JSON.stringify(code)}} language="tsx" />`).join('\n\n') : variations.map(({title,args}) => `### ${title}
 
 <div className="component-example sb-unstyled"><Example initialArgs={${args}} /></div>
 

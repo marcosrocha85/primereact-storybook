@@ -6,7 +6,7 @@ import exampleSource from "./BreadCrumb.examples.tsx?raw";
 
 <Title>BreadCrumb</Title>
 
-<Subtitle>Navigation breadcrumb.</Subtitle>
+<Subtitle>Contextual navigation through the Sakai page hierarchy. Demo commands report the selected destination; supply menu item URLs or commands for application navigation.</Subtitle>
 
 ## Usage
 
@@ -16,7 +16,21 @@ import exampleSource from "./BreadCrumb.examples.tsx?raw";
 
 ## Variations
 
-The usage example shows the base composition. Use Default to explore the documented properties.
+### Without Home
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ showHome: false }} />
+</div>
+
+<Source code={exampleSource + '\n// Render without the Home item:\n<Example initialArgs={{ showHome: false }} />'} language="tsx" />
+
+### Disabled item
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ model: [{ label: 'Computer' }, { label: 'Notebook', disabled: true }, { label: 'Item' }] }} />
+</div>
+
+<Source code={exampleSource + "\n// Disable an unavailable destination:\n<Example initialArgs={{ model: [{ label: 'Computer' }, { label: 'Notebook', disabled: true }, { label: 'Item' }] }} />"} language="tsx" />
 
 ## Playground
 
