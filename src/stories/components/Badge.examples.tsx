@@ -20,10 +20,10 @@ export function Playground({ args, updateArgs }: {
       <Button label={label} icon={icon} onClick={() => setMessage(label + ' opened')}>
         <Badge {...badgeProps} />
       </Button>
-    ) : placement === 'icon' ? (
-      <span className="p-overlay-badge" role="img" aria-label={label + (badgeProps.value ? ': ' + badgeProps.value : ': new activity')}>
+    ) : placement === 'icon' && icon ? (
+      <span className="p-overlay-badge inline-flex" role="img" aria-label={label + (badgeProps.value ? ': ' + badgeProps.value : ': new activity')}>
         <i className={icon} style={{ fontSize: '2rem' }} aria-hidden="true" />
-        <Badge {...badgeProps} />
+        <Badge {...badgeProps} size={undefined} />
       </span>
     ) : <Badge {...badgeProps} />}
     {placement === 'button' && <span role="status" className="ml-3">{message}</span>}

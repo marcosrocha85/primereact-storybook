@@ -12,7 +12,7 @@ const meta = {
     docs: { description: { component: 'Numeric marker or status indicator, displayed on its own, over an icon, or inside a button.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { value: { control: 'text', description: 'Leave empty to display a dot. Text such as 10+ is displayed literally.' }, severity: { control: 'select', options: [undefined, 'success', 'info', 'warning', 'danger'] }, size: { control: 'select', options: [undefined, 'large', 'xlarge'] }, placement: { control: 'select', options: ['standalone', 'icon', 'button'] }, icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] }, label: { control: 'text', description: 'Button label and accessible name for the icon composition.' } }
+  argTypes: { value: { control: 'text', description: 'Leave empty to display a dot. Text such as 10+ is displayed literally.' }, severity: { control: 'select', options: [undefined, 'success', 'info', 'warning', 'danger'] }, size: { control: 'select', options: [undefined, 'large', 'xlarge'], if: { arg: 'placement', neq: 'icon' }, description: 'Icon overlays always use the default badge size, as in Sakai.' }, placement: { control: 'select', options: ['standalone', 'icon', 'button'] }, icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] }, label: { control: 'text', description: 'Button label and accessible name for the icon composition.' } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;

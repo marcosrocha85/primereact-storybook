@@ -628,7 +628,7 @@ import { menuWithActions } from '../menuExamples';`,
 }`,
     extraImports: `import { Button } from 'primereact/button';`,
     args: `{ value: '2', severity: undefined, size: undefined, placement: 'standalone', icon: 'pi pi-check', label: 'Notifications' }`,
-    argTypes: `{ value: { control: 'text', description: 'Leave empty to display a dot. Text such as 10+ is displayed literally.' }, severity: { control: 'select', options: [undefined, 'success', 'info', 'warning', 'danger'] }, size: { control: 'select', options: [undefined, 'large', 'xlarge'] }, placement: { control: 'select', options: ['standalone', 'icon', 'button'] }, icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] }, label: { control: 'text', description: 'Button label and accessible name for the icon composition.' } }`,
+    argTypes: `{ value: { control: 'text', description: 'Leave empty to display a dot. Text such as 10+ is displayed literally.' }, severity: { control: 'select', options: [undefined, 'success', 'info', 'warning', 'danger'] }, size: { control: 'select', options: [undefined, 'large', 'xlarge'], if: { arg: 'placement', neq: 'icon' }, description: 'Icon overlays always use the default badge size, as in Sakai.' }, placement: { control: 'select', options: ['standalone', 'icon', 'button'] }, icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] }, label: { control: 'text', description: 'Button label and accessible name for the icon composition.' } }`,
     hooks: `const { placement, icon, label, ...badgeProps } = args;
   const [message, setMessage] = useState('');`,
     playground: `<>
@@ -636,10 +636,10 @@ import { menuWithActions } from '../menuExamples';`,
       <Button label={label} icon={icon} onClick={() => setMessage(label + ' opened')}>
         <Badge {...badgeProps} />
       </Button>
-    ) : placement === 'icon' ? (
-      <span className="p-overlay-badge" role="img" aria-label={label + (badgeProps.value ? ': ' + badgeProps.value : ': new activity')}>
+    ) : placement === 'icon' && icon ? (
+      <span className="p-overlay-badge inline-flex" role="img" aria-label={label + (badgeProps.value ? ': ' + badgeProps.value : ': new activity')}>
         <i className={icon} style={{ fontSize: '2rem' }} aria-hidden="true" />
-        <Badge {...badgeProps} />
+        <Badge {...badgeProps} size={undefined} />
       </span>
     ) : <Badge {...badgeProps} />}
     {placement === 'button' && <span role="status" className="ml-3">{message}</span>}
@@ -651,15 +651,15 @@ import { menuWithActions } from '../menuExamples';`,
 <Badge value="4" severity="info" />
 <Badge value="12" severity="warning" />
 <Badge value="3" severity="danger" />` },
-      { title: 'Positioned badges', code: `<span className="p-overlay-badge mr-4" role="img" aria-label="2 notifications">
+      { title: 'Positioned badges', code: `<span className="p-overlay-badge inline-flex mr-4" role="img" aria-label="2 notifications">
   <i className="pi pi-bell" style={{ fontSize: '2rem' }} aria-hidden="true" />
   <Badge value="2" />
 </span>
-<span className="p-overlay-badge mr-4" role="img" aria-label="More than 10 events">
+<span className="p-overlay-badge inline-flex mr-4" role="img" aria-label="More than 10 events">
   <i className="pi pi-calendar" style={{ fontSize: '2rem' }} aria-hidden="true" />
   <Badge value="10+" severity="danger" />
 </span>
-<span className="p-overlay-badge" role="img" aria-label="New mail">
+<span className="p-overlay-badge inline-flex" role="img" aria-label="New mail">
   <i className="pi pi-envelope" style={{ fontSize: '2rem' }} aria-hidden="true" />
   <Badge severity="danger" />
 </span>` },

@@ -77,11 +77,27 @@ test('Badge: Sakai variations, composition Controls and code', async () => {
   }
   await page.locator('#control-placement').selectOption({ label: 'icon' });
   await preview.locator('.p-overlay-badge .p-badge').waitFor();
-  await page.locator('#control-icon').selectOption({ label: 'pi pi-search' });
-  await preview.locator('.p-overlay-badge .pi-search').waitFor();
+  assert.equal(await page.locator('#control-size').count(), 0, 'Oversized badges are not offered for icon overlays');
+  assert.equal(await preview.locator('.p-badge-lg, .p-badge-xl').count(), 0, 'Previously selected size cannot leak into icon overlays');
   await page.locator('#control-value').fill('');
   await preview.locator('.p-badge-dot').waitFor();
+  for (const icon of ['pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill']) {
+    await page.locator('#control-icon').selectOption({ label: icon });
+    const glyph = preview.locator(`.p-overlay-badge .${icon.split(' ')[1]}`);
+    await glyph.waitFor();
+    const iconBox = await glyph.boundingBox();
+    const badgeBox = await preview.locator('.p-badge-dot').boundingBox();
+    assert.ok(iconBox && badgeBox);
+    assert.ok(badgeBox.width < iconBox.width / 2, 'Dot remains smaller than the icon');
+    assert.ok(Math.abs(badgeBox.x + badgeBox.width / 2 - (iconBox.x + iconBox.width)) < 2, 'Badge is anchored to the right edge');
+    assert.ok(Math.abs(badgeBox.y + badgeBox.height / 2 - iconBox.y) < 2, 'Badge is anchored to the top edge');
+  }
+  await page.locator('#control-icon').selectOption({ label: 'undefined' });
+  await preview.locator('.p-overlay-badge').waitFor({ state: 'detached' });
+  assert.equal(await preview.locator('#storybook-root .p-badge').count(), 1, 'No-icon option renders a standalone badge');
   await page.locator('#control-placement').selectOption({ label: 'button' });
+  await page.locator('#control-size').waitFor();
+  await preview.locator('.p-button .p-badge-xl').waitFor();
   await preview.getByRole('button', { name: 'Notifications' }).click();
   await preview.getByRole('status').filter({ hasText: 'Notifications opened' }).waitFor();
   assert.equal(await preview.locator('#storybook-root .p-badge').count(), 1);
