@@ -260,3 +260,46 @@ At the end of attempt 2, independent delivery validation remained blocked pendin
 The calling environment now supplies `LD_LIBRARY_PATH=/tmp/sakai-breadcrumb-libs/extracted/usr/lib/x86_64-linux-gnu`. Re-ran `node scripts/generate-component-stories.mjs`, `node --test tests/chart-contract.test.mjs tests/component-generator.test.mjs` (2 passed), `npm run build`, and `npm run build-storybook`: all passed. Generated output remained unchanged.
 
 `STORYBOOK_URL=http://127.0.0.1:6015 node --test --test-name-pattern='^Chart:' tests/component-review.test.mjs` passed both Chart tests against the rebuilt static Storybook, using inherited library configuration without a command-local override. Re-inspected desktop/mobile Summary examples and Default screenshots at 1280/390 pixels: data, titles and legends render without clipping. `git diff --check` passed. The temporary static server was stopped. The previous browser dependency blocker is resolved; no additional implementation or infrastructure changes were needed.
+
+### Checkbox — issue #16 API review
+
+Reviewed against Button, Sakai's [Input UI Kit](https://sakai.primereact.org/uikit/input) and
+`vendor/sakai-react/app/(main)/uikit/input/page.tsx`, plus installed
+`primereact/checkbox/checkbox.d.ts` and `checkbox.esm.js`.
+
+| API surface | Treatment |
+| --- | --- |
+| `checked`, `disabled`, `readOnly`, `invalid`, `variant`, `icon` | Exposed in Default. Boolean checked Controls; outlined/filled; Button's icon options. Undefined icon restores the native check mark, rather than removing the checked indicator. |
+| Story-only `label` | Exposed; associated with the supplied `inputId`, or a unique React ID. Removed before forwarding. Empty labels receive a fallback accessible name; supplied ARIA names take precedence. |
+| `onChange` | Adapted to synchronize args, then forwards the exact event to the supplied callback. No coercion or nullish replacement of `event.checked`. |
+| `value`, `trueValue`, `falseValue` | Passed through unchanged. Native runtime compares checked strictly with trueValue and emits trueValue/falseValue in event.checked. Native types declare checked as boolean despite runtime support for other values. Controls curate boolean mode; the wrapper preserves the installed type and runtime contract without casts. |
+| `id`, `inputId`, `inputRef`, `name`, `autoFocus`, `required`, `tabIndex`, `style`, `className` | Passed through; only absent inputId receives a default. |
+| `onClick`, `onMouseDown`, `onContextMenu`, inherited focus/blur, keyboard, pointer, mouse, touch, drag, clipboard, composition, form, animation, transition, capture and other React DOM handlers | Passed through unchanged; native DOM routing retained. |
+| Inherited `InputHTMLAttributes` / `HTMLAttributes` / `AriaAttributes` | All remaining attributes spread unchanged, including input constraints/form attributes, defaultChecked/defaultValue, role, ARIA, title, language, direction, content-editing, access keys, data attributes and other global attributes. Native implementation sends otherProps to the root and copies ARIA to the input; accepting an inherited input attribute does not guarantee native input routing. Use native PT input for explicit input attributes. No wrapper override of that routing. |
+| `icon` string, React node or render function | All native IconType forms passed through; Controls curate strings only. |
+| `tooltip`, `tooltipOptions` | Passed through, outside curated examples. Nested options: appendTo, at, my, position, mouseTrack/Left/Top, event, showEvent/hideEvent, showDelay/hideDelay/updateDelay, autoHide, autoZIndex, baseZIndex, closeOnEscape, disabled, showOnDisabled, className, style, onBeforeShow/onBeforeHide/onShow/onHide, pt, ptOptions, unstyled. |
+| `pt` | Passed through intact, with no wrapper defaults to merge. Sections root/input/box/icon/tooltip/hooks; object and callback forms, receiving props/context/state. Checkbox context exposes checked/disabled; state exposes focused. Tooltip's nested PT and lifecycle hooks remain native. |
+| `ptOptions`, `unstyled` | Passed through. mergeSections, mergeProps and classNameMergeFunction retain native semantics. |
+| `children` | Forwarded, but the native implementation does not render children; not used for labels. |
+| Component ref; focus/getElement/getInput | Native Checkbox ref accepted through ComponentProps and forwarded; no wrapper imperative API. inputRef remains available. |
+
+Sakai's checkbox list stores selection in an application-owned array and computes a boolean
+checked for each city; it is not a native array selection mode. The curated playground keeps
+one labeled city checkbox, with independent unchecked, disabled, read-only, invalid, filled
+and custom-icon Summary examples. Multi-checkbox application state, input-group composition,
+tooltips and custom PT styling remain outside these examples; no additional visual features
+or native selection modes are invented.
+
+Contract tests inspect forwarding and invoke supplied callbacks, including null, undefined,
+string and numeric checked payloads (runtime inspection, beyond the native TypeScript declaration).
+Browser coverage checks actual label activation, Space, disabled/read-only states, invalid/filled
+classes, each offered icon, spacing, unique Summary IDs, Controls synchronization/reset and Code.
+The API inventory is source inspection, not exhaustive testing of inherited attributes, arbitrary
+templates, tooltips, PT combinations or custom-value browser behavior.
+
+Validation for this revision:
+- `node --test tests/checkbox-contract.test.mjs tests/component-generator.test.mjs`: passed, 3 tests.
+- `STORYBOOK_URL=http://127.0.0.1:6016 node --test --test-name-pattern='^Checkbox:|^Controls reflect interaction' tests/component-review.test.mjs`: passed, 3 tests against the static build.
+- `npm run build`, `npm run build-storybook`, `git diff --check`: passed.
+- Summary screenshots inspected at 1280px and 390px: labels, unchecked/disabled/read-only/invalid/filled/icon examples remain aligned, with no page overflow. Source panels scroll horizontally on narrow screens.
+- Initial Storybook build exposed an MDX string-escaping bug; generator now serializes snippet strings with JSON.stringify. Initial label test sampled state before the Storybook args update; it now waits for the expected input state without weakening the assertion.

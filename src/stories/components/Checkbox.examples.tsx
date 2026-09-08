@@ -1,14 +1,21 @@
-import { useState, type ComponentProps } from 'react';
+import { useState, useId, type ComponentProps } from 'react';
 import { Checkbox } from 'primereact/checkbox';
 
-export type ExampleArgs = ComponentProps<typeof Checkbox>;
-export const defaultArgs: ExampleArgs = { checked: true, disabled: false };
+export type ExampleArgs = ComponentProps<typeof Checkbox> & { label?: string };
+export const defaultArgs: ExampleArgs = { checked: true, label: 'Chicago', disabled: false, readOnly: false, invalid: false, variant: 'outlined', icon: undefined };
 
 export function Playground({ args, updateArgs }: {
   args: ExampleArgs;
   updateArgs: (changes: Partial<ExampleArgs>) => void;
 }) {
-  return (<Checkbox {...args} aria-label="Checkbox" onChange={(event) => { updateArgs({ checked: event.checked ?? false }); args.onChange?.(event); } } />);
+  const generatedId = useId();
+  const { label, ...checkboxProps } = args;
+  const inputId = args.inputId ?? generatedId;
+  return (<div className="flex align-items-center gap-2">
+    <Checkbox aria-label={label ? undefined : 'Checkbox'} {...checkboxProps} inputId={inputId}
+      onChange={(event) => { updateArgs({ checked: event.checked }); args.onChange?.(event); }} />
+    {label && <label htmlFor={inputId}>{label}</label>}
+  </div>);
 }
 
 export function Example({ initialArgs = {} }: { initialArgs?: Partial<ExampleArgs> }) {

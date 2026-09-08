@@ -126,13 +126,40 @@ const components = [
     name: 'Checkbox',
     prime: 'checkbox',
     importName: 'Checkbox',
-    description: 'Boolean control or multi-selection option.',
-    args: `{ checked: true, disabled: false }`,
+    description: 'Labeled checkbox for a boolean choice or an option in an application-managed selection.',
+    exampleType: "ComponentProps<typeof Checkbox> & { label?: string }",
+    args: `{ checked: true, label: 'Chicago', disabled: false, readOnly: false, invalid: false, variant: 'outlined', icon: undefined }`,
     argTypes: `{
+    label: { control: 'text' },
     checked: { control: 'boolean' },
-    disabled: { control: 'boolean' }
+    disabled: { control: 'boolean' },
+    readOnly: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    variant: { control: 'inline-radio', options: ['outlined', 'filled'] },
+    icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] }
   }`,
-    playground: `<Checkbox {...args} aria-label="Checkbox" onChange={(event) => { updateArgs({ checked: event.checked ?? false }); args.onChange?.(event); } } />`,
+    hooks: `const generatedId = useId();
+  const { label, ...checkboxProps } = args;
+  const inputId = args.inputId ?? generatedId;`,
+    playground: `<div className="flex align-items-center gap-2">
+    <Checkbox aria-label={label ? undefined : 'Checkbox'} {...checkboxProps} inputId={inputId}
+      onChange={(event) => { updateArgs({ checked: event.checked }); args.onChange?.(event); }} />
+    {label && <label htmlFor={inputId}>{label}</label>}
+  </div>`,
+    docsVariations: [
+      ...[
+        ['Unchecked', '{ checked: false }'],
+        ['Disabled', '{ disabled: true }'],
+        ['Read only', '{ readOnly: true }'],
+        ['Invalid', '{ invalid: true, checked: false }'],
+        ['Filled', "{ variant: 'filled', checked: false }"],
+        ['Custom icon', "{ icon: 'pi pi-star-fill' }"]
+      ].map(([title, args]) => ({
+        title,
+        code: `<Example initialArgs={${args}} />`,
+        source: 'exampleSource + ' + JSON.stringify('\n// Render this variation:\n<Example initialArgs={' + args + '} />')
+      }))
+    ],
   },
   {
     name: 'Chips',
