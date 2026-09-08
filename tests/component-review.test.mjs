@@ -733,3 +733,100 @@ test('Card: Default fits the mobile viewport with every section visible', async 
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth));
   }
 });
+
+test('Carousel: page Controls synchronize navigation and reset with copyable source', async () => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(`${baseURL}/?path=/docs/components-carousel-summary--summary`);
+  const preview = page.frameLocator('#storybook-preview-iframe');
+  await preview.locator('.sbdocs-content h1').waitFor();
+  assert.deepEqual(await preview.locator('.sbdocs-content h3').allTextContents(), ['Responsive product collection', 'Circular navigation', 'Vertical layout']);
+  assert.equal(await preview.locator('.component-example .p-carousel').count(), 4);
+  await preview.getByRole('link', { name: 'Default', exact: true }).click();
+  await preview.locator('#storybook-root .p-carousel').waitFor();
+  await page.getByRole('tab', { name: 'Controls' }).click();
+  await preview.locator('.p-carousel-next').click();
+  await page.waitForFunction(() => document.querySelector('#control-page')?.value === '1');
+  await preview.locator('.p-carousel-item-active').filter({ hasText: 'Black Watch' }).waitFor();
+  await page.locator('#control-page').fill('2');
+  await page.locator('#control-page').press('Tab');
+  await preview.locator('.p-carousel-item-active').filter({ hasText: 'Blue Band' }).waitFor();
+  await page.getByRole('button', { name: 'Reset controls' }).click();
+  await preview.locator('.p-carousel-item-active').filter({ hasText: 'Bamboo Watch' }).waitFor();
+  assert.equal(await preview.locator('#storybook-root .p-carousel').count(), 1);
+  await page.getByRole('tab', { name: 'Code', exact: true }).click();
+  await page.locator('pre:visible').filter({ hasText: 'onPageChange' }).first().waitFor();
+});
+
+test('Carousel: circular, vertical, responsive, hidden navigation and autoplay', async () => {
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const orientation of ['horizontal', 'vertical']) {
+      await open('Carousel', `orientation:${orientation};circular:!true`);
+      await page.locator('.p-carousel-prev').click();
+      await page.locator('.p-carousel-item-active:not(.p-carousel-item-cloned)').filter({ hasText: 'Blue Band' }).waitFor();
+      await page.locator('.p-carousel-next').click();
+      await page.locator('.p-carousel-item-active:not(.p-carousel-item-cloned)').filter({ hasText: 'Bamboo Watch' }).waitFor();
+      await page.locator('.p-carousel-next').click();
+      await page.locator('.p-carousel-item-active:not(.p-carousel-item-cloned)').filter({ hasText: 'Black Watch' }).waitFor();
+      const box = await page.locator('.p-carousel').boundingBox();
+      assert.ok(box && box.x >= 0 && box.x + box.width <= width);
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    }
+    await page.goto(`${baseURL}/iframe.html?id=components-carousel-summary--summary&viewMode=docs`);
+    const responsive = page.locator('.component-example .p-carousel').nth(1);
+    await responsive.waitFor();
+    await page.waitForFunction((expected) => document.querySelectorAll('.component-example .p-carousel')[1]?.querySelectorAll('.p-carousel-item-active').length === expected, width === 390 ? 1 : 3);
+    if (width === 390) {
+      await responsive.locator('.p-carousel-next').click();
+      await responsive.locator('.p-carousel-item-active').filter({ hasText: 'Black Watch' }).waitFor();
+      await page.setViewportSize({ width: 1280, height: 900 });
+      await page.waitForFunction(() => document.querySelectorAll('.component-example .p-carousel')[1]?.querySelectorAll('.p-carousel-item-active').length === 3);
+    }
+  }
+  await open('Carousel', 'showNavigators:!false;showIndicators:!false;header:Products;footer:Collection');
+  assert.equal(await page.locator('.p-carousel-next,.p-carousel-prev,.p-carousel-indicators').count(), 0);
+  assert.equal(await page.locator('.p-carousel-header').textContent(), 'Products');
+  assert.equal(await page.locator('.p-carousel-footer').textContent(), 'Collection');
+  await open('Carousel', 'autoplayInterval:1000');
+  await page.locator('.p-carousel-item-active:not(.p-carousel-item-cloned)').filter({ hasText: 'Black Watch' }).waitFor();
+});
+
+
+test('Carousel: count/page constraints and configuration changes', async () => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  for (let visible = 1; visible <= 3; visible++) {
+    for (let scroll = 1; scroll <= visible; scroll++) {
+      await open('Carousel', `numVisible:${visible};numScroll:${scroll}`);
+      assert.equal(await page.locator('.p-carousel-item-active').count(), visible);
+      const lastPage = Math.ceil((3 - visible) / scroll);
+      for (let index = 0; index < lastPage; index++) {
+        await page.locator('.p-carousel-next').click();
+        await page.waitForFunction((expected) => [...document.querySelectorAll('.p-carousel-indicator')].findIndex((item) => item.classList.contains('p-highlight')) === expected, index + 1);
+      }
+      if (lastPage) await page.locator('.p-carousel-item-active').filter({ hasText: 'Blue Band' }).waitFor();
+      await page.locator('.p-carousel-next:disabled').waitFor();
+      if (lastPage) {
+        await open('Carousel', `numVisible:${visible};numScroll:${scroll};circular:!true`);
+        await page.locator('.p-carousel-prev').click();
+        await page.locator('.p-carousel-item-active:not(.p-carousel-item-cloned)').filter({ hasText: 'Blue Band' }).waitFor();
+        await page.locator('.p-carousel-next').click();
+        await page.locator('.p-carousel-item-active:not(.p-carousel-item-cloned)').filter({ hasText: 'Bamboo Watch' }).waitFor();
+      }
+    }
+  }
+  for (const args of ['numVisible:1;numScroll:2', 'numVisible:0', 'page:9', 'numVisible:3;page:1', 'circular:!true;page:1', 'autoplayInterval:-1']) {
+    await open('Carousel', args);
+    await page.getByRole('alert').waitFor();
+    assert.equal(await page.locator('.p-carousel').count(), 0);
+  }
+  await page.goto(`${baseURL}/?path=/story/components-carousel--default`);
+  const preview = page.frameLocator('#storybook-preview-iframe');
+  await preview.locator('.p-carousel').waitFor();
+  await page.getByRole('tab', { name: 'Controls' }).click();
+  await page.locator('#control-numVisible').fill('2');
+  await page.locator('#control-numVisible').press('Tab');
+  await preview.locator('.p-carousel-item-active').filter({ hasText: 'Black Watch' }).waitFor();
+  await page.getByRole('button', { name: 'Reset controls' }).click();
+  await preview.locator('.p-carousel-item-active').filter({ hasText: 'Bamboo Watch' }).waitFor();
+  assert.equal(await preview.locator('.p-carousel-item-active').count(), 1);
+});
