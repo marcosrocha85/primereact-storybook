@@ -80,9 +80,18 @@ CODEX_MODEL=your-model CODEX_PROFILE=your-profile bash scripts/implement-issues.
 CHECK_TIMEOUT_SECONDS=1800 bash scripts/implement-issues.sh 13
 ```
 
-The prompt requires `AGENTS.md`, full issue inspection, a native-API coverage inventory, explicit scope decisions, preservation of forwarded props/callbacks, focused tests and both project builds. An API inventory does not establish exhaustive compatibility. Validation records are reported by the model; the runner verifies their presence and status, the actual changed-file list, Git state and GitHub checks. Repositories without PR checks rely on those local validation reports. Automation does not replace independent code review.
+The prompt requires `AGENTS.md`, full issue inspection, a native-API coverage inventory, explicit scope decisions, preservation of forwarded props/callbacks, focused tests and both project builds. An API inventory does not establish exhaustive compatibility. The runner checks the model report, then independently executes both builds, changed Node test files, affected component contract tests, the generator test when applicable, and affected component browser tests against an owned static server on a free localhost port. Browser libraries must also be available to the runner process (`LD_LIBRARY_PATH` is inherited). Commands are selected by the controller, never evaluated from model-provided shell strings. Git state, file contents and GitHub checks remain delivery gates. Automation does not replace independent code review.
 
-The runner stops on the first failure and preserves work, branches and logs in `.git/codex-issue-runs/run-*/issue-*/`. It never uses `git reset --hard`, `git clean`, automatic stashing, admin merges or force-pushing implementation commits. A conflicting/open PR referencing an issue, an existing issue branch, failed checks, required GitHub approval, changed PR head or timeout blocks the next issue. Resolve the preserved work/PR manually and return to clean `main` before rerunning the remaining issue numbers. Concurrent invocations against the same Git repository are locked out.
+Technical implementation/validation failures receive up to three attempts total by default. Each attempt gets the preserved tree and previous diagnosis, report and validation logs. Repeated identical failures with unchanged files and diagnosis stop early. External dependencies, missing permissions and scope decisions stop immediately. CLI failures (including model/version and authentication errors) preserve a checkpoint and require environment repair; they are not blindly retried.
+
+```sh
+CODEX_MAX_ATTEMPTS=3 bash scripts/implement-issues.sh 15 16
+bash scripts/implement-issues.sh --resume .git/codex-issue-runs/run-XXXXXXXX
+```
+
+`--resume` continues the current issue and the remaining saved queue, with a new bounded attempt budget (1–10). It only accepts a checkpoint produced by this version before delivery starts, on the same branch/base commit and with exactly the saved tracked/untracked file contents and modes. Existing work is never discarded. External edits, interrupted runs with unsaved changes, a published branch, an open implementing PR, or any post-commit checkpoint require manual reconciliation; resume will not guess how to recover those states. Ignored dependencies/build output may be repaired without changing the checkpoint.
+
+Logs and independent validation exit codes live under `.git/codex-issue-runs/run-*/issue-*/attempt-*/`; the Codex transcript is `codex.log`. The runner never uses `git reset --hard`, `git clean`, automatic stashing, admin merges or force-pushing implementation commits. Failed GitHub checks, required approval, changed PR heads and merge timeouts still block delivery and the next issue. Concurrent invocations against the same Git repository are locked out. Automatic retries improve recovery; they do not authorize weakened tests or unrequested scope changes.
 
 The executor uses the [Codex non-interactive interface](https://developers.openai.com/codex/noninteractive/). Validate changes to this automation with:
 
@@ -91,4 +100,4 @@ bash -n scripts/implement-issues.sh
 node --test tests/issue-runner.test.mjs
 ```
 
-The tests use temporary Git repositories and mock Codex/GitHub commands; they do not implement or merge real issues.
+The tests use temporary Git repositories and mock Codex/GitHub/npm commands; they do not implement or merge real issues.

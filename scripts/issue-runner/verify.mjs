@@ -15,6 +15,8 @@ try {
     assert.ok(!existing, `Open PR #${existing?.number} already references this issue; inspect it before continuing`);
   } else if (mode === 'result') {
     assert.equal(data.status, 'ready', `Implementation blocked: ${JSON.stringify(data.blockers)}`);
+    assert.equal(data.blocker_kind, 'none', 'Unresolved blocker classification');
+    assert.equal(typeof data.recovery_notes, 'string', 'Missing recovery evidence');
     assert.equal(data.api_review_complete, true, 'API review is incomplete');
     assert.deepEqual(data.blockers, [], 'Unresolved blockers');
     for (const key of ['pr_title', 'pr_body']) {
