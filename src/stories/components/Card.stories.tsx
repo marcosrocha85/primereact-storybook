@@ -6,14 +6,13 @@ import exampleSource from './Card.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Card',
-  component: Card,
   parameters: {
     layout: 'centered',
-    controls: { include: ["title","subTitle"] },
-    docs: { description: { component: 'Content container with title, subtitle, and footer areas.' }, source: { code: exampleSource } }
+    controls: { include: ["title","subTitle","contentText","headerText","footerText","className","style"] },
+    docs: { description: { component: 'Content container with optional title, subtitle, header, and footer. Text controls provide curated compositions; native React nodes and slot functions remain supported through props. Card has no selection, disabled, or severity state.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { title: { control: 'text' }, subTitle: { control: 'text' } }
+  argTypes: { title: { control: 'text' }, subTitle: { control: 'text' }, contentText: { control: 'text', description: 'Fallback body text. Native children take precedence, including null.' }, headerText: { control: 'text', description: 'Optional padded heading. Native header takes precedence.' }, footerText: { control: 'text', description: 'Optional footer text. Native footer takes precedence.' }, className: { control: 'text' }, style: { control: 'object' } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;

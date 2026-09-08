@@ -1,12 +1,13 @@
 import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Example } from "./Card.examples";
 import exampleSource from "./Card.examples.tsx?raw";
+import { Card } from "primereact/card";
 
 <Meta title="Components/Card/Summary" />
 
 <Title>Card</Title>
 
-<Subtitle>Content container with title, subtitle, and footer areas.</Subtitle>
+<Subtitle>Content container with optional title, subtitle, header, and footer. Text controls provide curated compositions; native React nodes and slot functions remain supported through props. Card has no selection, disabled, or severity state.</Subtitle>
 
 ## Usage
 
@@ -16,7 +17,35 @@ import exampleSource from "./Card.examples.tsx?raw";
 
 ## Variations
 
-The usage example shows the base composition. Use Default to explore the documented properties.
+### Content only
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Card style={{ width: '24rem', maxWidth: '100%' }}>
+  <p className="m-0 line-height-3">A simple content container without a title or subtitle.</p>
+</Card>
+</div>
+
+<Source code={"<Card style={{ width: '24rem', maxWidth: '100%' }}>\n  <p className=\"m-0 line-height-3\">A simple content container without a title or subtitle.</p>\n</Card>"} language="tsx" />
+
+### Custom header
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Card header={<h5 className="m-0 p-3 pb-0">Card header</h5>} style={{ width: '24rem', maxWidth: '100%' }}>
+  <p className="m-0 line-height-3">A padded heading follows the Sakai panel example. Application menu actions are outside this curated Card example.</p>
+</Card>
+</div>
+
+<Source code={"<Card header={<h5 className=\"m-0 p-3 pb-0\">Card header</h5>} style={{ width: '24rem', maxWidth: '100%' }}>\n  <p className=\"m-0 line-height-3\">A padded heading follows the Sakai panel example. Application menu actions are outside this curated Card example.</p>\n</Card>"} language="tsx" />
+
+### Title, subtitle, and footer
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Card title="Card" subTitle="Subtitle" footer="Additional information" style={{ width: '24rem', maxWidth: '100%' }}>
+  <p className="m-0 line-height-3">Header and footer accept React nodes or functions receiving Card props. Children accept React nodes.</p>
+</Card>
+</div>
+
+<Source code={"<Card title=\"Card\" subTitle=\"Subtitle\" footer=\"Additional information\" style={{ width: '24rem', maxWidth: '100%' }}>\n  <p className=\"m-0 line-height-3\">Header and footer accept React nodes or functions receiving Card props. Children accept React nodes.</p>\n</Card>"} language="tsx" />
 
 ## Playground
 

@@ -394,10 +394,35 @@ const components = [
     name: 'Card',
     prime: 'card',
     importName: 'Card',
-    description: 'Content container with title, subtitle, and footer areas.',
-    args: `{ title: 'Card', subTitle: 'Subtitle' }`,
-    argTypes: `{ title: { control: 'text' }, subTitle: { control: 'text' } }`,
-    playground: `<Card {...args}><p className="m-0">Card content.</p></Card>`,
+    description: 'Content container with optional title, subtitle, header, and footer. Text controls provide curated compositions; native React nodes and slot functions remain supported through props. Card has no selection, disabled, or severity state.',
+    exampleType: `ComponentProps<typeof Card> & {
+  contentText?: string;
+  headerText?: string;
+  footerText?: string;
+}`,
+    args: `{ title: 'Card', subTitle: 'Subtitle', contentText: 'Card content.', headerText: '', footerText: '', className: '', style: {} }`,
+    argTypes: `{ title: { control: 'text' }, subTitle: { control: 'text' }, contentText: { control: 'text', description: 'Fallback body text. Native children take precedence, including null.' }, headerText: { control: 'text', description: 'Optional padded heading. Native header takes precedence.' }, footerText: { control: 'text', description: 'Optional footer text. Native footer takes precedence.' }, className: { control: 'text' }, style: { control: 'object' } }`,
+    hooks: `const { contentText, headerText, footerText, children, header, footer, ...cardProps } = args;`,
+    playground: `<div style={{ width: 'min(24rem, calc(100vw - 2rem))', maxWidth: '100%' }}>
+    <Card {...cardProps}
+      header={header !== undefined ? header : headerText ? <h5 className="m-0 p-3 pb-0">{headerText}</h5> : undefined}
+      footer={footer !== undefined ? footer : footerText || undefined}
+    >
+      {children !== undefined ? children : contentText ? <p className="m-0 line-height-3">{contentText}</p> : undefined}
+    </Card>
+  </div>`,
+    docsImports: `import { Card } from "primereact/card";`,
+    docsVariations: [
+      { title: 'Content only', code: `<Card style={{ width: '24rem', maxWidth: '100%' }}>
+  <p className="m-0 line-height-3">A simple content container without a title or subtitle.</p>
+</Card>` },
+      { title: 'Custom header', code: `<Card header={<h5 className="m-0 p-3 pb-0">Card header</h5>} style={{ width: '24rem', maxWidth: '100%' }}>
+  <p className="m-0 line-height-3">A padded heading follows the Sakai panel example. Application menu actions are outside this curated Card example.</p>
+</Card>` },
+      { title: 'Title, subtitle, and footer', code: `<Card title="Card" subTitle="Subtitle" footer="Additional information" style={{ width: '24rem', maxWidth: '100%' }}>
+  <p className="m-0 line-height-3">Header and footer accept React nodes or functions receiving Card props. Children accept React nodes.</p>
+</Card>` },
+    ],
   },
   {
     name: 'Divider',
