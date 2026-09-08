@@ -1,8 +1,10 @@
 {
   "type": "object",
   "additionalProperties": false,
-  "required": ["status", "pr_title", "pr_body", "changed_files", "validations", "api_review_complete", "blockers"],
+  "required": ["status", "pr_title", "pr_body", "changed_files", "validations", "api_review_complete", "blockers", "blocker_kind", "recovery_notes"],
   "properties": {
+    "blocker_kind": { "type": "string", "enum": ["none", "technical", "external", "permission", "scope"] },
+    "recovery_notes": { "type": "string" },
     "status": { "type": "string", "enum": ["ready", "blocked"] },
     "pr_title": { "type": "string" },
     "pr_body": { "type": "string" },
