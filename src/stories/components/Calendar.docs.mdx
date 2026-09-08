@@ -6,7 +6,7 @@ import exampleSource from "./Calendar.examples.tsx?raw";
 
 <Title>Calendar</Title>
 
-<Subtitle>Date picker input.</Subtitle>
+<Subtitle>Single date picker used in Sakai forms, with a popup, Today/Clear actions, floating labels, and validation states.</Subtitle>
 
 ## Usage
 
@@ -16,11 +16,29 @@ import exampleSource from "./Calendar.examples.tsx?raw";
 
 ## Variations
 
+### Floating label
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ floatLabel: true, showIcon: false, showButtonBar: false }} />
+</div>
+
+<Source code={exampleSource + '\n// Render a floating label:\n<Example initialArgs={{ floatLabel: true, showIcon: false, showButtonBar: false }} />'} language="tsx" />
+
+### Invalid state
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ invalid: true }} />
+</div>
+
+<Source code={exampleSource + '\n// Render validation styling:\n<Example initialArgs={{ invalid: true }} />'} language="tsx" />
+
 ### Disabled
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ disabled: true }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+<Source code={exampleSource + '\n// Render a disabled field:\n<Example initialArgs={{ disabled: true }} />'} language="tsx" />
 
 ## Playground
 
