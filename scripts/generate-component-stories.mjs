@@ -982,10 +982,23 @@ import { Avatar } from "primereact/avatar";`,
     name: 'Chip',
     prime: 'chip',
     importName: 'Chip',
-    description: 'Text chip with optional icon or image.',
-    args: `{ label: 'Action', icon: undefined, removable: false }`,
-    argTypes: `{ label: { control: 'text' }, icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] }, removable: { control: 'boolean' } }`,
-    playground: `<Chip {...args} />`,
+    description: 'Compact label with optional icon or image and native removal. Images take precedence over icons. Use visible to restore a removed playground chip; returning false from onRemove cancels removal.',
+    exampleType: "ComponentProps<typeof Chip> & { visible?: boolean }",
+    args: `{ label: 'Action', icon: undefined, image: undefined, imageAlt: 'Amy Elsner', removable: false, visible: true }`,
+    argTypes: `{ label: { control: 'text' }, icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] }, image: { control: 'select', options: [undefined, 'demo/images/avatar/amyelsner.png', 'demo/images/avatar/onyamalimba.png'] }, imageAlt: { control: 'text' }, removable: { control: 'boolean' }, visible: { control: 'boolean', description: 'Story-only visibility. Removal sets false; set true or reset Controls to restore.' }, className: { control: 'text' }, style: { control: 'object' } }`,
+    hooks: `const { visible = true, ...chipProps } = args;`,
+    playground: `visible ? <Chip {...chipProps} onRemove={(event) => {
+    const result = chipProps.onRemove?.(event);
+    if (result !== false) updateArgs({ visible: false });
+    return result !== false;
+  }} /> : null`,
+    docsImports: 'import { Chip } from "primereact/chip";',
+    docsVariations: [
+      { title: 'Labels', code: '<Chip label="Action" />\n<Chip label="Comedy" />' },
+      { title: 'Icons', code: '<Chip label="Search" icon="pi pi-search" />\n<Chip label="Bookmark" icon="pi pi-bookmark" />' },
+      { title: 'Images', code: '<Chip label="Amy Elsner" image="demo/images/avatar/amyelsner.png" imageAlt="Amy Elsner" />\n<Chip label="Onyama Limba" image="demo/images/avatar/onyamalimba.png" imageAlt="Onyama Limba" />' },
+      { title: 'Removable', code: '<Chip label="Thriller" removable />\n<Chip label="Search" icon="pi pi-search" removable />\n<Chip label="Amy Elsner" image="demo/images/avatar/amyelsner.png" imageAlt="Amy Elsner" removable />' },
+    ],
   },
   {
     name: 'Skeleton',

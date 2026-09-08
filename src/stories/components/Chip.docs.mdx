@@ -1,12 +1,13 @@
 import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Example } from "./Chip.examples";
 import exampleSource from "./Chip.examples.tsx?raw";
+import { Chip } from "primereact/chip";
 
 <Meta title="Components/Chip/Summary" />
 
 <Title>Chip</Title>
 
-<Subtitle>Text chip with optional icon or image.</Subtitle>
+<Subtitle>Compact label with optional icon or image and native removal. Images take precedence over icons. Use visible to restore a removed playground chip; returning false from onRemove cancels removal.</Subtitle>
 
 ## Usage
 
@@ -16,7 +17,42 @@ import exampleSource from "./Chip.examples.tsx?raw";
 
 ## Variations
 
-The usage example shows the base composition. Use Default to explore the documented properties.
+### Labels
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Chip label="Action" />
+<Chip label="Comedy" />
+</div>
+
+<Source code={"<Chip label=\"Action\" />\n<Chip label=\"Comedy\" />"} language="tsx" />
+
+### Icons
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Chip label="Search" icon="pi pi-search" />
+<Chip label="Bookmark" icon="pi pi-bookmark" />
+</div>
+
+<Source code={"<Chip label=\"Search\" icon=\"pi pi-search\" />\n<Chip label=\"Bookmark\" icon=\"pi pi-bookmark\" />"} language="tsx" />
+
+### Images
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Chip label="Amy Elsner" image="demo/images/avatar/amyelsner.png" imageAlt="Amy Elsner" />
+<Chip label="Onyama Limba" image="demo/images/avatar/onyamalimba.png" imageAlt="Onyama Limba" />
+</div>
+
+<Source code={"<Chip label=\"Amy Elsner\" image=\"demo/images/avatar/amyelsner.png\" imageAlt=\"Amy Elsner\" />\n<Chip label=\"Onyama Limba\" image=\"demo/images/avatar/onyamalimba.png\" imageAlt=\"Onyama Limba\" />"} language="tsx" />
+
+### Removable
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Chip label="Thriller" removable />
+<Chip label="Search" icon="pi pi-search" removable />
+<Chip label="Amy Elsner" image="demo/images/avatar/amyelsner.png" imageAlt="Amy Elsner" removable />
+</div>
+
+<Source code={"<Chip label=\"Thriller\" removable />\n<Chip label=\"Search\" icon=\"pi pi-search\" removable />\n<Chip label=\"Amy Elsner\" image=\"demo/images/avatar/amyelsner.png\" imageAlt=\"Amy Elsner\" removable />"} language="tsx" />
 
 ## Playground
 
