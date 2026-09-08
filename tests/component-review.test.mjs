@@ -681,3 +681,55 @@ test('DataView paginates and Default exposes copyable Code', async () => {
   await page.getByRole('button', { name: /Copy/ }).waitFor();
   assert.match(await page.getByRole('tabpanel').innerText(), /onChange/);
 });
+
+test('Card: composition Controls, copyable source and responsive slots', async () => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(`${baseURL}/?path=/docs/components-card-summary--summary`);
+  const preview = page.frameLocator('#storybook-preview-iframe');
+  await preview.locator('.sbdocs-content h1').waitFor();
+  assert.deepEqual(await preview.locator('.sbdocs-content h3').allTextContents(), ['Content only', 'Custom header', 'Title, subtitle, and footer']);
+  assert.equal(await preview.locator('.component-example .p-card').count(), 4);
+  assert.equal(await preview.locator('.docblock-argstable').count(), 0);
+  assert.equal(await preview.locator('.docblock-source').count(), 4);
+  await preview.getByRole('link', { name: 'Default', exact: true }).click();
+  await preview.locator('#storybook-root .p-card').waitFor();
+  await page.getByRole('tab', { name: 'Controls' }).click();
+  for (const [control, selector, value] of [
+    ['title', '.p-card-title', 'Edited title'],
+    ['subTitle', '.p-card-subtitle', 'Edited subtitle'],
+    ['contentText', '.p-card-content', 'Edited content'],
+    ['headerText', '.p-card-header', 'Edited header'],
+    ['footerText', '.p-card-footer', 'Edited footer'],
+  ]) {
+    await page.locator(`#control-${control}`).fill(value);
+    await preview.locator(selector).filter({ hasText: value }).waitFor();
+  }
+  assert.equal(await preview.locator('#storybook-root .p-card').count(), 1);
+  await page.getByRole('tab', { name: 'Code', exact: true }).click();
+  await page.locator('pre:visible').filter({ hasText: 'contentText' }).first().waitFor();
+  await page.getByRole('tab', { name: 'Controls' }).click();
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    const box = await preview.locator('.p-card').boundingBox();
+    assert.ok(box && box.width > 0 && box.width <= width);
+    await preview.locator('.p-card-header h5').waitFor();
+  }
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.getByRole('tab', { name: 'Controls' }).click();
+  for (const [control, selector] of [['title', '.p-card-title'], ['subTitle', '.p-card-subtitle'], ['contentText', '.p-card-content'], ['headerText', '.p-card-header'], ['footerText', '.p-card-footer']]) {
+    await page.locator(`#control-${control}`).fill('');
+    await preview.locator(selector).waitFor({ state: 'detached' });
+  }
+});
+
+
+test('Card: Default fits the mobile viewport with every section visible', async () => {
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await open('Card', 'headerText:Card header;footerText:Additional information');
+    await page.locator('.p-card-header').waitFor();
+    const box = await page.locator('.p-card').boundingBox();
+    assert.ok(box && box.x >= 0 && box.x + box.width <= width);
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth));
+  }
+});

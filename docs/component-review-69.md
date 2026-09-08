@@ -112,3 +112,43 @@ Chromium was installed for the existing Playwright dependency. The environment l
 ## Delivery boundary
 
 Implementation and validation are local. Issue #69 and its existing component issues remain open until the changes are reviewed and merged, as required by the GitHub workflow. No issue is considered completed solely by this audit record.
+
+## Card review — issue #13
+
+### Sources and scope
+
+Inspected Button docs/story, the Card generator entry and generated files, Sakai `app/(main)/uikit/panel/page.tsx` (custom padded heading and content), and installed PrimeReact `card/card.d.ts`, `card/card.esm.js`, `passthrough/index.d.ts`, and `componentbase/componentbase.d.ts`. The live Sakai panel URL could not be fetched; the local Sakai UI Kit source supplied the behavior reference. Card remains a presentation container. The upstream application popup menu is intentionally outside the curated Card examples; no inert actions, extra icons, images, selection modes, or artificial disabled/severity states were added.
+
+### API inventory
+
+| Native API surface | Treatment |
+| --- | --- |
+| `title`, `subTitle` | Exposed as text Controls; the full native ReactNode or `(props: CardProps) => ReactNode` types are retained and forwarded unchanged. Slot functions receive native resolved Card props. |
+| `header`, `footer` | Passed through as native nodes or slot functions, including explicit null/false/zero/empty values. Only `undefined` activates the optional `headerText`/`footerText` story fallback. |
+| `children` | Passed through as ReactNode, including arrays, elements, strings, numbers, booleans, null and portals. Only `undefined` activates `contentText`; function children are not supported by native Card. This fixes the previous unconditional replacement of supplied children. |
+| `className`, `style` | Exposed and forwarded unchanged; responsive stage sizing is on an outer div, independent of the supplied Card style. |
+| All inherited `React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>` members except native omissions `ref` and `title` | Passed through by the rest spread. Includes `key`, id, role, tabIndex, accessKey, contentEditable, dir, draggable, hidden, lang, slot, spellCheck, translate, defaultValue/defaultChecked, hydration/content-editable warning flags, HTML/RDFa/microdata attributes, all `aria-*` attributes, and all inherited React DOM event handlers and capture variants. Data attributes are forwarded at runtime. HTML title is replaced by the Card title slot. `dangerouslySetInnerHTML` retains React's native conflict with children; not offered as a Control. Ref forwarding through the story wrapper is intentionally outside the examples. |
+| Inherited events | Clipboard, composition, focus, form/input, load/error, keyboard, media, mouse, drag/drop, selection, touch, pointer/capture, scroll/wheel, animation and transition handlers remain untouched. Card has no component-specific events. No callback is replaced or synthesized. |
+| `pt` | Forwarded unchanged, with no wrapper defaults to overwrite or merge. All sections inventoried: root, header, body, title, subTitle, content, footer, hooks. Section attributes or functions using `CardPassThroughMethodOptions.props` retain native handling. |
+| `pt.hooks` | Native useMountEffect, useUpdateEffect, useUnmountEffect retained; not exposed as Controls. |
+| `ptOptions` | Native mergeSections, mergeProps and classNameMergeFunction retained unchanged; not exposed as Controls. |
+| `unstyled` | Forwarded; intentionally outside the themed Sakai examples. |
+| Nested models, selection/value modes, templates | No item model or selected value. The four named slots support React nodes/functions; children support React nodes. No native size, severity, icon, loading or disabled props. |
+| Story-only contentText, headerText, footerText | Optional strings, stripped before forwarding; empty strings omit their fallback section. Header fallback uses Sakai heading spacing. The Default uses useArgs; Card has no internal value to synchronize back. |
+
+### Evidence boundaries
+
+`tests/card-contract.test.mjs` verifies actual native server rendering of node/function slots, custom root/content pass-through entries, fallback precedence, explicit empty value modes, inherited callback identity and invocation with the original event, and preservation of styles/options. It does not prove browser event propagation, every inherited attribute, portals, lifecycle hooks, function-valued pass-through entries, unstyled rendering, or all possible combinations. Those surfaces were source-inspected and are forwarded without interception.
+
+`tests/component-review.test.mjs` has focused Card assertions for Summary/Default indexing, Summary sections and absence of Controls, copyable Source blocks, Default composition editing/clearing, one Card instance, and responsive widths. Validation results for this review are recorded below separately from the historical audit above.
+
+### Final validation for issue #13
+
+- `node scripts/generate-component-stories.mjs`: passed; only the Card generated set changed.
+- `node --test tests/card-contract.test.mjs tests/component-generator.test.mjs`: passed, 3 tests.
+- `npm run build`: passed on the final implementation.
+- `npm run build-storybook`: passed on the final implementation; existing chunk-size and plugin-timing warnings remain.
+- `STORYBOOK_URL=http://127.0.0.1:6013 LD_LIBRARY_PATH=/tmp/sakai-breadcrumb-libs/extracted/usr/lib/x86_64-linux-gnu node --test --test-name-pattern='^Card:' tests/component-review.test.mjs`: passed, 3 Card tests. No full browser suite was run.
+- `git diff --check`: passed.
+- Visually inspected Summary and composed Default at 1280 and 390 pixels. Content and section spacing are readable; no icons or interactive Card states apply. The centered Default initially overflowed at mobile width; the final stage uses a viewport-limited width and the regression test checks both Card bounds and document scroll width. Custom user CSS can still deliberately exceed that size.
+- Initial browser launches using `/tmp/sakai-browser-libs/usr/lib/x86_64-linux-gnu` and `/tmp/sakai-breadcrumb-libs/usr/lib/x86_64-linux-gnu` failed because `libnspr4.so` was missing at those paths. The existing `extracted` directory resolved the dependency. Intermediate runs found a hidden Code selector, mobile manager Controls visibility, and real stage overflow; those were corrected before the final passing run.
