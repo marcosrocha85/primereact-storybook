@@ -6,7 +6,7 @@ import exampleSource from "./Checkbox.examples.tsx?raw";
 
 <Title>Checkbox</Title>
 
-<Subtitle>Boolean control or multi-selection option.</Subtitle>
+<Subtitle>Labeled checkbox for a boolean choice or an option in an application-managed selection.</Subtitle>
 
 ## Usage
 
@@ -16,11 +16,53 @@ import exampleSource from "./Checkbox.examples.tsx?raw";
 
 ## Variations
 
+### Unchecked
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ checked: false }} />
+</div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ checked: false }} />"} language="tsx" />
+
 ### Disabled
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ disabled: true }} />
+</div>
 
 <Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+
+### Read only
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ readOnly: true }} />
+</div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ readOnly: true }} />"} language="tsx" />
+
+### Invalid
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ invalid: true, checked: false }} />
+</div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ invalid: true, checked: false }} />"} language="tsx" />
+
+### Filled
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ variant: 'filled', checked: false }} />
+</div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ variant: 'filled', checked: false }} />"} language="tsx" />
+
+### Custom icon
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ icon: 'pi pi-star-fill' }} />
+</div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ icon: 'pi pi-star-fill' }} />"} language="tsx" />
 
 ## Playground
 

@@ -6,16 +6,20 @@ import exampleSource from './Checkbox.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Checkbox',
-  component: Checkbox,
   parameters: {
     layout: 'centered',
-    controls: { include: ["checked","disabled"] },
-    docs: { description: { component: 'Boolean control or multi-selection option.' }, source: { code: exampleSource } }
+    controls: { include: ["label","checked","disabled","readOnly","invalid","variant","icon"] },
+    docs: { description: { component: 'Labeled checkbox for a boolean choice or an option in an application-managed selection.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
   argTypes: {
+    label: { control: 'text' },
     checked: { control: 'boolean' },
-    disabled: { control: 'boolean' }
+    disabled: { control: 'boolean' },
+    readOnly: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    variant: { control: 'inline-radio', options: ['outlined', 'filled'] },
+    icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] }
   }
 } satisfies Meta<ExampleArgs>;
 

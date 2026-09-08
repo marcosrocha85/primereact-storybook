@@ -883,3 +883,46 @@ test('Chart: six types render, Controls reset and Code remains copyable', async 
     }
   }
 });
+
+test('Checkbox: labeled states, icon spacing, keyboard and copyable code', async () => {
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await open('Checkbox');
+    const input = page.getByRole('checkbox', { name: 'Chicago' });
+    await page.getByText('Chicago', { exact: true }).click();
+    await page.waitForFunction(() => document.querySelector('input')?.checked === false);
+    assert.equal(await input.isChecked(), false);
+    await input.press('Space');
+    await page.waitForFunction(() => document.querySelector('input')?.checked === true);
+    assert.equal(await input.isChecked(), true);
+    for (const icon of ['!undefined', 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill']) {
+      await open('Checkbox', `icon:${icon}`);
+      const box = await page.locator('.p-checkbox').boundingBox();
+      const label = await page.locator('label').boundingBox();
+      assert.ok(label.x - box.x - box.width >= 7, 'Label has visible spacing');
+      assert.ok(box.width > 0);
+      if (icon !== '!undefined') assert.equal(await page.locator('.p-checkbox-icon.pi').count(), 1);
+    }
+    await open('Checkbox', 'readOnly:!true');
+    await page.getByRole('checkbox').press('Space');
+    assert.equal(await page.getByRole('checkbox').isChecked(), true);
+    await open('Checkbox', 'disabled:!true');
+    assert.equal(await page.getByRole('checkbox').isDisabled(), true);
+    await open('Checkbox', 'invalid:!true;variant:filled;checked:!false');
+    assert.equal(await page.locator('.p-checkbox.p-invalid.p-variant-filled').count(), 1);
+    assert.equal(await page.getByRole('checkbox').getAttribute('aria-invalid'), 'true');
+    await page.goto(`${baseURL}/iframe.html?id=components-checkbox-summary--summary&viewMode=docs`);
+    await page.locator('.sbdocs-content h1').waitFor();
+    const inputs = page.locator('.component-example input');
+    assert.equal(await inputs.count(), 7);
+    const ids = await inputs.evaluateAll(elements => elements.map(element => element.id));
+    assert.equal(new Set(ids).size, 7);
+    assert.equal(await page.locator('.docblock-source').count(), 7);
+    assert.ok(await page.locator('body').evaluate(element => element.scrollWidth <= innerWidth));
+  }
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(`${baseURL}/?path=/story/components-checkbox--default`);
+  await page.frameLocator('#storybook-preview-iframe').getByRole('checkbox').waitFor();
+  await page.getByRole('tab', { name: 'Code', exact: true }).click();
+  assert.ok((await page.locator('body').innerText()).includes('updateArgs({ checked: event.checked })'));
+});
