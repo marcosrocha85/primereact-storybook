@@ -52,6 +52,79 @@ for (const name of components) {
   });
 }
 
+test('Calendar: Sakai variations, date Controls, formatting and reset', async () => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(`${baseURL}/?path=/docs/components-calendar-summary--summary`);
+  const preview = page.frameLocator('#storybook-preview-iframe');
+  await preview.locator('.sbdocs-content h1').waitFor();
+  assert.deepEqual(await preview.locator('.sbdocs-content h3').allTextContents(), ['Floating label', 'Invalid state', 'Disabled']);
+  const stages = preview.locator('.component-example');
+  const inputs = stages.getByRole('combobox', { name: 'Date', exact: true });
+  assert.equal(await inputs.count(), 4, 'Each example has an associated label');
+  const ids = await inputs.evaluateAll(elements => elements.map(element => element.id));
+  assert.equal(new Set(ids).size, 4, 'Summary instances have unique input IDs');
+  assert.equal(await stages.nth(1).locator('.p-float-label').count(), 1);
+  assert.equal(await stages.nth(1).locator('.p-datepicker-trigger').count(), 0);
+  assert.equal(await inputs.nth(2).getAttribute('aria-invalid'), 'true');
+  assert.equal(await stages.nth(2).locator('.p-calendar.p-invalid').count(), 1);
+  assert.equal(await inputs.nth(3).isDisabled(), true);
+  assert.equal(await stages.nth(3).getByRole('button', { name: 'Choose Date' }).isDisabled(), true);
+  await inputs.nth(1).fill('09/15/2026');
+  await inputs.nth(1).press('Tab');
+  assert.equal(await inputs.nth(1).inputValue(), '09/15/2026');
+  assert.equal(await inputs.first().inputValue(), '', 'Summary state is independent');
+  await preview.getByRole('link', { name: 'Default', exact: true }).click();
+  const input = preview.locator('#storybook-root').getByRole('combobox', { name: 'Date', exact: true });
+  await input.waitFor();
+  assert.equal(await preview.locator('#storybook-root .p-calendar').count(), 1);
+  await page.getByRole('tab', { name: 'Controls' }).click();
+  const dateControl = page.locator('#control-value-date');
+  await dateControl.fill('2026-09-15');
+  await dateControl.press('Tab');
+  await page.waitForFunction(() => document.querySelector('#storybook-preview-iframe')?.contentDocument?.querySelector('input')?.value === '09/15/2026');
+  for (const [format, expected] of [['dd/mm/yy', '15/09/2026'], ['yy-mm-dd', '2026-09-15'], ['mm/dd/yy', '09/15/2026']]) {
+    await page.locator('#control-dateFormat').selectOption({ label: format });
+    await page.waitForFunction(value => document.querySelector('#storybook-preview-iframe')?.contentDocument?.querySelector('input')?.value === value, expected);
+  }
+  await input.fill('09/20/2026');
+  await input.press('Tab');
+  await page.waitForFunction(() => document.querySelector('#control-value-date')?.value === '2026-09-20');
+  await preview.getByRole('button', { name: 'Choose Date' }).click();
+  await preview.locator('.p-datepicker-calendar td:not(.p-datepicker-other-month) > span:not(.p-disabled)').filter({ hasText: /^18$/ }).click();
+  await page.waitForFunction(() => document.querySelector('#control-value-date')?.value === '2026-09-18');
+  await preview.getByRole('button', { name: 'Choose Date' }).click();
+  await preview.getByRole('button', { name: 'Clear', exact: true }).click();
+  await page.waitForFunction(() => document.querySelector('#control-value-date')?.value === '');
+  assert.equal(await input.inputValue(), '');
+  await preview.getByRole('button', { name: 'Choose Date' }).click();
+  await preview.getByRole('button', { name: 'Today', exact: true }).click();
+  const today = await preview.locator('body').evaluate(() => {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  });
+  await page.waitForFunction(value => document.querySelector('#control-value-date')?.value === value, today);
+  await page.locator('#control-floatLabel').focus();
+  await page.locator('#control-floatLabel').press('Space');
+  await preview.locator('.p-float-label .p-calendar').waitFor();
+  assert.equal(await input.getAttribute('placeholder'), null, 'Floating label does not overlap a placeholder');
+  await page.locator('#control-invalid').focus();
+  await page.locator('#control-invalid').press('Space');
+  await preview.locator('.p-calendar.p-invalid input[aria-invalid="true"]').waitFor();
+  await page.locator('#control-disabled').focus();
+  await page.locator('#control-disabled').press('Space');
+  await preview.locator('input:disabled').waitFor();
+  assert.equal(await preview.getByRole('button', { name: 'Choose Date' }).isDisabled(), true);
+  await page.getByRole('button', { name: 'Reset controls', exact: true }).click();
+  await preview.locator('input:not(:disabled)[aria-invalid="false"]').waitFor();
+  await preview.locator('.p-float-label').waitFor({ state: 'detached' });
+  assert.equal(await input.inputValue(), '');
+  assert.equal(await dateControl.inputValue(), '');
+  await page.getByRole('tab', { name: 'Code', exact: true }).click();
+  await page.getByRole('button', { name: /Copy/ }).waitFor();
+  assert.match(await page.getByRole('tabpanel').innerText(), /value=\{selectedDate\}/);
+  assert.match(await page.getByRole('tabpanel').innerText(), /calendarProps\.onChange\?\.\(event\)/);
+});
+
 test('BreadCrumb: hierarchy, optional Home, disabled items, Controls and code', async () => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto(`${baseURL}/?path=/docs/components-breadcrumb-summary--summary`);
@@ -404,7 +477,7 @@ test('AutoComplete filters, selects, and supports multiple values', async () => 
   }
 });
 
-test('Calendar selects and clears a date; InputNumber supports currency', async () => {
+test('Calendar: selects and clears a date', async () => {
   await open('Calendar');
   await page.locator('.p-datepicker-trigger').click();
   await page.locator('.p-datepicker-calendar td:not(.p-datepicker-other-month) > span:not(.p-disabled)').filter({ hasText: /^15$/ }).click();
@@ -412,6 +485,9 @@ test('Calendar selects and clears a date; InputNumber supports currency', async 
   await page.locator('.p-datepicker-trigger').click();
   await page.getByRole('button', { name: 'Clear', exact: true }).click();
   await page.waitForFunction(() => document.querySelector('input')?.value === '');
+});
+
+test('InputNumber supports currency', async () => {
   await open('InputNumber', 'mode:currency');
   await page.getByRole('spinbutton').fill('125');
   await page.getByRole('spinbutton').press('Tab');

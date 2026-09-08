@@ -63,15 +63,64 @@ const components = [
     name: 'Calendar',
     prime: 'calendar',
     importName: 'Calendar',
-    description: 'Date picker input.',
-    args: `{ value: null, placeholder: 'Select date', showIcon: true, showButtonBar: true }`,
+    extraImports: `import type { CalendarProps } from 'primereact/calendar';`,
+    description: 'Single date picker used in Sakai forms, with a popup, Today/Clear actions, floating labels, and validation states.',
+    exampleType: `Omit<CalendarProps, 'value'> & {
+  value: number | null;
+  label: string;
+  floatLabel: boolean;
+}`,
+    args: `{ value: null, label: 'Date', floatLabel: false, placeholder: 'Select date', dateFormat: 'mm/dd/yy', showIcon: true, showButtonBar: true, invalid: false, disabled: false, className: 'w-full' }`,
     argTypes: `{
-    placeholder: { control: 'text' },
+    value: { control: 'date', description: 'Selected date. Controls store a timestamp; the example converts it to a Date for Calendar.' },
+    label: { control: 'text' },
+    floatLabel: { control: 'boolean' },
+    placeholder: { control: 'text', if: { arg: 'floatLabel', truthy: false } },
+    dateFormat: { control: 'select', options: ['mm/dd/yy', 'dd/mm/yy', 'yy-mm-dd'] },
     showIcon: { control: 'boolean' },
     showButtonBar: { control: 'boolean' },
+    invalid: { control: 'boolean' },
     disabled: { control: 'boolean' }
   }`,
-    playground: `<Calendar {...args} onChange={(event) => { updateArgs({ value: event.value }); args.onChange?.(event); } } />`,
+    hooks: `const { value, label, floatLabel, inputId, ...calendarProps } = args;
+  const generatedId = useId();
+  const id = inputId ?? generatedId;
+  const date = value == null ? null : new Date(value);
+  const selectedDate = date && !Number.isNaN(date.getTime()) ? date : null;`,
+    playground: `<div style={{ width: '20rem', maxWidth: '100%' }}>
+    <div className={floatLabel ? 'p-float-label' : 'flex flex-column gap-2'}>
+      {!floatLabel && <label htmlFor={id}>{label}</label>}
+      <Calendar
+        pt={{ input: { root: { 'aria-invalid': calendarProps.invalid } } }}
+        {...calendarProps}
+        inputId={id}
+        value={selectedDate}
+        placeholder={floatLabel ? undefined : calendarProps.placeholder}
+        onChange={(event) => {
+          updateArgs({ value: event.value?.getTime() ?? null });
+          calendarProps.onChange?.(event);
+        }}
+      />
+      {floatLabel && <label htmlFor={id}>{label}</label>}
+    </div>
+  </div>`,
+    docsVariations: [
+      {
+        title: 'Floating label',
+        code: `<Example initialArgs={{ floatLabel: true, showIcon: false, showButtonBar: false }} />`,
+        source: `exampleSource + '\\n// Render a floating label:\\n<Example initialArgs={{ floatLabel: true, showIcon: false, showButtonBar: false }} />'`
+      },
+      {
+        title: 'Invalid state',
+        code: `<Example initialArgs={{ invalid: true }} />`,
+        source: `exampleSource + '\\n// Render validation styling:\\n<Example initialArgs={{ invalid: true }} />'`
+      },
+      {
+        title: 'Disabled',
+        code: `<Example initialArgs={{ disabled: true }} />`,
+        source: `exampleSource + '\\n// Render a disabled field:\\n<Example initialArgs={{ disabled: true }} />'`
+      }
+    ],
   },
   {
     name: 'Checkbox',
@@ -835,7 +884,7 @@ import { Avatar } from "primereact/avatar";`,
 ];
 
 for (const component of components) {
-  if (['InputText', 'InputTextarea', 'Password', 'InputMask', 'Calendar', 'Chips', 'Dropdown', 'ListBox', 'MultiSelect', 'SelectButton', 'InputNumber'].includes(component.name)) {
+  if (['InputText', 'InputTextarea', 'Password', 'InputMask', 'Chips', 'Dropdown', 'ListBox', 'MultiSelect', 'SelectButton', 'InputNumber'].includes(component.name)) {
     const control = ['InputText', 'InputTextarea', 'Password', 'InputMask'].includes(component.name) ? 'text' : component.name === 'InputNumber' ? 'number' : 'object';
     component.argTypes = component.argTypes.replace('{', `{ value: { control: '${control}' },`);
   }
@@ -846,7 +895,7 @@ const manualComponents = new Set(['Button', 'Accordion', 'AutoComplete', 'Image'
 function createExamples(component) {
   const type = component.exampleType ?? (component.name === 'DataTable' ? 'DataTablePropsSingle<typeof products>' : ['Dialog', 'Sidebar'].includes(component.name) ? `Omit<ComponentProps<typeof ${component.importName}>, 'onHide'> & { onHide?: () => void }` : `ComponentProps<typeof ${component.importName}>`);
   const typeImport = component.name === 'DataTable' ? "import type { DataTablePropsSingle } from 'primereact/datatable';\n" : '';
-  return `import { useState${component.hooks?.includes('useRef') ? ', useRef' : ''}${component.hooks?.includes('useId') ? ', useId' : ''}${component.name === 'DataTable' ? '' : ', type ComponentProps'} } from 'react';
+  return `import { useState${component.hooks?.includes('useRef') ? ', useRef' : ''}${component.hooks?.includes('useId') ? ', useId' : ''}${type.includes('ComponentProps') ? ', type ComponentProps' : ''} } from 'react';
 import { ${component.importName} } from 'primereact/${component.prime}';
 ${typeImport}${component.extraImports ?? ''}
 
