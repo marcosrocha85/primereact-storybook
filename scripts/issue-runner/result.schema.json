@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "pr_title", "pr_body", "changed_files", "validations", "api_review_complete", "blockers"],
+  "properties": {
+    "status": { "type": "string", "enum": ["ready", "blocked"] },
+    "pr_title": { "type": "string" },
+    "pr_body": { "type": "string" },
+    "changed_files": { "type": "array", "items": { "type": "string" } },
+    "validations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["command", "status"],
+        "properties": {
+          "command": { "type": "string" },
+          "status": { "type": "string", "enum": ["passed", "failed", "blocked"] }
+        }
+      }
+    },
+    "api_review_complete": { "type": "boolean" },
+    "blockers": { "type": "array", "items": { "type": "string" } }
+  }
+}
