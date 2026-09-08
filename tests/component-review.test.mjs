@@ -926,3 +926,56 @@ test('Checkbox: labeled states, icon spacing, keyboard and copyable code', async
   await page.getByRole('tab', { name: 'Code', exact: true }).click();
   assert.ok((await page.locator('body').innerText()).includes('updateArgs({ checked: event.checked })'));
 });
+
+test('Chip: Controls restore removal, preserve image precedence and expose Code', async () => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(`${baseURL}/?path=/docs/components-chip-summary--summary`);
+  const preview = page.frameLocator('#storybook-preview-iframe');
+  await preview.locator('.sbdocs-content h1').waitFor();
+  assert.deepEqual(await preview.locator('.sbdocs-content h3').allTextContents(), ['Labels', 'Icons', 'Images', 'Removable']);
+  await preview.getByRole('link', { name: 'Default', exact: true }).click();
+  await preview.locator('#storybook-root .p-chip').waitFor();
+  await page.getByRole('tab', { name: /Controls/ }).click();
+  const toggle = async name => {
+    const control = page.locator(`#control-${name}`);
+    await control.focus();
+    await control.press('Space');
+  };
+  await toggle('removable');
+  await preview.locator('.p-chip-remove-icon').click();
+  await preview.locator('.p-chip').waitFor({ state: 'hidden' });
+  await page.waitForFunction(() => document.querySelector('#control-visible')?.checked === false);
+  await toggle('visible');
+  await preview.locator('.p-chip').waitFor();
+  await preview.locator('.p-chip-remove-icon').press('Enter');
+  await preview.locator('.p-chip').waitFor({ state: 'hidden' });
+  await page.getByRole('button', { name: 'Reset controls' }).click();
+  await preview.locator('.p-chip').waitFor();
+  await page.getByRole('tab', { name: 'Code', exact: true }).click();
+  assert.match(await page.getByRole('tabpanel', { name: 'Code', exact: true }).innerText(), /onRemove|chipProps/);
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const icon of ['check', 'search', 'bookmark', 'star-fill']) {
+      await open('Chip', `icon:pi pi-${icon};removable:!true`);
+      const bounds = await page.locator('.p-chip').evaluate(chip => {
+        const icon = chip.querySelector('.p-chip-icon').getBoundingClientRect();
+        const text = chip.querySelector('.p-chip-text').getBoundingClientRect();
+        const remove = chip.querySelector('.p-chip-remove-icon').getBoundingClientRect();
+        return { gap: text.left - icon.right, removeGap: remove.left - text.right };
+      });
+      assert.ok(bounds.gap > 0 && bounds.removeGap > 0, 'Icons do not overlap the label');
+    }
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(`${baseURL}/?path=/story/components-chip--default&args=icon:pi%20pi-search;removable:!true`);
+    await page.getByRole('tab', { name: /Controls/ }).click();
+    for (const avatar of ['amyelsner', 'onyamalimba']) {
+      await page.locator('#control-image').selectOption({ label: `demo/images/avatar/${avatar}.png` });
+      await preview.locator(`.p-chip img[src$="${avatar}.png"]`).waitFor();
+      assert.equal(await preview.locator('.p-chip-icon').count(), 0, 'Native image precedence');
+      assert.equal(await preview.locator('.p-chip').count(), 1);
+    }
+    await page.setViewportSize({ width, height: 900 });
+    await preview.locator('.p-chip-remove-icon').press('Backspace');
+    await preview.locator('.p-chip').waitFor({ state: 'hidden' });
+  }
+});

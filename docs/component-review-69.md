@@ -303,3 +303,55 @@ Validation for this revision:
 - `npm run build`, `npm run build-storybook`, `git diff --check`: passed.
 - Summary screenshots inspected at 1280px and 390px: labels, unchecked/disabled/read-only/invalid/filled/icon examples remain aligned, with no page overflow. Source panels scroll horizontally on narrow screens.
 - Initial Storybook build exposed an MDX string-escaping bug; generator now serializes snippet strings with JSON.stringify. Initial label test sampled state before the Storybook args update; it now waits for the expected input state without weakening the assertion.
+
+### Chip — issue #17 API review
+
+Inspected Button, Sakai's Misc UI Kit source at
+`vendor/sakai-react/app/(main)/uikit/misc/page.tsx`, and installed PrimeReact
+`chip/chip.d.ts` and `chip/chip.esm.js`. The live Sakai URL could not be opened by
+the browser service; the local upstream source supplied the variation reference.
+
+| API surface | Treatment |
+| --- | --- |
+| `label`, `icon`, `image`, `imageAlt`, `removable`, `className`, `style` | Exposed in Default and forwarded. Icon Controls use Button's options; image Controls curate two relative avatar assets. Native image-over-icon precedence retained; arbitrary image URLs remain accepted by the wrapper. |
+| Story-only `visible` | Adapted: defaults true, removed before forwarding. Successful removal sets false; restoring true or resetting Controls remounts the chip. This also recreates native internal state/ref lifecycle. |
+| `onRemove` / `ChipRemoveEvent` | Exact event forwarded; `originalEvent` and native `value` preserved. Callback runs before args update; returning false cancels both native removal and visibility synchronization. Missing callback permits removal. Native runtime value falls back from label to image to icon, although the declaration says string. No coercion. |
+| `onImageError` | Passed through unchanged. |
+| `icon`, `removeIcon` / `IconType<ChipProps>` | Native string, React node and render-function forms passed through. Custom remove icons and functional templates are outside curated Controls. |
+| `template` / `TemplateType<ChipProps>` | Passed through: node or function receiving ChipProps. Native template replaces built-in content, including the remove control; no wrapper-invented removal behavior. |
+| `children` | Forwarded, but native rendering ignores children; use template for custom content. |
+| `pt` / `ChipPassThroughOptions` | Passed through intact, no wrapper defaults. Sections root, image, icon, label, removeIcon, hooks; attribute objects and callback forms remain native. Method options declare props and state; ChipState declares visible. Native metadata only explicitly supplies props, so callback state availability is not asserted. Lifecycle hooks use ComponentHooks: useMountEffect, useUpdateEffect and useUnmountEffect. |
+| `ptOptions`, `unstyled` | Passed through; mergeSections, mergeProps, classNameMergeFunction and native style semantics unchanged. Unstyled examples are outside the curated Sakai theme. |
+| Inherited div/HTML/ARIA attributes | All forwarded unchanged: id, title, role, ARIA/data attributes, tabIndex, accessKey, contentEditable, dir/lang, hidden, draggable, spellCheck, slot, defaultValue/defaultChecked and remaining React global attributes. Native otherProps routing retained. |
+| Inherited events | Focus/blur, keyboard, mouse, pointer, touch, drag, clipboard, composition, form, animation, transition, scroll, media and capture variants passed through unchanged. Native remove-key behavior supports Enter, NumpadEnter and Backspace. |
+| Component ref / `getElement`, `getVisible`, `setVisible` | Forwarded through ComponentProps; no wrapper imperative API. Calling native setVisible directly does not update the story-only visible arg. |
+| Selection/value models | Not applicable: Chip is a label, not the separate Chips multi-value input. No size, severity, loading or disabled API is invented. |
+
+Summary curates labels, icons, images and removable variants, each with copyable
+source. Sakai's `custom-chip` container has no matching styling in the inspected
+upstream styles, so no extra visual style was invented. Default renders at most
+one Chip. Visibility restoration is the only extra story behavior; all native
+props retain their contract. Global Code panel and hidden Canvas source settings
+are inherited from preview.tsx.
+
+Contract coverage checks forwarded identities (including refs, templates, PT and
+callbacks), invokes supplied removal/image-error/click callbacks, verifies false
+cancellation and absent callback behavior. This inventory is source inspection,
+not exhaustive browser coverage of arbitrary templates, PT, inherited handlers,
+unstyled rendering or imperative methods.
+
+Validation for this revision:
+- `node scripts/generate-component-stories.mjs`: passed; only Chip output changed.
+- `node --test tests/chip-contract.test.mjs tests/component-generator.test.mjs`: passed, 2 tests.
+- `npm run build`: passed.
+- `npm run build-storybook`: passed, with existing build warnings.
+- `STORYBOOK_URL=http://127.0.0.1:6017 node --test --test-name-pattern='^Chip:' tests/component-review.test.mjs`: passed, 2 tests, using inherited LD_LIBRARY_PATH. Covers Summary/Default navigation, no Summary Controls, copyable source/Code, mouse and keyboard removal, visibility synchronization/restoration/reset, all offered icons with spacing assertions, both image options and native image precedence.
+- Summary and Default screenshots inspected at 1280px and 390px. Icons, labels, images and removal controls are aligned; mobile examples wrap without clipping. Source blocks scroll horizontally.
+- `git diff --check`: passed.
+
+Initial browser runs failed on an invented Code panel ID and an image path supplied
+through URL args. Inspection found the real accessible Code tabpanel and Storybook's
+“Omitted potentially unsafe URL args” warning. Tests now use the accessible panel
+and actual image Controls; no component behavior or valid assertion was removed.
+No previous diagnostic/result/validation/patch files existed in the supplied recovery
+directory. No full browser suite was run. The temporary static server was stopped.
