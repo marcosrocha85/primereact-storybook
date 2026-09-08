@@ -830,3 +830,56 @@ test('Carousel: count/page constraints and configuration changes', async () => {
   await preview.locator('.p-carousel-item-active').filter({ hasText: 'Bamboo Watch' }).waitFor();
   assert.equal(await preview.locator('.p-carousel-item-active').count(), 1);
 });
+
+test('Chart: six types render, Controls reset and Code remains copyable', async () => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(`${baseURL}/?path=/docs/components-chart-summary--summary`);
+  const preview = page.frameLocator('#storybook-preview-iframe');
+  await preview.locator('.sbdocs-content h1').waitFor();
+  assert.deepEqual(await preview.locator('.sbdocs-content h3').allTextContents(), ['Line', 'Bar', 'Pie', 'Doughnut', 'Polar area', 'Radar']);
+  await page.waitForTimeout(1500);
+  for (const canvas of await preview.locator('.component-example canvas').all()) {
+    assert.ok(await canvas.evaluate(node => {
+      const pixels = node.getContext('2d').getImageData(0, 0, node.width, node.height).data;
+      let colored = 0;
+      for (let i = 0; i < pixels.length; i += 4) if (pixels[i + 3] > 100 && pixels[i + 2] > pixels[i] + 30) colored++;
+      return colored > 1000;
+    }), 'Every Summary chart paints its data, not only axes and legend');
+  }
+  await preview.getByRole('link', { name: 'Default', exact: true }).click();
+  await preview.locator('#storybook-root canvas').waitFor();
+  await page.getByRole('tab', { name: 'Controls' }).click();
+  assert.equal(await page.getByRole('switch', { name: 'Edit data as JSON' }).count(), 1);
+  assert.equal(await page.getByRole('switch', { name: 'Edit options as JSON' }).count(), 1);
+  for (const type of ['line', 'bar', 'pie', 'doughnut', 'polarArea', 'radar']) {
+    await page.locator('#control-type').selectOption({ label: type });
+    await page.waitForTimeout(600);
+    const canvas = preview.locator('#storybook-root canvas');
+    assert.equal(await canvas.count(), 1);
+    assert.equal(await canvas.getAttribute('aria-label'), 'Sample values: A 12, B 19, C 3');
+    assert.ok(await canvas.evaluate(node => node.getContext('2d').getImageData(0, 0, node.width, node.height).data.some((value, index) => index % 4 === 3 && value > 0)), `${type} paints pixels`);
+  }
+  await page.getByRole('switch', { name: 'Edit options as JSON' }).click();
+  await page.locator('#control-options').fill(JSON.stringify({ animation: false, plugins: { title: { display: true, text: 'Edited chart' } } }));
+  await page.locator('#control-options').press('Tab');
+  await page.waitForFunction(() => document.querySelector('#storybook-preview-iframe')?.contentDocument?.querySelector('canvas')?.getAttribute('aria-label') === 'Edited chart');
+  await page.getByRole('switch', { name: 'Edit data as JSON' }).click();
+  await page.locator('#control-data').fill(JSON.stringify({ labels: ['Changed'], datasets: [{ label: 'Changed data', data: [8] }] }));
+  await page.locator('#control-data').press('Tab');
+  await page.waitForTimeout(500);
+  assert.ok((await page.locator('#control-data').inputValue()).includes('Changed data'));
+  await page.getByRole('button', { name: 'Reset controls', exact: true }).click();
+  await page.waitForFunction(() => document.querySelector('#control-type')?.value === 'bar');
+  await page.getByRole('tab', { name: 'Code', exact: true }).click();
+  assert.ok((await page.getByRole('tabpanel', { name: 'Code', exact: true }).textContent()).includes('<Chart {...args} />'));
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const type of ['line', 'bar', 'pie', 'doughnut', 'polarArea', 'radar']) {
+      await open('Chart', `type:${type}`);
+      await page.waitForTimeout(400);
+      const bounds = await page.locator('canvas').boundingBox();
+      assert.ok(bounds.width > 0 && bounds.x >= 0 && bounds.x + bounds.width <= width, `${type} fits ${width}px`);
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+    }
+  }
+});

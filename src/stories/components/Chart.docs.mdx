@@ -6,7 +6,7 @@ import exampleSource from "./Chart.examples.tsx?raw";
 
 <Title>Chart</Title>
 
-<Subtitle>Charts powered by Chart.js.</Subtitle>
+<Subtitle>Chart.js visualizations used by Sakai for line, bar, pie, doughnut, polar area and radar charts. Edit data and options as Chart.js configuration objects. Type changes reuse the supplied data; custom chart types and plugins remain available through native props.</Subtitle>
 
 ## Usage
 
@@ -16,41 +16,53 @@ import exampleSource from "./Chart.examples.tsx?raw";
 
 ## Variations
 
-### line
+### Line
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ type: 'line' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ type: 'line' }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ type: 'line' }} />"} language="tsx" />
+<Source code={exampleSource + "\n<Example initialArgs={{ type: 'line' }} />"} language="tsx" />
 
-### bar
+### Bar
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ type: 'bar' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ type: 'bar' }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ type: 'bar' }} />"} language="tsx" />
+<Source code={exampleSource + "\n<Example initialArgs={{ type: 'bar' }} />"} language="tsx" />
 
-### pie
+### Pie
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ type: 'pie' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ type: 'pie' }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ type: 'pie' }} />"} language="tsx" />
+<Source code={exampleSource + "\n<Example initialArgs={{ type: 'pie' }} />"} language="tsx" />
 
-### doughnut
+### Doughnut
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ type: 'doughnut' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ type: 'doughnut' }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ type: 'doughnut' }} />"} language="tsx" />
+<Source code={exampleSource + "\n<Example initialArgs={{ type: 'doughnut' }} />"} language="tsx" />
 
-### polarArea
+### Polar area
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ type: 'polarArea' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ type: 'polarArea' }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ type: 'polarArea' }} />"} language="tsx" />
+<Source code={exampleSource + "\n<Example initialArgs={{ type: 'polarArea' }} />"} language="tsx" />
 
-### radar
+### Radar
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ type: 'radar' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ type: 'radar' }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ type: 'radar' }} />"} language="tsx" />
+<Source code={exampleSource + "\n<Example initialArgs={{ type: 'radar' }} />"} language="tsx" />
 
 ## Playground
 
