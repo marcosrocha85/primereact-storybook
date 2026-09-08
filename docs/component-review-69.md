@@ -152,3 +152,54 @@ Inspected Button docs/story, the Card generator entry and generated files, Sakai
 - `git diff --check`: passed.
 - Visually inspected Summary and composed Default at 1280 and 390 pixels. Content and section spacing are readable; no icons or interactive Card states apply. The centered Default initially overflowed at mobile width; the final stage uses a viewport-limited width and the regression test checks both Card bounds and document scroll width. Custom user CSS can still deliberately exceed that size.
 - Initial browser launches using `/tmp/sakai-browser-libs/usr/lib/x86_64-linux-gnu` and `/tmp/sakai-breadcrumb-libs/usr/lib/x86_64-linux-gnu` failed because `libnspr4.so` was missing at those paths. The existing `extracted` directory resolved the dependency. Intermediate runs found a hidden Code selector, mobile manager Controls visibility, and real stage overflow; those were corrected before the final passing run.
+
+## Carousel review — issue #14
+
+### Sources and scope
+
+Inspected Button docs/story, the Carousel generator and generated set, Sakai `app/(main)/uikit/media/page.tsx` and `public/demo/data/products-small.json`, and installed PrimeReact 10.9.7 `carousel/carousel.d.ts`, `carousel/carousel.esm.js`, `passthrough/index.d.ts`, and `componentbase/componentbase.d.ts`. The live [Sakai Media page](https://sakai.primereact.org/uikit/media) returned no extractable content; the local UI Kit supplies the implementation reference.
+
+The implementation replaces bare names with three Sakai product cards (image, name, price, stock), uses relative assets, and adds responsive, circular and vertical Summary examples with complete copyable source. The upstream application action buttons are deliberately omitted because this documentation has no corresponding product actions. These presentation changes make the item template and responsive collection visible. Only Summary/Default remain; Code panel and hidden Canvas source inherit the global preview configuration.
+
+### API inventory
+
+| Native API surface | Treatment |
+| --- | --- |
+| `value`, `itemTemplate` | Passed through unchanged. The sample array/template are defaults, not wrapper replacements. Native arbitrary arrays, primitive items, object models, empty arrays and omitted values retain their types. Custom data requires a matching custom template; the sample template expects name/image/price/inventoryStatus. There is no selection mode. Despite optional typing, native rendering throws for nonempty data without a callable template. |
+| `page`, `onPageChange` | Page is exposed as a zero-based page index (the declaration describes it ambiguously as an item index; implementation uses pages). The wrapper adapts the native `{ page: number }` event to updateArgs and calls the supplied callback with the original event. Example owns state; Default uses useArgs. Only normal paging injects the adapter. Circular/autoplay use native internal paging and reject supplied onPageChange or nonzero page with an explicit message; see the limitation below. Responsive pages are clamped to the current viewport and synchronized back to Controls. |
+| `numVisible`, `numScroll` | Exposed positive integer Controls for the three-item sample, forwarded unchanged. Valid configurations require numScroll <= numVisible and counts appropriate to data length; no native mode is coerced or narrowed in the props type. Invalid count combinations display guidance before mounting Carousel. Configuration changes remount the native instance because its count state is initialized from props. |
+| `responsiveOptions` | Object Control; forwarded unchanged. Nested entries contain breakpoint (CSS max-width string), numVisible and numScroll. The playground accepts pixel breakpoints, validates the nested counts, and subscribes to viewport changes. Effective count changes remount the native instance, including after navigation, while clamping the page to its available range. The supplied options object is forwarded unchanged. Summary supplies 768px/2 and 560px/1 options. |
+| `orientation`, `verticalViewPortHeight` | Exposed horizontal/vertical and viewport-height Controls; passed through. Vertical uses a 320px sample viewport. |
+| `circular`, `showIndicators`, `showNavigators`, `autoplayInterval` | Exposed and passed through. Autoplay defaults to zero; native positive intervals imply circular behavior and navigation stops autoplay. Circular forward/backward wrapping, horizontal/vertical layouts, autoplay and hidden navigation have browser coverage. Switching layout or autoplay configuration remounts the native instance. |
+| `header`, `footer` | Text Controls; full native ReactNode contract retained for programmatic arguments, including null/false/zero/arrays/elements. Native does not declare function slots here. |
+| `prevIcon`, `nextIcon` | Full native IconType (string, React node, or options callback) forwarded; intentionally outside curated Controls. Native defaults provide orientation-specific arrows. |
+| `contentClassName`, `containerClassName`, `indicatorsContentClassName` | Passed through, outside curated Controls. |
+| `id`, `className`, `style` and inherited HTMLDivElement attributes | Forwarded unchanged. Stage sizing is on an outer div. Native extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> omitting ref: this includes key, title, role, tabIndex, accessKey, contentEditable, dir, draggable, hidden, lang, slot, spellCheck, translate, defaultValue/defaultChecked, hydration/content-editable warning flags, HTML/RDFa/microdata, and all aria attributes. Data attributes pass through at runtime. dangerouslySetInnerHTML retains the native React conflict with generated children. |
+| Inherited DOM events | Clipboard, composition, focus, form/input, load/error, keyboard, media, mouse, drag/drop, selection, touch, pointer/capture, scroll/wheel, animation and transition handlers, including capture variants, forwarded unchanged. Native internal swipe/indicator handling remains native. Only onPageChange is intercepted. |
+| `children` | Passed through as declared ReactNode; native Carousel builds its own item/header/footer children and does not render props.children. Not exposed as a composition Control. |
+| `pt` | Forwarded unchanged without wrapper defaults. All sections: root, header, content, container, previousButton, previousButtonIcon, itemsContent, itemsContainer, itemCloned, item, nextButton, nextButtonIcon, indicators, indicator, indicatorButton, footer, hooks. Section objects/functions and their attribute/event merging retain native behavior. |
+| Nested PT models | Method options include props, state (numVisible, numScroll, page, totalShiftedItems) and context (active). Hooks include useMountEffect, useUpdateEffect, useUnmountEffect. Source-inspected, outside Controls. |
+| `ptOptions` | mergeSections, mergeProps and classNameMergeFunction forwarded unchanged. |
+| `unstyled` | Passed through; intentionally outside themed Sakai examples. |
+| Imperative ref API | Native startAutoplay, stopAutoplay, getElement; outside the wrapper examples. The wrapper does not forward a Carousel ref. |
+| Story-only properties | None; ExampleArgs retains ComponentProps<typeof Carousel>. |
+
+### Evidence and native limitation
+
+PrimeReact 10.9.7 controlled circular navigation was reproduced failing before the change. Its changePage function does not update internal pageState in controlled mode, while circular navigation still reads that state. The playground therefore uses native uncontrolled paging for circular/autoplay, with page zero and no onPageChange callback. It explicitly rejects incompatible arguments instead of silently dropping user callbacks. This is a restriction of the documented playground, not a fix to the dependency. Normal paging still forwards the original event to supplied callbacks and synchronizes Controls. No dependency or vendor file was modified.
+
+Contract tests inspect forwarding and server-render native Carousel with custom object/primitive/empty data, custom templates, slot nodes, root/item PT and original event callbacks. The viewport subscription and effect are stubbed only for direct adapter inspection; browser tests exercise real hooks. Tests also cover invalid counts/pages/responsive configurations and the explicit circular callback restriction. They do not prove every inherited attribute, PT hook/function, icon template, unstyled mode, imperative ref method or API combination.
+
+Browser coverage includes Summary/Default indexing, assets, sections, Controls placement, copyable source, normal paging and reset; circular wrapping in both directions and orientations at 1280px/390px; responsive counts and desktop resize after mobile navigation; hidden navigators/indicators, header/footer and autoplay; all six valid sample count pairs in normal mode and circular wrapping for pairs with multiple pages; invalid configuration guidance and live count edits/reset. Desktop/mobile Default screenshots were inspected with no clipping or overlapping navigation.
+
+### Actual validation
+
+- `node scripts/generate-component-stories.mjs`: passed; generated changes are limited to Carousel.
+- `node --test tests/carousel-contract.test.mjs tests/component-generator.test.mjs`: passed, 5 tests.
+- `npm run build`: passed.
+- `npm run build-storybook`: passed; existing build warnings remain.
+- `STORYBOOK_URL=http://127.0.0.1:6014 LD_LIBRARY_PATH=/tmp/sakai-breadcrumb-libs/extracted/usr/lib/x86_64-linux-gnu node --test --test-name-pattern='^Carousel:' tests/component-review.test.mjs`: passed, 4 tests.
+- After extending count coverage to circular mode, the same browser command with `--test-name-pattern='^Carousel: count'`: passed, 1 test.
+- `git diff --check`: passed.
+
+No full browser suite was run. API inventory is source-inspection evidence, not exhaustive behavioral certification.
