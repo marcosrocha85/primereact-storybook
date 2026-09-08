@@ -777,11 +777,33 @@ function productTemplate(product: (typeof products)[number]) {
     name: 'Chart',
     prime: 'chart',
     importName: 'Chart',
-    description: 'Charts powered by Chart.js.',
-    renderPrefix: `const data = { labels: ['A', 'B', 'C'], datasets: [{ label: 'Dataset', data: [12, 19, 3], backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726'] }] };`,
-    args: `{ type: 'bar', data }`,
-    argTypes: `{ type: { control: 'select', options: ['line', 'bar', 'pie', 'doughnut', 'polarArea', 'radar'] } }`,
-    playground: `<div style={{ width: '32rem', maxWidth: '100%' }}><Chart {...args} /></div>`,
+    description: 'Chart.js visualizations used by Sakai for line, bar, pie, doughnut, polar area and radar charts. Edit data and options as Chart.js configuration objects. Type changes reuse the supplied data; custom chart types and plugins remain available through native props.',
+    extraImports: `import type { ChartData, ChartOptions } from 'chart.js';`,
+    renderPrefix: `const data: ChartData = {
+  labels: ['A', 'B', 'C'],
+  datasets: [{
+    label: 'Sample values',
+    data: [12, 19, 3],
+    backgroundColor: ['#6366f1', '#a855f7', '#14b8a6'],
+    borderColor: '#6366f1',
+    borderWidth: 1
+  }]
+};
+const options: ChartOptions = {
+  responsive: true,
+  plugins: { title: { display: true, text: 'Sample values: A 12, B 19, C 3' } }
+};`,
+    exampleDefaults: 'structuredClone(defaultArgs)',
+    args: `{ type: 'bar', data, options }`,
+    argTypes: `{ type: { control: 'select', options: ['line', 'bar', 'pie', 'doughnut', 'polarArea', 'radar'] }, data: { control: 'object' }, options: { control: 'object' } }`,
+    playground: `<div style={{ width: 'min(32rem, calc(100vw - 4rem))', maxWidth: '100%' }}><Chart {...args} /></div>`,
+    docsVariations: [
+      ...[['Line', 'line'], ['Bar', 'bar'], ['Pie', 'pie'], ['Doughnut', 'doughnut'], ['Polar area', 'polarArea'], ['Radar', 'radar']].map(([title, type]) => ({
+        title,
+        code: `<Example initialArgs={{ type: '${type}' }} />`,
+        source: `exampleSource + ${JSON.stringify(`\n<Example initialArgs={{ type: '${type}' }} />`)}`
+      }))
+    ],
   },
   {
     name: 'ProgressBar',
@@ -996,7 +1018,7 @@ ${component.hooks ? '  ' + component.hooks + '\n' : ''}  return (${component.pla
 }
 
 export function Example({ initialArgs = {} }: { initialArgs?: Partial<ExampleArgs> }) {
-  const [args, setArgs] = useState<ExampleArgs>({ ...defaultArgs, ...initialArgs });
+  const [args, setArgs] = useState<ExampleArgs>({ ...${component.exampleDefaults ?? 'defaultArgs'}, ...initialArgs });
   return <Playground args={args} updateArgs={(changes) => setArgs((current) => ({ ...current, ...changes }))} />;
 }
 `;

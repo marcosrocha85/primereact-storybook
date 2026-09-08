@@ -203,3 +203,60 @@ Browser coverage includes Summary/Default indexing, assets, sections, Controls p
 - `git diff --check`: passed.
 
 No full browser suite was run. API inventory is source-inspection evidence, not exhaustive behavioral certification.
+
+## Chart review — issue #15
+
+### Sources and scope
+
+Inspected Button docs/story, the Chart generator and generated files, Sakai `app/(main)/uikit/charts/page.tsx`, installed PrimeReact `chart/chart.d.ts` and `chart/chart.esm.js`, PT/hook declarations, and Chart.js `dist/types/index.d.ts`. The live Sakai charts URL could not be opened by the web tool; the local upstream source provides the six chart variations.
+
+Only Summary/Default remain. Summary has named line, bar, pie, doughnut, polar area and radar variations, each with self-contained copyable source. Default exposes native type/data/options Controls, uses useArgs, and inherits the global Code panel and hidden Canvas source. Chart has no controlled selection/value-change event to synchronize back from the canvas. Legend visibility and tooltips remain native transient Chart.js interactions.
+
+Necessary presentation changes: Sakai palette, an explicit dataset label and title (also the native canvas accessible label), and viewport-limited stage width. Each Summary instance clones only the serializable sample defaults before applying supplied initialArgs. Sharing Chart.js configuration objects across simultaneous chart types caused blank data/incorrect axes in the initial visual inspection. Independent defaults fixed those examples; custom data/options/plugins/callbacks/PT are never cloned or replaced. A separate direct Chart.js experiment with shared versus independent configurations also produced different pie/doughnut/polar chart geometry; that experiment is narrower than the simultaneous Summary failure and is not a PrimeReact defect certification.
+
+### API inventory
+
+| Surface | Treatment |
+| --- | --- |
+| `type` | Select exposes the six Sakai types. Native optional string remains unchanged, including scatter, bubble and registered custom types programmatically; those require compatible data/registration and are outside curated examples. |
+| `data` | Object Control, forwarded unchanged. Native object/undefined contract preserved. ChartData includes labels, xLabels, yLabels and datasets; datasets include per-dataset type, data, labels, ordering, visibility, axes, parsing, styles, element/controller and plugin options. Number/null, floating bar tuples, x/y points, x/y/r bubble points, object parsing, empty data and mixed dataset types remain native configurations, not converted into the numeric sample format. Only the three-number sample is browser validated. |
+| `options` | Object Control, forwarded unchanged. Nested Chart.js configuration families: core colors/fonts/layout, responsiveness/aspect ratio/device pixel ratio, locale, events/interaction/hover, parsing/normalization, animation/transitions, per-type controller/dataset/element settings, Cartesian/radial scales, and plugins (legend, title/subtitle, tooltip, filler, decimation). Scriptable/indexable settings and functions remain supported through programmatic props; JSON Controls cannot author functions. Callbacks include onClick/onHover/onResize, animation progress/completion, scale/tick callbacks, legend click/hover/leave, tooltip callbacks/filter/sort/external rendering and scriptable contexts. None are intercepted. Arbitrary invalid JSON configurations are not validated by this documentation wrapper. |
+| `plugins` | Native array passed by identity. Chart.js plugin id/defaults/events and install/start/stop/uninstall, initialization/update/layout/dataset/element/render/draw/event/resize/destroy hooks remain native; intentionally outside JSON Controls. No plugin is injected. |
+| `width`, `height` | Native optional strings forwarded, used on root/canvas by PrimeReact; non-responsive dimensions are outside the responsive curated examples. |
+| `ariaLabel` | Forwarded. Default uses the native fallback from options.plugins.title.text. Users editing data should update their title/accessible description as appropriate; there is no automatic derived label. |
+| `children` | Forwarded ReactNode. Native implementation builds its own canvas and does not render these children. No React content/template slot is adapted. Canvas drawing customization belongs to Chart.js plugins/options. |
+| Inherited div attributes | All DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> except ref/content/pt retain native forwarding: id, className, style, title, role, tabIndex, accessKey, contentEditable, dir, draggable, hidden, lang, slot, spellCheck, translate, defaultValue/defaultChecked, hydration/content-editable warning flags, HTML/RDFa/microdata and aria attributes; data attributes pass at runtime. dangerouslySetInnerHTML retains the native conflict with generated children. Stage sizing lives on a separate div. |
+| Inherited DOM events | Clipboard, composition, focus, form/input, load/error, keyboard, media, mouse, drag/drop, selection, touch, pointer/capture, scroll/wheel, animation/transition and capture variants all pass through. Native canvas interaction callbacks are configured through options, not a selection event. |
+| `pt` | All sections root, canvas, hooks pass unchanged, without wrapper defaults. Section attribute objects or functions receive ChartPassThroughMethodOptions containing props. Hook methods useMountEffect/useUpdateEffect/useUnmountEffect retain native handling. |
+| `ptOptions` | mergeSections, mergeProps, classNameMergeFunction passed unchanged. |
+| `unstyled` | Passed through, outside themed examples. |
+| Ref API | Native getCanvas, getChart, getBase64Image, generateLegend, refresh, getElement remain outside curated examples; no ref adapter is introduced. generateLegend is declared but its implementation delegates to a Chart.js instance method, not exercised here. |
+| Story-only args, selection modes, severity, disabled, icon/template props | Not applicable: none introduced or declared by Chart. |
+
+Native source limitation: the installed PrimeReact memo comparator observes only data/options/type identity. Changes solely to other props can be ignored until one of those three changes. The wrapper preserves this native behavior and therefore does not advertise those fields as independently reactive Controls. This is source inspection, not a browser-tested exhaustive API claim.
+
+### Validation evidence
+
+- `node scripts/generate-component-stories.mjs`: passed; generated changes limited to Chart. The optional exampleDefaults generator field is used only by Chart; other outputs remain unchanged.
+- `node --test tests/chart-contract.test.mjs tests/component-generator.test.mjs`: passed, 2 tests. Contract checks preserve configuration identities, undefined/empty/numeric-null/point data, inherited attributes, PT, plugins and supplied callback arguments. Callbacks are invoked directly through forwarded props; this does not claim browser coverage of every plugin/DOM hook.
+- `npm run build`: passed.
+- `npm run build-storybook`: passed, with existing build warnings.
+- `STORYBOOK_URL=http://127.0.0.1:6015 LD_LIBRARY_PATH=/tmp/sakai-breadcrumb-libs/extracted/usr/lib/x86_64-linux-gnu node --test --test-name-pattern='^Chart:' tests/component-review.test.mjs`: passed, 2 tests. Covers indexing, Summary structure/no Controls/source, Summary data-painted regression, six type Controls, JSON edits, reset, Code panel, and six chart widths at 1280/390 pixels.
+- Visual inspection of Summary and Default screenshots at 1280/390 pixels: data, labels, legend swatches and title spacing render without clipping. No component icon/disabled/severity states apply. Source blocks retain their normal horizontal code scrolling.
+- `git diff --check`: passed.
+
+Initial browser attempts exposed test selectors that assumed an exact Controls tab name or an input ID before entering JSON edit mode, plus an asynchronous reset assertion. The tests now use actual accessible controls and wait for the reset. The data-painted regression was added after fixing the shared-default visual failure. No full browser suite was run. Arbitrary Chart.js configuration, all inherited attributes, imperative methods and unstyled/plugin combinations are inventoried, not exhaustively tested.
+
+### Recovery attempt 2
+
+The controller's independent validation failed before either browser test ran: Chromium could not load `libnspr4.so`. Its inherited `LD_LIBRARY_PATH` was empty. Reproduced with `node --test --test-name-pattern='^Chart:' tests/component-review.test.mjs` (exit 1, two hook failures). This is a browser runtime dependency failure, not evidence of a Chart regression.
+
+Re-ran the generator, both contract/generator tests, both builds and `git diff --check` successfully. Served the rebuilt static Storybook on port 6015 and re-ran the exact browser command above with its explicit `LD_LIBRARY_PATH`: both Chart tests passed. Re-inspected desktop/mobile Summary and Default, scrolling each mobile example into view and waiting for its animation before capturing it; all six variations render their data and labels without clipping. The temporary server was stopped.
+
+At the end of attempt 2, independent delivery validation remained blocked pending the calling controller's browser library configuration. A child command cannot change its parent's environment. No repository test infrastructure or system library directories were changed to work around that boundary.
+
+### Recovery attempt 3
+
+The calling environment now supplies `LD_LIBRARY_PATH=/tmp/sakai-breadcrumb-libs/extracted/usr/lib/x86_64-linux-gnu`. Re-ran `node scripts/generate-component-stories.mjs`, `node --test tests/chart-contract.test.mjs tests/component-generator.test.mjs` (2 passed), `npm run build`, and `npm run build-storybook`: all passed. Generated output remained unchanged.
+
+`STORYBOOK_URL=http://127.0.0.1:6015 node --test --test-name-pattern='^Chart:' tests/component-review.test.mjs` passed both Chart tests against the rebuilt static Storybook, using inherited library configuration without a command-local override. Re-inspected desktop/mobile Summary examples and Default screenshots at 1280/390 pixels: data, titles and legends render without clipping. `git diff --check` passed. The temporary static server was stopped. The previous browser dependency blocker is resolved; no additional implementation or infrastructure changes were needed.

@@ -9,11 +9,11 @@ const meta = {
   component: Chart,
   parameters: {
     layout: 'centered',
-    controls: { include: ["type"] },
-    docs: { description: { component: 'Charts powered by Chart.js.' }, source: { code: exampleSource } }
+    controls: { include: ["type","data","options"] },
+    docs: { description: { component: 'Chart.js visualizations used by Sakai for line, bar, pie, doughnut, polar area and radar charts. Edit data and options as Chart.js configuration objects. Type changes reuse the supplied data; custom chart types and plugins remain available through native props.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { type: { control: 'select', options: ['line', 'bar', 'pie', 'doughnut', 'polarArea', 'radar'] } }
+  argTypes: { type: { control: 'select', options: ['line', 'bar', 'pie', 'doughnut', 'polarArea', 'radar'] }, data: { control: 'object' }, options: { control: 'object' } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;
