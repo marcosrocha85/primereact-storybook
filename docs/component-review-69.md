@@ -450,3 +450,37 @@ Validation for this revision:
 ### Recovery attempt 4
 
 No separate prior recovery artifact existed for this specific Chips pass.
+
+### ContextMenu API audit — issue #21
+
+Inspected Button, the Sakai menu UI Kit source at
+`vendor/sakai-react/app/(main)/uikit/menu/page.tsx`, and the installed PrimeReact
+`contextmenu/contextmenu.d.ts` and `contextmenu.esm.js`.
+
+| API surface | Treatment |
+| --- | --- |
+| `model` | Exposed as an object Control and passed through after a shallow recursive adaptation that adds observable command feedback. Nested `items`, grouped items, separators, disabled/visible items, URLs, templates, icons, and item-level styling remain native. |
+| `global`, `autoZIndex`, `baseZIndex`, `breakpoint`, `scrollHeight`, `ariaLabel` | Exposed where useful in Default and forwarded unchanged. Summary demonstrates nested items, separators, disabled items, responsive breakpoint and scroll height. |
+| `appendTo`, `transitionOptions`, `submenuIcon`, `unstyled` | Passed through unchanged and intentionally outside curated Controls. Native value modes, including HTMLElement/function append targets and IconType submenu values, are not narrowed. |
+| `onShow`, `onHide` | Passed through unchanged; the playground does not replace or synthesize these callbacks. The imperative `show`/`hide` ref methods remain native. |
+| `children` | Forwarded by the native props spread; ContextMenu renders its menu overlay rather than arbitrary children. |
+| `pt`, inherited `HTMLAttributes<HTMLDivElement>`, ARIA/data attributes and DOM events | Passed through by `{...args}` without wrapper defaults. Native PT sections include root, menu, menuitem, action, icon, label, submenuIcon, separator, hooks, transition, tabIndex, onFocus and onBlur. |
+| MenuItem callbacks and templates | `menuWithActions` invokes each supplied `item.command` before its local status callback; item templates and other MenuItem fields are preserved. Function-valued templates/callbacks are source-inspected, not authored through JSON Controls. |
+| Story-only trigger | The target div owns the context-menu event and keyboard equivalent (`ContextMenu` key or `Shift+F10`), prevents the browser menu, and calls the native ref `show` method. This trigger is outside the ContextMenu prop contract and is not forwarded. |
+
+The story keeps the full `ContextMenuProps` type through `ComponentProps<typeof ContextMenu>`;
+only displayed Controls are curated. No native selection/value mode applies to this overlay
+component. Supplied ContextMenu callbacks and MenuItem commands are preserved; the only
+adaptation is the local command wrapper used to make actions observable in the example.
+
+Validation for this revision:
+- `node scripts/generate-component-stories.mjs`: passed; generated output remained scoped to ContextMenu and preserved the manual components.
+- `node --test tests/component-generator.test.mjs`: passed, 1 test.
+- `STORYBOOK_URL=http://127.0.0.1:6017 node --test --test-name-pattern='popup menus and ContextMenu|ContextMenu: only Summary' tests/component-review.test.mjs`: passed, 2 tests against the static build.
+- `npm run build`: passed.
+- `npm run build-storybook`: passed; existing large-chunk/plugin-timing warnings remain.
+- `git diff --check`: passed.
+
+Browser assertions cover right-click, `Shift+F10`, command feedback, Summary structure,
+responsive rendering and the Default playground. The API inventory is source inspection, not
+exhaustive behavioral testing of every inherited prop, PT callback, template or append target.

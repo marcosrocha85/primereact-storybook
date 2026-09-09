@@ -419,7 +419,7 @@ test('Toast and Messages show and clear feedback', async () => {
   }
 });
 
-test('popup menus and context menu have working triggers', async () => {
+test('popup menus and ContextMenu have working mouse and keyboard triggers', async () => {
   for (const name of ['Menu', 'TieredMenu']) {
     await open(name, 'popup:!true');
     await page.getByRole('button', { name: 'Open menu' }).click();
@@ -428,8 +428,16 @@ test('popup menus and context menu have working triggers', async () => {
     await page.locator('.p-menu-overlay, .p-tieredmenu-overlay').waitFor({ state: 'hidden' });
   }
   await open('ContextMenu');
-  await page.getByText('Right click or press Shift+F10 here').click({ button: 'right' });
+  const target = page.getByText('Right-click or press Shift+F10 here');
+  await target.click({ button: 'right' });
   await page.getByRole('menubar').waitFor();
+  await page.getByRole('menuitem', { name: 'Save' }).click();
+  await page.getByRole('status').filter({ hasText: 'Save selected' }).waitFor();
+  await target.focus();
+  await target.press('Shift+F10');
+  await page.getByRole('menubar').waitFor();
+  await page.getByRole('menuitem', { name: 'Delete' }).click();
+  await page.getByRole('status').filter({ hasText: 'Delete selected' }).waitFor();
 });
 
 test('PickList transfers items and OrderList reorders them', async () => {

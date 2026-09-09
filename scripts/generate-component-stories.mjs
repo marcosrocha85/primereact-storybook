@@ -697,13 +697,12 @@ import { menuWithActions } from '../menuExamples';`,
     importName: 'ContextMenu',
     hooks: `const ref = useRef<ContextMenu>(null);
   const [action, setAction] = useState('No action yet');`,
-    extraImports: `import { Button } from 'primereact/button';
-import { menuWithActions } from '../menuExamples';`,
-    description: 'Context-triggered menu.',
+    extraImports: `import { menuWithActions } from '../menuExamples';`,
+    description: 'Popup menu opened by a context click or an equivalent keyboard command.',
     renderPrefix: `const items = [{ label: 'Save', icon: 'pi pi-save' }, { label: 'Delete', icon: 'pi pi-times' }];`,
     args: `{ model: items }`,
-    argTypes: `{ model: { control: 'object' } }`,
-    playground: `<><><ContextMenu {...args} model={menuWithActions(args.model ?? [], setAction)} ref={ref} /><div tabIndex={0} className="p-4 border-1 border-round" onContextMenu={(event) => ref.current?.show(event)} onKeyDown={(event) => { if (event.key === 'ContextMenu' || (event.shiftKey && event.key === 'F10')) { event.preventDefault(); ref.current?.show(event); } }}>Right click or press Shift+F10 here</div></><p role="status">{action}</p></>`,
+    argTypes: `{ model: { control: 'object' }, ariaLabel: { control: 'text' }, global: { control: 'boolean' }, breakpoint: { control: 'text' }, scrollHeight: { control: 'text' }, autoZIndex: { control: 'boolean' } }`,
+    playground: `<><ContextMenu {...args} model={menuWithActions(args.model ?? [], setAction)} ref={ref} /><div tabIndex={0} className="p-4 border-1 border-round" onContextMenu={(event) => { event.preventDefault(); ref.current?.show(event); }} onKeyDown={(event) => { if (event.key === 'ContextMenu' || (event.shiftKey && event.key === 'F10')) { event.preventDefault(); ref.current?.show(event); } }}>Right-click or press Shift+F10 here</div><p role="status">{action}</p></>`,
   },
   {
     name: 'MegaMenu',
