@@ -6,7 +6,7 @@ import exampleSource from "./ConfirmPopup.examples.tsx?raw";
 
 <Title>ConfirmPopup</Title>
 
-<Subtitle>Contextual confirmation.</Subtitle>
+<Subtitle>Contextual confirmation displayed relative to a target.</Subtitle>
 
 ## Usage
 
@@ -16,7 +16,37 @@ import exampleSource from "./ConfirmPopup.examples.tsx?raw";
 
 ## Variations
 
-The usage example shows the base composition. Use Default to explore the documented properties.
+### Custom labels
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ acceptLabel: 'Delete', rejectLabel: 'Keep item' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ acceptLabel: 'Delete', rejectLabel: 'Keep item' }} />"} language="tsx" />
+
+### Icons
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ icon: 'pi pi-exclamation-triangle', acceptIcon: 'pi pi-check', rejectIcon: 'pi pi-times' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ icon: 'pi pi-exclamation-triangle', acceptIcon: 'pi pi-check', rejectIcon: 'pi pi-times' }} />"} language="tsx" />
+
+### Reject-focused
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ defaultFocus: 'reject', acceptLabel: 'Continue', rejectLabel: 'Cancel' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ defaultFocus: 'reject', acceptLabel: 'Continue', rejectLabel: 'Cancel' }} />"} language="tsx" />
+
+### Non-dismissible
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ dismissable: false, closeOnEscape: false }} />
+</div>
+
+<Source code={"<Example initialArgs={{ dismissable: false, closeOnEscape: false }} />"} language="tsx" />
 
 ## Playground
 

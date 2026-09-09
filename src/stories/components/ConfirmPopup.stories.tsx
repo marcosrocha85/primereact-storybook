@@ -9,11 +9,21 @@ const meta = {
   component: ConfirmPopup,
   parameters: {
     layout: 'centered',
-    controls: { include: ["message"] },
-    docs: { description: { component: 'Contextual confirmation.' }, source: { code: exampleSource } }
+    controls: { include: ["message","acceptLabel","rejectLabel","defaultFocus","dismissable","closeOnEscape","icon","acceptIcon","rejectIcon"] },
+    docs: { description: { component: 'Contextual confirmation displayed relative to a target.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { message: { control: 'text' } }
+  argTypes: {
+    message: { control: 'text' },
+    acceptLabel: { control: 'text' },
+    rejectLabel: { control: 'text' },
+    defaultFocus: { control: 'inline-radio', options: ['accept', 'reject'] },
+    dismissable: { control: 'boolean' },
+    closeOnEscape: { control: 'boolean' },
+    icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] },
+    acceptIcon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] },
+    rejectIcon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] }
+  }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;
