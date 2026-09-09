@@ -9,13 +9,21 @@ const meta = {
   component: ColorPicker,
   parameters: {
     layout: 'centered',
-    controls: { include: ["value","disabled"] },
-    docs: { description: { component: 'Visual color picker.' }, source: { code: exampleSource } }
+    controls: { include: ["value","format","inline","defaultColor","disabled","autoFocus","inputId","inputClassName","panelClassName","style"] },
+    docs: { description: { component: 'Color input used in Sakai forms, with hex, RGB, HSB, inline, disabled, and overlay variations.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
   argTypes: {
-    value: { control: 'text' },
-    disabled: { control: 'boolean' }
+    value: { control: 'object', description: 'Hex string or RGB/HSB object, matching the native ColorPicker value modes.' },
+    format: { control: 'inline-radio', options: ['hex', 'rgb', 'hsb'] },
+    inline: { control: 'boolean' },
+    defaultColor: { control: 'text' },
+    disabled: { control: 'boolean' },
+    autoFocus: { control: 'boolean' },
+    inputId: { control: 'text' },
+    inputClassName: { control: 'text' },
+    panelClassName: { control: 'text' },
+    style: { control: 'object' }
   }
 } satisfies Meta<ExampleArgs>;
 

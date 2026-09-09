@@ -200,13 +200,27 @@ const components = [
     name: 'ColorPicker',
     prime: 'colorpicker',
     importName: 'ColorPicker',
-    description: 'Visual color picker.',
-    args: `{ value: '1976D2' }`,
+    description: 'Color input used in Sakai forms, with hex, RGB, HSB, inline, disabled, and overlay variations.',
+    args: `{ value: '1976D2', format: 'hex', inline: false, defaultColor: 'ff0000', disabled: false, style: { width: '2rem' } }`,
     argTypes: `{
-    value: { control: 'text' },
-    disabled: { control: 'boolean' }
+    value: { control: 'object', description: 'Hex string or RGB/HSB object, matching the native ColorPicker value modes.' },
+    format: { control: 'inline-radio', options: ['hex', 'rgb', 'hsb'] },
+    inline: { control: 'boolean' },
+    defaultColor: { control: 'text' },
+    disabled: { control: 'boolean' },
+    autoFocus: { control: 'boolean' },
+    inputId: { control: 'text' },
+    inputClassName: { control: 'text' },
+    panelClassName: { control: 'text' },
+    style: { control: 'object' }
   }`,
     playground: `<ColorPicker {...args} onChange={(event) => { updateArgs({ value: event.value ?? undefined }); args.onChange?.(event); } } />`,
+    docsVariations: [
+      { title: 'Inline', code: `<Example initialArgs={{ inline: true, style: undefined }} />` },
+      { title: 'RGB value', code: `<Example initialArgs={{ value: { r: 25, g: 118, b: 210 }, format: 'rgb' }} />` },
+      { title: 'HSB value', code: `<Example initialArgs={{ value: { h: 210, s: 88, b: 82 }, format: 'hsb' }} />` },
+      { title: 'Disabled', code: `<Example initialArgs={{ disabled: true }} />` }
+    ],
   },
   {
     name: 'Dropdown',
