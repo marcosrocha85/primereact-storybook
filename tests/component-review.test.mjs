@@ -397,6 +397,18 @@ test('ConfirmPopup accepts and rejects', async () => {
   }
 });
 
+test('ConfirmPopup dismisses with Escape and preserves supplied callbacks', async () => {
+  const source = await fs.promises.readFile('src/stories/components/ConfirmPopup.examples.tsx', 'utf8');
+  assert.match(source, /args\.onHide\?\.\(result\)/);
+  assert.match(source, /args\.accept\?\.\(\)/);
+  assert.match(source, /args\.reject\?\.\(\)/);
+  await open('ConfirmPopup');
+  await page.getByRole('button', { name: 'Confirm', exact: true }).click();
+  await page.locator('.p-confirm-popup').waitFor({ state: 'visible' });
+  await page.keyboard.press('Escape');
+  await page.locator('.p-confirm-popup').waitFor({ state: 'hidden' });
+});
+
 test('Toast and Messages show and clear feedback', async () => {
   for (const name of ['Toast', 'Messages']) {
     await open(name);

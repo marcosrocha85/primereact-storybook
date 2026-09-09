@@ -97,6 +97,22 @@ All 67 components pass the same browser checks at 1280×900 and 390×900: exactl
 | Tree | [#67](https://github.com/marcosrocha85/primereact-storybook/issues/67) | Expand; checkbox selection |
 | TreeTable | [#68](https://github.com/marcosrocha85/primereact-storybook/issues/68) | Expand; checkbox selection |
 
+### ConfirmPopup API audit — issue #20
+
+Source inspection covered the installed `ConfirmPopupProps` type, PrimeReact implementation, and the Sakai UI Kit menu/confirmation route. The story forwards the complete native props object; it adapts only `target`, `visible`/`onHide`, `accept`, and `reject` to connect the trigger and observable feedback. Supplied `onHide`, `accept`, and `reject` callbacks remain invoked.
+
+| Native surface | ConfirmPopup contract | Story treatment |
+| --- | --- | --- |
+| `tagKey`, `target`, `visible`, `defaultFocus`, `dismissable`, `closeOnEscape` | Popup identity, target alignment, controlled visibility, focus choice, and dismissal behavior | Forwarded; `target` and `visible` are adapted for the playground trigger. Controls expose focus and dismissal settings. |
+| `message`, `icon`, `rejectLabel`, `acceptLabel`, `rejectIcon`, `acceptIcon`, `rejectClassName`, `acceptClassName`, `className`, `style` | Message supports a React node or function; icons support `IconType`; labels and styling customize the popup and its buttons | Forwarded. Controls expose text labels and curated icon strings; React nodes/functions and arbitrary styling remain supported through native props but are outside the controls examples. |
+| `appendTo`, `transitionOptions`, `unstyled` | Overlay mount target, transition configuration, and core-style opt-out | Forwarded unchanged; intentionally outside the curated playground controls. `appendTo` retains its `'self' | HTMLElement | null | (() => HTMLElement)` value modes. |
+| `footer`, `content`, `children` | React node or function templates for footer/content and child content | Forwarded unchanged; intentionally outside the curated examples. The default composition uses the native message/footer implementation. |
+| `pt`, `ptOptions` | Nested pass-through sections for `root`, `content`, `icon`, `message`, `footer`, `rejectButton`, `acceptButton`, `hooks`, and `transition` | Forwarded unchanged; user pass-through customizations are not replaced by playground defaults. |
+| `onShow`, `onHide(result)`, `accept`, `reject` | Visibility and action callbacks | `onHide`, `accept`, and `reject` are wrapped only to synchronize local feedback, then invoke the supplied callback. `onShow` is forwarded unchanged. |
+| Inherited DOM attributes and component-base props | Additional native attributes accepted by the PrimeReact component base | Forwarded by `{...args}`; not independently exercised in this focused review. |
+
+The browser checks verify the documented trigger, accept/reject feedback, and Escape dismissal at desktop and mobile widths through the static Storybook build. They do not exhaustively test every native prop, template, pass-through section, lifecycle hook, transition configuration, or append target; those surfaces are source-inspected and forwarded.
+
 ## Validation
 
 - `npm run build`: passed. Earlier TypeScript failures in vendored UI Kit pages are no longer pulled into the component build because examples no longer import those pages; no compiler options or vendor files were weakened.

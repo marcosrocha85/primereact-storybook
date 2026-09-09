@@ -544,10 +544,26 @@ const components = [
     extraImports: `import { Button } from 'primereact/button';`,
     hooks: `const [target, setTarget] = useState<HTMLElement | null>(null);
   const [result, setResult] = useState('No decision yet');`,
-    description: 'Contextual confirmation.',
-    args: `{ message: 'Are you sure?', visible: false }`,
-    argTypes: `{ message: { control: 'text' } }`,
-    playground: `<><Button label="Confirm" onClick={(event) => { setTarget(event.currentTarget); updateArgs({ visible: true }); }} /><ConfirmPopup {...args} target={target ?? undefined} onHide={() => updateArgs({ visible: false })} accept={() => { setResult('Accepted'); args.accept?.(); }} reject={() => { setResult('Rejected'); args.reject?.(); }} /><p role="status">{result}</p></>`,
+    description: 'Contextual confirmation displayed relative to a target.',
+    args: `{ message: 'Are you sure?', visible: false, dismissable: true, closeOnEscape: true }`,
+    argTypes: `{
+    message: { control: 'text' },
+    acceptLabel: { control: 'text' },
+    rejectLabel: { control: 'text' },
+    defaultFocus: { control: 'inline-radio', options: ['accept', 'reject'] },
+    dismissable: { control: 'boolean' },
+    closeOnEscape: { control: 'boolean' },
+    icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] },
+    acceptIcon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] },
+    rejectIcon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] }
+  }`,
+    playground: `<><Button label="Confirm" onClick={(event) => { setTarget(event.currentTarget); updateArgs({ visible: true }); }} /><ConfirmPopup {...args} target={target ?? undefined} onHide={(result) => { updateArgs({ visible: false }); args.onHide?.(result); }} accept={() => { setResult('Accepted'); args.accept?.(); }} reject={() => { setResult('Rejected'); args.reject?.(); }} /><p role="status">{result}</p></>`,
+    docsVariations: [
+      { title: 'Custom labels', code: `<Example initialArgs={{ acceptLabel: 'Delete', rejectLabel: 'Keep item' }} />` },
+      { title: 'Icons', code: `<Example initialArgs={{ icon: 'pi pi-exclamation-triangle', acceptIcon: 'pi pi-check', rejectIcon: 'pi pi-times' }} />` },
+      { title: 'Reject-focused', code: `<Example initialArgs={{ defaultFocus: 'reject', acceptLabel: 'Continue', rejectLabel: 'Cancel' }} />` },
+      { title: 'Non-dismissible', code: `<Example initialArgs={{ dismissable: false, closeOnEscape: false }} />` }
+    ],
   },
   {
     name: 'Tooltip',

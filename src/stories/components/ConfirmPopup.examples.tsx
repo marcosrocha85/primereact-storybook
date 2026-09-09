@@ -3,7 +3,7 @@ import { ConfirmPopup } from 'primereact/confirmpopup';
 import { Button } from 'primereact/button';
 
 export type ExampleArgs = ComponentProps<typeof ConfirmPopup>;
-export const defaultArgs: ExampleArgs = { message: 'Are you sure?', visible: false };
+export const defaultArgs: ExampleArgs = { message: 'Are you sure?', visible: false, dismissable: true, closeOnEscape: true };
 
 export function Playground({ args, updateArgs }: {
   args: ExampleArgs;
@@ -11,7 +11,7 @@ export function Playground({ args, updateArgs }: {
 }) {
   const [target, setTarget] = useState<HTMLElement | null>(null);
   const [result, setResult] = useState('No decision yet');
-  return (<><Button label="Confirm" onClick={(event) => { setTarget(event.currentTarget); updateArgs({ visible: true }); }} /><ConfirmPopup {...args} target={target ?? undefined} onHide={() => updateArgs({ visible: false })} accept={() => { setResult('Accepted'); args.accept?.(); }} reject={() => { setResult('Rejected'); args.reject?.(); }} /><p role="status">{result}</p></>);
+  return (<><Button label="Confirm" onClick={(event) => { setTarget(event.currentTarget); updateArgs({ visible: true }); }} /><ConfirmPopup {...args} target={target ?? undefined} onHide={(result) => { updateArgs({ visible: false }); args.onHide?.(result); }} accept={() => { setResult('Accepted'); args.accept?.(); }} reject={() => { setResult('Rejected'); args.reject?.(); }} /><p role="status">{result}</p></>);
 }
 
 export function Example({ initialArgs = {} }: { initialArgs?: Partial<ExampleArgs> }) {
