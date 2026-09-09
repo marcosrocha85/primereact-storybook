@@ -3,13 +3,14 @@ set -Eeuo pipefail
 
 usage() {
   cat <<'USAGE'
-Usage: bash scripts/implement-issues.sh [--dry-run] ISSUE [ISSUE ...]
+Usage: bash scripts/implement-issues.sh [--use-qwen] [--dry-run] ISSUE [ISSUE ...]
        bash scripts/implement-issues.sh --resume RUN_DIRECTORY
 
 Implements issues in the supplied order, creates PRs, squash-merges them and
 returns to a clean main after each issue. Stops on an unresolved failure after bounded recovery.
 
 Options:
+  --use-qwen Codex plans/reviews; Qwen in LM Studio implements the plan.
   --dry-run  Print the sequence without running Codex, Git or GitHub commands.
   --resume   Resume a preserved implementation checkpoint (before commit/PR).
   --help     Show this help.
@@ -18,6 +19,8 @@ Environment:
   CODEX_MAX_ATTEMPTS     Attempts per issue/resume, including the first (default: 3; max: 10).
   CODEX_MODEL           Optional model; otherwise use the local Codex default.
   CODEX_PROFILE         Optional Codex profile.
+  QWEN_MODEL            Implementation model with --use-qwen (default: qwen/qwen3-30b-a3b).
+  QWEN_BASE_URL         LM Studio API URL (default: http://127.0.0.1:1234/v1).
   CHECK_TIMEOUT_SECONDS Time limit for GitHub checks/merge (default: 1200).
 
 Requires Bash 4.4+, Git, gh, Node.js, npm, flock and an authenticated Codex CLI.
@@ -29,10 +32,12 @@ die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 issues=()
 dry_run=false
 resume_dir=''
+use_qwen=false
 while (($#)); do
   argument=$1
   shift
   case "$argument" in
+    --use-qwen) use_qwen=true ;;
     --resume) (($#)) || die "Missing resume directory"; [[ -z "$resume_dir" ]] || die "Duplicate --resume"; resume_dir=$1; shift ;;
     --help|-h) usage; exit 0 ;;
     --dry-run) dry_run=true ;;
@@ -49,6 +54,7 @@ done
 [[ -z "$resume_dir" ]] || { ((${#issues[@]} == 0)) && ! "$dry_run" || die "Use --resume without issue numbers or --dry-run"; }
 ((${#issues[@]})) || [[ -n "$resume_dir" ]] || { usage >&2; exit 1; }
 if "$dry_run"; then
+  if "$use_qwen"; then printf 'Execution: Codex plan -> Qwen implementation -> validation -> Codex review\n'; fi
   for issue in "${issues[@]}"; do
     printf '#%s: update main -> codex/issue-%s -> Codex -> PR -> checks -> squash -> clean main\n' "$issue" "$issue"
   done
@@ -97,6 +103,15 @@ mkdir -p "$git_dir/codex-issue-runs"
 if [[ -n "$resume_dir" ]]; then
   run_dir="$(cd "$resume_dir" && pwd -P)"
   [[ "$run_dir" == "$git_dir"/codex-issue-runs/run-* ]] || die 'Resume directory must belong to this checkout'
+  saved_mode=codex
+  [[ ! -f "$run_dir/execution-mode" ]] || saved_mode="$(cat "$run_dir/execution-mode")"
+  [[ "$saved_mode" == codex || "$saved_mode" == qwen ]] || die 'Invalid saved execution mode'
+  if "$use_qwen" && [[ "$saved_mode" != qwen ]]; then die 'Cannot enable --use-qwen on a Codex-only checkpoint'; fi
+  if [[ "$saved_mode" == qwen ]]; then
+    use_qwen=true
+    QWEN_MODEL="$(cat "$run_dir/qwen-model")"
+    QWEN_BASE_URL="$(cat "$run_dir/qwen-base-url")"
+  fi
   resume_issue="$(cat "$run_dir/current-issue")"
   [[ "$resume_issue" =~ ^[1-9][0-9]*$ ]] || die 'Invalid checkpoint issue'
   mapfile -t issues < "$run_dir/issues.list"
@@ -114,9 +129,19 @@ else
   run_dir="$(mktemp -d "$git_dir/codex-issue-runs/run-XXXXXXXX")"
   cp -R "$support_dir" "$run_dir/support"
   printf '%s\n' "${issues[@]}" > "$run_dir/issues.list"
+  if "$use_qwen"; then
+    printf 'qwen\n' > "$run_dir/execution-mode"
+    printf '%s\n' "${QWEN_MODEL:-qwen/qwen3-30b-a3b}" > "$run_dir/qwen-model"
+    printf '%s\n' "${QWEN_BASE_URL:-http://127.0.0.1:1234/v1}" > "$run_dir/qwen-base-url"
+  else
+    printf 'codex\n' > "$run_dir/execution-mode"
+  fi
 fi
 support_dir="$run_dir/support"
 printf 'Logs: %s\n' "$run_dir"
+if "$use_qwen"; then
+  node "$support_dir/delegation.mjs" "${QWEN_MODEL:-qwen/qwen3-30b-a3b}" "${QWEN_BASE_URL:-http://127.0.0.1:1234/v1}"
+fi
 codex_args=(-a never exec --sandbox workspace-write -c sandbox_workspace_write.network_access=true -C "$root")
 [[ -z "${CODEX_MODEL:-}" ]] || codex_args+=(-m "$CODEX_MODEL")
 [[ -z "${CODEX_PROFILE:-}" ]] || codex_args+=(-p "$CODEX_PROFILE")
@@ -148,7 +173,11 @@ for issue in "${issues[@]}"; do
     [[ "$base_sha" == "$(git rev-parse origin/main)" ]] || die 'Local main contains unpublished commits.'
     require_clean
     git switch -c "$branch"
-    node "$support_dir/recover.mjs" init "$issue_dir" "$root"
+    if "$use_qwen"; then
+      node "$support_dir/recover.mjs" init "$issue_dir" "$root" qwen "${QWEN_MODEL:-qwen/qwen3-30b-a3b}" "${QWEN_BASE_URL:-http://127.0.0.1:1234/v1}"
+    else
+      node "$support_dir/recover.mjs" init "$issue_dir" "$root"
+    fi
     printf '%s\n' "$issue" > "$run_dir/current-issue"
   else
     [[ -z "$(git ls-remote --heads origin "refs/heads/$branch")" ]] || die 'Resume branch was published externally; inspect its PR before continuing'
