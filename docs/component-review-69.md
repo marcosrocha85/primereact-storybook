@@ -140,6 +140,29 @@ The inventory is source inspection, not exhaustive behavioral testing. Focused b
 
 Issue #22 validation: `node --test tests/datatable-contract.test.mjs tests/component-generator.test.mjs` passed (2 tests); `STORYBOOK_URL=http://127.0.0.1:6017 LD_LIBRARY_PATH=/tmp/sakai-browser-libs/usr/lib/x86_64-linux-gnu node --test --test-name-pattern='DataTable' tests/component-review.test.mjs` passed (2 tests, desktop/mobile Summary/Default plus sorting, pagination, filtering, and selection); `npm run build` passed; `npm run build-storybook` passed with existing large-chunk and plugin-timing warnings; `git diff --check` passed. The browser test used a temporary static server on port 6017, which was stopped after validation.
 
+## DataView review — issue #23
+
+### Sources and scope
+
+Inspected the Button docs/story, the DataView generator entry and generated files, the Sakai UI Kit list source at `vendor/sakai-react/app/(main)/uikit/list/page.tsx`, and the installed PrimeReact `dataview.d.ts` and implementation. The curated story demonstrates the Sakai-relevant list/grid composition and pagination with a typed product template. Summary examples are static and copyable; Controls remain on the single Default story.
+
+### API inventory
+
+| Native surface | Treatment |
+| --- | --- |
+| `value`, `dataKey`, `layout` | Forwarded unchanged. The Default Controls expose the curated `list` and `grid` values; PrimeReact's declared string extension remains available programmatically. `dataKey` is passed through for stable item keys and is not a separate Control. |
+| Pagination: `rows`, `first`, `totalRecords`, `paginator`, `paginatorPosition`, `alwaysShowPaginator`, `paginatorClassName`, `paginatorTemplate`, `paginatorLeft`, `paginatorRight`, `paginatorDropdownAppendTo`, `pageLinkSize`, `rowsPerPageOptions`, `currentPageReportTemplate` | Forwarded unchanged. `paginator` and `rows` are exposed as Controls; the remaining paginator configuration is intentionally outside the curated playground. The native uncontrolled paging state remains intact. |
+| Sorting: `sortField`, `sortOrder` | Forwarded unchanged and outside the curated Controls. PrimeReact sorts a copied value array before rendering; no wrapper sorting or value mutation is introduced. |
+| Display and data loading: `header`, `footer`, `emptyMessage`, `gutter`, `loading`, `loadingIcon`, `lazy`, `className`, `style`, `unstyled` | Forwarded unchanged. The product card template is the only story-owned default; custom loading, empty, header/footer, gutter, lazy/server data, styling and unstyled modes remain native props outside the curated examples. |
+| Templates: `itemTemplate`, `listTemplate`, `children` | `itemTemplate` is passed through when supplied; otherwise the story supplies its product renderer to make the playground visible. `listTemplate` and children remain untouched and available programmatically. Both template value forms and arbitrary item models remain native. |
+| `onPage` | Forwarded unchanged. The story does not intercept or replace supplied page callbacks; the default uses PrimeReact's internal paging state. |
+| `pt`, `ptOptions` | Forwarded unchanged with no wrapper PT defaults. Native sections root, header, paginator, content, emptyMessage, footer, loadingOverlay, loadingIcon, grid and hooks retain their object/function forms and method options. |
+| Inherited `HTMLAttributes<HTMLDivElement>` and DOM events | Forwarded by the native component base, including `id`, `role`, `aria-*`, `data-*`, `title`, `tabIndex`, `className`, `style`, keyboard, focus, pointer, mouse, touch, drag, clipboard, composition, form, animation, transition, scroll and capture handlers. Native routing to the root remains unchanged. |
+| Ref API | Native `getElement()` remains available through the component ref and is not adapted or exposed as a Control. |
+| Nested `DataViewLayoutOptions` | The related native component supports `id`, `layout`, `listIcon`, `gridIcon`, `style`, `className`, `onChange`, `children`, PT and inherited div attributes. It is used by Sakai to change layout but is not mounted in this DataView story; its icon/function value modes remain outside this curated scope. |
+
+The inventory is based on source inspection and does not claim exhaustive testing. Focused browser coverage verifies pagination, Summary structure, list/grid rendering at desktop and mobile widths, and the Default source panel. The contract test verifies native prop identity, the custom item-template fallback, supplied item-template callbacks, PT, inherited attributes and `onPage` preservation. Sorting, lazy/server paging, custom paginator templates, list templates, arbitrary item models, PT callbacks, inherited events, ref methods and DataViewLayoutOptions are forwarded or documented but not exhaustively browser-tested.
+
 ## Validation
 
 - `npm run build`: passed. Earlier TypeScript failures in vendored UI Kit pages are no longer pulled into the component build because examples no longer import those pages; no compiler options or vendor files were weakened.
