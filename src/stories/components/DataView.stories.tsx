@@ -10,10 +10,10 @@ const meta = {
   parameters: {
     layout: 'centered',
     controls: { include: ["layout","paginator","rows"] },
-    docs: { description: { component: 'Collection view in list or grid layout.' }, source: { code: exampleSource } }
+    docs: { description: { component: 'Collection view used by Sakai for paginated list and grid layouts.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { layout: { control: 'inline-radio', options: ['list', 'grid'] }, paginator: { control: 'boolean' }, rows: { control: 'number' } }
+  argTypes: { layout: { control: 'inline-radio', options: ['list', 'grid'] }, paginator: { control: 'boolean' }, rows: { control: { type: 'number', min: 1, max: 4, step: 1 } } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;

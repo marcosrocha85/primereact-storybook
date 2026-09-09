@@ -704,6 +704,15 @@ test('scroll containers, resizable panels and removable chips work', async () =>
 });
 
 test('DataView paginates and Default exposes copyable Code', async () => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(`${baseURL}/?path=/docs/components-dataview-summary--summary`);
+  const preview = page.frameLocator('#storybook-preview-iframe');
+  await preview.locator('.sbdocs-content h1').waitFor();
+  assert.deepEqual(await preview.locator('.sbdocs-content h3').allTextContents(), ['List layout', 'Grid layout', 'Pagination']);
+  assert.equal(await preview.locator('.docblock-argstable').count(), 0);
+  assert.equal(await preview.locator('.docblock-source').count(), 4);
+  assert.equal(await preview.locator('.p-dataview-list').count(), 3);
+  assert.equal(await preview.locator('.p-dataview-grid').count(), 1);
   await open('DataView');
   await page.getByText('Bamboo Watch', { exact: true }).waitFor();
   await page.locator('.p-paginator-next').click();

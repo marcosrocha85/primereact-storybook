@@ -6,7 +6,7 @@ import exampleSource from "./DataView.examples.tsx?raw";
 
 <Title>DataView</Title>
 
-<Subtitle>Collection view in list or grid layout.</Subtitle>
+<Subtitle>Collection view used by Sakai for paginated list and grid layouts.</Subtitle>
 
 ## Usage
 
@@ -16,7 +16,29 @@ import exampleSource from "./DataView.examples.tsx?raw";
 
 ## Variations
 
-The usage example shows the base composition. Use Default to explore the documented properties.
+### List layout
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ layout: 'list', paginator: true, rows: 1 }} />
+</div>
+
+<Source code={"<Example initialArgs={{ layout: 'list', paginator: true, rows: 1 }} />"} language="tsx" />
+
+### Grid layout
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ layout: 'grid', paginator: false }} />
+</div>
+
+<Source code={"<Example initialArgs={{ layout: 'grid', paginator: false }} />"} language="tsx" />
+
+### Pagination
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ layout: 'list', paginator: true, rows: 2 }} />
+</div>
+
+<Source code={"<Example initialArgs={{ layout: 'list', paginator: true, rows: 2 }} />"} language="tsx" />
 
 ## Playground
 
