@@ -361,13 +361,33 @@ const components = [
     prime: 'datatable',
     importName: 'DataTable',
     extraImports: `import { Column } from 'primereact/column';`,
+    docsImports: `import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { products } from "./DataTable.examples";`,
     description: 'Data table with sorting, filtering, pagination, and single-row selection.',
-    renderPrefix: `const products = [
+    renderPrefix: `export const products = [
   { id: '1000', name: 'Bamboo Watch', category: 'Accessories', price: 65 },
-  { id: '1001', name: 'Black Watch', category: 'Accessories', price: 72 }
+  { id: '1001', name: 'Black Watch', category: 'Accessories', price: 72 },
+  { id: '1002', name: 'Blue Band', category: 'Fitness', price: 79 },
+  { id: '1003', name: 'Blue T-Shirt', category: 'Clothing', price: 29 }
 ];`,
     args: `{ value: products, dataKey: 'id', paginator: true, rows: 1, stripedRows: false, showGridlines: false, selectionMode: 'single', selection: null }`,
-    argTypes: `{ paginator: { control: 'boolean' }, stripedRows: { control: 'boolean' }, showGridlines: { control: 'boolean' }, rows: { control: 'number' } }`,
+    argTypes: `{ paginator: { control: 'boolean' }, stripedRows: { control: 'boolean' }, showGridlines: { control: 'boolean' }, rows: { control: 'number' }, size: { control: 'inline-radio', options: [undefined, 'small', 'normal', 'large'] }, responsiveLayout: { control: 'inline-radio', options: ['scroll', 'stack'] } }`,
+    docsVariations: [
+      { title: 'Sorting and pagination', code: `<DataTable value={products} dataKey="id" paginator rows={2} sortField="price" sortOrder={-1}>
+  <Column field="name" header="Name" sortable />
+  <Column field="price" header="Price" sortable />
+</DataTable>` },
+      { title: 'Filtering', code: `<DataTable value={products} dataKey="id" filterDisplay="row">
+  <Column field="name" header="Name" filter filterPlaceholder="Search by name" />
+  <Column field="category" header="Category" filter filterPlaceholder="Search by category" />
+</DataTable>` },
+      { title: 'Selection and density', code: `<DataTable value={products} dataKey="id" selectionMode="single" size="small" stripedRows>
+  <Column field="name" header="Name" />
+  <Column field="category" header="Category" />
+  <Column field="price" header="Price" />
+</DataTable>` }
+    ],
     playground: `<DataTable {...args} onSelectionChange={(event) => { updateArgs({ selection: event.value }); args.onSelectionChange?.(event); }}><Column field="name" header="Name" sortable filter /><Column field="category" header="Category" sortable /><Column field="price" header="Price" sortable /></DataTable>`,
   },
   {

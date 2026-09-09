@@ -1,6 +1,9 @@
 import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Example } from "./DataTable.examples";
 import exampleSource from "./DataTable.examples.tsx?raw";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { products } from "./DataTable.examples";
 
 <Meta title="Components/DataTable/Summary" />
 
@@ -16,7 +19,39 @@ import exampleSource from "./DataTable.examples.tsx?raw";
 
 ## Variations
 
-The usage example shows the base composition. Use Default to explore the documented properties.
+### Sorting and pagination
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<DataTable value={products} dataKey="id" paginator rows={2} sortField="price" sortOrder={-1}>
+  <Column field="name" header="Name" sortable />
+  <Column field="price" header="Price" sortable />
+</DataTable>
+</div>
+
+<Source code={"<DataTable value={products} dataKey=\"id\" paginator rows={2} sortField=\"price\" sortOrder={-1}>\n  <Column field=\"name\" header=\"Name\" sortable />\n  <Column field=\"price\" header=\"Price\" sortable />\n</DataTable>"} language="tsx" />
+
+### Filtering
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<DataTable value={products} dataKey="id" filterDisplay="row">
+  <Column field="name" header="Name" filter filterPlaceholder="Search by name" />
+  <Column field="category" header="Category" filter filterPlaceholder="Search by category" />
+</DataTable>
+</div>
+
+<Source code={"<DataTable value={products} dataKey=\"id\" filterDisplay=\"row\">\n  <Column field=\"name\" header=\"Name\" filter filterPlaceholder=\"Search by name\" />\n  <Column field=\"category\" header=\"Category\" filter filterPlaceholder=\"Search by category\" />\n</DataTable>"} language="tsx" />
+
+### Selection and density
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<DataTable value={products} dataKey="id" selectionMode="single" size="small" stripedRows>
+  <Column field="name" header="Name" />
+  <Column field="category" header="Category" />
+  <Column field="price" header="Price" />
+</DataTable>
+</div>
+
+<Source code={"<DataTable value={products} dataKey=\"id\" selectionMode=\"single\" size=\"small\" stripedRows>\n  <Column field=\"name\" header=\"Name\" />\n  <Column field=\"category\" header=\"Category\" />\n  <Column field=\"price\" header=\"Price\" />\n</DataTable>"} language="tsx" />
 
 ## Playground
 
