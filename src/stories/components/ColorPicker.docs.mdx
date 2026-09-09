@@ -6,7 +6,7 @@ import exampleSource from "./ColorPicker.examples.tsx?raw";
 
 <Title>ColorPicker</Title>
 
-<Subtitle>Visual color picker.</Subtitle>
+<Subtitle>Color input used in Sakai forms, with hex, RGB, HSB, inline, disabled, and overlay variations.</Subtitle>
 
 ## Usage
 
@@ -16,11 +16,37 @@ import exampleSource from "./ColorPicker.examples.tsx?raw";
 
 ## Variations
 
+### Inline
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ inline: true, style: undefined }} />
+</div>
+
+<Source code={"<Example initialArgs={{ inline: true, style: undefined }} />"} language="tsx" />
+
+### RGB value
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ value: { r: 25, g: 118, b: 210 }, format: 'rgb' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ value: { r: 25, g: 118, b: 210 }, format: 'rgb' }} />"} language="tsx" />
+
+### HSB value
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ value: { h: 210, s: 88, b: 82 }, format: 'hsb' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ value: { h: 210, s: 88, b: 82 }, format: 'hsb' }} />"} language="tsx" />
+
 ### Disabled
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ disabled: true }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ disabled: true }} />"} language="tsx" />
 
 ## Playground
 

@@ -113,6 +113,42 @@ Chromium was installed for the existing Playwright dependency. The environment l
 
 Implementation and validation are local. Issue #69 and its existing component issues remain open until the changes are reviewed and merged, as required by the GitHub workflow. No issue is considered completed solely by this audit record.
 
+## ColorPicker review — issue #19
+
+### Sources and scope
+
+Inspected Button docs/story, the ColorPicker generator entry and generated files, Sakai `app/(main)/uikit/input/page.tsx`, and the installed PrimeReact 10.9.7 `colorpicker/colorpicker.d.ts`, implementation, pass-through types, and component-base types. The Sakai example uses a controlled hex value, a two-rem preview, and the native `onChange` event. ColorPicker remains a single color input; no unrelated form-layout or application actions were added.
+
+### API inventory
+
+| Native API surface | Treatment |
+| --- | --- |
+| `value` and `format` | Exposed in Default Controls. `value` retains the native hex string, RGB object, HSB object, or `undefined` modes; `format` retains `hex`, `rgb`, and `hsb`. The adapter updates Controls with the event value without converting or narrowing it. |
+| `onChange` | Wrapped only to synchronize `value` through `useArgs`/local Example state, then invokes the supplied callback with the original event. |
+| `inline`, `defaultColor`, `disabled`, `autoFocus`, `inputId`, `inputRef`, `inputStyle`, `inputClassName`, `panelClassName`, `panelStyle`, `tooltip`, `tooltipOptions`, `transitionOptions`, `appendTo`, `children`, `unstyled` | Native props are passed through unchanged. The first nine relevant visual/input props are editable Controls where they are safe and meaningful; DOM refs, overlays, transitions, tooltip configuration, children, unstyled mode, and mount targets remain available to programmatic story args but outside the curated Controls. |
+| `onShow`, `onHide` | Passed through unchanged; no wrapper callback replaces them. |
+| Inherited `React.InputHTMLAttributes<HTMLInputElement>` except native `onChange`, `value`, and `ref` | Passed through by the native component. This includes `id`, `name`, `className`, `style`, `tabIndex`, `aria-*`, data attributes at runtime, input attributes, and inherited clipboard, composition, focus, keyboard, mouse, pointer, touch, drag, selection, animation and transition callbacks. `inputRef` remains the native ref prop; the story does not add ref forwarding. |
+| `pt` | Passed through unchanged. Native sections are `root`, `input`, `panel`, `content`, `selector`, `color`, `colorHandle`, `hue`, `hueHandle`, `tooltip`, `hooks`, and `transition`; user entries are not replaced by wrapper defaults. |
+| `ptOptions` | Passed through unchanged, including native merge sections/props behavior. |
+| Nested models, selection modes, templates | No item model, selection mode, or template API exists. The native value model is the string/RGB/HSB union above; `children` is accepted by the native contract but does not define the picker UI. |
+| Imperative ref API | Native `show`, `hide`, `focus`, `getElement`, `getOverlay`, and `getInput` methods are source-inspected and remain outside the story wrapper examples. |
+
+### Evidence boundaries
+
+`tests/colorpicker-contract.test.mjs` verifies the wrapper's value-mode, prop, pass-through, callback identity, and original-event behavior. The existing focused browser test verifies hue and saturation/brightness interaction. Browser coverage does not certify every inherited DOM event, every pass-through function/hook, portal target, transition callback, imperative ref method, or all string/object value combinations. Those surfaces are source-inspected and forwarded without interception.
+
+### Final validation for issue #19
+
+- `node scripts/generate-component-stories.mjs`: passed; generated changes are limited to ColorPicker.
+- `node --test tests/colorpicker-contract.test.mjs tests/component-generator.test.mjs`: passed, 2 tests.
+- `npm run build`: passed.
+- `npm run build-storybook`: passed; existing large-chunk and plugin-timing warnings remain.
+- `STORYBOOK_URL=http://127.0.0.1:6020 LD_LIBRARY_PATH=/tmp/sakai-browser-libs/usr/lib/x86_64-linux-gnu node --test --test-name-pattern='Slider, Knob, Rating and ColorPicker|ColorPicker: only Summary and Default' tests/component-review.test.mjs`: passed, 2 tests. Summary/Default and hue/color interaction passed at desktop/mobile widths.
+- Manual Playwright visual inspection of Summary and Default at 1280px and 390px: passed; one Default instance rendered and no horizontal overflow was observed.
+- `git diff --check`: passed.
+
+Only Summary/Default are retained. Summary has copyable source for usage, inline, RGB, HSB, and disabled examples; Controls remain on Default only. The Default remains one ColorPicker instance and its stage uses the Sakai two-rem preview style.
+
 ## Card review — issue #13
 
 ### Sources and scope

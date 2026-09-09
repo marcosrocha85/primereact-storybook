@@ -2,7 +2,7 @@ import { useState, type ComponentProps } from 'react';
 import { ColorPicker } from 'primereact/colorpicker';
 
 export type ExampleArgs = ComponentProps<typeof ColorPicker>;
-export const defaultArgs: ExampleArgs = { value: '1976D2' };
+export const defaultArgs: ExampleArgs = { value: '1976D2', format: 'hex', inline: false, defaultColor: 'ff0000', disabled: false, style: { width: '2rem' } };
 
 export function Playground({ args, updateArgs }: {
   args: ExampleArgs;
