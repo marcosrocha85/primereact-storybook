@@ -3,9 +3,11 @@ import { DataTable } from 'primereact/datatable';
 import type { DataTablePropsSingle } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 
-const products = [
+export const products = [
   { id: '1000', name: 'Bamboo Watch', category: 'Accessories', price: 65 },
-  { id: '1001', name: 'Black Watch', category: 'Accessories', price: 72 }
+  { id: '1001', name: 'Black Watch', category: 'Accessories', price: 72 },
+  { id: '1002', name: 'Blue Band', category: 'Fitness', price: 79 },
+  { id: '1003', name: 'Blue T-Shirt', category: 'Clothing', price: 29 }
 ];
 
 export type ExampleArgs = DataTablePropsSingle<typeof products>;

@@ -8,11 +8,11 @@ const meta = {
   title: 'Components/DataTable',
   parameters: {
     layout: 'centered',
-    controls: { include: ["paginator","stripedRows","showGridlines","rows"] },
+    controls: { include: ["paginator","stripedRows","showGridlines","rows","size","responsiveLayout"] },
     docs: { description: { component: 'Data table with sorting, filtering, pagination, and single-row selection.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { paginator: { control: 'boolean' }, stripedRows: { control: 'boolean' }, showGridlines: { control: 'boolean' }, rows: { control: 'number' } }
+  argTypes: { paginator: { control: 'boolean' }, stripedRows: { control: 'boolean' }, showGridlines: { control: 'boolean' }, rows: { control: 'number' }, size: { control: 'inline-radio', options: [undefined, 'small', 'normal', 'large'] }, responsiveLayout: { control: 'inline-radio', options: ['scroll', 'stack'] } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;
