@@ -80,6 +80,22 @@ CODEX_MODEL=your-model CODEX_PROFILE=your-profile bash scripts/implement-issues.
 CHECK_TIMEOUT_SECONDS=1800 bash scripts/implement-issues.sh 13
 ```
 
+To delegate implementation to Qwen in LM Studio, add `--use-qwen`:
+
+```sh
+CODEX_MODEL=your-codex-model bash scripts/implement-issues.sh --use-qwen 21 22
+
+# Optional overrides; these are the defaults.
+QWEN_MODEL=qwen/qwen3-30b-a3b QWEN_BASE_URL=http://127.0.0.1:1234/v1 \
+  bash scripts/implement-issues.sh --use-qwen 21 22
+```
+
+GitHub Issues remains the backlog. Codex generates an implementation plan with exact allowed files; Qwen implements that plan; the controller runs independent validation; Codex reviews the actual diff and validation evidence and generates the PR metadata. Only then does the shell publish and squash the PR, confirm issue closure and prepare `main` for the next issue. Technical review findings return to Codex for a revised plan and Qwen for corrections. Codex never takes over implementation in this mode. Without the flag, the existing Codex-only flow remains in effect.
+
+`CODEX_MODEL` and `CODEX_PROFILE` select the planner/reviewer configuration. Qwen runs through a separate Codex CLI invocation with `--ignore-user-config` and a custom Responses provider pointing to `QWEN_BASE_URL`; it does not receive `CODEX_PROFILE`. Both implementation and planning/review commands have network access for authenticated `gh issue view`, `gh pr view` and `gh pr diff` reads. The prompts explicitly require `gh`, not GitHub connectors, and reserve Git/GitHub writes for the controller. Planning and review use the `issue_runner_readonly` permission profile, and repository fingerprints reject edits during either phase. Remove legacy `sandbox_mode` / `sandbox_workspace_write` settings from the Codex configuration or selected profile when using this mode: Codex gives those older settings precedence over [named permission profiles](https://learn.chatgpt.com/docs/permissions).
+
+Use a recent Codex CLI supporting `--ignore-user-config`, custom Responses providers and named permission profiles (configuration checked with 0.153.4). Start the LM Studio server and make the exact `QWEN_MODEL` ID available at `/v1/models`. The endpoint must be reachable from the shell running this script; for WSL with LM Studio on Windows, set `QWEN_BASE_URL` to the reachable host address if localhost is unavailable. Preflight checks connectivity and the advertised model before branching. It does not verify generation, tool calling or structured output: the LM Studio/model combination must support the Responses requests, tools and JSON schemas used by Codex. Integration tests mock model execution; compatibility with a live Qwen server must be verified separately.
+
 The prompt requires `AGENTS.md`, full issue inspection, a native-API coverage inventory, explicit scope decisions, preservation of forwarded props/callbacks, focused tests and both project builds. An API inventory does not establish exhaustive compatibility. The runner checks the model report, then independently executes both builds, changed Node test files, affected component contract tests, the generator test when applicable, and affected component browser tests against an owned static server on a free localhost port. Browser libraries must also be available to the runner process (`LD_LIBRARY_PATH` is inherited). Commands are selected by the controller, never evaluated from model-provided shell strings. Git state, file contents and GitHub checks remain delivery gates. Automation does not replace independent code review.
 
 Technical implementation/validation failures receive up to three attempts total by default. Each attempt gets the preserved tree and previous diagnosis, report and validation logs. Repeated identical failures with unchanged files and diagnosis stop early. External dependencies, missing permissions and scope decisions stop immediately. CLI failures (including model/version and authentication errors) preserve a checkpoint and require environment repair; they are not blindly retried.
@@ -91,7 +107,11 @@ bash scripts/implement-issues.sh --resume .git/codex-issue-runs/run-XXXXXXXX
 
 `--resume` continues the current issue and the remaining saved queue, with a new bounded attempt budget (1–10). It only accepts a checkpoint produced by this version before delivery starts, on the same branch/base commit and with exactly the saved tracked/untracked file contents and modes. Existing work is never discarded. External edits, interrupted runs with unsaved changes, a published branch, an open implementing PR, or any post-commit checkpoint require manual reconciliation; resume will not guess how to recover those states. Ignored dependencies/build output may be repaired without changing the checkpoint.
 
+Qwen runs save their execution mode, model and endpoint. `--resume` restores those settings without needing `--use-qwen` again. A Codex-only checkpoint cannot switch to Qwen with that flag; start a new run after reconciling the existing work.
+
 Logs and independent validation exit codes live under `.git/codex-issue-runs/run-*/issue-*/attempt-*/`; the Codex transcript is `codex.log`. The runner never uses `git reset --hard`, `git clean`, automatic stashing, admin merges or force-pushing implementation commits. Failed GitHub checks, required approval, changed PR heads and merge timeouts still block delivery and the next issue. Concurrent invocations against the same Git repository are locked out. Automatic retries improve recovery; they do not authorize weakened tests or unrequested scope changes.
+
+With `--use-qwen`, each attempt contains `plan.json`, `implementation.json`, `review.json`, the corresponding prompts/transcripts, and controller validation logs. An early blocker may stop the attempt before later artifacts exist.
 
 The executor uses the [Codex non-interactive interface](https://developers.openai.com/codex/noninteractive/). Validate changes to this automation with:
 

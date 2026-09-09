@@ -3,7 +3,8 @@ import { test } from 'node:test';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { execFileSync, spawnSync } from 'node:child_process';
+import http from 'node:http';
+import { execFileSync, spawnSync, spawn } from 'node:child_process';
 
 const project = process.cwd();
 const gitEnv = { ...process.env, GIT_AUTHOR_NAME: 'Test', GIT_AUTHOR_EMAIL: 'test@example.com', GIT_COMMITTER_NAME: 'Test', GIT_COMMITTER_EMAIL: 'test@example.com' };
@@ -48,6 +49,38 @@ if(program==='npm'){
 if(program==='codex'){
  const prompt=fs.readFileSync(0,'utf8');
  const issue=Number(prompt.match(/Selected issue: #(\\d+)/)[1]);
+ const role=prompt.includes('Role: Codex planner.')?'plan':prompt.includes('Role: Codex reviewer.')?'review':prompt.includes('Role: Qwen implementer.')?'qwen':'codex';
+ state.calls??=[];state.calls.push({role,issue,args});
+ if(role==='plan'){
+  state.events.push('plan:'+issue);save();
+  if(args.includes('--sandbox')||!args.includes('default_permissions="issue_runner_readonly"')||!args.includes('permissions.issue_runner_readonly={ extends = ":read-only", network = { enabled = true } }')||args.includes('--ignore-user-config'))throw Error('Planner isolation/config wrong');
+  const result={status:'ready',blocker_kind:'none',blockers:[],recovery_notes:'Inspect issue and previous diagnostics',plan:'Implement component '+issue+'; preserve callbacks; run focused checks.',allowed_files:['component-'+issue+'.txt']};
+  if(state.scenario==='plan-blocked'){result.status='blocked';result.blocker_kind='scope';result.blockers=['Missing acceptance decision'];}
+  if(state.scenario==='plan-edits')fs.writeFileSync('planner-edit.txt','Must be preserved and rejected');
+  fs.writeFileSync(option('--output-last-message'),JSON.stringify(result));process.exit(0);
+ }
+ if(role==='qwen'){
+  state.events.push('qwen:'+issue);save();
+  if(option('--sandbox')!=='workspace-write'||!args.includes('--ignore-user-config')||args.includes('-p'))throw Error('Qwen inherited cloud config');
+  if(!args.includes('model_provider="issue_runner_qwen"')||!args.includes('sandbox_workspace_write.network_access=true'))throw Error('Wrong Qwen provider/network');
+  if(!prompt.includes('gh issue view')||!prompt.includes('gh pr view')||!prompt.includes('gh pr diff')||!prompt.includes('Do not use connectors/MCP'))throw Error('Missing read-only gh guidance');
+  if(!prompt.includes('Implement component '+issue)||!prompt.includes('allowed_files'))throw Error('Missing Codex plan');
+  fs.writeFileSync('component-'+issue+'.txt','implemented '+issue+'\\n');
+  if(state.scenario==='qwen-extra')fs.writeFileSync('outside-plan.txt','Unplanned change');
+  const result={status:'ready',blocker_kind:'none',blockers:[],recovery_notes:'Implemented the Codex plan',changed_files:['component-'+issue+'.txt']};
+  if(state.scenario==='qwen-blocked'){result.status='blocked';result.blocker_kind='permission';result.blockers=['Cannot run required tool'];}
+  fs.writeFileSync(option('--output-last-message'),JSON.stringify(result));process.exit(0);
+ }
+ if(role==='review'){
+  state.events.push('review:'+issue);save();
+  if(args.includes('--sandbox')||!args.includes('default_permissions="issue_runner_readonly"')||!args.includes('permissions.issue_runner_readonly={ extends = ":read-only", network = { enabled = true } }')||args.includes('--ignore-user-config'))throw Error('Reviewer isolation/config wrong');
+  if(!state.builds)throw Error('Review occurred before controller validation');
+  const result={status:'ready',blocker_kind:'none',blockers:[],recovery_notes:'Reviewed diff and controller logs',pr_title:'Codex reviewed component '+issue,pr_body:'Codex plan and review, Qwen implementation; controller checks passed.',changed_files:['component-'+issue+'.txt'],validations:['npm run build','npm run build-storybook','git diff --check'].map(command=>({command,status:'passed'})),api_review_complete:true};
+  const reviews=state.events.filter(event=>event==='review:'+issue).length;
+  if(state.scenario==='review-blocked'||(state.scenario==='review-once'&&reviews===1)){result.status='blocked';result.blocker_kind='technical';result.blockers=['Missing planned behavior'];result.recovery_notes='Correct missing behavior on next Qwen attempt';}
+  if(state.scenario==='review-edits')fs.writeFileSync('reviewer-edit.txt','Must be preserved and rejected');
+  fs.writeFileSync(option('--output-last-message'),JSON.stringify(result));process.exit(0);
+ }
  state.events.push('codex:'+issue); save();
  if(state.scenario==='codex-failure')process.exit(2);
  fs.writeFileSync('component-'+issue+'.txt','implemented '+issue+'\\n');
@@ -94,11 +127,18 @@ if(args[0]==='repo'&&args[1]==='view'){
 }else {throw Error('Unexpected gh command: '+args.join(' '));}
 `;
   for (const command of ['codex', 'gh', 'npm']) fs.writeFileSync(path.join(bin, command), mock, { mode: 0o755 });
-  const run = (...args) => spawnSync('bash', ['scripts/implement-issues.sh', ...args], {
-    cwd: repo, encoding: 'utf8', timeout: 30000,
-    env: { ...gitEnv, PATH: `${bin}:${process.env.PATH}`, RUNNER_TEST_STATE: state, CHECK_TIMEOUT_SECONDS: '1', ...extraEnv }
+  const runOptions = { cwd: repo, encoding: 'utf8', timeout: 30000,
+    env: { ...gitEnv, PATH: `${bin}:${process.env.PATH}`, RUNNER_TEST_STATE: state, CHECK_TIMEOUT_SECONDS: '1', ...extraEnv } };
+  const run = (...args) => spawnSync('bash', ['scripts/implement-issues.sh', ...args], runOptions);
+  const runAsync = (...args) => new Promise((resolve, reject) => {
+    const child = spawn('bash', ['scripts/implement-issues.sh', ...args], runOptions);
+    let stdout = '', stderr = '';
+    child.stdout.on('data', chunk => { stdout += chunk; });
+    child.stderr.on('data', chunk => { stderr += chunk; });
+    child.on('error', reject);
+    child.on('close', status => resolve({ status, stdout, stderr }));
   });
-  return { repo, git, run, setScenario: scenario => { const value = JSON.parse(fs.readFileSync(state, 'utf8')); value.scenario = scenario; fs.writeFileSync(state, JSON.stringify(value)); }, checkpoint: () => path.join(repo, '.git/codex-issue-runs', fs.readdirSync(path.join(repo, '.git/codex-issue-runs'))[0]), state: () => JSON.parse(fs.readFileSync(state, 'utf8')), cleanup: () => fs.rmSync(temp, { recursive: true, force: true }) };
+  return { repo, git, run, runAsync, setScenario: scenario => { const value = JSON.parse(fs.readFileSync(state, 'utf8')); value.scenario = scenario; fs.writeFileSync(state, JSON.stringify(value)); }, checkpoint: () => path.join(repo, '.git/codex-issue-runs', fs.readdirSync(path.join(repo, '.git/codex-issue-runs'))[0]), state: () => JSON.parse(fs.readFileSync(state, 'utf8')), cleanup: () => fs.rmSync(temp, { recursive: true, force: true }) };
 }
 
 function withFixture(scenario, fn) {
@@ -264,5 +304,95 @@ test('CLI failure can resume after environment repair without discarding files',
     const result = run('--resume', checkpoint());
     assert.equal(result.status, 0, result.stderr + result.stdout);
     assert.deepEqual(state().closed, [13]);
+  });
+});
+
+async function withQwenFixture(scenario, fn, model = 'qwen/qwen3-30b-a3b') {
+  let requests = 0;
+  const server = http.createServer((request, response) => {
+    requests++;
+    assert.equal(request.url, '/v1/models');
+    response.setHeader('Content-Type', 'application/json');
+    response.end(JSON.stringify({ data: scenario === 'missing-model' ? [] : [{ id: model }] }));
+  });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  const setup = fixture(scenario, {
+    CODEX_MODEL: 'selected-codex-model', CODEX_PROFILE: 'selected-profile',
+    QWEN_MODEL: model, QWEN_BASE_URL: `http://127.0.0.1:${server.address().port}/v1`
+  });
+  try { await fn(setup, () => requests); }
+  finally { setup.cleanup(); await new Promise(resolve => server.close(resolve)); }
+}
+
+test('--use-qwen plans and reviews with Codex, implements only with Qwen, then delivers sequentially', async () => {
+  await withQwenFixture('', async ({ runAsync, state, git }) => {
+    const result = await runAsync('--use-qwen', '13', '14');
+    assert.equal(result.status, 0, result.stderr + result.stdout);
+    assert.deepEqual(state().events, ['plan:13', 'qwen:13', 'review:13', 'pr:13', 'merge:13', 'plan:14', 'qwen:14', 'review:14', 'pr:14', 'merge:14']);
+    for (const { role, args } of state().calls) {
+      assert.equal(args[args.indexOf('-m') + 1], role === 'qwen' ? 'qwen/qwen3-30b-a3b' : 'selected-codex-model');
+      assert.equal(args.includes('selected-profile'), role !== 'qwen');
+    }
+    assert.equal(git('status', '--porcelain'), '');
+    assert.equal(git('branch', '--show-current'), 'main');
+  });
+});
+
+test('Codex review findings trigger a new Codex plan and Qwen correction', async () => {
+  await withQwenFixture('review-once', async ({ runAsync, state }) => {
+    const result = await runAsync('--use-qwen', '13');
+    assert.equal(result.status, 0, result.stderr + result.stdout);
+    assert.deepEqual(state().events, ['plan:13', 'qwen:13', 'review:13', 'plan:13', 'qwen:13', 'review:13', 'pr:13', 'merge:13']);
+  });
+});
+
+for (const scenario of ['plan-blocked', 'qwen-blocked', 'review-blocked', 'plan-edits', 'review-edits', 'qwen-extra', 'actual-build-failure']) {
+  test(`delegated mode preserves changes and never delivers on ${scenario}`, async () => {
+    await withQwenFixture(scenario, async ({ runAsync, state, git }) => {
+      const result = await runAsync('--use-qwen', '13', '14');
+      assert.notEqual(result.status, 0, result.stdout);
+      assert.ok(!state().events.includes('pr:13'));
+      assert.ok(!state().events.includes('plan:14'));
+      assert.ok(!state().events.includes('codex:13'), 'No fallback to Codex implementation');
+      assert.equal(git('branch', '--show-current'), 'codex/issue-13');
+      if (scenario === 'plan-blocked') assert.ok(!state().events.includes('qwen:13'));
+      if (scenario === 'actual-build-failure') assert.ok(state().events.includes('review:13'), 'Codex gets the failing controller evidence');
+    });
+  });
+}
+
+test('resume retains Qwen mode and model without repeating the flag', async () => {
+  await withQwenFixture('review-blocked', async ({ runAsync, setScenario, checkpoint, state }) => {
+    assert.notEqual((await runAsync('--use-qwen', '13', '14')).status, 0);
+    setScenario('');
+    const result = await runAsync('--resume', checkpoint());
+    assert.equal(result.status, 0, result.stderr + result.stdout);
+    assert.deepEqual(state().closed, [13, 14]);
+    assert.ok(state().calls.filter(call => call.role === 'qwen').every(call => call.args.includes('custom-qwen-id')));
+  }, 'custom-qwen-id');
+});
+
+test('Qwen preflight and dry-run never start implementation when the model is missing', async () => {
+  await withQwenFixture('missing-model', async ({ runAsync, state, git }, requests) => {
+    const dryRun = await runAsync('--use-qwen', '--dry-run', '13');
+    assert.equal(dryRun.status, 0);
+    assert.match(dryRun.stdout, /Codex plan -> Qwen implementation/);
+    assert.equal(requests(), 0);
+    const result = await runAsync('--use-qwen', '13');
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /does not advertise/);
+    assert.deepEqual(state().events, []);
+    assert.equal(git('branch', '--show-current'), 'main');
+  });
+});
+
+test('an existing Codex-only checkpoint cannot silently switch into Qwen mode', () => {
+  withFixture('technical-stuck', ({ run, checkpoint, state }) => {
+    assert.notEqual(run('13').status, 0);
+    const events = [...state().events];
+    const result = run('--use-qwen', '--resume', checkpoint());
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /Cannot enable --use-qwen/);
+    assert.deepEqual(state().events, events);
   });
 });
