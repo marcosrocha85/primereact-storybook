@@ -9,11 +9,11 @@ const meta = {
   component: ContextMenu,
   parameters: {
     layout: 'centered',
-    controls: { include: ["model"] },
-    docs: { description: { component: 'Context-triggered menu.' }, source: { code: exampleSource } }
+    controls: { include: ["model","ariaLabel","global","breakpoint","scrollHeight","autoZIndex"] },
+    docs: { description: { component: 'Popup menu opened by a context click or an equivalent keyboard command.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { model: { control: 'object' } }
+  argTypes: { model: { control: 'object' }, ariaLabel: { control: 'text' }, global: { control: 'boolean' }, breakpoint: { control: 'text' }, scrollHeight: { control: 'text' }, autoZIndex: { control: 'boolean' } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;
