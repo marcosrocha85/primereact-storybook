@@ -496,11 +496,25 @@ test('InputNumber supports currency', async () => {
 
 test('Chips adds/removes tokens and InputMask retains formatted input', async () => {
   await open('Chips');
-  await page.locator('input').fill('First');
-  await page.locator('input').press('Enter');
+  const input = page.locator('input');
+  await input.fill('First');
+  await input.press('Enter');
   await page.locator('.p-chips-token').filter({ hasText: 'First' }).waitFor();
-  await page.locator('.p-chips-token-icon').click();
-  await page.locator('.p-chips-token').waitFor({ state: 'hidden' });
+  const chip = page.locator('.p-chips-token').filter({ hasText: 'First' }).first();
+  const label = chip.locator('.p-chips-token-label');
+  const icon = chip.locator('.p-chips-token-icon');
+  const labelBounds = await label.boundingBox();
+  const iconBounds = await icon.boundingBox();
+  assert.ok(labelBounds && iconBounds, 'Chip label and remove icon are visible');
+  assert.equal(Math.abs((labelBounds.y + labelBounds.height / 2) - (iconBounds.y + iconBounds.height / 2)) < 3, true, 'Chip label and remove icon are aligned');
+  assert.equal(await label.isVisible(), true);
+  await icon.click();
+  await chip.waitFor({ state: 'hidden' });
+  await input.fill('Second');
+  await input.press('Enter');
+  await page.locator('.p-chips-token-label').filter({ hasText: 'Second' }).waitFor();
+  await input.press('Backspace');
+  await page.locator('.p-chips-token').filter({ hasText: 'Second' }).waitFor({ state: 'hidden' });
   await open('InputMask');
   await page.locator('input').fill('09062026');
   await page.locator('input').press('Tab');

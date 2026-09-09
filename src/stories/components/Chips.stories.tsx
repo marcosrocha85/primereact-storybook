@@ -9,14 +9,24 @@ const meta = {
   component: Chips,
   parameters: {
     layout: 'centered',
-    controls: { include: ["value","placeholder","separator","disabled"] },
+    controls: { include: ["value","placeholder","separator","disabled","readOnly","invalid","variant","removable","allowDuplicate","addOnBlur","max"] },
     docs: { description: { component: 'Multi-value input rendered as chips.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
   argTypes: { value: { control: 'object' },
     placeholder: { control: 'text' },
     separator: { control: 'text' },
-    disabled: { control: 'boolean' }
+    disabled: { control: 'boolean' },
+    readOnly: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    variant: {
+      control: 'inline-radio',
+      options: [undefined, 'outlined', 'filled']
+    },
+    removable: { control: 'boolean' },
+    allowDuplicate: { control: 'boolean' },
+    addOnBlur: { control: 'boolean' },
+    max: { control: 'number' }
   }
 } satisfies Meta<ExampleArgs>;
 
