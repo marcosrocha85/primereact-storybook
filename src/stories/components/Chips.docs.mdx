@@ -18,9 +18,35 @@ import exampleSource from "./Chips.examples.tsx?raw";
 
 ### Disabled
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ disabled: true }} />
+</div>
 
 <Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+
+### Read only
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ value: ['Chicago', 'New York'], readOnly: true }} />
+</div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ value: ['Chicago', 'New York'], readOnly: true }} />"} language="tsx" />
+
+### Invalid
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ value: ['Invalid'], invalid: true }} />
+</div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ value: ['Invalid'], invalid: true }} />"} language="tsx" />
+
+### Filled
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ value: ['Piano', 'Keyboard'], variant: 'filled' }} />
+</div>
+
+<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ value: ['Piano', 'Keyboard'], variant: 'filled' }} />"} language="tsx" />
 
 ## Playground
 

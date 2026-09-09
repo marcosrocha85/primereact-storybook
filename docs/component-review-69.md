@@ -355,3 +355,46 @@ through URL args. Inspection found the real accessible Code tabpanel and Storybo
 and actual image Controls; no component behavior or valid assertion was removed.
 No previous diagnostic/result/validation/patch files existed in the supplied recovery
 directory. No full browser suite was run. The temporary static server was stopped.
+
+### Chips — issue #18 API review
+
+Inspected Button, Sakai's input-related UI Kit pages at
+`vendor/sakai-react/app/(main)/uikit/input/page.tsx` and
+`vendor/sakai-react/app/(main)/uikit/floatlabel/page.tsx`, plus installed PrimeReact
+`chips/chips.d.ts` and `chips/chips.esm.js`.
+
+| API surface | Treatment |
+| --- | --- |
+| `value`, `placeholder`, `separator`, `max`, `addOnBlur`, `allowDuplicate`, `autoFocus`, `name`, `inputId`, `inputRef`, `ariaLabelledBy`, `readOnly`, `invalid`, `disabled`, `variant`, `removable`, `removeIcon`, `keyfilter`, `tooltip`, `tooltipOptions` | Exposed and/or preserved in source inspection with full native contract intent. Controls include `value` and text/boolean fields; function-valued options (`removeIcon`, function templates, keyfilters with custom objects, render functions) are intentionally outside curated controls and are forwarded unchanged when set through props.
+| `itemTemplate` | Exposed by source inspection only and forwarded unchanged when supplied by story users.
+| `onAdd` / `ChipsAddEvent` | Forwarded unchanged. When supplied and returning `false`, native Chips skips insertion and `onChange` emits an unchanged value; wrapper sync uses `event.value`.
+| `onRemove` / `ChipsRemoveEvent` | Forwarded unchanged; return value is preserved and forwarded to callers. Native `onRemove` does not honor a false cancel contract, and the wrapper does not add one.
+| `onChange` / `ChipsChangeEvent` | Wrapped to sync `value` and forward the event. `event.value` is normalized to `[]` when `undefined` before state sync.
+| `onFocus`, `onBlur`, `onKeyDown` and inherited DOM callbacks | Passed through unchanged.
+| `pt` / `ChipsPassThroughOptions` | Forwarded without wrapper defaults: sections `root`, `container`, `token`, `label`, `removeTokenIcon`, `inputToken`, `input`, `tooltip`, and `hooks` remain native.
+| `ptOptions`, `unstyled` | Forwarded unchanged.
+| `children` | Forwarded by spread. Native Chips does not consume children for rendering.
+| `id`, `className`, `style`, `tabIndex`, `title`, `aria-*`, `data-*` and inherited DOM attributes/events | Forwarded unchanged via inherited `InputHTMLAttributes<HTMLDivElement>` minus `onChange`, `onFocus`, `onBlur`, `onKeyDown`, and `ref`, as declared by PrimeReact.
+| `focus`, `getElement`, `getInput` | Ref-forwarded native methods are not adapted or wrapped.
+
+### Evidence and validation boundaries
+
+Contract tests cover forwarded prop/attribute identity, event forwarding, callback
+invocation, and value sync behavior, including undefined `onChange` normalization.
+Browser checks cover token creation and removal by icon and backspace, plus token
+label/remove-icon alignment. Template rendering beyond plain string values, all
+keyfilter variants, and all pass-through callback combinations are source-inspected but
+not exhaustively validated.
+
+Validation for this revision:
+- `node scripts/generate-component-stories.mjs`: executed (generated 62 component story sets; preserved 5 manual components).
+- `node --test tests/chips-contract.test.mjs`: passed.
+- `node --test tests/component-generator.test.mjs`: passed.
+- `npm run build`: passed.
+- `npm run build-storybook`: passed.
+- `STORYBOOK_URL=http://127.0.0.1:6006 node --test --test-name-pattern='Chips' tests/component-review.test.mjs`: passed.
+- `git diff --check`: passed.
+
+### Recovery attempt 4
+
+No separate prior recovery artifact existed for this specific Chips pass.

@@ -170,8 +170,30 @@ const components = [
     argTypes: `{
     placeholder: { control: 'text' },
     separator: { control: 'text' },
-    disabled: { control: 'boolean' }
+    disabled: { control: 'boolean' },
+    readOnly: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    variant: {
+      control: 'inline-radio',
+      options: [undefined, 'outlined', 'filled']
+    },
+    removable: { control: 'boolean' },
+    allowDuplicate: { control: 'boolean' },
+    addOnBlur: { control: 'boolean' },
+    max: { control: 'number' }
   }`,
+    docsVariations: [
+      ...[
+        ['Disabled', '{ disabled: true }'],
+        ['Read only', "{ value: ['Chicago', 'New York'], readOnly: true }"],
+        ['Invalid', "{ value: ['Invalid'], invalid: true }"],
+        ['Filled', "{ value: ['Piano', 'Keyboard'], variant: 'filled' }"]
+      ].map(([title, args]) => ({
+        title,
+        code: `<Example initialArgs={${args}} />`,
+        source: 'exampleSource + ' + JSON.stringify('\n// Render this variation:\n<Example initialArgs={' + args + '} />')
+      }))
+    ],
     playground: `<Chips {...args} onChange={(event) => { updateArgs({ value: event.value ?? [] }); args.onChange?.(event); } } />`,
   },
   {
