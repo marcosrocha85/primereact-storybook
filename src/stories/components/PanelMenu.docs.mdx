@@ -16,7 +16,29 @@ import exampleSource from "./PanelMenu.examples.tsx?raw";
 
 ## Variations
 
-The usage example shows the base composition. Use Default to explore the documented properties.
+### Multiple expanded panels
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ multiple: true }} />
+</div>
+
+<Source code={exampleSource + "\n// Allow more than one panel to stay expanded:\n<Example initialArgs={{ multiple: true }} />"} language="tsx" />
+
+### Disabled and hidden items
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ model: [{ label: 'Customers', icon: 'pi pi-users', items: [{ label: 'Directory', disabled: true }, { label: 'Hidden', visible: false }] }] }} />
+</div>
+
+<Source code={exampleSource + "\n// Disable or hide individual menu items:\n<Example initialArgs={{ model: [{ label: 'Customers', icon: 'pi pi-users', items: [{ label: 'Directory', disabled: true }, { label: 'Hidden', visible: false }] }] }} />"} language="tsx" />
+
+### Custom submenu icons
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ expandIcon: 'pi pi-angle-right', collapseIcon: 'pi pi-angle-down' }} />
+</div>
+
+<Source code={exampleSource + "\n// Customize collapsed and expanded indicators:\n<Example initialArgs={{ expandIcon: 'pi pi-angle-right', collapseIcon: 'pi pi-angle-down' }} />"} language="tsx" />
 
 ## Playground
 

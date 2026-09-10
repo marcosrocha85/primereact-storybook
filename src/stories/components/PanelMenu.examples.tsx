@@ -2,7 +2,7 @@ import { useState, type ComponentProps } from 'react';
 import { PanelMenu } from 'primereact/panelmenu';
 import { menuWithActions } from '../menuExamples';
 
-const items = [{ label: 'Customers', icon: 'pi pi-fw pi-table', items: [{ label: 'New', icon: 'pi pi-fw pi-plus' }] }];
+const items = [{ label: 'Customers', icon: 'pi pi-fw pi-table', items: [{ label: 'New', icon: 'pi pi-fw pi-plus' }, { label: 'Directory', icon: 'pi pi-fw pi-list' }] }, { label: 'Orders', icon: 'pi pi-fw pi-shopping-cart', items: [{ label: 'Recent orders', icon: 'pi pi-fw pi-clock' }] }];
 
 export type ExampleArgs = ComponentProps<typeof PanelMenu>;
 export const defaultArgs: ExampleArgs = { model: items, style: { width: '20rem' } };

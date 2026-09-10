@@ -105,6 +105,22 @@ The inventory is source inspection, not exhaustive behavioral testing. The focus
 
 ## Component audit
 
+### PanelMenu API inventory — issue #44
+
+The inventory below is based on the installed PrimeReact `PanelMenuProps`, `MenuItem`, pass-through declarations and implementation, plus the Sakai UI Kit menu source. It records the native contract reviewed for this issue; it is not exhaustive interaction testing.
+
+| API surface | Treatment |
+| --- | --- |
+| `model` (`MenuItem[]`, including nested items) | Exposed as an object Control and adapted only to decorate leaf commands with local feedback. The recursive adapter preserves every item property, nested structure and each supplied `item.command` before reporting the selected label. |
+| `expandedKeys` / `onExpandedKeysChange` | Passed through unchanged for native controlled expansion. They are outside the curated Controls because the playground does not synthesize a key map or narrow the native value. |
+| `multiple` | Exposed as a boolean Control and passed through unchanged; the Summary demonstrates multiple top-level panels remaining open. |
+| `expandIcon`, `collapseIcon`, `transitionOptions` | Passed through unchanged and intentionally outside the curated Controls because icon values support strings, React nodes and functions, while transition options are a native configuration object. Custom string icons are shown in Summary. |
+| `onOpen`, `onClose`, `onExpandedKeysChange`, inherited `HTMLAttributes<HTMLDivElement>` (`onFocus`, `onBlur`, `onKeyDown`, ARIA/data attributes, `id`, `className`, `style`, and other DOM attributes) | Forwarded unchanged through `{...args}`. Supplied callbacks and DOM attributes remain available; the wrapper does not replace them. |
+| `pt`, `ptOptions`, `unstyled`, `children` | Forwarded unchanged. Native root, panel, header, action, icon, label, menu, menuitem, transition and lifecycle pass-through sections remain available; no wrapper PT defaults replace caller values. |
+| Templates, selection/value modes, filtering and imperative methods | Not applicable or native-only. PanelMenu has no component-level selection value or filtering model; `getElement()` remains available through the native ref and outside Controls. `MenuItem.template` remains part of the forwarded model and is not represented in the curated examples. |
+
+The inventory is source inspection, not exhaustive behavioral testing. The focused contract test verifies prop spreading, recursive command preservation and the Summary/Default structure. The component browser check verifies panel expansion, leaf command feedback, Controls synchronization, copyable sources and desktop/mobile rendering. Every callback form, pass-through callback, transition option, icon function, template, inherited DOM event and ref method remains forwarded but is not exhaustively tested.
+
 ### Message API inventory — issue #40
 
 The inventory below is based on the installed PrimeReact `MessageProps` declaration and implementation, plus the Sakai UI Kit message page at `vendor/sakai-react/app/(main)/uikit/message/page.tsx`. It records the native contract reviewed for this issue; it is not an exhaustive interaction test.

@@ -1115,10 +1115,30 @@ import { menuWithActions } from '../menuExamples';`,
     hooks: `const [action, setAction] = useState('No action yet');`,
     extraImports: `import { menuWithActions } from '../menuExamples';`,
     description: 'Menu with expandable panels.',
-    renderPrefix: `const items = [{ label: 'Customers', icon: 'pi pi-fw pi-table', items: [{ label: 'New', icon: 'pi pi-fw pi-plus' }] }];`,
+    renderPrefix: `const items = [{ label: 'Customers', icon: 'pi pi-fw pi-table', items: [{ label: 'New', icon: 'pi pi-fw pi-plus' }, { label: 'Directory', icon: 'pi pi-fw pi-list' }] }, { label: 'Orders', icon: 'pi pi-fw pi-shopping-cart', items: [{ label: 'Recent orders', icon: 'pi pi-fw pi-clock' }] }];`,
     args: `{ model: items, style: { width: '20rem' } }`,
-    argTypes: `{ multiple: { control: 'boolean' } }`,
+    argTypes: `{
+    model: { control: 'object', description: 'MenuItem[] with nested items for expandable panels and leaf actions.' },
+    multiple: { control: 'boolean', description: 'Allow multiple top-level panels to stay expanded.' }
+  }`,
     playground: `<><PanelMenu {...args} model={menuWithActions(args.model ?? [], setAction)} /><p role="status">{action}</p></>`,
+    docsVariations: [
+      {
+        title: 'Multiple expanded panels',
+        code: `<Example initialArgs={{ multiple: true }} />`,
+        source: 'exampleSource + ' + JSON.stringify('\n// Allow more than one panel to stay expanded:\n<Example initialArgs={{ multiple: true }} />')
+      },
+      {
+        title: 'Disabled and hidden items',
+        code: `<Example initialArgs={{ model: [{ label: 'Customers', icon: 'pi pi-users', items: [{ label: 'Directory', disabled: true }, { label: 'Hidden', visible: false }] }] }} />`,
+        source: 'exampleSource + ' + JSON.stringify('\n// Disable or hide individual menu items:\n<Example initialArgs={{ model: [{ label: \'Customers\', icon: \'pi pi-users\', items: [{ label: \'Directory\', disabled: true }, { label: \'Hidden\', visible: false }] }] }} />')
+      },
+      {
+        title: 'Custom submenu icons',
+        code: `<Example initialArgs={{ expandIcon: 'pi pi-angle-right', collapseIcon: 'pi pi-angle-down' }} />`,
+        source: 'exampleSource + ' + JSON.stringify('\n// Customize collapsed and expanded indicators:\n<Example initialArgs={{ expandIcon: \'pi pi-angle-right\', collapseIcon: \'pi pi-angle-down\' }} />')
+      }
+    ],
   },
   {
     name: 'Toast',

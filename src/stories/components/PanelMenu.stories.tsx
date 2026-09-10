@@ -9,11 +9,14 @@ const meta = {
   component: PanelMenu,
   parameters: {
     layout: 'centered',
-    controls: { include: ["multiple"] },
+    controls: { include: ["model","multiple"] },
     docs: { description: { component: 'Menu with expandable panels.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { multiple: { control: 'boolean' } }
+  argTypes: {
+    model: { control: 'object', description: 'MenuItem[] with nested items for expandable panels and leaf actions.' },
+    multiple: { control: 'boolean', description: 'Allow multiple top-level panels to stay expanded.' }
+  }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;
