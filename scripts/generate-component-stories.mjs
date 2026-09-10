@@ -1202,11 +1202,17 @@ const items: MenuItem[] = [
     name: 'TabMenu',
     prime: 'tabmenu',
     importName: 'TabMenu',
-    description: 'Tabbed menu.',
-    renderPrefix: `const items = [{ label: 'Home', icon: 'pi pi-fw pi-home' }, { label: 'Calendar', icon: 'pi pi-fw pi-calendar' }];`,
-    args: `{ model: items, activeIndex: 0 }`,
-    argTypes: `{ activeIndex: { control: 'number' } }`,
-    playground: `<TabMenu {...args} onTabChange={(event) => { updateArgs({ activeIndex: event.index }); args.onTabChange?.(event); } } />`,
+    extraImports: `import type { MenuItem } from 'primereact/menuitem';`,
+    description: 'Tabbed menu for navigation and command items, with active, disabled, icon, and link states.',
+    renderPrefix: `const items: MenuItem[] = [{ label: 'Home', icon: 'pi pi-fw pi-home' }, { label: 'Calendar', icon: 'pi pi-fw pi-calendar' }];`,
+    args: `{ model: items, activeIndex: 0, className: '', style: {} }`,
+    argTypes: `{ model: { control: 'object', description: 'MenuItem[] used to render the tab headers.' }, activeIndex: { control: 'number' }, className: { control: 'text' }, style: { control: 'object' } }`,
+    playground: `<div style={{ width: 'min(40rem, calc(100vw - 2rem))', maxWidth: '100%', minWidth: 0 }}><TabMenu {...args} onTabChange={(event) => { updateArgs({ activeIndex: event.index }); args.onTabChange?.(event); } } /></div>`,
+    docsVariations: [
+      { title: 'Icons', code: `<Example initialArgs={{ model: [{ label: 'Dashboard', icon: 'pi pi-home' }, { label: 'Calendar', icon: 'pi pi-calendar' }, { label: 'Settings', icon: 'pi pi-cog' }] }} />` },
+      { title: 'Disabled item', code: `<Example initialArgs={{ model: [{ label: 'Available' }, { label: 'Disabled', disabled: true }, { label: 'Another item' }] }} />` },
+      { title: 'Links and active item', code: `<Example initialArgs={{ activeIndex: 1, model: [{ label: 'Documentation', url: '#documentation' }, { label: 'Examples', url: '#examples' }] }} />` }
+    ],
   },
   {
     name: 'TieredMenu',
