@@ -6,7 +6,7 @@ import exampleSource from "./Steps.examples.tsx?raw";
 
 <Title>Steps</Title>
 
-<Subtitle>Step-based flow.</Subtitle>
+<Subtitle>Workflow step indicator with selectable, disabled, icon, and read-only states.</Subtitle>
 
 ## Usage
 
@@ -16,7 +16,29 @@ import exampleSource from "./Steps.examples.tsx?raw";
 
 ## Variations
 
-The usage example shows the base composition. Use Default to explore the documented properties.
+### Icons
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div style={{ width: '100%' }}><Example initialArgs={{ model: [{ label: 'Personal', icon: 'pi pi-user' }, { label: 'Seat', icon: 'pi pi-ticket' }, { label: 'Payment', icon: 'pi pi-credit-card' }] }} /></div>
+</div>
+
+<Source code={exampleSource + "\n// Add icons to the workflow steps:\n<div style={{ width: '100%' }}><Example initialArgs={{ model: [{ label: 'Personal', icon: 'pi pi-user' }, { label: 'Seat', icon: 'pi pi-ticket' }, { label: 'Payment', icon: 'pi pi-credit-card' }] }} /></div>"} language="tsx" />
+
+### Disabled step
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div style={{ width: '100%' }}><Example initialArgs={{ model: [{ label: 'Personal' }, { label: 'Seat', disabled: true }, { label: 'Payment' }], readOnly: false }} /></div>
+</div>
+
+<Source code={exampleSource + "\n// Disable an unavailable step:\n<div style={{ width: '100%' }}><Example initialArgs={{ model: [{ label: 'Personal' }, { label: 'Seat', disabled: true }, { label: 'Payment' }], readOnly: false }} /></div>"} language="tsx" />
+
+### Read-only
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div style={{ width: '100%' }}><Example initialArgs={{ activeIndex: 1, readOnly: true }} /></div>
+</div>
+
+<Source code={exampleSource + "\n// Render a non-interactive progress indicator:\n<div style={{ width: '100%' }}><Example initialArgs={{ activeIndex: 1, readOnly: true }} /></div>"} language="tsx" />
 
 ## Playground
 
