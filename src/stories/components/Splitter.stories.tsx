@@ -9,11 +9,18 @@ const meta = {
   component: Splitter,
   parameters: {
     layout: 'centered',
-    controls: { include: ["layout","gutterSize"] },
+    controls: { include: ["layout","gutterSize","step","className","style","unstyled"] },
     docs: { description: { component: 'Resizable panel layout.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { layout: { control: 'inline-radio', options: ['horizontal', 'vertical'] }, gutterSize: { control: 'number' } }
+  argTypes: {
+    layout: { control: 'inline-radio', options: ['horizontal', 'vertical'] },
+    gutterSize: { control: 'number' },
+    step: { control: 'number' },
+    className: { control: 'text' },
+    style: { control: 'object' },
+    unstyled: { control: 'boolean' }
+  }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;

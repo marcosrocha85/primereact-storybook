@@ -1237,3 +1237,27 @@ Controls placement, responsive rendering, and no runtime exceptions. Custom item
 pointer sequences, filter templates/locales, icon function forms, PT callbacks, inherited DOM
 events, keyboard multi-selection, and the imperative ref method remain forwarded but are not
 exhaustively tested.
+
+### Splitter API audit — issue #57
+
+Inspected the Button documentation/story reference, the Splitter generator entry and generated
+files, the Sakai UI Kit panel example at `vendor/sakai-react/app/(main)/uikit/panel/page.tsx`, and
+the installed PrimeReact `splitter.d.ts` and implementation. The curated Summary covers panel
+sizes/minimum sizes, vertical orientation, nested panels, and keyboard resize steps. Default
+remains one native Splitter instance and preserves caller-supplied children when provided.
+
+| Native surface | Treatment |
+| --- | --- |
+| `layout`, `gutterSize`, `step` | Exposed through focused Default Controls and passed through unchanged. Horizontal/vertical orientation, gutter width, and keyboard resize increments are documented or represented in the playground. |
+| `children` and `SplitterPanel` (`size`, `minSize`, `children`) | Passed through unchanged. The playground supplies a two-panel fallback only when `args.children` is absent; nested Splitter compositions remain supported through native children. |
+| `stateKey`, `stateStorage` | Passed through unchanged and intentionally outside the curated Controls. Stateful session/local persistence remains available through native args without adding persistent state to the default example. |
+| `onResizeEnd` | Passed through unchanged. PrimeReact's native event contains `originalEvent` and the resulting numeric `sizes` array; the story does not replace or coerce it. Pointer resizing is covered by the component browser check. |
+| `className`, `style`, `id`, `aria-*`, `data-*`, inherited `HTMLAttributes<HTMLDivElement>`, and DOM events | Forwarded unchanged through `{...args}`. This includes focus, blur, keyboard, mouse, pointer, touch, drag, clipboard, animation, transition, and capture handlers. |
+| `pt`, `ptOptions`, `unstyled` | Forwarded unchanged; no wrapper PT defaults replace caller values. Native root, gutter, gutter handler, panel root, and lifecycle pass-through sections remain available. `unstyled` is exposed as a focused visual Control. |
+| Templates, selection/value modes, and imperative API | Not applicable to Splitter. It has no item/template or controlled selection/value model; the native `getElement()` ref method remains available but outside Controls. |
+
+This inventory is source inspection, not exhaustive behavioral testing. The focused component
+browser check verifies pointer resizing, Summary/Default structure, copyable sources, Controls
+placement, and desktop/mobile rendering. Stateful persistence, keyboard and touch resize paths,
+custom panel templates/children, every inherited DOM event, PT callback form, callback invocation,
+and the imperative ref method remain forwarded or source-inspected but are not exhaustively tested.
