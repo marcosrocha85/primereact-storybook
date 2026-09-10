@@ -9,11 +9,11 @@ const meta = {
   component: Message,
   parameters: {
     layout: 'centered',
-    controls: { include: ["severity","text"] },
-    docs: { description: { component: 'Inline message.' }, source: { code: exampleSource } }
+    controls: { include: ["severity","text","icon"] },
+    docs: { description: { component: 'Inline message used for validation feedback and status information.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { severity: { control: 'select', options: ['success', 'info', 'warn', 'error'] }, text: { control: 'text' } }
+  argTypes: { severity: { control: 'select', options: [undefined, 'success', 'info', 'warn', 'error', 'secondary', 'contrast'] }, text: { control: 'text' }, icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;

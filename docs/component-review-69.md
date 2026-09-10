@@ -105,6 +105,23 @@ The inventory is source inspection, not exhaustive behavioral testing. The focus
 
 ## Component audit
 
+### Message API inventory — issue #40
+
+The inventory below is based on the installed PrimeReact `MessageProps` declaration and implementation, plus the Sakai UI Kit message page at `vendor/sakai-react/app/(main)/uikit/message/page.tsx`. It records the native contract reviewed for this issue; it is not an exhaustive interaction test.
+
+| API surface | Treatment |
+| --- | --- |
+| `severity` (`success`, `info`, `warn`, `error`, `secondary`, `contrast`) | Exposed through Default Controls and passed through unchanged. The Summary curates every supported severity. |
+| `text` (`ReactNode` or function) | Exposed as a text Control and passed through unchanged. React-node/function forms remain supported through native story args but are outside the curated examples. |
+| `icon` (`IconType`) | Exposed through the Button-compatible select Control, including the no-icon option, and passed through unchanged. Summary demonstrates custom PrimeIcons; component-generated severity icons remain native behavior when unset. |
+| `content` (`ReactNode` or function) | Passed through unchanged and intentionally outside the curated Controls; it is the native custom-content alternative to `text`. |
+| `children` | Forwarded unchanged through the native props spread; no child composition is required by the component's documented API and it is outside the curated examples. |
+| `id`, `className`, `style`, ARIA/data attributes, DOM event handlers and other inherited `HTMLAttributes<HTMLDivElement>` | Forwarded unchanged through `{...args}` and intentionally outside the curated Controls. |
+| `pt`, `ptOptions`, `unstyled` | Forwarded unchanged. Native pass-through sections (`root`, `icon`, `text`, `hooks`) and unstyled mode remain available through native story args; no wrapper defaults replace user customizations. |
+| Nested models, selection/value modes, templates beyond `content`, imperative methods | Not applicable or native-only. Message has no option collection, selection value, or item model; its `getElement()` ref method remains outside the curated Controls. |
+
+The story is presentation-only, so state-changing interaction testing is not applicable. The focused browser check verifies the Summary/Default contract, all curated severities, custom icon rendering, Controls placement, copyable sources, runtime safety, and desktop/mobile rendering. Forwarded callback forms, custom content functions, pass-through callbacks, inherited DOM events, unstyled mode, and the ref method remain source-inspected and are not exhaustively tested.
+
 All 67 components pass the same browser checks at 1280×900 and 390×900: exactly one Default, an indexed Summary, the common section order, no Summary Controls, copyable source, no runtime exceptions, loaded example images, and preserved icon fonts. The table lists additional checks; presentation-only components have no state-changing action to exercise. This covers the documented examples, not every upstream prop combination. “Wired” explicitly denotes source inspection in addition to the automated interactions listed, not an independently exercised gesture.
 
 | Component | Existing issue | Additional checks |
