@@ -11,7 +11,15 @@ let server;
 async function run(command, args, env = process.env) {
   console.log(`Validate: ${command} ${args.join(' ')}`);
   fs.writeSync(log, `\n$ ${command} ${args.join(' ')}\n`);
-  const child = spawn(command, args, { env, stdio: ['ignore', log, log] });
+  const child = spawn(command, args, { env, stdio: ['ignore', 'pipe', 'pipe'] });
+  child.stdout.on('data', chunk => {
+    fs.writeSync(log, chunk);
+    process.stdout.write(chunk);
+  });
+  child.stderr.on('data', chunk => {
+    fs.writeSync(log, chunk);
+    process.stderr.write(chunk);
+  });
   const code = await new Promise((resolve, reject) => {
     child.once('error', reject);
     child.once('exit', resolve);

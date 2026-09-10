@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { qwenSettings, qwenArgs, readOnlyArgs, assertPlan, assertImplementation } from './delegation.mjs';
 
@@ -45,14 +45,26 @@ function invariant(state) {
 
 class RunnerFailure extends Error {}
 
-function execute(state, attempt, name, args, prompt, schema, readOnly = false) {
+async function execute(state, attempt, name, args, prompt, schema, readOnly = false) {
   const before = fingerprint();
   fs.writeFileSync(path.join(attempt, `${name}.prompt.md`), prompt);
   const log = fs.openSync(path.join(attempt, `${name}.log`), 'w');
   const resultFile = path.join(attempt, name === 'codex' ? 'result.json' : `${name}.json`);
   console.log(`${name}: ${attempt}`);
-  const execution = spawnSync('codex', [...args, '--output-schema', path.join(support, schema), '--output-last-message', resultFile, '-'], {
-    cwd: root, input: prompt, stdio: ['pipe', log, log], encoding: 'utf8'
+  const child = spawn('codex', [...args, '--output-schema', path.join(support, schema), '--output-last-message', resultFile, '-'], {
+    cwd: root, stdio: ['pipe', 'pipe', 'pipe']
+  });
+  const forward = (stream, destination) => stream.on('data', chunk => {
+    fs.writeSync(log, chunk);
+    destination.write(chunk);
+  });
+  forward(child.stdout, process.stdout);
+  forward(child.stderr, process.stderr);
+  child.stdin.on('error', () => {});
+  child.stdin.end(prompt);
+  const execution = await new Promise(resolve => {
+    child.once('error', error => resolve({ status: null, error }));
+    child.once('close', (status, signal) => resolve({ status, signal }));
   });
   fs.closeSync(log);
   try {
@@ -125,13 +137,13 @@ try {
           // Planning and review retain the chosen cloud model/profile, with read-only file access.
           const context = prompt.slice(0, prompt.indexOf('\n\n'));
           const planPrompt = `${context}\n\n${fs.readFileSync(path.join(support, 'plan.md'), 'utf8')}\nAttempt directory: ${attempt}\nPrevious attempts: ${directory}`;
-          const planFile = execute(state, attempt, 'plan', readOnlyArgs(parameters), planPrompt, 'plan.schema.json', true);
+          const planFile = await execute(state, attempt, 'plan', readOnlyArgs(parameters), planPrompt, 'plan.schema.json', true);
           report = JSON.parse(fs.readFileSync(planFile, 'utf8'));
           assertPlan(report);
           const plan = report;
           const planText = fs.readFileSync(planFile, 'utf8');
           const workerPrompt = `${context}\n\n${fs.readFileSync(path.join(support, 'implement-plan.md'), 'utf8')}\nCodex plan:\n${planText}`;
-          const workerFile = execute(state, attempt, 'implementation', qwenArgs(root, state.qwen), workerPrompt, 'implementation.schema.json');
+          const workerFile = await execute(state, attempt, 'implementation', qwenArgs(root, state.qwen), workerPrompt, 'implementation.schema.json');
           report = JSON.parse(fs.readFileSync(workerFile, 'utf8'));
           if (fs.readFileSync(planFile, 'utf8') !== planText) throw new RunnerFailure('Qwen modified the saved Codex plan');
           const actual = changedFiles();
@@ -142,9 +154,9 @@ try {
           invariant(state);
           if (fingerprint() !== state.fingerprint) throw new RunnerFailure('Validation changed the implementation before Codex review');
           const reviewPrompt = `${context}\n\n${fs.readFileSync(path.join(support, 'review-plan.md'), 'utf8')}\nCodex plan:\n${planText}\nImplementation report: ${workerFile}\nController evidence directory: ${attempt}\nController validation exit: ${validation.status}`;
-          resultFile = execute(state, attempt, 'review', readOnlyArgs(parameters), reviewPrompt, 'result.schema.json', true);
+          resultFile = await execute(state, attempt, 'review', readOnlyArgs(parameters), reviewPrompt, 'result.schema.json', true);
         } else {
-          resultFile = execute(state, attempt, 'codex', parameters, prompt, 'result.schema.json');
+          resultFile = await execute(state, attempt, 'codex', parameters, prompt, 'result.schema.json');
         }
         report = JSON.parse(fs.readFileSync(resultFile, 'utf8'));
         assert.ok(['none', 'technical', 'external', 'permission', 'scope'].includes(report.blocker_kind), 'Missing blocker classification');

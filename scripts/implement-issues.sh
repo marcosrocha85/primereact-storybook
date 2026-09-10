@@ -87,6 +87,37 @@ require_clean() {
 field() {
   node -e 'let v=JSON.parse(require("node:fs").readFileSync(0,"utf8")); for(const k of process.argv[1].split("."))v=v?.[k]; if(v===undefined||v===null)process.exit(1); process.stdout.write(String(v));' "$1"
 }
+format_duration() {
+  local duration=$1
+  if ((duration >= 3600)); then
+    printf '%dh%02dm' "$((duration / 3600))" "$(((duration % 3600) / 60))"
+  elif ((duration >= 60)); then
+    printf '%dm%02ds' "$((duration / 60))" "$((duration % 60))"
+  else
+    printf '%ds' "$duration"
+  fi
+}
+progress_status() {
+  local phase=$1 width=24 filled empty percent elapsed eta='calculating' complete_bar pending_bar
+  ((batch_total > 0)) || return
+  filled=$((batch_completed * width / batch_total))
+  empty=$((width - filled))
+  percent=$((batch_completed * 100 / batch_total))
+  elapsed=$((SECONDS - batch_started))
+  if ((duration_samples > 0)); then
+    local average=$((duration_sum / duration_samples)) remaining
+    remaining=$((average * (batch_total - batch_completed) - (SECONDS - current_started)))
+    ((remaining > 0)) || remaining=0
+    eta="$(format_duration "$remaining")"
+  fi
+  printf -v complete_bar '%*s' "$filled" ''
+  printf -v pending_bar '%*s' "$empty" ''
+  complete_bar=${complete_bar// /#}
+  pending_bar=${pending_bar// /-}
+  printf '\n[%s%s] %3d%% | %d/%d [#%s] %s | elapsed %s | ETA %s\n' \
+    "$complete_bar" "$pending_bar" "$percent" "$current_index" "$batch_total" \
+    "${current_issue:--}" "$phase" "$(format_duration "$elapsed")" "$eta"
+}
 
 require_no_operation
 if [[ -z "$resume_dir" ]]; then
@@ -145,8 +176,19 @@ fi
 codex_args=(-a never exec --sandbox workspace-write -c sandbox_workspace_write.network_access=true -C "$root")
 [[ -z "${CODEX_MODEL:-}" ]] || codex_args+=(-m "$CODEX_MODEL")
 [[ -z "${CODEX_PROFILE:-}" ]] || codex_args+=(-p "$CODEX_PROFILE")
+batch_total=${#issues[@]}
+batch_completed=0
+batch_started=$SECONDS
+duration_sum=0
+duration_samples=0
+current_started=$SECONDS
+current_issue=''
+current_index=0
 
 for issue in "${issues[@]}"; do
+  current_issue=$issue
+  current_index=$((batch_completed + 1))
+  current_started=$SECONDS
   if [[ -z "$resume_dir" ]]; then
     require_clean
     [[ "$(git branch --show-current)" == main ]] || die 'Expected main before starting the next issue.'
@@ -154,9 +196,15 @@ for issue in "${issues[@]}"; do
   issue_dir="$run_dir/issue-$issue"
   mkdir -p "$issue_dir"
   gh issue view "$issue" --repo "$repo" --json number,state,title,body,comments,assignees > "$issue_dir/issue.json"
+  issue_title="$(field title < "$issue_dir/issue.json")"
+  printf '\n========== %d/%d [#%s] %s ==========\n' "$((batch_completed + 1))" "$batch_total" "$issue" "$issue_title"
+  progress_status 'preparing'
   if [[ "$(field state < "$issue_dir/issue.json")" == CLOSED ]]; then
     [[ -z "$resume_dir" ]] || die 'Resumed issue was closed externally; inspect preserved work'
     printf '#%s is closed; skipping.\n' "$issue"
+    batch_completed=$((batch_completed + 1))
+    current_started=$SECONDS
+    progress_status 'closed; skipped'
     continue
   fi
   # Read every page; Codex decides semantic dependencies from this live context.
@@ -188,7 +236,9 @@ for issue in "${issues[@]}"; do
     cat "$support_dir/prompt.md"
   } > "$issue_dir/prompt.md"
   printf '\nImplementing #%s on %s\n' "$issue" "$branch"
+  progress_status 'Codex implementation'
   node "$support_dir/recover.mjs" run "$issue_dir" "$root" "${codex_args[@]}"
+  progress_status 'validated; preparing delivery'
   [[ "$(git branch --show-current)" == "$branch" && "$(git rev-parse HEAD)" == "$base_sha" ]] || die 'Codex changed the branch or committed unexpectedly.'
   node "$support_dir/verify.mjs" result "$issue_dir/result.json" "$issue_dir/files.list"
   git diff --check
@@ -207,6 +257,7 @@ for issue in "${issues[@]}"; do
   gh pr create --repo "$repo" --base main --head "$branch" --title "$title" --body-file "$issue_dir/pr-body.md" > "$issue_dir/pr-url.txt"
   pr_url="$(cat "$issue_dir/pr-url.txt")"
   printf 'PR: %s\n' "$pr_url"
+  progress_status 'waiting for GitHub checks and merge'
   deadline=$((SECONDS + timeout_seconds))
   merge_requested=false
   while :; do
@@ -221,6 +272,7 @@ for issue in "${issues[@]}"; do
       merge_requested=true
     else
       printf 'Waiting for GitHub checks/merge: %s\n' "$pr_url"
+      progress_status 'waiting for GitHub checks and merge'
       remaining=$((deadline - SECONDS))
       sleep "$((remaining < 10 ? remaining : 10))"
     fi
@@ -241,5 +293,11 @@ for issue in "${issues[@]}"; do
   git branch -D "$branch"
   git fetch --prune origin
   require_clean
+  issue_duration=$((SECONDS - current_started))
+  duration_sum=$((duration_sum + issue_duration))
+  duration_samples=$((duration_samples + 1))
+  batch_completed=$((batch_completed + 1))
+  current_started=$SECONDS
   printf '#%s merged; main is clean.\n' "$issue"
+  progress_status 'completed'
 done
