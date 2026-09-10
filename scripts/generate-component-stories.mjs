@@ -960,10 +960,27 @@ function productTemplate(product: Product) {
     prime: 'sidebar',
     importName: 'Sidebar',
     extraImports: `import { Button } from 'primereact/button';`,
-    description: 'Side panel.',
-    args: `{ visible: false, position: 'right' }`,
-    argTypes: `{ visible: { control: 'boolean' }, position: { control: 'select', options: ['left', 'right', 'top', 'bottom'] } }`,
-    playground: `<><Button label="Open Sidebar" onClick={() => updateArgs({ visible: true })} /><Sidebar {...args} onHide={() => { updateArgs({ visible: false }); args.onHide?.(); } }><p>Sidebar content.</p></Sidebar></>`,
+    description: 'Overlay side panel for navigation, contextual content, and responsive layouts.',
+    args: `{ visible: false, position: 'right', dismissable: true, modal: true, showCloseIcon: true, closeOnEscape: true, fullScreen: false, blockScroll: false }`,
+    argTypes: `{
+    visible: { control: 'boolean' },
+    position: { control: 'select', options: ['left', 'right', 'top', 'bottom'] },
+    dismissable: { control: 'boolean' },
+    modal: { control: 'boolean' },
+    showCloseIcon: { control: 'boolean' },
+    closeOnEscape: { control: 'boolean' },
+    fullScreen: { control: 'boolean' },
+    blockScroll: { control: 'boolean' }
+  }`,
+    docsVariations: [
+      { title: 'Positions', code: `<Example initialArgs={{ position: 'left' }} />
+<Example initialArgs={{ position: 'right' }} />
+<Example initialArgs={{ position: 'top' }} />
+<Example initialArgs={{ position: 'bottom' }} />` },
+      { title: 'Full screen', code: `<Example initialArgs={{ fullScreen: true }} />` },
+      { title: 'Modal and dismissable states', code: `<Example initialArgs={{ modal: false, dismissable: false }} />` }
+    ],
+    playground: `<><Button label="Open Sidebar" onClick={() => updateArgs({ visible: true })} /><Sidebar {...args} onHide={() => { updateArgs({ visible: false }); args.onHide?.(); } }>{args.children ?? <p>Sidebar content.</p>}</Sidebar></>`,
   },
   {
     name: 'ConfirmPopup',
