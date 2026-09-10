@@ -671,11 +671,34 @@ function productTemplate(product: (typeof products)[number], layout?: string) {
     name: 'OrderList',
     prime: 'orderlist',
     importName: 'OrderList',
-    description: 'Orderable list.',
-    renderPrefix: `const products = [{ name: 'Bamboo Watch' }, { name: 'Black Watch' }];`,
-    args: `{ dataKey: 'name', filterBy: 'name', value: products, header: 'Products' }`,
-    argTypes: `{ header: { control: 'text' }, filter: { control: 'boolean' } }`,
-    playground: `<OrderList {...args} itemTemplate={(item: { name: string }) => <span>{item.name}</span>} onChange={(event) => { updateArgs({ value: event.value }); args.onChange?.(event); }} />`,
+    description: 'Orderable list used by Sakai for reordering, filtering, and drag-and-drop collections.',
+    renderPrefix: `type Product = { name: string; category: string };
+
+const products: Product[] = [
+  { name: 'Bamboo Watch', category: 'Accessories' },
+  { name: 'Black Watch', category: 'Accessories' },
+  { name: 'Blue Band', category: 'Fitness' },
+  { name: 'Blue T-Shirt', category: 'Clothing' }
+];
+
+function productTemplate(product: Product) {
+  return <div><div className="font-medium">{product.name}</div><div className="text-sm text-color-secondary">{product.category}</div></div>;
+}`,
+    args: `{ dataKey: 'name', filterBy: 'name', value: products, header: 'Products', filter: false, dragdrop: false, filterMatchMode: 'contains' }`,
+    argTypes: `{
+    header: { control: 'text' },
+    filter: { control: 'boolean' },
+    filterMatchMode: { control: 'select', options: ['contains', 'startsWith', 'endsWith', 'equals', 'notEquals'] },
+    dragdrop: { control: 'boolean' },
+    autoOptionFocus: { control: 'boolean' },
+    focusOnHover: { control: 'boolean' }
+  }`,
+    playground: `<OrderList {...args} itemTemplate={args.itemTemplate ?? productTemplate} onChange={(event) => { updateArgs({ value: event.value }); args.onChange?.(event); }} />`,
+    docsVariations: [
+      { title: 'Filtering', code: `<Example initialArgs={{ filter: true, filterPlaceholder: 'Search products' }} />` },
+      { title: 'Drag and drop', code: `<Example initialArgs={{ dragdrop: true }} />` },
+      { title: 'Responsive list', code: `<Example initialArgs={{ breakpoint: '640px', className: 'w-full' }} />` }
+    ],
   },
   {
     name: 'Tree',

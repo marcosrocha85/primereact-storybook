@@ -1061,3 +1061,36 @@ test('Chip: Controls restore removal, preserve image precedence and expose Code'
     await preview.locator('.p-chip').waitFor({ state: 'hidden' });
   }
 });
+
+test('OrderList: selected item moves upward, filtering works and supplied callback remains in code', async () => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(`${baseURL}/?path=/docs/components-orderlist-summary--summary`);
+  const preview = page.frameLocator('#storybook-preview-iframe');
+  await preview.locator('.sbdocs-content h1').waitFor();
+  assert.deepEqual(await preview.locator('.sbdocs-content h3').allTextContents(), ['Filtering', 'Drag and drop', 'Responsive list']);
+  assert.equal(await preview.locator('.docblock-argstable').count(), 0, 'Summary has no Controls');
+  assert.equal(await preview.locator('.docblock-source').count(), 4, 'Summary examples have copyable source');
+  await preview.getByRole('link', { name: 'Default', exact: true }).click();
+  const root = preview.locator('#storybook-root');
+  await root.locator('.p-orderlist').waitFor();
+  const items = root.locator('.p-orderlist-item');
+  await items.nth(1).click();
+  await root.locator('.p-orderlist-item.p-highlight').waitFor();
+  await root.locator('.p-orderlist-controls button').nth(0).click();
+  await root.locator('.p-orderlist-item').first().filter({ hasText: 'Black Watch' }).waitFor();
+  assert.deepEqual(await items.allTextContents(), ['Black WatchAccessories', 'Bamboo WatchAccessories', 'Blue BandFitness', 'Blue T-ShirtClothing']);
+  await page.getByRole('tab', { name: /Controls/ }).waitFor();
+  await page.getByRole('tab', { name: /Controls/ }).click();
+  await page.locator('#control-filter').focus();
+  await page.locator('#control-filter').press('Space');
+  await preview.locator('.p-orderlist-filter-input').fill('Blue');
+  assert.deepEqual(await items.allTextContents(), ['Blue BandFitness', 'Blue T-ShirtClothing']);
+  await page.getByRole('tab', { name: 'Code', exact: true }).click();
+  assert.match(await page.getByRole('tabpanel', { name: 'Code', exact: true }).innerText(), /args\.onChange\?\.\(event\)/);
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(`${baseURL}/iframe.html?id=components-orderlist--default&viewMode=story`);
+    await page.locator('#storybook-root .p-orderlist').waitFor();
+    assert.equal(await page.locator('.sb-errordisplay').isVisible(), false);
+  }
+});
