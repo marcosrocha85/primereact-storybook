@@ -123,6 +123,38 @@ The inventory is source inspection, not exhaustive behavioral testing. The focus
 
 ## Component audit
 
+### RadioButton API inventory — issue #48
+
+Inspected the Button documentation/story reference, Sakai's input UI Kit source at
+`vendor/sakai-react/app/(main)/uikit/input/page.tsx`, and the installed PrimeReact
+`radiobutton/radiobutton.d.ts` and `radiobutton.esm.js`. This inventory records the
+native contract reviewed for this issue; it is source-inspection evidence, not exhaustive
+behavioral testing.
+
+| API surface | Treatment |
+| --- | --- |
+| `checked`, `value`, `name`, `disabled`, `invalid`, `readOnly`, `required`, `variant` | Exposed through focused Default Controls and passed through unchanged. The Summary shows controlled group selection, checked, disabled, invalid and filled states. The application owns the group value; RadioButton does not provide a native array selection model. |
+| `onChange` | Adapted only to synchronize the story's controlled `checked` arg, then forwards the exact native event to the supplied callback. No value or event payload coercion is applied. |
+| `inputId`, `inputRef`, `id`, `autoFocus`, `tabIndex`, `className`, `style`, `children`, `tooltip`, `tooltipOptions` | Passed through unchanged. The playground supplies a generated `inputId` only when the caller omits one and adds a label for the curated single-option example; supplied IDs and tooltip configuration win. |
+| `pt`, `ptOptions`, `unstyled` | Passed through unchanged. Native root, input, box, icon, tooltip and lifecycle pass-through sections remain available; the story adds no PT defaults that could replace user entries. |
+| Inherited `HTMLDivElement` attributes and handlers | Forwarded by the native component through `{...args}`, including ARIA/data attributes, focus/blur, pointer, mouse, keyboard, form, clipboard, composition, drag, animation and transition handlers. Native routing of inherited attributes to the root versus inner input remains PrimeReact's behavior. |
+| Nested models, templates, selection/value modes, component callbacks and imperative methods | No nested item model or render template API applies. Selection is application-managed through `checked`/`value`; `onChange` is the sole component callback. `focus()`, `select()`, `getElement()`, `getInput()` and input refs remain native-only and outside Controls. |
+
+The focused contract test verifies representative prop spreading, supplied callback
+preservation, PT/tooltip values, generated versus supplied IDs and exact change-event
+forwarding. The component browser check verifies the Summary/Default contract, group
+selection, disabled behavior, Controls synchronization, copyable sources, and desktop/mobile
+rendering. Alternate value types, every inherited DOM event, PT callback form, tooltip event,
+imperative method, arbitrary children and every native prop combination remain forwarded or
+source-inspected but are not exhaustively tested.
+
+Validation for this revision:
+- `node scripts/generate-component-stories.mjs`: passed; generated output remained scoped to RadioButton.
+- `node --test tests/radiobutton-contract.test.mjs tests/component-generator.test.mjs`: passed, 3 tests.
+- `STORYBOOK_URL=http://127.0.0.1:4173 LD_LIBRARY_PATH=/tmp/sakai-browser-libs/usr/lib/x86_64-linux-gnu node --test --test-name-pattern='RadioButton|boolean inputs' tests/component-review.test.mjs`: passed, 3 tests against the static build at desktop/mobile widths.
+- `npm run build`, `npm run build-storybook`, and `git diff --check`: passed. Storybook emitted existing large-chunk and plugin-timing warnings.
+- Visual inspection at 1280px and 390px confirmed aligned labels/radio indicators, group wrapping, checked/disabled/invalid/filled states, Controls, and Code panel without clipping.
+
 ### ProgressBar API inventory — issue #47
 
 The inventory below is based on the installed PrimeReact `ProgressBarProps` declaration and implementation, plus the Sakai UI Kit `misc` and `table` examples. It records the native contract reviewed for this issue; it is not an exhaustive interaction test.

@@ -567,10 +567,41 @@ const components = [
     name: 'RadioButton',
     prime: 'radiobutton',
     importName: 'RadioButton',
-    description: 'Single option within a group.',
-    args: `{ checked: false, value: 'Option 1' }`,
-    argTypes: `{ checked: { control: 'boolean' }, disabled: { control: 'boolean' } }`,
-    playground: `<RadioButton {...args} aria-label="RadioButton" onChange={(event) => { updateArgs({ checked: event.checked ?? false }); args.onChange?.(event); } } />`,
+    description: 'Single option within an application-managed radio group.',
+    args: `{ checked: false, value: 'Option 1', name: 'options', disabled: false, invalid: false, readOnly: false, required: false, variant: undefined }`,
+    argTypes: `{
+    checked: { control: 'boolean' },
+    value: { control: 'text' },
+    name: { control: 'text' },
+    disabled: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    readOnly: { control: 'boolean' },
+    required: { control: 'boolean' },
+    variant: { control: 'inline-radio', options: [undefined, 'outlined', 'filled'] }
+  }`,
+    exampleHelpers: `export function RadioGroupExample() {
+  const [selected, setSelected] = useState('Chicago');
+  const options = ['Chicago', 'Los Angeles', 'New York'];
+  return <div className="flex flex-wrap gap-3">{options.map((option) => {
+    const inputId = 'radio-' + option.toLowerCase().replaceAll(' ', '-');
+    return <div className="flex align-items-center gap-2" key={option}>
+      <RadioButton inputId={inputId} name="city" value={option} checked={selected === option} onChange={(event) => setSelected(event.value)} />
+      <label htmlFor={inputId}>{option}</label>
+    </div>;
+  })}</div>;
+}`,
+    hooks: `const generatedId = useId();`,
+    playground: `<div className="flex align-items-center gap-2"><RadioButton {...args} inputId={args.inputId ?? generatedId} aria-label={args['aria-label'] ?? (args['aria-labelledby'] ? undefined : 'RadioButton')} onChange={(event) => { updateArgs({ checked: event.checked }); args.onChange?.(event); } } /><label htmlFor={args.inputId ?? generatedId}>{String(args.value ?? 'Option')}</label></div>`,
+    docsImports: `import { RadioGroupExample } from "./RadioButton.examples";`,
+    docsVariations: [
+      { title: 'Radio group', code: `<RadioGroupExample />`, source: '`<RadioGroupExample />`' },
+      { title: 'States', code: `<div className="flex flex-wrap gap-3">
+  <Example initialArgs={{ checked: true }} />
+  <Example initialArgs={{ disabled: true }} />
+  <Example initialArgs={{ invalid: true }} />
+</div>` },
+      { title: 'Filled variant', code: `<Example initialArgs={{ variant: 'filled', checked: true }} />` }
+    ],
   },
   {
     name: 'Rating',
@@ -1673,6 +1704,8 @@ import { ${component.importName} } from 'primereact/${component.prime}';
 ${typeImport}${component.extraImports ?? ''}
 
 ${component.renderPrefix ?? ''}
+
+${component.exampleHelpers ?? ''}
 
 export type ExampleArgs = ${type};
 export const defaultArgs: ExampleArgs = ${component.args};

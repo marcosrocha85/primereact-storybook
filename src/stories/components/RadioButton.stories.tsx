@@ -9,11 +9,20 @@ const meta = {
   component: RadioButton,
   parameters: {
     layout: 'centered',
-    controls: { include: ["checked","disabled"] },
-    docs: { description: { component: 'Single option within a group.' }, source: { code: exampleSource } }
+    controls: { include: ["checked","value","name","disabled","invalid","readOnly","required","variant"] },
+    docs: { description: { component: 'Single option within an application-managed radio group.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { checked: { control: 'boolean' }, disabled: { control: 'boolean' } }
+  argTypes: {
+    checked: { control: 'boolean' },
+    value: { control: 'text' },
+    name: { control: 'text' },
+    disabled: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    readOnly: { control: 'boolean' },
+    required: { control: 'boolean' },
+    variant: { control: 'inline-radio', options: [undefined, 'outlined', 'filled'] }
+  }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;

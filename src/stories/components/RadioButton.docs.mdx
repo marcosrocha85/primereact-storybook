@@ -1,12 +1,13 @@
 import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Example } from "./RadioButton.examples";
 import exampleSource from "./RadioButton.examples.tsx?raw";
+import { RadioGroupExample } from "./RadioButton.examples";
 
 <Meta title="Components/RadioButton/Summary" />
 
 <Title>RadioButton</Title>
 
-<Subtitle>Single option within a group.</Subtitle>
+<Subtitle>Single option within an application-managed radio group.</Subtitle>
 
 ## Usage
 
@@ -16,11 +17,33 @@ import exampleSource from "./RadioButton.examples.tsx?raw";
 
 ## Variations
 
-### Disabled
+### Radio group
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<RadioGroupExample />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+<Source code={`<RadioGroupExample />`} language="tsx" />
+
+### States
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-wrap gap-3">
+  <Example initialArgs={{ checked: true }} />
+  <Example initialArgs={{ disabled: true }} />
+  <Example initialArgs={{ invalid: true }} />
+</div>
+</div>
+
+<Source code={"<div className=\"flex flex-wrap gap-3\">\n  <Example initialArgs={{ checked: true }} />\n  <Example initialArgs={{ disabled: true }} />\n  <Example initialArgs={{ invalid: true }} />\n</div>"} language="tsx" />
+
+### Filled variant
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ variant: 'filled', checked: true }} />
+</div>
+
+<Source code={"<Example initialArgs={{ variant: 'filled', checked: true }} />"} language="tsx" />
 
 ## Playground
 

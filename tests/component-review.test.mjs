@@ -421,6 +421,30 @@ test('boolean inputs respond to clicks and keyboard, and respect disabled', asyn
   }
 });
 
+test('RadioButton: Summary group selection and Default controls', async () => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(`${baseURL}/?path=/docs/components-radiobutton-summary--summary`);
+  const preview = page.frameLocator('#storybook-preview-iframe');
+  await preview.locator('.sbdocs-content h1').waitFor();
+  assert.deepEqual(await preview.locator('.sbdocs-content h3').allTextContents(), ['Radio group', 'States', 'Filled variant']);
+  assert.equal(await preview.locator('.docblock-argstable').count(), 0);
+  assert.ok(await preview.locator('.docblock-source').count() >= 4);
+  const losAngeles = preview.getByLabel('Los Angeles', { exact: true });
+  await losAngeles.click({ force: true });
+  await preview.locator('#radio-los-angeles:checked').waitFor();
+  await preview.locator('#radio-chicago:not(:checked)').waitFor();
+
+  await preview.getByRole('link', { name: 'Default', exact: true }).click();
+  await preview.locator('#storybook-root input[type="radio"]').waitFor();
+  await page.getByRole('tab', { name: 'Controls' }).click();
+  await page.locator('#control-disabled').focus();
+  await page.locator('#control-disabled').press('Space');
+  await preview.locator('#storybook-root input[type="radio"]:disabled').waitFor();
+  await page.getByRole('tab', { name: 'Code', exact: true }).click();
+  await page.getByRole('button', { name: /Copy/ }).waitFor();
+  assert.match(await page.getByRole('tabpanel').innerText(), /<RadioButton \{\.\.\.args\}/);
+});
+
 test('text fields retain edits', async () => {
   for (const name of ['InputText', 'InputTextarea', 'Password']) {
     await open(name);
