@@ -6,7 +6,7 @@ import { menuWithActions } from '../menuExamples';
 const items = [{ label: 'Save', icon: 'pi pi-save' }, { label: 'Update', icon: 'pi pi-refresh' }];
 
 export type ExampleArgs = ComponentProps<typeof Menu>;
-export const defaultArgs: ExampleArgs = { model: items };
+export const defaultArgs: ExampleArgs = { model: items, popup: false, popupAlignment: 'left', closeOnEscape: true, autoZIndex: true, baseZIndex: 0, tabIndex: 0 };
 
 export function Playground({ args, updateArgs }: {
   args: ExampleArgs;
