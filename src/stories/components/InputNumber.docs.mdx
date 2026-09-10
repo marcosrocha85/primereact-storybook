@@ -6,7 +6,7 @@ import exampleSource from "./InputNumber.examples.tsx?raw";
 
 <Title>InputNumber</Title>
 
-<Subtitle>Numeric input with formatting.</Subtitle>
+<Subtitle>Numeric input with decimal and currency formatting, optional spinner buttons, and validation states.</Subtitle>
 
 ## Usage
 
@@ -16,23 +16,62 @@ import exampleSource from "./InputNumber.examples.tsx?raw";
 
 ## Variations
 
-### decimal
+### Decimal input
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ mode: 'decimal' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ mode: 'decimal', value: 123456.789 }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ mode: 'decimal' }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ mode: 'decimal', value: 123456.789 }} />"} language="tsx" />
 
-### currency
+### Currency input
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ mode: 'currency' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ mode: 'currency', currency: 'USD', value: 1250.5 }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ mode: 'currency' }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ mode: 'currency', currency: 'USD', value: 1250.5 }} />"} language="tsx" />
+
+### Spinner layouts
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-wrap align-items-center gap-3">
+  <Example initialArgs={{ showButtons: true, buttonLayout: 'stacked' }} />
+  <Example initialArgs={{ showButtons: true, buttonLayout: 'horizontal' }} />
+</div>
+</div>
+
+<Source code={"<div className=\"flex flex-wrap align-items-center gap-3\">\n  <Example initialArgs={{ showButtons: true, buttonLayout: 'stacked' }} />\n  <Example initialArgs={{ showButtons: true, buttonLayout: 'horizontal' }} />\n</div>"} language="tsx" />
+
+### Prefix and suffix
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-wrap align-items-center gap-3">
+  <Example initialArgs={{ prefix: '$ ', minFractionDigits: 2, maxFractionDigits: 2 }} />
+  <Example initialArgs={{ suffix: ' kg', showButtons: false }} />
+</div>
+</div>
+
+<Source code={"<div className=\"flex flex-wrap align-items-center gap-3\">\n  <Example initialArgs={{ prefix: '$ ', minFractionDigits: 2, maxFractionDigits: 2 }} />\n  <Example initialArgs={{ suffix: ' kg', showButtons: false }} />\n</div>"} language="tsx" />
+
+### Invalid and read-only states
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-column gap-3">
+  <Example initialArgs={{ invalid: true }} />
+  <Example initialArgs={{ readOnly: true, value: 42 }} />
+</div>
+</div>
+
+<Source code={"<div className=\"flex flex-column gap-3\">\n  <Example initialArgs={{ invalid: true }} />\n  <Example initialArgs={{ readOnly: true, value: 42 }} />\n</div>"} language="tsx" />
 
 ### Disabled
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ disabled: true }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ disabled: true }} />"} language="tsx" />
 
 ## Playground
 
