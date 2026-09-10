@@ -4,41 +4,34 @@
 
 This repository documents PrimeFaces Sakai React as a Storybook-based design system. The public artifact is the static Storybook build generated into `storybook-static` and deployed through GitHub Pages.
 
-## Required Session Startup: GitHub Issues
+## Agentic SDLC Workflow
 
-GitHub Issues in `marcosrocha85/primereact-storybook` is the authoritative backlog and task-status source. `TODO.md` is only a migration pointer, not an editable task queue.
+The component-review campaign is complete. GitHub Issues in `marcosrocha85/primereact-storybook` remains the source of truth for future work, but there is no standing component queue or local TODO backlog. Do not invent work when no issue or user-approved scope exists, and do not use a batch implementation runner.
 
-At the beginning of every session, before choosing implementation work:
+Every new component or material component change follows these stages:
 
-1. Read this guide and inspect the working tree. Preserve existing user changes.
-   Whenever the user requests implementation of a new issue, first verify that no local merge or unresolved conflicts remain and that the current issue branch's pull request has been merged. If the merge is still pending, report the blocker; do not merge it without explicit authorization. Once verified, switch to `main`, update it with `git pull --ff-only origin main`, and create the new issue branch from that updated `main` before editing implementation files.
-2. Fetch the current open component-review queue from GitHub, including every page, sorted by issue number ascending:
-
-   ```sh
-   gh api --paginate 'repos/marcosrocha85/primereact-storybook/issues?state=open&labels=component-review&sort=created&direction=asc&per_page=100' --jq '.[] | select(.pull_request == null) | {number, title, html_url, assignees, labels}'
-   ```
-
-3. Honor an issue or scope explicitly selected by the user. Otherwise, select actionable issues labeled `priority:highest` before ordinary component reviews, regardless of issue number. Within each priority group, select the lowest-numbered actionable issue. A highest-priority audit that tracks ongoing component fixes remains the entry point: read it first and select its next unresolved linked task instead of starting an unrelated review or duplicating an active fix. Read the selected issue's full body, comments, dependencies, and linked pull requests before editing:
-
-   ```sh
-   gh issue view <number> --repo marcosrocha85/primereact-storybook --comments
-   gh pr list --repo marcosrocha85/primereact-storybook --state open --limit 100 --json number,title,body,url
-   ```
-
-4. Skip issues with unresolved dependencies, an active implementation by another contributor, or an open implementing pull request; state the reason and select the next actionable issue. Report the selected issue number and scope before implementation. For a read-only or unrelated request, fetch the queue but keep the user's requested scope.
-5. Treat the selected issue's acceptance criteria and the current code as implementation context. Do not rely on a cached queue or the former TODO checkboxes. If GitHub cannot be read, report the exact blocker instead of guessing the next task. If no actionable issues remain, report that result instead of inventing work.
-
-Use the GitHub connector as an alternative when `gh` is unavailable, preserving the same filtering, pagination, ordering, and full issue inspection.
-
-Keep implementation scoped to the selected issue. New backlog tasks belong in GitHub Issues, not in a second local checklist. Repository documentation remains the source for architecture and coding conventions; a GitHub Wiki is optional for longer-lived project context.
-
-### Required Pull Request Delivery
-
-- From now on, every issue implementation must be delivered through a GitHub pull request. Unless the user explicitly limits the task to local files or read-only work, authorization to implement an issue includes creating a dedicated branch, making scoped commits, pushing that branch, and opening or updating its PR; do not request separate confirmation for these delivery steps.
-- After implementation and validation, open or update the PR against the repository's default branch. Include `Closes #<number>` for each issue whose full acceptance criteria the PR satisfies, plus the change summary, validation results, and any blockers. For partial work, use `Refs #<number>` and keep the issue open. Use a draft PR while required work or validation is incomplete.
-- Do not treat local changes, passing tests, commits, or PR creation as issue completion. Keep the issue open until its acceptance criteria are satisfied and the implementing PR is merged; closing keywords should then close it automatically.
-- PR creation does not authorize merging. Leave review and merge to the user unless they explicitly authorize the agent to merge.
-- Report the PR URL when delivering the implementation. If pushing or opening the PR is blocked, report the exact blocker and leave the issue open.
+1. **Intake and discovery**
+   - Read this guide and inspect the working tree. Preserve existing user changes.
+   - Honor the issue or scope selected by the user. For issue-backed work, read the full issue body, comments, dependencies, assignees, and linked/open PRs with `gh` or the GitHub connector.
+   - Inspect the relevant Sakai page and source, installed PrimeReact types and implementation, current component stories/docs, generator entry, and related tests.
+   - Keep discovery read-only. Identify ambiguity, dependencies, native API risks, generated-file ownership, and missing acceptance criteria.
+2. **Plan and approval**
+   - Produce a concrete implementation plan covering scope, affected files, controls, compositions, callbacks, accessibility, documentation, and focused validation.
+   - Record future backlog work in GitHub Issues rather than a repository checklist.
+   - Wait for explicit implementation approval after presenting the plan. Approval authorizes the scoped branch, implementation, commit, push, and PR delivery described below.
+3. **Implementation**
+   - Before editing, verify that no Git operation or unresolved conflict remains and that any preceding implementation PR has been merged. Never merge it without explicit authorization.
+   - Switch to `main`, run `git pull --ff-only origin main`, and create a dedicated branch from the updated `main`.
+   - Implement only the approved scope. Update the generator instead of generated component files when the generator owns them.
+4. **Validation and review**
+   - Run focused tests for the changed behavior, then the required builds and `git diff --check`.
+   - Review the final diff against the approved plan, issue acceptance criteria, Sakai behavior, the complete relevant PrimeReact API, and the controls exposed to users.
+   - Report actual validation results and distinguish code defects from environment blockers.
+5. **Pull request delivery**
+   - Create a scoped Conventional Commit using `type(scope): description` or `type: description`.
+   - Push the branch and open or update a PR against `main`. Include `Closes #<number>` only when the full issue is satisfied; use `Refs #<number>` for partial work.
+   - Use a draft PR while required work or validation remains incomplete. Report the PR URL and any blocker.
+   - PR creation does not authorize merging. Merge remains an explicit human gate. After a confirmed merge, synchronize `main` and delete only the confirmed merged implementation branches.
 
 ## Current Architecture
 
@@ -102,7 +95,7 @@ Do not document application pages such as dashboard, landing, auth, or full-page
 - Do not edit files inside `vendor/sakai-react`; update local wrappers, helpers, or the generator instead.
 - Run `npm run build` and `npm run build-storybook` before considering the project ready.
 
-For each reviewed component:
+For each new or materially changed component:
 
 1. Inspect `Button.docs.mdx` and `Button.stories.tsx` as the exact structural reference.
 2. Inspect the current component docs/story files.
@@ -124,7 +117,7 @@ For each reviewed component:
 - Keep sample assets relative to the Storybook base path so GitHub Pages deployments under a repository path work.
 - Default exposes the Code panel through `parameters.docs.codePanel`; Summary source examples and Default code must describe the actual implementation.
 - Validate the affected behaviors with `node --test tests/component-review.test.mjs` against a running Storybook. Set `STORYBOOK_URL` when using a different port or a static build. The test uses the existing Playwright dependency and requires its Chromium browser and system libraries.
-- The audit evidence and applicable checks for all components are recorded in `docs/component-review-69.md`. Task status and remaining work stay in GitHub Issues.
+- Historical audit evidence and applicable checks for the completed component-review campaign are recorded in `docs/component-review-69.md`. Future work belongs in GitHub Issues.
 
 ## GitHub Pages
 
@@ -142,6 +135,7 @@ For each reviewed component:
 
 ## Current Status
 
-- 67 component story sets are generated under `src/stories/components`.
+- The component-review campaign is complete, covering 67 component story sets under `src/stories/components`.
 - The manual Button documentation is the target pattern for future refinements.
 - The old page-level `Sakai React/*` story grouping was removed from navigation to keep the catalog focused on real components.
+- New components and material changes follow the Agentic SDLC workflow above.
