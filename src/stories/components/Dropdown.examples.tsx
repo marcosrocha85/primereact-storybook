@@ -1,10 +1,11 @@
-import { useState, type ComponentProps } from 'react';
+import { useState } from 'react';
 import { Dropdown } from 'primereact/dropdown';
+import type { DropdownProps } from 'primereact/dropdown';
 
 const cityOptions = [{ name: 'New York', code: 'NY' }, { name: 'Rome', code: 'RM' }, { name: 'London', code: 'LDN' }];
 
-export type ExampleArgs = ComponentProps<typeof Dropdown>;
-export const defaultArgs: ExampleArgs = { value: null, placeholder: 'Select', optionLabel: 'name', options: cityOptions, filter: false };
+export type ExampleArgs = DropdownProps;
+export const defaultArgs: ExampleArgs = { value: null, placeholder: 'Select a city', optionLabel: 'name', options: cityOptions, filter: false, disabled: false, invalid: false, variant: 'outlined', showClear: false, editable: false, checkmark: false };
 
 export function Playground({ args, updateArgs }: {
   args: ExampleArgs;

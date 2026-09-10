@@ -6,7 +6,7 @@ import exampleSource from "./Dropdown.examples.tsx?raw";
 
 <Title>Dropdown</Title>
 
-<Subtitle>Single-option selector.</Subtitle>
+<Subtitle>Select one option from a collection, with filtering, validation, editable input, and clearable states.</Subtitle>
 
 ## Usage
 
@@ -16,17 +16,40 @@ import exampleSource from "./Dropdown.examples.tsx?raw";
 
 ## Variations
 
-### Filter
+### Filterable options
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ filter: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ filter: true, filterPlaceholder: 'Search cities' }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ filter: true }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ filter: true, filterPlaceholder: 'Search cities' }} />"} language="tsx" />
+
+### Filled and invalid states
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-column gap-3" style={{ maxWidth: '20rem' }}>
+  <Example initialArgs={{ variant: 'filled' }} />
+  <Example initialArgs={{ invalid: true }} />
+</div>
+</div>
+
+<Source code={"<div className=\"flex flex-column gap-3\" style={{ maxWidth: '20rem' }}>\n  <Example initialArgs={{ variant: 'filled' }} />\n  <Example initialArgs={{ invalid: true }} />\n</div>"} language="tsx" />
+
+### Editable and clearable
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ value: { name: 'Rome', code: 'RM' }, editable: true, showClear: true, placeholder: 'Type or select a city' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ value: { name: 'Rome', code: 'RM' }, editable: true, showClear: true, placeholder: 'Type or select a city' }} />"} language="tsx" />
 
 ### Disabled
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ disabled: true }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ disabled: true }} />"} language="tsx" />
 
 ## Playground
 
