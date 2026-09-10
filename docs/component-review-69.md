@@ -73,6 +73,21 @@ The inventory below is based on the installed PrimeReact `InputSwitchProps` decl
 
 The inventory is source inspection, not exhaustive behavioral testing. The focused contract test verifies native true/false values, inherited attributes, PT, children, and the supplied change/focus/blur callbacks across the intercepted change path. The component browser check verifies click and Space toggling, disabled behavior, Summary/Default structure, copyable source, and desktop/mobile rendering. Every pass-through callback form, tooltip/transition behavior, ref method, and inherited DOM event remains forwarded but is not exhaustively tested.
 
+### MegaMenu API inventory — issue #37
+
+The inventory below is based on the installed PrimeReact `MegaMenuProps`, `MenuItem` model, pass-through declarations, and implementation, plus the Sakai UI Kit menu examples. It records the native contract reviewed for this issue; it is not exhaustive interaction testing.
+
+| API surface | Treatment |
+| --- | --- |
+| `model` (`MenuItem[]`, including nested `MenuItem[][]` column groups) | Adapted only to decorate leaf commands with the playground feedback callback. The recursive adapter preserves item properties, nested group structure, and each supplied `item.command` before invoking the story feedback. |
+| `orientation`, `breakpoint`, `scrollHeight`, `tabIndex` | Exposed through focused Default Controls and passed through unchanged. Horizontal and vertical layouts plus responsive breakpoint/scroll-height behavior are curated in Summary. |
+| `start`, `end`, `submenuIcon`, `menuIcon` | Passed through unchanged and intentionally outside the curated Controls because they accept React nodes or `IconType` functions in addition to strings. The native submenu icon string mode is shown in Summary. |
+| `onFocus`, `onBlur`, inherited `HTMLAttributes<HTMLDivElement>` | Passed through unchanged via `{...args}`; supplied DOM/ARIA attributes, class/style, and event callbacks are not replaced by the playground. |
+| `pt`, `ptOptions`, `unstyled`, `children` | Passed through unchanged; no wrapper pass-through defaults are merged over caller values. These are available through native story args but outside the curated visual Controls. |
+| Templates, selection/value modes, option filtering, imperative methods | Not applicable or native-only. MegaMenu has no selection value model or filtering API; its native `getElement()` ref method remains outside Controls. |
+
+The inventory is source inspection, not exhaustive behavioral testing. The focused contract test verifies recursive model decoration, supplied leaf-command preservation, and passthrough spread. The component browser check verifies nested submenu opening, supplied command feedback, Summary/Default structure, copyable sources, and desktop/mobile rendering. Every `MenuItem` property, icon function, PT callback, inherited DOM event, and ref method remains forwarded but is not exhaustively tested.
+
 ## Component audit
 
 All 67 components pass the same browser checks at 1280×900 and 390×900: exactly one Default, an indexed Summary, the common section order, no Summary Controls, copyable source, no runtime exceptions, loaded example images, and preserved icon fonts. The table lists additional checks; presentation-only components have no state-changing action to exercise. This covers the documented examples, not every upstream prop combination. “Wired” explicitly denotes source inspection in addition to the automated interactions listed, not an independently exercised gesture.

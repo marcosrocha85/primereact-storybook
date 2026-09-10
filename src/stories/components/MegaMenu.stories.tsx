@@ -9,11 +9,17 @@ const meta = {
   component: MegaMenu,
   parameters: {
     layout: 'centered',
-    controls: { include: ["orientation"] },
-    docs: { description: { component: 'Large grouped menu.' }, source: { code: exampleSource } }
+    controls: { include: ["model","orientation","breakpoint","scrollHeight","tabIndex"] },
+    docs: { description: { component: 'Grouped navigation menu that opens multi-column submenus.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] } }
+  argTypes: {
+    model: { control: 'object', description: 'MenuItem[] with nested MenuItem[][] groups for MegaMenu columns.' },
+    orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] },
+    breakpoint: { control: 'text', description: 'CSS media-query boundary for the responsive menu button.' },
+    scrollHeight: { control: 'text', description: 'Maximum responsive panel height.' },
+    tabIndex: { control: 'number' }
+  }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;

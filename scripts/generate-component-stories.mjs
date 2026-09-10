@@ -1008,11 +1008,22 @@ import { menuWithActions } from '../menuExamples';`,
     importName: 'MegaMenu',
     hooks: `const [action, setAction] = useState('No action yet');`,
     extraImports: `import { menuWithActions } from '../menuExamples';`,
-    description: 'Large grouped menu.',
-    renderPrefix: `const items = [{ label: 'Videos', icon: 'pi pi-fw pi-video', items: [[{ label: 'Video 1', items: [{ label: 'Video 1.1' }] }]] }];`,
-    args: `{ model: items, orientation: 'horizontal' }`,
-    argTypes: `{ orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] } }`,
-    playground: `<><MegaMenu {...args} model={menuWithActions(args.model ?? [], setAction)} /><p role="status">{action}</p></>`,
+    description: 'Grouped navigation menu that opens multi-column submenus.',
+    renderPrefix: `const items = [{ label: 'Videos', icon: 'pi pi-fw pi-video', items: [[{ label: 'Video 1', items: [{ label: 'Video 1.1' }, { label: 'Video 1.2' }] }, { label: 'Video 2', items: [{ label: 'Video 2.1' }] }], [{ label: 'Guides', items: [{ label: 'Guide 1' }] }]] }];`,
+    args: `{ model: items, orientation: 'horizontal', breakpoint: '767px', scrollHeight: '400px' }`,
+    argTypes: `{
+    model: { control: 'object', description: 'MenuItem[] with nested MenuItem[][] groups for MegaMenu columns.' },
+    orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] },
+    breakpoint: { control: 'text', description: 'CSS media-query boundary for the responsive menu button.' },
+    scrollHeight: { control: 'text', description: 'Maximum responsive panel height.' },
+    tabIndex: { control: 'number' }
+  }`,
+    playground: `<div style={{ width: '100%', maxWidth: '56rem' }}><MegaMenu {...args} model={menuWithActions(args.model ?? [], setAction)} /><p role="status">{action}</p></div>`,
+    docsVariations: [
+      { title: 'Vertical layout', code: `<Example initialArgs={{ orientation: 'vertical', breakpoint: '767px' }} />` },
+      { title: 'Responsive menu', code: `<Example initialArgs={{ breakpoint: '900px', scrollHeight: '240px' }} />` },
+      { title: 'Custom submenu icon', code: `<Example initialArgs={{ submenuIcon: 'pi pi-angle-right' }} />` }
+    ],
   },
   {
     name: 'PanelMenu',
