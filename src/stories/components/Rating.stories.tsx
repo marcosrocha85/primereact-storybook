@@ -9,11 +9,17 @@ const meta = {
   component: Rating,
   parameters: {
     layout: 'centered',
-    controls: { include: ["value","stars","cancel","disabled"] },
-    docs: { description: { component: 'Star rating control.' }, source: { code: exampleSource } }
+    controls: { include: ["value","stars","cancel","disabled","readOnly"] },
+    docs: { description: { component: 'Star rating control for selecting or displaying a numeric score.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { value: { control: 'number' }, stars: { control: 'number' }, cancel: { control: 'boolean' }, disabled: { control: 'boolean' } }
+  argTypes: {
+    value: { control: 'number', description: 'Selected star value. Use null or undefined for no selection.' },
+    stars: { control: 'number', description: 'Number of stars rendered by the rating.' },
+    cancel: { control: 'boolean', description: 'Show the cancel control for clearing the selection.' },
+    disabled: { control: 'boolean' },
+    readOnly: { control: 'boolean' }
+  }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;

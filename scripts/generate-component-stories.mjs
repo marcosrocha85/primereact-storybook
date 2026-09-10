@@ -607,10 +607,24 @@ const components = [
     name: 'Rating',
     prime: 'rating',
     importName: 'Rating',
-    description: 'Star rating control.',
-    args: `{ value: 3, stars: 5, cancel: false }`,
-    argTypes: `{ value: { control: 'number' }, stars: { control: 'number' }, cancel: { control: 'boolean' }, disabled: { control: 'boolean' } }`,
+    description: 'Star rating control for selecting or displaying a numeric score.',
+    args: `{ value: 3, stars: 5, cancel: true, disabled: false, readOnly: false }`,
+    argTypes: `{
+    value: { control: 'number', description: 'Selected star value. Use null or undefined for no selection.' },
+    stars: { control: 'number', description: 'Number of stars rendered by the rating.' },
+    cancel: { control: 'boolean', description: 'Show the cancel control for clearing the selection.' },
+    disabled: { control: 'boolean' },
+    readOnly: { control: 'boolean' }
+  }`,
     playground: `<Rating {...args} onChange={(event) => { updateArgs({ value: event.value ?? undefined }); args.onChange?.(event); } } />`,
+    docsImports: `import { Rating } from "primereact/rating";`,
+    docsVariations: [
+      { title: 'Selectable rating', code: `<Example initialArgs={{ value: 3, stars: 5 }} />` },
+      { title: 'Custom star count', code: `<Example initialArgs={{ value: 4, stars: 10, cancel: false }} />` },
+      { title: 'Read-only rating', code: `<Rating value={4} readOnly cancel={false} />` },
+      { title: 'Clearable rating', code: `<Example initialArgs={{ value: 3, cancel: true }} />` },
+      { title: 'Disabled rating', code: `<Example initialArgs={{ value: 3, disabled: true }} />` }
+    ],
   },
   {
     name: 'SelectButton',

@@ -1,12 +1,13 @@
 import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Example } from "./Rating.examples";
 import exampleSource from "./Rating.examples.tsx?raw";
+import { Rating } from "primereact/rating";
 
 <Meta title="Components/Rating/Summary" />
 
 <Title>Rating</Title>
 
-<Subtitle>Star rating control.</Subtitle>
+<Subtitle>Star rating control for selecting or displaying a numeric score.</Subtitle>
 
 ## Usage
 
@@ -16,11 +17,45 @@ import exampleSource from "./Rating.examples.tsx?raw";
 
 ## Variations
 
-### Disabled
+### Selectable rating
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ value: 3, stars: 5 }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ value: 3, stars: 5 }} />"} language="tsx" />
+
+### Custom star count
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ value: 4, stars: 10, cancel: false }} />
+</div>
+
+<Source code={"<Example initialArgs={{ value: 4, stars: 10, cancel: false }} />"} language="tsx" />
+
+### Read-only rating
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Rating value={4} readOnly cancel={false} />
+</div>
+
+<Source code={"<Rating value={4} readOnly cancel={false} />"} language="tsx" />
+
+### Clearable rating
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ value: 3, cancel: true }} />
+</div>
+
+<Source code={"<Example initialArgs={{ value: 3, cancel: true }} />"} language="tsx" />
+
+### Disabled rating
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ value: 3, disabled: true }} />
+</div>
+
+<Source code={"<Example initialArgs={{ value: 3, disabled: true }} />"} language="tsx" />
 
 ## Playground
 

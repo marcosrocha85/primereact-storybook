@@ -2,7 +2,7 @@ import { useState, type ComponentProps } from 'react';
 import { Rating } from 'primereact/rating';
 
 export type ExampleArgs = ComponentProps<typeof Rating>;
-export const defaultArgs: ExampleArgs = { value: 3, stars: 5, cancel: false };
+export const defaultArgs: ExampleArgs = { value: 3, stars: 5, cancel: true, disabled: false, readOnly: false };
 
 export function Playground({ args, updateArgs }: {
   args: ExampleArgs;
