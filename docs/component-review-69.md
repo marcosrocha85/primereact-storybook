@@ -123,6 +123,21 @@ The inventory is source inspection, not exhaustive behavioral testing. The focus
 
 ## Component audit
 
+### ProgressBar API inventory — issue #47
+
+The inventory below is based on the installed PrimeReact `ProgressBarProps` declaration and implementation, plus the Sakai UI Kit `misc` and `table` examples. It records the native contract reviewed for this issue; it is not an exhaustive interaction test.
+
+| API surface | Treatment |
+| --- | --- |
+| `value` (`string \| number \| null \| undefined`) | Exposed as a numeric Default Control for the common 0–100 playground range and passed through unchanged; the native string, null and out-of-range forms remain available through `ExampleArgs` and are not silently normalized. |
+| `showValue`, `unit`, `mode` (`determinate \| indeterminate`), `color` | Exposed through focused Default Controls and passed through unchanged. Determinate, indeterminate, hidden-label, custom-unit and custom-color compositions are curated in Summary. |
+| `displayValueTemplate` | Passed through unchanged and intentionally outside Controls because it accepts a render function; the native custom label contract is source-inspected, not represented by a text-only Control. |
+| `id`, `className`, `style`, ARIA/data attributes, DOM event handlers and other inherited `HTMLAttributes<HTMLDivElement>` | Forwarded unchanged through `{...args}`; the playground only supplies its responsive outer width wrapper. Native root attributes remain available through story args and are outside curated Controls. |
+| `pt`, `ptOptions`, `unstyled`, `children` | Forwarded unchanged; root, container, value, label and lifecycle pass-through sections remain available. No wrapper pass-through defaults replace user customizations. `children` is accepted by the native contract but is not rendered by the current PrimeReact implementation. |
+| Templates, nested models, selection/value modes and imperative methods | Not applicable or native-only. ProgressBar has no option collection, selection model, item template or events that change component state; its `getElement()` ref method remains outside Controls. |
+
+The API inventory is source inspection, not exhaustive behavioral testing. The focused browser check verifies the curated Summary modes, label visibility, Default Controls synchronization, copyable source, and desktop rendering; the generic component check also verifies mobile rendering and runtime safety. Supplied display-template functions, pass-through callbacks, inherited DOM events, arbitrary native attributes, string/null values, custom children and ref methods remain forwarded or native-supported but are not exhaustively tested.
+
 ### PanelMenu API inventory — issue #44
 
 The inventory below is based on the installed PrimeReact `PanelMenuProps`, `MenuItem`, pass-through declarations and implementation, plus the Sakai UI Kit menu source. It records the native contract reviewed for this issue; it is not exhaustive interaction testing.

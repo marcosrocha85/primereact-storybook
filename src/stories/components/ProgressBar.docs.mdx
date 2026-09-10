@@ -6,7 +6,7 @@ import exampleSource from "./ProgressBar.examples.tsx?raw";
 
 <Title>ProgressBar</Title>
 
-<Subtitle>Progress indicator.</Subtitle>
+<Subtitle>Progress indicator for determinate completion values and indeterminate activity.</Subtitle>
 
 ## Usage
 
@@ -16,17 +16,40 @@ import exampleSource from "./ProgressBar.examples.tsx?raw";
 
 ## Variations
 
-### determinate
+### Determinate values
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ mode: 'determinate' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-column gap-3">
+  <Example initialArgs={{ value: 25 }} />
+  <Example initialArgs={{ value: 75 }} />
+</div>
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ mode: 'determinate' }} />"} language="tsx" />
+<Source code={"<div className=\"flex flex-column gap-3\">\n  <Example initialArgs={{ value: 25 }} />\n  <Example initialArgs={{ value: 75 }} />\n</div>"} language="tsx" />
 
-### indeterminate
+### Indeterminate
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ mode: 'indeterminate' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ mode: 'indeterminate' }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ mode: 'indeterminate' }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ mode: 'indeterminate' }} />"} language="tsx" />
+
+### Hidden value
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ value: 50, showValue: false }} />
+</div>
+
+<Source code={"<Example initialArgs={{ value: 50, showValue: false }} />"} language="tsx" />
+
+### Custom unit and color
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ value: 65, unit: ' completed', color: '#10b981' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ value: 65, unit: ' completed', color: '#10b981' }} />"} language="tsx" />
 
 ## Playground
 

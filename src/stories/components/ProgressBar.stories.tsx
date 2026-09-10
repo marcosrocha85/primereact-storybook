@@ -9,11 +9,17 @@ const meta = {
   component: ProgressBar,
   parameters: {
     layout: 'centered',
-    controls: { include: ["value","showValue","mode"] },
-    docs: { description: { component: 'Progress indicator.' }, source: { code: exampleSource } }
+    controls: { include: ["value","showValue","unit","mode","color"] },
+    docs: { description: { component: 'Progress indicator for determinate completion values and indeterminate activity.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { value: { control: 'number' }, showValue: { control: 'boolean' }, mode: { control: 'select', options: ['determinate', 'indeterminate'] } }
+  argTypes: {
+    value: { control: 'number', description: 'Determinate progress from 0 to 100.' },
+    showValue: { control: 'boolean' },
+    unit: { control: 'text' },
+    mode: { control: 'select', options: ['determinate', 'indeterminate'] },
+    color: { control: 'text' }
+  }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;
