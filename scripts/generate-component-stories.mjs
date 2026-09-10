@@ -951,9 +951,44 @@ function productTemplate(product: Product) {
     importName: 'Splitter',
     extraImports: `import { SplitterPanel } from 'primereact/splitter';`,
     description: 'Resizable panel layout.',
-    args: `{ style: { height: '180px', width: '30rem', maxWidth: '100%' } }`,
-    argTypes: `{ layout: { control: 'inline-radio', options: ['horizontal', 'vertical'] }, gutterSize: { control: 'number' } }`,
-    playground: `<Splitter {...args}><SplitterPanel className="flex align-items-center justify-content-center">Panel 1</SplitterPanel><SplitterPanel className="flex align-items-center justify-content-center">Panel 2</SplitterPanel></Splitter>`,
+    args: `{ layout: 'horizontal', gutterSize: 4, step: 5, style: { height: '180px', width: '30rem', maxWidth: '100%' } }`,
+    argTypes: `{
+    layout: { control: 'inline-radio', options: ['horizontal', 'vertical'] },
+    gutterSize: { control: 'number' },
+    step: { control: 'number' },
+    className: { control: 'text' },
+    style: { control: 'object' },
+    unstyled: { control: 'boolean' }
+  }`,
+    hooks: `const panels = args.children ?? [
+    <SplitterPanel key="panel-1" size={30} minSize={10} className="flex align-items-center justify-content-center">Panel 1</SplitterPanel>,
+    <SplitterPanel key="panel-2" size={70} minSize={10} className="flex align-items-center justify-content-center">Panel 2</SplitterPanel>
+  ];`,
+    playground: `<Splitter {...args}>{panels}</Splitter>`,
+    docsImports: `import { Splitter, SplitterPanel } from 'primereact/splitter';`,
+    docsVariations: [
+      { title: 'Panel sizes and minimum sizes', code: `<Splitter style={{ height: '180px', width: '30rem', maxWidth: '100%' }}>
+  <SplitterPanel size={30} minSize={10}>Panel 1</SplitterPanel>
+  <SplitterPanel size={70} minSize={10}>Panel 2</SplitterPanel>
+</Splitter>` },
+      { title: 'Vertical layout', code: `<Splitter layout="vertical" style={{ height: '240px', width: '30rem', maxWidth: '100%' }}>
+  <SplitterPanel size={40}>Top panel</SplitterPanel>
+  <SplitterPanel size={60}>Bottom panel</SplitterPanel>
+</Splitter>` },
+      { title: 'Nested panels', code: `<Splitter style={{ height: '240px', width: '30rem', maxWidth: '100%' }}>
+  <SplitterPanel size={30} minSize={10}>Panel 1</SplitterPanel>
+  <SplitterPanel size={70}>
+    <Splitter layout="vertical" style={{ height: '100%' }}>
+      <SplitterPanel size={50} minSize={10}>Panel 2</SplitterPanel>
+      <SplitterPanel size={50} minSize={10}>Panel 3</SplitterPanel>
+    </Splitter>
+  </SplitterPanel>
+</Splitter>` },
+      { title: 'Keyboard step', code: `<Splitter step={10} style={{ height: '180px', width: '30rem', maxWidth: '100%' }}>
+  <SplitterPanel>Use Arrow keys on the gutter.</SplitterPanel>
+  <SplitterPanel>Panel 2</SplitterPanel>
+</Splitter>` }
+    ],
   },
   {
     name: 'Dialog',

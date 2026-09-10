@@ -1,6 +1,7 @@
 import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Example } from "./Splitter.examples";
 import exampleSource from "./Splitter.examples.tsx?raw";
+import { Splitter, SplitterPanel } from 'primereact/splitter';
 
 <Meta title="Components/Splitter/Summary" />
 
@@ -16,7 +17,54 @@ import exampleSource from "./Splitter.examples.tsx?raw";
 
 ## Variations
 
-The usage example shows the base composition. Use Default to explore the documented properties.
+### Panel sizes and minimum sizes
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Splitter style={{ height: '180px', width: '30rem', maxWidth: '100%' }}>
+  <SplitterPanel size={30} minSize={10}>Panel 1</SplitterPanel>
+  <SplitterPanel size={70} minSize={10}>Panel 2</SplitterPanel>
+</Splitter>
+</div>
+
+<Source code={"<Splitter style={{ height: '180px', width: '30rem', maxWidth: '100%' }}>\n  <SplitterPanel size={30} minSize={10}>Panel 1</SplitterPanel>\n  <SplitterPanel size={70} minSize={10}>Panel 2</SplitterPanel>\n</Splitter>"} language="tsx" />
+
+### Vertical layout
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Splitter layout="vertical" style={{ height: '240px', width: '30rem', maxWidth: '100%' }}>
+  <SplitterPanel size={40}>Top panel</SplitterPanel>
+  <SplitterPanel size={60}>Bottom panel</SplitterPanel>
+</Splitter>
+</div>
+
+<Source code={"<Splitter layout=\"vertical\" style={{ height: '240px', width: '30rem', maxWidth: '100%' }}>\n  <SplitterPanel size={40}>Top panel</SplitterPanel>\n  <SplitterPanel size={60}>Bottom panel</SplitterPanel>\n</Splitter>"} language="tsx" />
+
+### Nested panels
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Splitter style={{ height: '240px', width: '30rem', maxWidth: '100%' }}>
+  <SplitterPanel size={30} minSize={10}>Panel 1</SplitterPanel>
+  <SplitterPanel size={70}>
+    <Splitter layout="vertical" style={{ height: '100%' }}>
+      <SplitterPanel size={50} minSize={10}>Panel 2</SplitterPanel>
+      <SplitterPanel size={50} minSize={10}>Panel 3</SplitterPanel>
+    </Splitter>
+  </SplitterPanel>
+</Splitter>
+</div>
+
+<Source code={"<Splitter style={{ height: '240px', width: '30rem', maxWidth: '100%' }}>\n  <SplitterPanel size={30} minSize={10}>Panel 1</SplitterPanel>\n  <SplitterPanel size={70}>\n    <Splitter layout=\"vertical\" style={{ height: '100%' }}>\n      <SplitterPanel size={50} minSize={10}>Panel 2</SplitterPanel>\n      <SplitterPanel size={50} minSize={10}>Panel 3</SplitterPanel>\n    </Splitter>\n  </SplitterPanel>\n</Splitter>"} language="tsx" />
+
+### Keyboard step
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Splitter step={10} style={{ height: '180px', width: '30rem', maxWidth: '100%' }}>
+  <SplitterPanel>Use Arrow keys on the gutter.</SplitterPanel>
+  <SplitterPanel>Panel 2</SplitterPanel>
+</Splitter>
+</div>
+
+<Source code={"<Splitter step={10} style={{ height: '180px', width: '30rem', maxWidth: '100%' }}>\n  <SplitterPanel>Use Arrow keys on the gutter.</SplitterPanel>\n  <SplitterPanel>Panel 2</SplitterPanel>\n</Splitter>"} language="tsx" />
 
 ## Playground
 
