@@ -6,7 +6,7 @@ import exampleSource from "./InputMask.examples.tsx?raw";
 
 <Title>InputMask</Title>
 
-<Subtitle>Text field with an input mask.</Subtitle>
+<Subtitle>Masked text field for dates, phone numbers, identifiers, and other structured input.</Subtitle>
 
 ## Usage
 
@@ -16,11 +16,56 @@ import exampleSource from "./InputMask.examples.tsx?raw";
 
 ## Variations
 
+### Date mask
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ mask: '99/99/9999', placeholder: 'MM/DD/YYYY' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ mask: '99/99/9999', placeholder: 'MM/DD/YYYY' }} />"} language="tsx" />
+
+### Phone mask
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ mask: '(999) 999-9999', placeholder: '(555) 555-5555' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ mask: '(999) 999-9999', placeholder: '(555) 555-5555' }} />"} language="tsx" />
+
+### Unmasked value
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ mask: '99/99/9999', unmask: true }} />
+</div>
+
+<Source code={"<Example initialArgs={{ mask: '99/99/9999', unmask: true }} />"} language="tsx" />
+
+### Floating label
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ floatLabel: true, placeholder: undefined }} />
+</div>
+
+<Source code={"<Example initialArgs={{ floatLabel: true, placeholder: undefined }} />"} language="tsx" />
+
+### Invalid and read-only states
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-column gap-3">
+  <Example initialArgs={{ invalid: true }} />
+  <Example initialArgs={{ readOnly: true, value: '09/06/2026' }} />
+</div>
+</div>
+
+<Source code={"<div className=\"flex flex-column gap-3\">\n  <Example initialArgs={{ invalid: true }} />\n  <Example initialArgs={{ readOnly: true, value: '09/06/2026' }} />\n</div>"} language="tsx" />
+
 ### Disabled
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ disabled: true }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ disabled: true }} />"} language="tsx" />
 
 ## Playground
 

@@ -256,14 +256,48 @@ const components = [
     name: 'InputMask',
     prime: 'inputmask',
     importName: 'InputMask',
-    description: 'Text field with an input mask.',
-    args: `{ value: '', mask: '99/99/9999', placeholder: '99/99/9999' }`,
+    extraImports: `import type { InputMaskProps } from 'primereact/inputmask';`,
+    description: 'Masked text field for dates, phone numbers, identifiers, and other structured input.',
+    exampleType: `InputMaskProps & {
+  label?: string;
+  floatLabel?: boolean;
+}`,
+    args: `{ value: '', mask: '99/99/9999', placeholder: 'MM/DD/YYYY', label: 'Date', floatLabel: false, slotChar: '_', autoClear: true, unmask: false, invalid: false, disabled: false, readOnly: false }`,
     argTypes: `{
+    label: { control: 'text' },
+    floatLabel: { control: 'boolean' },
     mask: { control: 'text' },
     placeholder: { control: 'text' },
-    disabled: { control: 'boolean' }
+    slotChar: { control: 'text' },
+    autoClear: { control: 'boolean' },
+    unmask: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    readOnly: { control: 'boolean' },
+    variant: { control: 'inline-radio', options: [undefined, 'outlined', 'filled'] }
   }`,
-    playground: `<InputMask {...args} onChange={(event) => { updateArgs({ value: event.value }); args.onChange?.(event); } } />`,
+    hooks: `const generatedId = useId();
+  const { label, floatLabel, ...inputMaskProps } = args;
+  const inputId = inputMaskProps.id ?? generatedId;`,
+    playground: `<div style={{ width: '20rem', maxWidth: '100%' }}>
+    <div className={floatLabel ? 'p-float-label' : 'flex flex-column gap-2'}>
+      {!floatLabel && label && <label htmlFor={inputId}>{label}</label>}
+      <InputMask {...inputMaskProps} id={inputId} value={inputMaskProps.value ?? ''}
+        onChange={(event) => { updateArgs({ value: event.value ?? '' }); inputMaskProps.onChange?.(event); }} />
+      {floatLabel && label && <label htmlFor={inputId}>{label}</label>}
+    </div>
+  </div>`,
+    docsVariations: [
+      { title: 'Date mask', code: `<Example initialArgs={{ mask: '99/99/9999', placeholder: 'MM/DD/YYYY' }} />` },
+      { title: 'Phone mask', code: `<Example initialArgs={{ mask: '(999) 999-9999', placeholder: '(555) 555-5555' }} />` },
+      { title: 'Unmasked value', code: `<Example initialArgs={{ mask: '99/99/9999', unmask: true }} />` },
+      { title: 'Floating label', code: `<Example initialArgs={{ floatLabel: true, placeholder: undefined }} />` },
+      { title: 'Invalid and read-only states', code: `<div className="flex flex-column gap-3">
+  <Example initialArgs={{ invalid: true }} />
+  <Example initialArgs={{ readOnly: true, value: '09/06/2026' }} />
+</div>` },
+      { title: 'Disabled', code: `<Example initialArgs={{ disabled: true }} />` }
+    ],
   },
   {
     name: 'InputNumber',

@@ -6,17 +6,24 @@ import exampleSource from './InputMask.examples.tsx?raw';
 
 const meta = {
   title: 'Components/InputMask',
-  component: InputMask,
   parameters: {
     layout: 'centered',
-    controls: { include: ["value","mask","placeholder","disabled"] },
-    docs: { description: { component: 'Text field with an input mask.' }, source: { code: exampleSource } }
+    controls: { include: ["value","label","floatLabel","mask","placeholder","slotChar","autoClear","unmask","invalid","disabled","readOnly","variant"] },
+    docs: { description: { component: 'Masked text field for dates, phone numbers, identifiers, and other structured input.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
   argTypes: { value: { control: 'text' },
+    label: { control: 'text' },
+    floatLabel: { control: 'boolean' },
     mask: { control: 'text' },
     placeholder: { control: 'text' },
-    disabled: { control: 'boolean' }
+    slotChar: { control: 'text' },
+    autoClear: { control: 'boolean' },
+    unmask: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    readOnly: { control: 'boolean' },
+    variant: { control: 'inline-radio', options: [undefined, 'outlined', 'filled'] }
   }
 } satisfies Meta<ExampleArgs>;
 
