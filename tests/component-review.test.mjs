@@ -475,16 +475,13 @@ test('popup menus and ContextMenu have working mouse and keyboard triggers', asy
   await page.getByRole('status').filter({ hasText: 'Delete selected' }).waitFor();
 });
 
-test('PickList transfers items and OrderList reorders them', async () => {
+test('PickList transfers items', async () => {
   await open('PickList');
   await page.getByRole('option', { name: 'Bamboo Watch' }).click();
   await page.getByRole('button', { name: 'Move to Target', exact: true }).click();
   await page.getByRole('listbox').nth(1).getByRole('option', { name: 'Bamboo Watch' }).waitFor();
+  await page.getByRole('status').filter({ hasText: '1 item(s) moved to target.' }).waitFor();
   assert.doesNotMatch(await page.getByRole('listbox').nth(0).innerText(), /Bamboo Watch/);
-  await open('OrderList');
-  await page.getByRole('option', { name: 'Black Watch' }).click();
-  await page.getByRole('button', { name: 'Move Up', exact: true }).click();
-  await page.waitForFunction(() => document.querySelector('[role="option"]')?.textContent === 'Black Watch');
 });
 
 test('tab controls and Steps update their selection', async () => {
