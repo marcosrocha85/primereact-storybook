@@ -2,13 +2,13 @@ import { useState, type ComponentProps } from 'react';
 import { ToggleButton } from 'primereact/togglebutton';
 
 export type ExampleArgs = ComponentProps<typeof ToggleButton>;
-export const defaultArgs: ExampleArgs = { checked: true, onLabel: 'Yes', offLabel: 'No', onIcon: 'pi pi-check', offIcon: 'pi pi-times' };
+export const defaultArgs: ExampleArgs = { checked: true, onLabel: 'Enabled', offLabel: 'Disabled', onIcon: 'pi pi-check', offIcon: 'pi pi-times', iconPos: 'left', invalid: false, disabled: false, readonly: false, 'aria-label': 'ToggleButton' };
 
 export function Playground({ args, updateArgs }: {
   args: ExampleArgs;
   updateArgs: (changes: Partial<ExampleArgs>) => void;
 }) {
-  return (<ToggleButton {...args} aria-label="ToggleButton" onChange={(event) => { updateArgs({ checked: event.value }); args.onChange?.(event); } } />);
+  return (<ToggleButton {...args} onChange={(event) => { updateArgs({ checked: event.value }); args.onChange?.(event); } } />);
 }
 
 export function Example({ initialArgs = {} }: { initialArgs?: Partial<ExampleArgs> }) {

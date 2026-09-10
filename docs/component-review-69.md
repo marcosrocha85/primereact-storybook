@@ -1403,3 +1403,33 @@ supplied callback path. The component browser check verifies selection retention
 structure, copyable sources, Controls placement, and desktop/mobile rendering. Keyboard navigation,
 URL navigation, item commands/templates, PT callbacks, every inherited DOM event, ref methods, and
 all MenuItem combinations remain forwarded but are not exhaustively tested.
+
+### ToggleButton API audit — issue #64
+
+Inspected the Button documentation/story reference, the ToggleButton generator entry and
+generated files, the Sakai UI Kit ToggleButton usages at
+`vendor/sakai-react/app/(main)/uikit/input/page.tsx` and
+`vendor/sakai-react/app/(main)/uikit/table/page.tsx`, and the installed PrimeReact
+`togglebutton.d.ts` and implementation. The curated Summary covers labels, paired icons,
+icon position, invalid state, and disabled state. Default remains one native ToggleButton
+instance and synchronizes only the controlled `checked` value.
+
+| Native surface | Treatment |
+| --- | --- |
+| `checked`, `onLabel`, `offLabel`, `onIcon`, `offIcon`, `iconPos`, `invalid`, `disabled`, `readonly`, `tooltip` | Exposed through focused Controls and forwarded unchanged. Icon Controls use the standard select options including the no-icon option; native icon node/function forms remain available through args. |
+| `tooltipOptions`, `unstyled` | Forwarded unchanged and intentionally outside the focused Controls; tooltip configuration and the unstyled boundary remain available through native args. |
+| `onChange` | Adapted only to call `updateArgs({ checked: event.value })`, then invokes the supplied callback with the original PrimeReact change event. Click and Space behavior are covered by the shared boolean-input browser check. |
+| `onFocus`, `onBlur` | Forwarded unchanged through the native props spread. The wrapper does not replace these callbacks. |
+| `children` | Forwarded unchanged. ToggleButton's native implementation renders labels/icons and does not use children in the curated examples; custom child values remain outside the visual playground. |
+| `pt`, `ptOptions` | Forwarded unchanged. Native root, input, box, icon, label, tooltip, and lifecycle pass-through sections retain their object/function forms; no wrapper defaults replace caller values. |
+| `className`, `style`, `id`, `name`, `tabIndex`, `autoFocus`, `aria-*`, `data-*`, inherited `HTMLAttributes<HTMLDivElement>`, and DOM events | Forwarded unchanged through `{...args}`. This includes focus, blur, keyboard, mouse, pointer, touch, clipboard, animation, transition, and capture handlers. The default accessible label is an ordinary default arg and can be replaced by the caller. |
+| `inputId` implementation hook and imperative `focus()`/`getElement()` API | Source-inspected native behavior; `inputId` is used by the installed implementation but is not declared in the installed `ToggleButtonProps`. The ref methods are outside Controls and remain available on the native component. |
+| Nested models, selection/value modes, templates, and alternate value modes | Not applicable. ToggleButton has one boolean value, no item model, no collection/template API, and no alternate selection mode. |
+
+This inventory is source inspection, not exhaustive behavioral testing. The focused ToggleButton
+browser check verifies the Summary/Default structure, no Summary Controls, copyable sources,
+single-instance Default rendering, icon-position and invalid Controls, and desktop rendering.
+The shared boolean-input check verifies click, Space, and disabled behavior. Mobile rendering,
+custom icon node/function forms, tooltip options, PT callbacks, inherited DOM events, supplied
+focus/change callbacks, `inputId`, unstyled mode, and ref methods remain forwarded or
+source-inspected but are not exhaustively tested.
