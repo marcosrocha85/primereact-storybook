@@ -155,6 +155,41 @@ Validation for this revision:
 - `npm run build`, `npm run build-storybook`, and `git diff --check`: passed. Storybook emitted existing large-chunk and plugin-timing warnings.
 - Visual inspection at 1280px and 390px confirmed aligned labels/radio indicators, group wrapping, checked/disabled/invalid/filled states, Controls, and Code panel without clipping.
 
+### Rating API inventory — issue #49
+
+Inspected the Button documentation/story reference, Sakai's Rating usage in
+`vendor/sakai-react/app/(main)/uikit/input/page.tsx`, the list and table product
+compositions, and the installed PrimeReact `rating/rating.d.ts` and
+`rating/rating.esm.js`. This inventory records source-inspection evidence; it is
+not exhaustive behavioral testing.
+
+| Native API surface | Treatment |
+| --- | --- |
+| `value`, `stars`, `cancel`, `disabled`, `readOnly` | Exposed through focused Default Controls and passed through unchanged. Summary covers selectable, custom star-count, clearable, read-only and disabled ratings. The native numeric value model remains available; `null`/`undefined` means no selected value. |
+| `onChange` | Adapted only to synchronize the story's controlled `value` arg, preserving `undefined` when the native cancel event reports `null`; then forwards the exact native event to the supplied callback. |
+| `onIcon`, `offIcon`, `cancelIcon`, `cancelIconProps`, `onIconProps`, `offIconProps` | Passed through unchanged. Icon values support native strings, nodes and functions; they are not represented by text-only Controls. |
+| `tooltip`, `tooltipOptions`, `id`, `className`, `style`, `tabIndex`, `children`, and inherited `HTMLDivElement` attributes/handlers | Passed through unchanged through `{...args}`. This includes ARIA/data attributes and focus, blur, keyboard, pointer, mouse, clipboard, composition, drag, animation and transition handlers. `children` is accepted by the native contract but does not replace the generated rating items. |
+| `pt`, `ptOptions`, `unstyled` | Passed through unchanged. Native root, item, cancel item, on/off/cancel icon, tooltip and lifecycle pass-through sections remain available; the story supplies no PT defaults that could replace user entries. |
+| Nested models, templates, selection modes and imperative methods | Not applicable or native-only. Rating has no item model, render-template API or alternate selection/value mode. The native ref exposes the component element and remains outside Controls. |
+
+The focused contract test verifies representative numeric/configuration values,
+inherited attributes and callbacks, icon/tooltip props, PT, unstyled mode and
+exact event preservation for a controlled change including cancellation. The
+component browser check verifies the Summary/Default contract, rendered star
+count and value synchronization at desktop/mobile widths. Alternate icon
+functions/nodes, every inherited DOM event, PT callback form, tooltip behavior,
+arbitrary children and the imperative ref remain forwarded or source-inspected
+but are not exhaustively tested.
+
+Validation for this revision:
+- `node scripts/generate-component-stories.mjs`: passed; generated output remained scoped to Rating.
+- `node --test tests/rating-contract.test.mjs tests/component-generator.test.mjs`: passed, 3 tests.
+- `npm run build`: passed.
+- `npm run build-storybook`: passed; existing large-chunk and plugin-timing warnings remain.
+- `STORYBOOK_URL=http://127.0.0.1:4173 LD_LIBRARY_PATH=/tmp/sakai-browser-libs/usr/lib/x86_64-linux-gnu node --test --test-name-pattern='Rating: only Summary and Default' tests/component-review.test.mjs`: passed; Summary/Default rendered at desktop/mobile widths.
+- Manual Playwright visual inspection at 1280px and 390px: passed; curated examples render without runtime errors or layout clipping. A direct browser interaction also verified selecting the fifth star and clearing it with the cancel control.
+- `git diff --check`: passed.
+
 ### ProgressBar API inventory — issue #47
 
 The inventory below is based on the installed PrimeReact `ProgressBarProps` declaration and implementation, plus the Sakai UI Kit `misc` and `table` examples. It records the native contract reviewed for this issue; it is not an exhaustive interaction test.
