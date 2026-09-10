@@ -6,7 +6,7 @@ import exampleSource from "./PickList.examples.tsx?raw";
 
 <Title>PickList</Title>
 
-<Subtitle>Transfer items between lists.</Subtitle>
+<Subtitle>Transfer items between source and target lists with filtering, selection, and responsive controls.</Subtitle>
 
 ## Usage
 
@@ -16,11 +16,37 @@ import exampleSource from "./PickList.examples.tsx?raw";
 
 ## Variations
 
-### Filter
+### Filtering
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ filter: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ filter: true, sourceFilterPlaceholder: 'Search available items', targetFilterPlaceholder: 'Search selected items' }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ filter: true }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ filter: true, sourceFilterPlaceholder: 'Search available items', targetFilterPlaceholder: 'Search selected items' }} />"} language="tsx" />
+
+### Preselected target items
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ source: [{ name: 'Blue Band' }], target: [{ name: 'Bamboo Watch' }, { name: 'Black Watch' }] }} />
+</div>
+
+<Source code={"<Example initialArgs={{ source: [{ name: 'Blue Band' }], target: [{ name: 'Bamboo Watch' }, { name: 'Black Watch' }] }} />"} language="tsx" />
+
+### Control visibility
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ showSourceControls: false, showTargetControls: false }} />
+</div>
+
+<Source code={"<Example initialArgs={{ showSourceControls: false, showTargetControls: false }} />"} language="tsx" />
+
+### Selection mode
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ metaKeySelection: false }} />
+</div>
+
+<Source code={"<Example initialArgs={{ metaKeySelection: false }} />"} language="tsx" />
 
 ## Playground
 

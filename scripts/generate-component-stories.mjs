@@ -677,11 +677,31 @@ function productTemplate(product: (typeof products)[number], layout?: string) {
     name: 'PickList',
     prime: 'picklist',
     importName: 'PickList',
-    description: 'Transfer items between lists.',
-    renderPrefix: `const source = [{ name: 'Bamboo Watch' }, { name: 'Black Watch' }];`,
-    args: `{ dataKey: 'name', filterBy: 'name', source, target: [], sourceHeader: 'Available', targetHeader: 'Selected' }`,
-    argTypes: `{ sourceHeader: { control: 'text' }, targetHeader: { control: 'text' }, filter: { control: 'boolean' } }`,
-    playground: `<PickList {...args} itemTemplate={(item: { name: string }) => <span>{item.name}</span>} onChange={(event) => { updateArgs({ source: event.source, target: event.target }); args.onChange?.(event); }} />`,
+    description: 'Transfer items between source and target lists with filtering, selection, and responsive controls.',
+    renderPrefix: `const source = [{ name: 'Bamboo Watch' }, { name: 'Black Watch' }, { name: 'Blue Band' }];
+
+function pickListItemTemplate(item: { name: string }) {
+  return <span>{item.name}</span>;
+}`,
+    args: `{ dataKey: 'name', filterBy: 'name', source, target: [], sourceHeader: 'Available', targetHeader: 'Selected', filter: false, showSourceControls: true, showTargetControls: true, metaKeySelection: true }`,
+    argTypes: `{
+    sourceHeader: { control: 'text' },
+    targetHeader: { control: 'text' },
+    filter: { control: 'boolean' },
+    filterMatchMode: { control: 'select', options: ['contains', 'startsWith', 'endsWith', 'equals', 'notEquals'] },
+    showSourceControls: { control: 'boolean' },
+    showTargetControls: { control: 'boolean' },
+    metaKeySelection: { control: 'boolean' },
+    breakpoint: { control: 'text' }
+  }`,
+    hooks: `const [lastMove, setLastMove] = useState('No items moved yet.');`,
+    playground: `<><PickList {...args} itemTemplate={args.itemTemplate ?? pickListItemTemplate} onChange={(event) => { updateArgs({ source: event.source, target: event.target }); args.onChange?.(event); }} onMoveToTarget={(event) => { setLastMove(event.value.length + ' item(s) moved to target.'); args.onMoveToTarget?.(event); }} /><p role="status">{lastMove}</p></>`,
+    docsVariations: [
+      { title: 'Filtering', code: `<Example initialArgs={{ filter: true, sourceFilterPlaceholder: 'Search available items', targetFilterPlaceholder: 'Search selected items' }} />` },
+      { title: 'Preselected target items', code: `<Example initialArgs={{ source: [{ name: 'Blue Band' }], target: [{ name: 'Bamboo Watch' }, { name: 'Black Watch' }] }} />` },
+      { title: 'Control visibility', code: `<Example initialArgs={{ showSourceControls: false, showTargetControls: false }} />` },
+      { title: 'Selection mode', code: `<Example initialArgs={{ metaKeySelection: false }} />` }
+    ],
   },
   {
     name: 'OrderList',
