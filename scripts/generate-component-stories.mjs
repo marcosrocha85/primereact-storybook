@@ -226,15 +226,31 @@ const components = [
     name: 'Dropdown',
     prime: 'dropdown',
     importName: 'Dropdown',
-    description: 'Single-option selector.',
+    extraImports: `import type { DropdownProps } from 'primereact/dropdown';`,
+    exampleType: 'DropdownProps',
+    description: 'Select one option from a collection, with filtering, validation, editable input, and clearable states.',
     renderPrefix: `const cityOptions = [{ name: 'New York', code: 'NY' }, { name: 'Rome', code: 'RM' }, { name: 'London', code: 'LDN' }];`,
-    args: `{ value: null, placeholder: 'Select', optionLabel: 'name', options: cityOptions, filter: false }`,
+    args: `{ value: null, placeholder: 'Select a city', optionLabel: 'name', options: cityOptions, filter: false, disabled: false, invalid: false, variant: 'outlined', showClear: false, editable: false, checkmark: false }`,
     argTypes: `{
     placeholder: { control: 'text' },
     filter: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    variant: { control: 'inline-radio', options: ['outlined', 'filled'] },
+    showClear: { control: 'boolean' },
+    editable: { control: 'boolean' },
+    checkmark: { control: 'boolean' },
     disabled: { control: 'boolean' }
   }`,
     playground: `<Dropdown {...args} onChange={(event) => { updateArgs({ value: event.value }); args.onChange?.(event); } } />`,
+    docsVariations: [
+      { title: 'Filterable options', code: `<Example initialArgs={{ filter: true, filterPlaceholder: 'Search cities' }} />` },
+      { title: 'Filled and invalid states', code: `<div className="flex flex-column gap-3" style={{ maxWidth: '20rem' }}>
+  <Example initialArgs={{ variant: 'filled' }} />
+  <Example initialArgs={{ invalid: true }} />
+</div>` },
+      { title: 'Editable and clearable', code: `<Example initialArgs={{ value: { name: 'Rome', code: 'RM' }, editable: true, showClear: true, placeholder: 'Type or select a city' }} />` },
+      { title: 'Disabled', code: `<Example initialArgs={{ disabled: true }} />` }
+    ],
   },
   {
     name: 'InputMask',

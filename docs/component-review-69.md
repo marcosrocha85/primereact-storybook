@@ -470,6 +470,35 @@ Validation for this revision:
 - Summary and Default screenshots inspected at 1280px and 390px. Icons, labels, images and removal controls are aligned; mobile examples wrap without clipping. Source blocks scroll horizontally.
 - `git diff --check`: passed.
 
+## Dropdown review — issue #26
+
+Inspected the Button documentation/story reference, the Dropdown generator entry and generated files, the Sakai UI Kit Dropdown uses in form layout, input, float-label, invalid-state, list, and table examples, and the installed PrimeReact `dropdown.d.ts` and implementation. The Summary now uses local stateful examples for filtering, filled/invalid, editable/clearable, and disabled states. Default keeps one controlled Dropdown instance and synchronizes its selected value through `useArgs`.
+
+### API inventory
+
+| Native surface | Treatment |
+| --- | --- |
+| `value`, `options`, `optionLabel`, `optionValue`, `optionDisabled`, `dataKey`, `optionGroupLabel`, `optionGroupChildren` | Forwarded unchanged. The curated example uses object options and `optionLabel`; the native value remains unrestricted (`any`) and primitive, object, null, and other supported modes are intentionally outside the curated Controls. |
+| `onChange` | Wrapped only to synchronize `value` through `useArgs`/local Summary state, then invokes the supplied callback with the original event. |
+| Filtering: `filter`, `filterBy`, `filterDelay`, `filterInputAutoFocus`, `filterLocale`, `filterMatchMode`, `filterPlaceholder`, `filterTemplate`, `showFilterClear`, `filterIcon`, `filterClearIcon`, `emptyFilterMessage` | Forwarded unchanged. `filter` is exposed as a Control and the Summary demonstrates filtering; custom filter templates, locales, icons, and messages remain native args outside the curated Controls. |
+| Display and states: `placeholder`, `variant`, `invalid`, `disabled`, `editable`, `checkmark`, `highlightOnSelect`, `selectOnFocus`, `focusOnHover`, `autoOptionFocus`, `showClear`, `showOnFocus`, `loading`, `loadingIcon`, `resetFilterOnHide`, `scrollHeight`, `required`, `maxLength` | Forwarded unchanged. The Default exposes the documented variant/state subset; the remaining native options are intentionally outside the curated Controls. |
+| Templates: `itemTemplate`, `optionGroupTemplate`, `valueTemplate`, `panelFooterTemplate`, `children` | Forwarded unchanged. The story does not replace supplied templates or children; they are source-inspected and outside the curated examples. |
+| Overlay and icons: `appendTo`, `dropdownIcon`, `collapseIcon`, `clearIcon`, `panelClassName`, `panelStyle`, `transitionOptions`, `tooltip`, `tooltipOptions`, `virtualScrollerOptions` | Forwarded unchanged, preserving native element/function/object value modes and overlay configuration. |
+| `onFocus`, `onBlur`, `onMouseDown`, `onContextMenu`, `onShow`, `onHide`, `onFilter` | Forwarded unchanged. The supplied callback contract is tested for the intercepted `onChange` path; the remaining callbacks are source-inspected and not independently exercised. |
+| `pt`, `ptOptions`, `unstyled` | Forwarded unchanged. Native pass-through sections and user PT entries are not replaced by playground defaults. |
+| Inherited `HTMLAttributes<HTMLDivElement>` | Forwarded by `{...args}`, including `id`, `className`, `style`, `tabIndex`, `aria-*`, `data-*`, and inherited DOM event attributes. |
+| Imperative ref API | Native `focus`, `clear`, `show`, `hide`, `getElement`, `getOverlay`, and `getInput` methods remain available through the PrimeReact ref and are not adapted by the story. |
+
+This inventory is based on source inspection and is not exhaustive behavioral testing. The focused contract test verifies native props, object value handling, templates, pass-through objects, inherited attributes, and preservation of the supplied `onChange` callback. The component browser test verifies option selection at desktop and mobile widths plus the shared Summary/Default, Controls, source-panel, and runtime checks. Filtering, editable input, templates, virtual scrolling, overlay targets, PT callback forms, imperative methods, and every inherited DOM event remain forwarded but are not exhaustively tested.
+
+Validation for issue #26:
+- `node scripts/generate-component-stories.mjs`: passed; output remained scoped to Dropdown and preserved the five manual components.
+- `node --test tests/dropdown-contract.test.mjs tests/component-generator.test.mjs`: passed.
+- `npm run build`: passed.
+- `npm run build-storybook`: passed; existing large-chunk and plugin-timing warnings remain.
+- `STORYBOOK_URL=http://127.0.0.1:6017 LD_LIBRARY_PATH=/tmp/sakai-browser-libs/usr/lib/x86_64-linux-gnu node --test --test-name-pattern='Dropdown' tests/component-review.test.mjs`: passed at 1280px and 390px; covers option selection, Summary/Default navigation, Controls placement, copyable source, responsive rendering, and runtime exceptions.
+- `git diff --check`: passed.
+
 Initial browser runs failed on an invented Code panel ID and an image path supplied
 through URL args. Inspection found the real accessible Code tabpanel and Storybook's
 “Omitted potentially unsafe URL args” warning. Tests now use the accessible panel

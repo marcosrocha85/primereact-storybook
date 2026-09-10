@@ -6,16 +6,20 @@ import exampleSource from './Dropdown.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Dropdown',
-  component: Dropdown,
   parameters: {
     layout: 'centered',
-    controls: { include: ["value","placeholder","filter","disabled"] },
-    docs: { description: { component: 'Single-option selector.' }, source: { code: exampleSource } }
+    controls: { include: ["value","placeholder","filter","invalid","variant","showClear","editable","checkmark","disabled"] },
+    docs: { description: { component: 'Select one option from a collection, with filtering, validation, editable input, and clearable states.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
   argTypes: { value: { control: 'object' },
     placeholder: { control: 'text' },
     filter: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    variant: { control: 'inline-radio', options: ['outlined', 'filled'] },
+    showClear: { control: 'boolean' },
+    editable: { control: 'boolean' },
+    checkmark: { control: 'boolean' },
     disabled: { control: 'boolean' }
   }
 } satisfies Meta<ExampleArgs>;
