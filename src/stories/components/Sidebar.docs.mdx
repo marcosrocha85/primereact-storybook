@@ -6,7 +6,7 @@ import exampleSource from "./Sidebar.examples.tsx?raw";
 
 <Title>Sidebar</Title>
 
-<Subtitle>Side panel.</Subtitle>
+<Subtitle>Overlay side panel for navigation, contextual content, and responsive layouts.</Subtitle>
 
 ## Usage
 
@@ -16,29 +16,32 @@ import exampleSource from "./Sidebar.examples.tsx?raw";
 
 ## Variations
 
-### left
+### Positions
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'left' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ position: 'left' }} />
+<Example initialArgs={{ position: 'right' }} />
+<Example initialArgs={{ position: 'top' }} />
+<Example initialArgs={{ position: 'bottom' }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'left' }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ position: 'left' }} />\n<Example initialArgs={{ position: 'right' }} />\n<Example initialArgs={{ position: 'top' }} />\n<Example initialArgs={{ position: 'bottom' }} />"} language="tsx" />
 
-### right
+### Full screen
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'right' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ fullScreen: true }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'right' }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ fullScreen: true }} />"} language="tsx" />
 
-### top
+### Modal and dismissable states
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'top' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ modal: false, dismissable: false }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'top' }} />"} language="tsx" />
-
-### bottom
-
-<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'bottom' }} /></div>
-
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'bottom' }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ modal: false, dismissable: false }} />"} language="tsx" />
 
 ## Playground
 

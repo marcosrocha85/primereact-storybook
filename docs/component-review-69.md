@@ -387,6 +387,23 @@ All 67 components pass the same browser checks at 1280×900 and 390×900: exactl
 | Tree | [#67](https://github.com/marcosrocha85/primereact-storybook/issues/67) | Expand; checkbox selection |
 | TreeTable | [#68](https://github.com/marcosrocha85/primereact-storybook/issues/68) | Expand; checkbox selection |
 
+### Sidebar API inventory — issue #53
+
+The inventory below is based on the installed PrimeReact `SidebarProps`, `SidebarPassThroughOptions`, and Sidebar implementation, the Button story/documentation reference, and the Sakai UI Kit overlay example at `vendor/sakai-react/app/(main)/uikit/overlay/page.tsx`. It records the native contract reviewed for this issue; it is not exhaustive interaction testing.
+
+| API surface | Treatment |
+| --- | --- |
+| `visible`, `position` | `visible` is adapted only for controlled Storybook synchronization; `position` is exposed through a select Control with all native values (`left`, `right`, `top`, `bottom`). Both are passed through unchanged otherwise. |
+| `dismissable`, `modal`, `showCloseIcon`, `closeOnEscape`, `fullScreen`, `blockScroll` | Exposed through focused Default Controls and passed through unchanged. These cover the primary Sakai overlay compositions and are curated in Summary. |
+| `maskStyle`, `maskClassName`, `baseZIndex`, `appendTo`, `transitionOptions`, `className`, `style`, `id`, `children`, inherited HTML attributes and DOM callbacks | Passed through unchanged by `{...args}`; intentionally outside the curated Controls/examples. `children` remains available to callers, while the playground supplies its own demonstration content. |
+| `header`, `icons`, `content`, `closeIcon`, `ariaCloseLabel` | Passed through unchanged; intentionally outside the curated Controls because they accept React nodes, callbacks, native `IconType` values, or headless content props. |
+| `onHide` | Adapted to set `visible: false`, then invokes the supplied callback with no arguments, preserving the native callback contract. The focused contract test exercises this path. |
+| `onShow` | Passed through unchanged; no wrapper callback is synthesized. |
+| `pt`, `ptOptions`, `unstyled` | Passed through unchanged. Root, header, close button/icon, custom icons, content, mask, transition, and lifecycle pass-through sections remain available; no wrapper PT defaults replace user entries. |
+| Nested models, alternate value modes, and imperative methods | No option/value model applies. Native `getElement()`, `getMask()`, and `getCloseIcon()` ref methods remain outside Controls and are source-inspected. |
+
+The API inventory is source inspection, not exhaustive behavioral testing. `tests/sidebar-contract.test.mjs` verifies representative inherited attributes, PT options, custom content, visual props, and supplied `onHide` preservation. The browser check verifies open, close, reopen, Summary/Default structure, copyable sources, Controls placement, and desktop/mobile rendering. Header/icon/content callback forms, transition variants, mask behavior for every position, Escape/focus paths, refs, and every native prop combination remain forwarded but are not exhaustively tested.
+
 ### Password API inventory — issue #45
 
 The inventory below is based on the installed PrimeReact `PasswordProps` declaration and implementation, plus the Sakai invalid-state and authentication examples under `vendor/sakai-react`. It records the native contract reviewed for this issue; it is not exhaustive interaction testing.
