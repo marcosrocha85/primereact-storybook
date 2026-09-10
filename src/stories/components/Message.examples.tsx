@@ -2,7 +2,7 @@ import { useState, type ComponentProps } from 'react';
 import { Message } from 'primereact/message';
 
 export type ExampleArgs = ComponentProps<typeof Message>;
-export const defaultArgs: ExampleArgs = { severity: 'info', text: 'Message content' };
+export const defaultArgs: ExampleArgs = { severity: 'info', text: 'Message content', icon: undefined };
 
 export function Playground({ args, updateArgs }: {
   args: ExampleArgs;

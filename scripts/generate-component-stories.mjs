@@ -1105,9 +1105,37 @@ import { menuWithActions } from '../menuExamples';`,
     name: 'Message',
     prime: 'message',
     importName: 'Message',
-    description: 'Inline message.',
-    args: `{ severity: 'info', text: 'Message content' }`,
-    argTypes: `{ severity: { control: 'select', options: ['success', 'info', 'warn', 'error'] }, text: { control: 'text' } }`,
+    description: 'Inline message used for validation feedback and status information.',
+    args: `{ severity: 'info', text: 'Message content', icon: undefined }`,
+    argTypes: `{ severity: { control: 'select', options: [undefined, 'success', 'info', 'warn', 'error', 'secondary', 'contrast'] }, text: { control: 'text' }, icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] } }`,
+    docsImports: `import { Message } from "primereact/message";`,
+    docsVariations: [
+      {
+        title: 'Severities',
+        code: `<div className="flex flex-column gap-2 align-items-start">
+  <Message severity="success" text="Success message" />
+  <Message severity="info" text="Information message" />
+  <Message severity="warn" text="Warning message" />
+  <Message severity="error" text="Error message" />
+  <Message severity="secondary" text="Secondary message" />
+  <Message severity="contrast" text="Contrast message" />
+</div>`
+      },
+      {
+        title: 'Icons',
+        code: `<div className="flex flex-wrap gap-2">
+  <Message severity="success" icon="pi pi-check" text="Custom success icon" />
+  <Message severity="info" icon="pi pi-bookmark" text="Custom info icon" />
+</div>`
+      },
+      {
+        title: 'Validation feedback',
+        code: `<div className="flex flex-column gap-2 align-items-start">
+  <Message severity="error" text="Username is required" />
+  <Message severity="error" text="Enter a valid email address" />
+</div>`
+      }
+    ],
     playground: `<Message {...args} />`,
   },
   {
