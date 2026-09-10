@@ -9,11 +9,11 @@ const meta = {
   component: Divider,
   parameters: {
     layout: 'centered',
-    controls: { include: ["layout","align"] },
-    docs: { description: { component: 'Visual separator.' }, source: { code: exampleSource } }
+    controls: { include: ["children","layout","align","type"] },
+    docs: { description: { component: 'Visual separator for dividing content into related sections.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { layout: { control: 'inline-radio', options: ['horizontal', 'vertical'] }, align: { control: 'select', options: ['left', 'center', 'right', 'top', 'bottom'] } }
+  argTypes: { children: { control: 'text' }, layout: { control: 'inline-radio', options: ['horizontal', 'vertical'] }, align: { control: 'select', options: ['left', 'center', 'right', 'top', 'bottom'] }, type: { control: 'inline-radio', options: ['solid', 'dashed', 'dotted'] } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;

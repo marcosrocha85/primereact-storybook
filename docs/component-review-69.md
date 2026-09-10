@@ -553,3 +553,37 @@ Validation for this revision:
 Browser assertions cover right-click, `Shift+F10`, command feedback, Summary structure,
 responsive rendering and the Default playground. The API inventory is source inspection, not
 exhaustive behavioral testing of every inherited prop, PT callback, template or append target.
+
+### Divider API audit — issue #25
+
+Inspected Button, the installed PrimeReact `divider/divider.d.ts` and
+`divider/divider.esm.js`, and the Sakai UI Kit miscellaneous source. The current upstream
+miscellaneous page does not contain a Divider example; the curated examples therefore follow
+PrimeReact's documented contract and the component's native visual modes.
+
+| Native surface | Treatment |
+| --- | --- |
+| `layout` | Exposed as a radio Control for `horizontal` and `vertical`; forwarded unchanged. |
+| `align` | Exposed as a select Control with the native union (`left`, `center`, `right`, `top`, `bottom`); forwarded unchanged. Horizontal alignment uses left/center/right and vertical alignment uses top/center/bottom as defined by PrimeReact. |
+| `type` | Exposed as a radio Control for the native `solid`, `dashed`, and `dotted` modes; forwarded unchanged. Summary shows all three styles. |
+| `children` | Exposed as a text Control for the common text-label composition; forwarded through the native props spread. Other React node values remain supported when supplied through native story args but are outside the curated text Control. |
+| `pt`, `ptOptions`, `unstyled` | Forwarded unchanged and intentionally outside the curated Controls. Native PT sections are `root`, `content`, and `hooks`; user pass-through entries are not replaced by playground defaults. |
+| `className`, `style`, `id`, `title`, `tabIndex`, `aria-*`, `data-*` and inherited HTML attributes/events | Forwarded unchanged by `{...args}` as part of PrimeReact's inherited `HTMLAttributes<HTMLDivElement>` contract. |
+| `ref` / `getElement()` | Native ref and imperative element lookup remain available through the PrimeReact component; the story does not adapt them. |
+| State, value modes, templates and component callbacks | Not applicable to Divider. It is presentation-only; there are no component events, value/selection models, or render templates beyond `children` and PT methods. |
+
+The Default playground keeps one Divider instance and adapts only its surrounding layout so
+vertical mode has a visible height. No native prop is dropped or narrowed by the playground.
+Summary examples cover the documented solid/dashed/dotted styles, horizontal alignment, and
+vertical alignment at desktop and mobile widths. These checks do not exhaustively exercise
+arbitrary React children, inherited attributes, PT callback forms, unstyled rendering, or
+imperative methods; those surfaces are source-inspected and forwarded.
+
+Validation for this revision:
+- `node scripts/generate-component-stories.mjs`: executed; generated output remained scoped to Divider and preserved the five manual components.
+- `node --test tests/component-generator.test.mjs`: passed.
+- `npm run build`: passed.
+- `npm run build-storybook`: passed; existing large-chunk and plugin-timing warnings remain.
+- `STORYBOOK_URL=http://127.0.0.1:4173 LD_LIBRARY_PATH=/tmp/sakai-browser-libs/usr/lib/x86_64-linux-gnu node --test --test-name-pattern='Divider' tests/component-review.test.mjs`: passed at 1280px and 390px. Covers Summary/Default indexing, no Summary Controls, copyable source, responsive rendering, and no runtime exceptions.
+- Playwright screenshots inspected at 1280px and 390px: passed; styles, alignment examples, vertical composition, source blocks, and mobile wrapping are visible without clipping.
+- `git diff --check`: passed.

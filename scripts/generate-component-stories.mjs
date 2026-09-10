@@ -531,10 +531,22 @@ function productTemplate(product: (typeof products)[number], layout?: string) {
     name: 'Divider',
     prime: 'divider',
     importName: 'Divider',
-    description: 'Visual separator.',
-    args: `{ layout: 'horizontal', align: 'center' }`,
-    argTypes: `{ layout: { control: 'inline-radio', options: ['horizontal', 'vertical'] }, align: { control: 'select', options: ['left', 'center', 'right', 'top', 'bottom'] } }`,
-    playground: `<div style={{ width: '24rem', maxWidth: '100%', display: args.layout === 'vertical' ? 'flex' : 'block' }}><span>Before</span><Divider {...args}>Divider</Divider><span>After</span></div>`,
+    description: 'Visual separator for dividing content into related sections.',
+    args: `{ layout: 'horizontal', align: 'center', type: 'solid', children: 'Divider' }`,
+    argTypes: `{ children: { control: 'text' }, layout: { control: 'inline-radio', options: ['horizontal', 'vertical'] }, align: { control: 'select', options: ['left', 'center', 'right', 'top', 'bottom'] }, type: { control: 'inline-radio', options: ['solid', 'dashed', 'dotted'] } }`,
+    playground: `<div style={{ width: '24rem', maxWidth: '100%', height: args.layout === 'vertical' ? '8rem' : undefined, display: args.layout === 'vertical' ? 'flex' : 'block', alignItems: 'center' }}><span>Before</span><Divider {...args} /><span>After</span></div>`,
+    docsVariations: [
+      { title: 'Border styles', code: `<Divider type="solid">Solid</Divider>
+<Divider type="dashed">Dashed</Divider>
+<Divider type="dotted">Dotted</Divider>` },
+      { title: 'Horizontal alignment', code: `<Example initialArgs={{ align: 'left', children: 'Left' }} />
+<Example initialArgs={{ align: 'center', children: 'Center' }} />
+<Example initialArgs={{ align: 'right', children: 'Right' }} />` },
+      { title: 'Vertical layout', code: `<Example initialArgs={{ layout: 'vertical', align: 'top', children: 'Top' }} />
+<Example initialArgs={{ layout: 'vertical', align: 'center', children: 'Center' }} />
+<Example initialArgs={{ layout: 'vertical', align: 'bottom', children: 'Bottom' }} />` }
+    ],
+    docsImports: `import { Divider } from "primereact/divider";`,
   },
   {
     name: 'Splitter',
