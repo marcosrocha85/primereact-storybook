@@ -1128,12 +1128,51 @@ function productTemplate(product: Product) {
     name: 'Tooltip',
     prime: 'tooltip',
     importName: 'Tooltip',
-    extraImports: `import { Button } from 'primereact/button';`,
-    hooks: `const id = useId();`,
-    description: 'Contextual hint.',
-    args: `{ content: 'Tooltip content', event: 'both' }`,
-    argTypes: `{ content: { control: 'text' }, position: { control: 'select', options: ['top', 'bottom', 'left', 'right'] } }`,
-    playground: `<><Tooltip {...args} pt={{ root: { 'aria-hidden': false }, ...args.pt }} target={'[id="' + id + '"]'} /><Button id={id} label="Hover or focus me" /></>`,
+    extraImports: `import { Button } from 'primereact/button';
+import type { TooltipPassThroughOptions } from 'primereact/tooltip';`,
+    hooks: `const id = useId();
+  const target = args.target ?? '[id="' + id + '"]';
+  const root = args.pt?.root;
+  type TooltipRoot = NonNullable<TooltipPassThroughOptions['root']>;
+  type TooltipRootOptions<T> = T extends (options?: infer Options) => unknown ? Options : never;
+  const accessibleRoot = typeof root === 'function'
+    ? (options: TooltipRootOptions<TooltipRoot>) => ({ 'aria-hidden': false, ...(root(options) ?? {}) })
+    : { 'aria-hidden': false, ...(root ?? {}) };
+  const pt: TooltipPassThroughOptions = { ...args.pt, root: accessibleRoot };`,
+    description: 'Contextual hint attached to a target element, with hover, focus, placement, and timing options.',
+    args: `{ content: 'Tooltip content', event: 'both', position: 'top', disabled: false, showOnDisabled: false, mouseTrack: false, mouseTrackLeft: 5, mouseTrackTop: 5, showDelay: 0, hideDelay: 0, closeOnEscape: false, autoHide: true }`,
+    argTypes: `{
+    content: { control: 'text' },
+    position: { control: 'select', options: ['top', 'bottom', 'left', 'right', 'mouse'] },
+    event: { control: 'inline-radio', options: ['hover', 'focus', 'both'] },
+    disabled: { control: 'boolean' },
+    showOnDisabled: { control: 'boolean' },
+    mouseTrack: { control: 'boolean' },
+    mouseTrackLeft: { control: { type: 'number', min: 0, step: 1 } },
+    mouseTrackTop: { control: { type: 'number', min: 0, step: 1 } },
+    showDelay: { control: { type: 'number', min: 0, step: 100 } },
+    hideDelay: { control: { type: 'number', min: 0, step: 100 } },
+    closeOnEscape: { control: 'boolean' },
+    autoHide: { control: 'boolean' }
+  }`,
+    playground: `<><Tooltip {...args} target={target} pt={pt} /><Button id={id} label="Hover or focus me" /></>`,
+    docsImports: `import { Tooltip } from "primereact/tooltip";
+import { Button } from "primereact/button";`,
+    docsVariations: [
+      { title: 'Positions', code: `<div className="flex flex-wrap align-items-center gap-3">
+  <Example initialArgs={{ position: 'top' }} />
+  <Example initialArgs={{ position: 'bottom' }} />
+  <Example initialArgs={{ position: 'left' }} />
+  <Example initialArgs={{ position: 'right' }} />
+</div>` },
+      { title: 'Show events', code: `<div className="flex flex-wrap align-items-center gap-3">
+  <Example initialArgs={{ event: 'hover', content: 'Shown on hover' }} />
+  <Example initialArgs={{ event: 'focus', content: 'Shown on focus' }} />
+  <Example initialArgs={{ event: 'both', content: 'Shown on hover or focus' }} />
+</div>` },
+      { title: 'Mouse tracking', code: `<Example initialArgs={{ position: 'mouse', mouseTrack: true, content: 'Follows the pointer' }} />` },
+      { title: 'Timing and dismissal', code: `<Example initialArgs={{ showDelay: 300, hideDelay: 300, closeOnEscape: true, autoHide: false }} />` }
+    ],
   },
   {
     name: 'Menubar',

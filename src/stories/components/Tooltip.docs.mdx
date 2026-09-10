@@ -1,12 +1,14 @@
 import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Example } from "./Tooltip.examples";
 import exampleSource from "./Tooltip.examples.tsx?raw";
+import { Tooltip } from "primereact/tooltip";
+import { Button } from "primereact/button";
 
 <Meta title="Components/Tooltip/Summary" />
 
 <Title>Tooltip</Title>
 
-<Subtitle>Contextual hint.</Subtitle>
+<Subtitle>Contextual hint attached to a target element, with hover, focus, placement, and timing options.</Subtitle>
 
 ## Usage
 
@@ -16,29 +18,46 @@ import exampleSource from "./Tooltip.examples.tsx?raw";
 
 ## Variations
 
-### top
+### Positions
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'top' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-wrap align-items-center gap-3">
+  <Example initialArgs={{ position: 'top' }} />
+  <Example initialArgs={{ position: 'bottom' }} />
+  <Example initialArgs={{ position: 'left' }} />
+  <Example initialArgs={{ position: 'right' }} />
+</div>
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'top' }} />"} language="tsx" />
+<Source code={"<div className=\"flex flex-wrap align-items-center gap-3\">\n  <Example initialArgs={{ position: 'top' }} />\n  <Example initialArgs={{ position: 'bottom' }} />\n  <Example initialArgs={{ position: 'left' }} />\n  <Example initialArgs={{ position: 'right' }} />\n</div>"} language="tsx" />
 
-### bottom
+### Show events
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'bottom' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-wrap align-items-center gap-3">
+  <Example initialArgs={{ event: 'hover', content: 'Shown on hover' }} />
+  <Example initialArgs={{ event: 'focus', content: 'Shown on focus' }} />
+  <Example initialArgs={{ event: 'both', content: 'Shown on hover or focus' }} />
+</div>
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'bottom' }} />"} language="tsx" />
+<Source code={"<div className=\"flex flex-wrap align-items-center gap-3\">\n  <Example initialArgs={{ event: 'hover', content: 'Shown on hover' }} />\n  <Example initialArgs={{ event: 'focus', content: 'Shown on focus' }} />\n  <Example initialArgs={{ event: 'both', content: 'Shown on hover or focus' }} />\n</div>"} language="tsx" />
 
-### left
+### Mouse tracking
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'left' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ position: 'mouse', mouseTrack: true, content: 'Follows the pointer' }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'left' }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ position: 'mouse', mouseTrack: true, content: 'Follows the pointer' }} />"} language="tsx" />
 
-### right
+### Timing and dismissal
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'right' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ showDelay: 300, hideDelay: 300, closeOnEscape: true, autoHide: false }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'right' }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ showDelay: 300, hideDelay: 300, closeOnEscape: true, autoHide: false }} />"} language="tsx" />
 
 ## Playground
 
