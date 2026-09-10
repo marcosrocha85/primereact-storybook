@@ -23,6 +23,22 @@ Sakai UI Kit sources under `vendor/sakai-react/app/(main)/uikit` were inspected 
 | Default controls/code are incomplete | Several story definitions exposed no Controls; static snippets omitted implemented handlers. | Each generated Default exposes supported properties; Code is enabled globally and includes the example implementation. |
 | Demo media assumes deployment at domain root | Image paths started with `/demo/`. | Local gallery/image samples use `./demo/` so assets resolve relative to the Storybook deployment path. |
 
+### InputMask API inventory — issue #30
+
+The inventory below is based on the installed PrimeReact `InputMaskProps` and `InputTextProps` declarations plus the installed InputMask implementation. It records the contract reviewed for this issue; it is not an exhaustive interaction test.
+
+| API surface | Status in the curated story | Evidence / scope decision |
+| --- | --- | --- |
+| `mask`, `slotChar`, `autoClear`, `unmask` | Exposed through Default Controls and passed through | Native mask tokens (`9`, `a`, `*`, and optional `?`) and formatted/unmasked value behavior verified by source inspection; date and phone masks are rendered in Summary; unmasked editing is not exhaustively tested. |
+| `value` (`string \| null`) | Adapted for controlled Storybook synchronization | The playground normalizes nullish values to the native empty string for rendering and stores `event.value` back in args; the native formatted display remains intact. |
+| `disabled`, `invalid`, `readOnly`, `variant` | Exposed through Default Controls and passed through | Disabled, invalid, read-only, and outlined/filled styling are curated; disabled/read-only behavior is source-inspected and the existing browser test covers formatted entry. |
+| `required`, `name`, `id`, `type`, `size`, `maxLength`, `tabIndex`, `style`, `className`, `placeholder`, `autoFocus`, `keyfilter`, `validateOnly`, `tooltip`, `tooltipOptions`, `unstyled`, `pt`, `ptOptions`, `children` | Passed through unchanged; intentionally outside curated Controls/examples | These inherited HTML/InputText and passthrough properties remain available on `InputMaskProps`; the wrapper only consumes story-only `label`/`floatLabel` and supplies an id when none is provided. |
+| `onChange` | Adapted and preserved | The wrapper updates the controlled value and invokes the supplied callback with PrimeReact's event. Formatted input retention is browser-tested; supplied callback invocation is preserved by source inspection, not independently asserted in the component-review browser test. |
+| `onComplete` | Passed through unchanged | Native completion event and `string \| undefined \| null` value are source-inspected; no completion callback is synthesized by the playground. |
+| `onFocus`, `onBlur` | Passed through unchanged | Native focus/blur callbacks are source-inspected; no callback is replaced by the wrapper. |
+| InputMask templates / nested models / alternate value objects | Not applicable | InputMask exposes no item model, option collection, header/footer/item templates, or object-valued selection mode. Its nested contract is the inherited input element and passthrough options. |
+| `label`, `floatLabel` | Story-only adaptation | These are not native InputMask props. They provide the Sakai form composition and are removed before native props are forwarded; supplied `id` is retained for label association. |
+
 ## Component audit
 
 All 67 components pass the same browser checks at 1280×900 and 390×900: exactly one Default, an indexed Summary, the common section order, no Summary Controls, copyable source, no runtime exceptions, loaded example images, and preserved icon fonts. The table lists additional checks; presentation-only components have no state-changing action to exercise. This covers the documented examples, not every upstream prop combination. “Wired” explicitly denotes source inspection in addition to the automated interactions listed, not an independently exercised gesture.
@@ -55,7 +71,7 @@ All 67 components pass the same browser checks at 1280×900 and 390×900: exactl
 | FileUpload | [#28](https://github.com/marcosrocha85/primereact-storybook/issues/28) | Local image selection; simulated upload completion; no POST request |
 | Galleria | [#29](https://github.com/marcosrocha85/primereact-storybook/issues/29) | Next image navigation; image assets |
 | Image | [#69](https://github.com/marcosrocha85/primereact-storybook/issues/69) | Preview open/close; assets; sizes/styles |
-| InputMask | [#30](https://github.com/marcosrocha85/primereact-storybook/issues/30) | Masked input formatting and retention |
+| InputMask | [#30](https://github.com/marcosrocha85/primereact-storybook/issues/30) | Masked input formatting and retention; API inventory above; source-inspected callback and passthrough preservation |
 | InputNumber | [#31](https://github.com/marcosrocha85/primereact-storybook/issues/31) | Currency-mode entry and formatting |
 | InputSwitch | [#32](https://github.com/marcosrocha85/primereact-storybook/issues/32) | Click and Space toggle; disabled |
 | InputText | [#33](https://github.com/marcosrocha85/primereact-storybook/issues/33) | Text entry and clearing |

@@ -531,7 +531,7 @@ test('InputNumber supports currency', async () => {
   assert.match(await page.getByRole('spinbutton').inputValue(), /125/);
 });
 
-test('Chips adds/removes tokens and InputMask retains formatted input', async () => {
+test('Chips adds/removes tokens and InputMask retains formatted and unmasked input', async () => {
   await open('Chips');
   const input = page.locator('input');
   await input.fill('First');
@@ -553,6 +553,10 @@ test('Chips adds/removes tokens and InputMask retains formatted input', async ()
   await input.press('Backspace');
   await page.locator('.p-chips-token').filter({ hasText: 'Second' }).waitFor({ state: 'hidden' });
   await open('InputMask');
+  await page.locator('input').fill('09062026');
+  await page.locator('input').press('Tab');
+  await page.waitForFunction(() => document.querySelector('input')?.value === '09/06/2026');
+  await open('InputMask', 'unmask:true');
   await page.locator('input').fill('09062026');
   await page.locator('input').press('Tab');
   await page.waitForFunction(() => document.querySelector('input')?.value === '09/06/2026');
