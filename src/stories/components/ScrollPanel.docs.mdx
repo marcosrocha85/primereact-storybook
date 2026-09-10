@@ -1,6 +1,7 @@
 import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Example } from "./ScrollPanel.examples";
 import exampleSource from "./ScrollPanel.examples.tsx?raw";
+import { ScrollPanel } from "primereact/scrollpanel";
 
 <Meta title="Components/ScrollPanel/Summary" />
 
@@ -16,7 +17,15 @@ import exampleSource from "./ScrollPanel.examples.tsx?raw";
 
 ## Variations
 
-The usage example shows the base composition. Use Default to explore the documented properties.
+### Horizontal scrolling
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<ScrollPanel style={{ width: '24rem', maxWidth: '100%', height: '160px' }}>
+  <div style={{ width: '36rem' }}>Content wider than the panel can scroll horizontally.</div>
+</ScrollPanel>
+</div>
+
+<Source code={"<ScrollPanel style={{ width: '24rem', maxWidth: '100%', height: '160px' }}>\n  <div style={{ width: '36rem' }}>Content wider than the panel can scroll horizontally.</div>\n</ScrollPanel>"} language="tsx" />
 
 ## Playground
 

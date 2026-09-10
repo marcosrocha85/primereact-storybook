@@ -190,6 +190,40 @@ Validation for this revision:
 - Manual Playwright visual inspection at 1280px and 390px: passed; curated examples render without runtime errors or layout clipping. A direct browser interaction also verified selecting the fifth star and clearing it with the cancel control.
 - `git diff --check`: passed.
 
+### ScrollPanel API inventory — issue #50
+
+Inspected the Button documentation/story reference, the ScrollPanel generator
+entry and generated files, the Sakai UI Kit `misc` example at
+`vendor/sakai-react/app/(main)/uikit/misc/page.tsx`, and the installed
+PrimeReact `scrollpanel.d.ts` and implementation. This inventory records
+source-inspection evidence; it is not exhaustive behavioral testing.
+
+| Native API surface | Treatment |
+| --- | --- |
+| `children` | Passed through unchanged when supplied. The playground provides its own vertical overflow content only when `children` is `undefined`; caller content is preserved by the fallback. |
+| `id`, `className`, `style`, `title`, `tabIndex`, ARIA/data attributes and inherited `HTMLAttributes<HTMLDivElement>` | Passed through unchanged through `{...args}`. The Default Control exposes `style` for the common viewport size; other inherited attributes and DOM handlers remain available through native story args and are outside curated Controls. |
+| `pt`, `ptOptions`, `unstyled` | Passed through unchanged. Native `root`, `wrapper`, `content`, `barX`, `barY` and lifecycle-hook pass-through sections remain available; the story supplies no PT defaults that replace user entries. |
+| Native DOM events, including `onScroll`, `onFocus`, `onBlur`, keyboard, pointer, mouse, touch, drag, clipboard, animation and transition handlers | Passed through unchanged. ScrollPanel's internal content scroll handler remains native and no callback is intercepted by the playground. |
+| Templates, nested models, selection/value modes and component-specific events | Not applicable. ScrollPanel has no item collection, value/selection model, render-template API or component-specific callback contract beyond inherited DOM events. |
+| Imperative methods | Native `getElement()`, `getContent()`, `getXBar()` and `getYBar()` ref methods remain available and are outside Controls. |
+
+The focused contract test verifies representative native attributes, children,
+DOM callback identity, PT configuration and the default constrained viewport.
+The component browser check verifies vertical scrolling, horizontal overflow in
+the Summary variation, Summary/Default structure, copyable sources and absence
+of Summary Controls at the existing desktop/mobile review widths. Alternate
+PT callback forms, every inherited DOM event, custom ref usage and all native
+attribute combinations remain forwarded but are not exhaustively tested.
+
+Validation for this revision:
+- `node scripts/generate-component-stories.mjs`: passed; generated output remained scoped to ScrollPanel.
+- `node --test tests/scrollpanel-contract.test.mjs tests/component-generator.test.mjs`: passed, 3 tests.
+- `npm run build`: passed.
+- `npm run build-storybook`: passed; existing large-chunk and plugin-timing warnings remain.
+- `STORYBOOK_URL=http://127.0.0.1:4173 LD_LIBRARY_PATH=/tmp/sakai-browser-libs/usr/lib/x86_64-linux-gnu node --test --test-name-pattern='scroll containers' tests/component-review.test.mjs`: passed; vertical and horizontal scrolling assertions passed against the static build.
+- `STORYBOOK_URL=http://127.0.0.1:4173 LD_LIBRARY_PATH=/tmp/sakai-browser-libs/usr/lib/x86_64-linux-gnu node --test --test-name-pattern='ScrollPanel: only Summary and Default' tests/component-review.test.mjs`: passed; Summary/Default rendered at 1280px and 390px.
+- `git diff --check`: passed.
+
 ### ProgressBar API inventory — issue #47
 
 The inventory below is based on the installed PrimeReact `ProgressBarProps` declaration and implementation, plus the Sakai UI Kit `misc` and `table` examples. It records the native contract reviewed for this issue; it is not an exhaustive interaction test.

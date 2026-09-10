@@ -1688,7 +1688,14 @@ import { Avatar } from "primereact/avatar";`,
     description: 'Area with custom scrolling.',
     args: `{ style: { width: '24rem', maxWidth: '100%', height: '160px' } }`,
     argTypes: `{ style: { control: 'object' } }`,
-    playground: `<ScrollPanel {...args}><p style={{ lineHeight: 1.7 }}>{Array.from({ length: 12 }, (_, index) => <span key={index} className="block">Scrollable content line {index + 1}.</span>)}</p></ScrollPanel>`,
+    hooks: `const content = args.children ?? <p style={{ lineHeight: 1.7 }}>{Array.from({ length: 12 }, (_, index) => <span key={index} className="block">Scrollable content line {index + 1}.</span>)}</p>;`,
+    playground: `<ScrollPanel {...args}>{content}</ScrollPanel>`,
+    docsImports: 'import { ScrollPanel } from "primereact/scrollpanel";',
+    docsVariations: [
+      { title: 'Horizontal scrolling', code: `<ScrollPanel style={{ width: '24rem', maxWidth: '100%', height: '160px' }}>
+  <div style={{ width: '36rem' }}>Content wider than the panel can scroll horizontally.</div>
+</ScrollPanel>` },
+    ],
   },
   {
     name: 'ScrollTop',

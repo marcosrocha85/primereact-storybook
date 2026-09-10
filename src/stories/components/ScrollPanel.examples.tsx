@@ -8,7 +8,8 @@ export function Playground({ args, updateArgs }: {
   args: ExampleArgs;
   updateArgs: (changes: Partial<ExampleArgs>) => void;
 }) {
-  return (<ScrollPanel {...args}><p style={{ lineHeight: 1.7 }}>{Array.from({ length: 12 }, (_, index) => <span key={index} className="block">Scrollable content line {index + 1}.</span>)}</p></ScrollPanel>);
+  const content = args.children ?? <p style={{ lineHeight: 1.7 }}>{Array.from({ length: 12 }, (_, index) => <span key={index} className="block">Scrollable content line {index + 1}.</span>)}</p>;
+  return (<ScrollPanel {...args}>{content}</ScrollPanel>);
 }
 
 export function Example({ initialArgs = {} }: { initialArgs?: Partial<ExampleArgs> }) {
