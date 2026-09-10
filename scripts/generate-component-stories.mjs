@@ -34,13 +34,56 @@ const components = [
     name: 'InputText',
     prime: 'inputtext',
     importName: 'InputText',
-    description: 'Base text field used in forms, filters, and search inputs.',
-    args: `{ value: '', placeholder: 'Default', disabled: false, invalid: false }`,
+    description: 'Base text field used in forms, filters, and search inputs, with validation and variant states.',
+    args: `{ value: '', placeholder: 'Search', disabled: false, invalid: false, readOnly: false, variant: undefined, validateOnly: false }`,
     argTypes: `{
     placeholder: { control: 'text' },
     disabled: { control: 'boolean' },
-    invalid: { control: 'boolean' }
+    invalid: { control: 'boolean' },
+    readOnly: { control: 'boolean' },
+    variant: { control: 'inline-radio', options: [undefined, 'outlined', 'filled'] },
+    validateOnly: { control: 'boolean' }
   }`,
+    docsImports: `import { InputText } from 'primereact/inputtext';`,
+    docsVariations: [
+      {
+        title: 'States',
+        code: `<InputText placeholder="Default" />
+<InputText placeholder="Disabled" disabled />
+<InputText placeholder="Read-only" value="Read-only value" readOnly />
+<InputText placeholder="Invalid" invalid />`
+      },
+      {
+        title: 'Variants',
+        code: `<InputText placeholder="Outlined" variant="outlined" />
+<InputText placeholder="Filled" variant="filled" />`
+      },
+      {
+        title: 'Form composition',
+        code: `<div className="flex flex-column gap-2">
+  <label htmlFor="email">Email</label>
+  <InputText id="email" type="email" placeholder="you@example.com" />
+</div>`
+      },
+      {
+        title: 'Icons',
+        code: `<span className="p-input-icon-left">
+  <i className="pi pi-user" />
+  <InputText placeholder="Username" />
+</span>
+<span className="p-input-icon-right">
+  <InputText placeholder="Search" />
+  <i className="pi pi-search" />
+</span>`
+      },
+      {
+        title: 'Float label',
+        code: `<span className="p-float-label">
+  <InputText id="username" />
+  <label htmlFor="username">Username</label>
+</span>`
+      }
+    ],
     playground: `<InputText {...args} value={args.value ?? ''} onChange={(event) => { updateArgs({ value: event.target.value }); args.onChange?.(event); } } />`,
   },
   {

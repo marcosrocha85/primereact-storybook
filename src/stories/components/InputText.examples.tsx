@@ -2,7 +2,7 @@ import { useState, type ComponentProps } from 'react';
 import { InputText } from 'primereact/inputtext';
 
 export type ExampleArgs = ComponentProps<typeof InputText>;
-export const defaultArgs: ExampleArgs = { value: '', placeholder: 'Default', disabled: false, invalid: false };
+export const defaultArgs: ExampleArgs = { value: '', placeholder: 'Search', disabled: false, invalid: false, readOnly: false, variant: undefined, validateOnly: false };
 
 export function Playground({ args, updateArgs }: {
   args: ExampleArgs;
