@@ -16,7 +16,29 @@ import exampleSource from "./Toolbar.examples.tsx?raw";
 
 ## Variations
 
-The usage example shows the base composition. Use Default to explore the documented properties.
+### Action groups
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example />
+</div>
+
+<Source code={exampleSource} language="tsx" />
+
+### Centered content
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ center: 'Manage records' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ center: 'Manage records' }} />"} language="tsx" />
+
+### Custom attributes
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ className: 'mb-4', 'aria-label': 'Record actions' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ className: 'mb-4', 'aria-label': 'Record actions' }} />"} language="tsx" />
 
 ## Playground
 

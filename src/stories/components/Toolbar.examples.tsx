@@ -3,14 +3,14 @@ import { Toolbar } from 'primereact/toolbar';
 import { Button } from 'primereact/button';
 
 export type ExampleArgs = ComponentProps<typeof Toolbar>;
-export const defaultArgs: ExampleArgs = {};
+export const defaultArgs: ExampleArgs = { className: undefined, style: undefined, id: undefined, 'aria-label': 'Actions' };
 
 export function Playground({ args, updateArgs }: {
   args: ExampleArgs;
   updateArgs: (changes: Partial<ExampleArgs>) => void;
 }) {
   const [action, setAction] = useState('No action yet');
-  return (<><Toolbar {...args} start={<Button label="New" icon="pi pi-plus" onClick={() => setAction('New selected')} />} end={<Button label="Save" icon="pi pi-check" onClick={() => setAction('Save selected')} />} /><p role="status">{action}</p></>);
+  return (<><Toolbar {...args} start={args.start ?? <Button label="New" icon="pi pi-plus" onClick={() => setAction('New selected')} />} center={args.center} end={args.end ?? <Button label="Save" icon="pi pi-check" onClick={() => setAction('Save selected')} />} /><p role="status">{action}</p></>);
 }
 
 export function Example({ initialArgs = {} }: { initialArgs?: Partial<ExampleArgs> }) {

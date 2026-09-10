@@ -9,11 +9,11 @@ const meta = {
   component: Toolbar,
   parameters: {
     layout: 'centered',
-    controls: { include: ["className","style"] },
+    controls: { include: ["className","style","id","aria-label"] },
     docs: { description: { component: 'Action toolbar.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { className: { control: 'text' }, style: { control: 'object' } }
+  argTypes: { className: { control: 'text' }, style: { control: 'object' }, id: { control: 'text' }, 'aria-label': { control: 'text' } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;

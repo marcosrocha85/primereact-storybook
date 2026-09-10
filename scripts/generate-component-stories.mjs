@@ -865,9 +865,14 @@ function productTemplate(product: Product) {
     extraImports: `import { Button } from 'primereact/button';`,
     hooks: `const [action, setAction] = useState('No action yet');`,
     description: 'Action toolbar.',
-    args: `{}`,
-    argTypes: `{ className: { control: 'text' }, style: { control: 'object' } }`,
-    playground: `<><Toolbar {...args} start={<Button label="New" icon="pi pi-plus" onClick={() => setAction('New selected')} />} end={<Button label="Save" icon="pi pi-check" onClick={() => setAction('Save selected')} />} /><p role="status">{action}</p></>`,
+    args: `{ className: undefined, style: undefined, id: undefined, 'aria-label': 'Actions' }`,
+    argTypes: `{ className: { control: 'text' }, style: { control: 'object' }, id: { control: 'text' }, 'aria-label': { control: 'text' } }`,
+    playground: `<><Toolbar {...args} start={args.start ?? <Button label="New" icon="pi pi-plus" onClick={() => setAction('New selected')} />} center={args.center} end={args.end ?? <Button label="Save" icon="pi pi-check" onClick={() => setAction('Save selected')} />} /><p role="status">{action}</p></>`,
+    docsVariations: [
+      { title: 'Action groups', code: `<Example />`, source: 'exampleSource' },
+      { title: 'Centered content', code: `<Example initialArgs={{ center: 'Manage records' }} />` },
+      { title: 'Custom attributes', code: `<Example initialArgs={{ className: 'mb-4', 'aria-label': 'Record actions' }} />` }
+    ],
   },
 
   {

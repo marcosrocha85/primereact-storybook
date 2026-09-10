@@ -1433,3 +1433,28 @@ The shared boolean-input check verifies click, Space, and disabled behavior. Mob
 custom icon node/function forms, tooltip options, PT callbacks, inherited DOM events, supplied
 focus/change callbacks, `inputId`, unstyled mode, and ref methods remain forwarded or
 source-inspected but are not exhaustively tested.
+
+### Toolbar API audit — issue #65
+
+Inspected the Button documentation/story reference, the Toolbar generator entry and generated
+files, the Sakai UI Kit Toolbar usage at
+`vendor/sakai-react/app/(main)/uikit/panel/page.tsx`, and the installed PrimeReact
+`toolbar.d.ts` and implementation. The curated Summary covers start/end action groups, centered
+content, and native attributes. Default remains one native Toolbar instance and uses fallback
+action buttons only when caller-supplied slots are absent.
+
+| Native surface | Treatment |
+| --- | --- |
+| `start`, `center`, `end` | Forwarded unchanged when supplied. The playground provides demo start/end buttons only as fallbacks and preserves supplied React nodes or template functions; centered text content is curated in Summary. |
+| Deprecated `left`, `right` | Forwarded unchanged through `{...args}`. The native implementation gives these precedence over `start`/`end`; the curated examples use the current names. |
+| `children` | Forwarded unchanged through `{...args}`; Toolbar renders its three template groups, so children are available to native args but outside the curated composition. |
+| `className`, `style`, `id`, `aria-*`, `data-*`, inherited `HTMLAttributes<HTMLDivElement>`, and DOM events | Forwarded unchanged through `{...args}`. This includes focus, blur, keyboard, mouse, pointer, touch, clipboard, animation, transition, and capture handlers. |
+| `pt`, `ptOptions`, `unstyled` | Forwarded unchanged; no wrapper PT defaults replace caller values. Native root/start/center/end and lifecycle pass-through sections retain their object/function forms. |
+| Nested models, selection/value modes, events, and imperative API | Toolbar has no item model, controlled selection/value mode, or component callback event. Button callbacks in the fallback slots provide the documented action feedback; the native `getElement()` ref method remains available outside Controls. |
+
+This inventory is source inspection, not exhaustive behavioral testing. The focused component
+browser check verifies Toolbar action feedback, Summary/Default structure, no Summary Controls,
+copyable sources, and desktop/mobile rendering. Supplied templates, rich children, PT callback
+forms, unstyled mode, inherited DOM events, the imperative ref method, and every slot combination
+remain native and are not exhaustively tested; supplied root callbacks are not intercepted by
+the playground.
