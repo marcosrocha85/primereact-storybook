@@ -9,8 +9,8 @@ const meta = {
   component: InputTextarea,
   parameters: {
     layout: 'centered',
-    controls: { include: ["value","placeholder","rows","cols","autoResize","disabled"] },
-    docs: { description: { component: 'Multi-line text field.' }, source: { code: exampleSource } }
+    controls: { include: ["value","placeholder","rows","cols","autoResize","disabled","invalid","readOnly","variant"] },
+    docs: { description: { component: 'Multi-line text field for messages, descriptions, and longer form input, with validation and resize states.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
   argTypes: { value: { control: 'text' },
@@ -18,7 +18,10 @@ const meta = {
     rows: { control: 'number' },
     cols: { control: 'number' },
     autoResize: { control: 'boolean' },
-    disabled: { control: 'boolean' }
+    disabled: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    readOnly: { control: 'boolean' },
+    variant: { control: 'inline-radio', options: [undefined, 'outlined', 'filled'] }
   }
 } satisfies Meta<ExampleArgs>;
 

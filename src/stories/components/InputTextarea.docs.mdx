@@ -1,12 +1,13 @@
 import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Example } from "./InputTextarea.examples";
 import exampleSource from "./InputTextarea.examples.tsx?raw";
+import { InputTextarea } from 'primereact/inputtextarea';
 
 <Meta title="Components/InputTextarea/Summary" />
 
 <Title>InputTextarea</Title>
 
-<Subtitle>Multi-line text field.</Subtitle>
+<Subtitle>Multi-line text field for messages, descriptions, and longer form input, with validation and resize states.</Subtitle>
 
 ## Usage
 
@@ -16,11 +17,48 @@ import exampleSource from "./InputTextarea.examples.tsx?raw";
 
 ## Variations
 
-### Disabled
+### States
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<InputTextarea placeholder="Default" rows={4} />
+<InputTextarea placeholder="Disabled" rows={4} disabled />
+<InputTextarea value="Read-only value" rows={4} readOnly />
+<InputTextarea placeholder="Invalid" rows={4} invalid />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+<Source code={"<InputTextarea placeholder=\"Default\" rows={4} />\n<InputTextarea placeholder=\"Disabled\" rows={4} disabled />\n<InputTextarea value=\"Read-only value\" rows={4} readOnly />\n<InputTextarea placeholder=\"Invalid\" rows={4} invalid />"} language="tsx" />
+
+### Variants
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<InputTextarea placeholder="Outlined" rows={4} variant="outlined" />
+<InputTextarea placeholder="Filled" rows={4} variant="filled" />
+</div>
+
+<Source code={"<InputTextarea placeholder=\"Outlined\" rows={4} variant=\"outlined\" />\n<InputTextarea placeholder=\"Filled\" rows={4} variant=\"filled\" />"} language="tsx" />
+
+### Auto resize
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<InputTextarea
+  value="This textarea grows as its content changes."
+  autoResize
+  rows={2}
+/>
+</div>
+
+<Source code={"<InputTextarea\n  value=\"This textarea grows as its content changes.\"\n  autoResize\n  rows={2}\n/>"} language="tsx" />
+
+### Form composition
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-column gap-2">
+  <label htmlFor="description">Description</label>
+  <InputTextarea id="description" rows={4} placeholder="Describe the request" />
+</div>
+</div>
+
+<Source code={"<div className=\"flex flex-column gap-2\">\n  <label htmlFor=\"description\">Description</label>\n  <InputTextarea id=\"description\" rows={4} placeholder=\"Describe the request\" />\n</div>"} language="tsx" />
 
 ## Playground
 
