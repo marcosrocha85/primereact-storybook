@@ -2,13 +2,13 @@ import { useState, type ComponentProps } from 'react';
 import { InputNumber } from 'primereact/inputnumber';
 
 export type ExampleArgs = ComponentProps<typeof InputNumber>;
-export const defaultArgs: ExampleArgs = { value: null, placeholder: 'Number', mode: 'decimal', currency: 'USD', showButtons: true };
+export const defaultArgs: ExampleArgs = { value: null, placeholder: 'Number', mode: 'decimal', currency: 'USD', showButtons: true, buttonLayout: 'stacked', format: true, useGrouping: true, step: 1, min: undefined, max: undefined, invalid: false, disabled: false, readOnly: false, variant: undefined };
 
 export function Playground({ args, updateArgs }: {
   args: ExampleArgs;
   updateArgs: (changes: Partial<ExampleArgs>) => void;
 }) {
-  return (<InputNumber {...args} currency={args.currency ?? 'USD'} onValueChange={(event) => { updateArgs({ value: event.value }); args.onValueChange?.(event); }} />);
+  return (<div style={{ width: '20rem', maxWidth: '100%' }}><InputNumber {...args} onValueChange={(event) => { updateArgs({ value: event.value }); args.onValueChange?.(event); }} /></div>);
 }
 
 export function Example({ initialArgs = {} }: { initialArgs?: Partial<ExampleArgs> }) {

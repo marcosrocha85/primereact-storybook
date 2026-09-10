@@ -303,15 +303,49 @@ const components = [
     name: 'InputNumber',
     prime: 'inputnumber',
     importName: 'InputNumber',
-    description: 'Numeric input with formatting.',
-    args: `{ value: null, placeholder: 'Number', mode: 'decimal', currency: 'USD', showButtons: true }`,
+    description: 'Numeric input with decimal and currency formatting, optional spinner buttons, and validation states.',
+    args: `{ value: null, placeholder: 'Number', mode: 'decimal', currency: 'USD', showButtons: true, buttonLayout: 'stacked', format: true, useGrouping: true, step: 1, min: undefined, max: undefined, invalid: false, disabled: false, readOnly: false, variant: undefined }`,
     argTypes: `{
+    value: { control: 'number' },
     placeholder: { control: 'text' },
+    format: { control: 'boolean' },
     showButtons: { control: 'boolean' },
+    buttonLayout: { control: 'select', options: ['stacked', 'horizontal', 'vertical'] },
     mode: { control: 'select', options: ['decimal', 'currency'] },
-    disabled: { control: 'boolean' }
+    currency: { control: 'text' },
+    currencyDisplay: { control: 'select', options: ['symbol', 'code', 'name'] },
+    locale: { control: 'text' },
+    useGrouping: { control: 'boolean' },
+    minFractionDigits: { control: 'number' },
+    maxFractionDigits: { control: 'number' },
+    prefix: { control: 'text' },
+    suffix: { control: 'text' },
+    step: { control: 'number' },
+    min: { control: 'number' },
+    max: { control: 'number' },
+    invalid: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    readOnly: { control: 'boolean' },
+    variant: { control: 'inline-radio', options: [undefined, 'outlined', 'filled'] }
   }`,
-    playground: `<InputNumber {...args} currency={args.currency ?? 'USD'} onValueChange={(event) => { updateArgs({ value: event.value }); args.onValueChange?.(event); }} />`,
+    playground: `<div style={{ width: '20rem', maxWidth: '100%' }}><InputNumber {...args} onValueChange={(event) => { updateArgs({ value: event.value }); args.onValueChange?.(event); }} /></div>`,
+    docsVariations: [
+      { title: 'Decimal input', code: `<Example initialArgs={{ mode: 'decimal', value: 123456.789 }} />` },
+      { title: 'Currency input', code: `<Example initialArgs={{ mode: 'currency', currency: 'USD', value: 1250.5 }} />` },
+      { title: 'Spinner layouts', code: `<div className="flex flex-wrap align-items-center gap-3">
+  <Example initialArgs={{ showButtons: true, buttonLayout: 'stacked' }} />
+  <Example initialArgs={{ showButtons: true, buttonLayout: 'horizontal' }} />
+</div>` },
+      { title: 'Prefix and suffix', code: `<div className="flex flex-wrap align-items-center gap-3">
+  <Example initialArgs={{ prefix: '$ ', minFractionDigits: 2, maxFractionDigits: 2 }} />
+  <Example initialArgs={{ suffix: ' kg', showButtons: false }} />
+</div>` },
+      { title: 'Invalid and read-only states', code: `<div className="flex flex-column gap-3">
+  <Example initialArgs={{ invalid: true }} />
+  <Example initialArgs={{ readOnly: true, value: 42 }} />
+</div>` },
+      { title: 'Disabled', code: `<Example initialArgs={{ disabled: true }} />` }
+    ],
   },
   {
     name: 'InputSwitch',
@@ -1254,7 +1288,7 @@ import { Avatar } from "primereact/avatar";`,
 ];
 
 for (const component of components) {
-  if (['InputText', 'InputTextarea', 'Password', 'InputMask', 'Chips', 'Dropdown', 'ListBox', 'MultiSelect', 'SelectButton', 'InputNumber'].includes(component.name)) {
+  if (['InputText', 'InputTextarea', 'Password', 'InputMask', 'Chips', 'Dropdown', 'ListBox', 'MultiSelect', 'SelectButton'].includes(component.name)) {
     const control = ['InputText', 'InputTextarea', 'Password', 'InputMask'].includes(component.name) ? 'text' : component.name === 'InputNumber' ? 'number' : 'object';
     component.argTypes = component.argTypes.replace('{', `{ value: { control: '${control}' },`);
   }

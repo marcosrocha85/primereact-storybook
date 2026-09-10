@@ -39,6 +39,23 @@ The inventory below is based on the installed PrimeReact `InputMaskProps` and `I
 | InputMask templates / nested models / alternate value objects | Not applicable | InputMask exposes no item model, option collection, header/footer/item templates, or object-valued selection mode. Its nested contract is the inherited input element and passthrough options. |
 | `label`, `floatLabel` | Story-only adaptation | These are not native InputMask props. They provide the Sakai form composition and are removed before native props are forwarded; supplied `id` is retained for label association. |
 
+### InputNumber API inventory — issue #31
+
+The inventory below is based on the installed PrimeReact `InputNumberProps` declaration and InputNumber implementation, plus the Sakai UI Kit input, invalid-state, and float-label examples. It records the native contract reviewed for this issue; it is not exhaustive interaction testing.
+
+| API surface | Status in the curated story | Evidence / scope decision |
+| --- | --- | --- |
+| `value` (`number \| null`) | Adapted for controlled Storybook synchronization | The playground wraps `onValueChange` only to store `event.value` in args/local Summary state; the original event and supplied callback are preserved without coercing the native number/null value. |
+| Formatting: `format`, `locale`, `localeMatcher`, `mode`, `currency`, `currencyDisplay`, `useGrouping`, `minFractionDigits`, `maxFractionDigits`, `roundingMode`, `prefix`, `suffix` | Exposed through Default Controls where useful and passed through unchanged | Decimal, currency, grouping, fraction, prefix/suffix, and locale modes are source-inspected; Summary renders decimal, currency, and prefix/suffix compositions. Currency mode requires a native `currency` value. |
+| Spinner and numeric constraints: `showButtons`, `buttonLayout`, `incrementButtonClassName`, `decrementButtonClassName`, `incrementButtonIcon`, `decrementButtonIcon`, `step`, `min`, `max`, `allowEmpty`, `maxLength` | Curated Controls expose the common layout/button and constraint properties; all are passed through unchanged | Stacked and horizontal spinner layouts are documented. Icon values retain PrimeReact's `IconType` string/node/function modes and are intentionally outside free-text Controls. |
+| Input state and attributes: `placeholder`, `disabled`, `invalid`, `readOnly`, `variant`, `required`, `name`, `type`, `tabIndex`, `pattern`, `size`, `inputId`, `autoFocus`, `inputStyle`, `inputClassName`, `tooltip`, `tooltipOptions`, `ariaLabelledBy` | Common visual/state properties are exposed; the complete native set is forwarded by `{...args}` | Invalid, read-only, disabled, and outlined/filled states are source-inspected and curated where relevant. Native input attributes remain available through args even when outside Controls. |
+| `onValueChange` | Adapted and preserved | The wrapper invokes `updateArgs({ value: event.value })`, then invokes the supplied callback with the exact original event. Focus, blur, key, and native `onChange` callbacks are not replaced. |
+| `onChange`, `onFocus`, `onBlur`, `onKeyDown` | Passed through unchanged | Callback identity and original-event preservation for the intercepted `onValueChange` path are covered by `tests/inputnumber-contract.test.mjs`; the other callbacks are source-inspected. |
+| `pt`, `ptOptions`, `unstyled`, inherited `HTMLAttributes<HTMLSpanElement>` and `children` | Passed through unchanged; intentionally outside curated Controls | Root/container attributes, DOM events, `id`, `className`, `style`, data/ARIA attributes, pass-through sections and native ref-compatible props remain available. No wrapper PT defaults replace user entries. |
+| Templates, nested models, alternate value/selection modes, imperative methods | Not applicable or native-only | InputNumber has no option collection, item model, or render-template API. Native `focus`, `getFormatter`, `getElement`, and `getInput` methods remain outside the story Controls and are source-inspected. |
+
+The API inventory is source inspection, not exhaustive behavioral testing. The focused contract test verifies representative formatting, constraint, input-attribute, PT, inherited-prop, and callback forwarding, including the intercepted supplied `onValueChange`. The browser check verifies decimal/currency entry, Summary/Default structure, copyable sources, Controls placement, and desktop/mobile rendering. Every locale, rounding mode, icon function, PT callback, imperative method, inherited DOM event, and native prop combination remains forwarded but is not exhaustively tested.
+
 ## Component audit
 
 All 67 components pass the same browser checks at 1280×900 and 390×900: exactly one Default, an indexed Summary, the common section order, no Summary Controls, copyable source, no runtime exceptions, loaded example images, and preserved icon fonts. The table lists additional checks; presentation-only components have no state-changing action to exercise. This covers the documented examples, not every upstream prop combination. “Wired” explicitly denotes source inspection in addition to the automated interactions listed, not an independently exercised gesture.
@@ -72,7 +89,7 @@ All 67 components pass the same browser checks at 1280×900 and 390×900: exactl
 | Galleria | [#29](https://github.com/marcosrocha85/primereact-storybook/issues/29) | Next image navigation; image assets |
 | Image | [#69](https://github.com/marcosrocha85/primereact-storybook/issues/69) | Preview open/close; assets; sizes/styles |
 | InputMask | [#30](https://github.com/marcosrocha85/primereact-storybook/issues/30) | Masked input formatting and retention; API inventory above; source-inspected callback and passthrough preservation |
-| InputNumber | [#31](https://github.com/marcosrocha85/primereact-storybook/issues/31) | Currency-mode entry and formatting |
+| InputNumber | [#31](https://github.com/marcosrocha85/primereact-storybook/issues/31) | Decimal/currency entry and formatting; spinner layouts, validation states, API inventory and callback forwarding |
 | InputSwitch | [#32](https://github.com/marcosrocha85/primereact-storybook/issues/32) | Click and Space toggle; disabled |
 | InputText | [#33](https://github.com/marcosrocha85/primereact-storybook/issues/33) | Text entry and clearing |
 | InputTextarea | [#34](https://github.com/marcosrocha85/primereact-storybook/issues/34) | Text entry and clearing |
