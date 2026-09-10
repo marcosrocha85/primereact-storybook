@@ -482,11 +482,33 @@ const components = [
     name: 'ListBox',
     prime: 'listbox',
     importName: 'ListBox',
-    description: 'Selection list.',
+    extraImports: `import type { ListBoxProps } from 'primereact/listbox';`,
+    exampleType: 'ListBoxProps',
+    description: 'Select one or more values from a list, with filtering, validation, templates, and grouped options.',
     renderPrefix: `const cityOptions = [{ name: 'New York', code: 'NY' }, { name: 'Rome', code: 'RM' }, { name: 'London', code: 'LDN' }];`,
-    args: `{ value: null, options: cityOptions, optionLabel: 'name' }`,
-    argTypes: `{ disabled: { control: 'boolean' }, filter: { control: 'boolean' } }`,
+    args: `{ value: null, options: cityOptions, optionLabel: 'name', multiple: false, filter: false, invalid: false, disabled: false }`,
+    argTypes: `{
+    multiple: { control: 'boolean' },
+    filter: { control: 'boolean' },
+    filterPlaceholder: { control: 'text' },
+    filterMatchMode: { control: 'inline-radio', options: ['contains', 'startsWith', 'endsWith', 'equals', 'notEquals'] },
+    invalid: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    metaKeySelection: { control: 'boolean' },
+    autoOptionFocus: { control: 'boolean' },
+    selectOnFocus: { control: 'boolean' },
+    focusOnHover: { control: 'boolean' }
+  }`,
     playground: `<ListBox {...args} onChange={(event) => { updateArgs({ value: event.value }); args.onChange?.(event); } } />`,
+    docsVariations: [
+      { title: 'Filterable options', code: `<Example initialArgs={{ filter: true, filterPlaceholder: 'Search cities' }} />` },
+      { title: 'Multiple selection', code: `<Example initialArgs={{ multiple: true, value: [] }} />` },
+      { title: 'Invalid and disabled states', code: `<div className="flex flex-column gap-3" style={{ maxWidth: '20rem' }}>
+  <Example initialArgs={{ invalid: true }} />
+  <Example initialArgs={{ disabled: true }} />
+</div>` },
+      { title: 'Filter matching', code: `<Example initialArgs={{ filter: true, filterMatchMode: 'startsWith' }} />` }
+    ],
   },
   {
     name: 'MultiSelect',

@@ -111,7 +111,7 @@ All 67 components pass the same browser checks at 1280×900 and 390×900: exactl
 | InputText | [#33](https://github.com/marcosrocha85/primereact-storybook/issues/33) | Text entry and clearing; API inventory, controlled value synchronization, and callback/passthrough preservation |
 | InputTextarea | [#34](https://github.com/marcosrocha85/primereact-storybook/issues/34) | Text entry and clearing |
 | Knob | [#35](https://github.com/marcosrocha85/primereact-storybook/issues/35) | Arrow-key value change |
-| ListBox | [#36](https://github.com/marcosrocha85/primereact-storybook/issues/36) | Option selection |
+| ListBox | [#36](https://github.com/marcosrocha85/primereact-storybook/issues/36) | Option selection; API inventory, controlled single/multiple values, filtering, and callback/prop forwarding |
 | MegaMenu | [#37](https://github.com/marcosrocha85/primereact-storybook/issues/37) | Nested menu opening; leaf command feedback |
 | Menu | [#38](https://github.com/marcosrocha85/primereact-storybook/issues/38) | Popup trigger; Escape; command feedback |
 | Menubar | [#39](https://github.com/marcosrocha85/primereact-storybook/issues/39) | Command feedback |
@@ -177,6 +177,24 @@ Inspected the Button docs/story reference, the InputTextarea generator entry and
 | Templates, nested models, alternate value/selection modes, imperative methods | Not applicable or native-only. InputTextarea has no option collection, item model, render-template, or alternate selection value; its textarea ref and DOM methods remain outside the curated Controls. |
 
 The inventory is source inspection, not exhaustive behavioral testing. The focused contract test verifies representative textarea attributes, pass-through values, inherited callbacks, and intercepted value synchronization. The component browser check verifies text entry and clearing, Summary/Default structure, copyable sources, Controls placement, runtime errors, and desktop/mobile rendering. Keyfilter enforcement, auto-resize height changes, tooltip rendering, PT callback forms, refs, and every inherited DOM attribute combination remain forwarded but are not exhaustively tested.
+
+### ListBox API inventory — issue #36
+
+Inspected the Button documentation/story reference, the ListBox generator entry and generated files, the Sakai UI Kit input example at `vendor/sakai-react/app/(main)/uikit/input/page.tsx`, and the installed PrimeReact `listbox.d.ts` and implementation. The Sakai example uses controlled object selection, `optionLabel`, and filtering. Summary now curates filterable, multiple-selection, invalid/disabled, and filter-match-mode examples; Default remains one controlled ListBox.
+
+| Native surface | Treatment |
+| --- | --- |
+| `value`, `options`, `optionLabel`, `optionValue`, `dataKey` | `options`, labels, keys, and arbitrary option values are forwarded unchanged. `value` is adapted only to synchronize Storybook args after `onChange`; the native single value and array value modes remain available. |
+| Selection behavior: `multiple`, `metaKeySelection`, `optionDisabled`, `autoOptionFocus`, `selectOnFocus`, `focusOnHover` | Forwarded unchanged. The curated Default exposes the common selection/focus controls; multiple selection is demonstrated in Summary with an array value. |
+| Filtering: `filter`, `filterBy`, `filterLocale`, `filterMatchMode`, `filterPlaceholder`, `filterValue`, `filterInputProps`, `filterTemplate`, `onFilterValueChange` | Forwarded unchanged. Filter visibility, placeholder, and match mode are exposed; custom filter templates, locale, controlled filter values, input props, and callbacks remain native args outside the curated Controls. |
+| Templates and empty states: `itemTemplate`, `optionGroupTemplate`, `optionGroupChildren`, `optionGroupLabel`, `emptyMessage`, `emptyFilterMessage` | Forwarded unchanged, including React-node/function template forms and grouped option models. These are intentionally outside the curated static examples except for the native option composition. |
+| Presentation and DOM contract: `invalid`, `disabled`, `listClassName`, `listStyle`, `tooltip`, `tooltipOptions`, `unstyled`, `children`, inherited `HTMLAttributes<HTMLDivElement>` | Forwarded unchanged through `{...args}`. Invalid/disabled states are curated; IDs, classes, styles, ARIA/data attributes, DOM events, tooltip settings, children, and unstyled behavior remain available through native props. |
+| `pt`, `ptOptions` | Forwarded unchanged. Root, header, filter, wrapper, virtual scroller, list, item/group, empty-message, tooltip, and lifecycle-hook pass-through sections retain their native value/function forms; no wrapper PT defaults replace user customizations. |
+| `onChange` | Adapted only to call `updateArgs({ value: event.value })`, then invokes the supplied callback with the exact original event. This is covered by `tests/listbox-contract.test.mjs`. |
+| Ref and imperative API | PrimeReact `focus()`, `getElement()`, and `getVirtualScroller()` remain native and are not exposed as Controls. |
+| Nested models, alternate selection/value modes, and supported templates | Option objects, `SelectItem` values, grouped options, single values, array values, and template node/function forms are supported by the native type. No wrapper narrows these modes; the curated playground intentionally demonstrates only the common object-option and single/multiple selection compositions. |
+
+The inventory is source inspection, not exhaustive behavioral testing. The focused contract test verifies representative option/value modes, filtering, templates, inherited attributes, PT configuration, and supplied `onChange` preservation. The shared browser check verifies native selection with PrimeReact's default `metaKeySelection={false}`. The exposed `metaKeySelection={true}` combination remains untested because PrimeReact 10.9.7's installed click path passes the browser event directly from `ListBoxItem` but then reads `event.originalEvent` in `onOptionSelect`, producing `Cannot read properties of undefined (reading 'metaKey')` before `onChange` is reached. No wrapper workaround was added because it would alter the native event contract. Summary/Default structure, copyable sources, Controls placement, and responsive rendering pass the focused browser checks. Grouped options, custom templates, virtual scrolling, filter callbacks, PT callback forms, refs, and every inherited DOM attribute combination remain forwarded but are not exhaustively tested.
 
 ### Fieldset review — issue #27
 

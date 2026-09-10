@@ -6,7 +6,7 @@ import exampleSource from "./ListBox.examples.tsx?raw";
 
 <Title>ListBox</Title>
 
-<Subtitle>Selection list.</Subtitle>
+<Subtitle>Select one or more values from a list, with filtering, validation, templates, and grouped options.</Subtitle>
 
 ## Usage
 
@@ -16,17 +16,40 @@ import exampleSource from "./ListBox.examples.tsx?raw";
 
 ## Variations
 
-### Disabled
+### Filterable options
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ filter: true, filterPlaceholder: 'Search cities' }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ filter: true, filterPlaceholder: 'Search cities' }} />"} language="tsx" />
 
-### Filter
+### Multiple selection
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ filter: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ multiple: true, value: [] }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ filter: true }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ multiple: true, value: [] }} />"} language="tsx" />
+
+### Invalid and disabled states
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-column gap-3" style={{ maxWidth: '20rem' }}>
+  <Example initialArgs={{ invalid: true }} />
+  <Example initialArgs={{ disabled: true }} />
+</div>
+</div>
+
+<Source code={"<div className=\"flex flex-column gap-3\" style={{ maxWidth: '20rem' }}>\n  <Example initialArgs={{ invalid: true }} />\n  <Example initialArgs={{ disabled: true }} />\n</div>"} language="tsx" />
+
+### Filter matching
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ filter: true, filterMatchMode: 'startsWith' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ filter: true, filterMatchMode: 'startsWith' }} />"} language="tsx" />
 
 ## Playground
 

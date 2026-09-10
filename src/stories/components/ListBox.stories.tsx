@@ -6,14 +6,24 @@ import exampleSource from './ListBox.examples.tsx?raw';
 
 const meta = {
   title: 'Components/ListBox',
-  component: ListBox,
   parameters: {
     layout: 'centered',
-    controls: { include: ["value","disabled","filter"] },
-    docs: { description: { component: 'Selection list.' }, source: { code: exampleSource } }
+    controls: { include: ["value","multiple","filter","filterPlaceholder","filterMatchMode","invalid","disabled","metaKeySelection","autoOptionFocus","selectOnFocus","focusOnHover"] },
+    docs: { description: { component: 'Select one or more values from a list, with filtering, validation, templates, and grouped options.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { value: { control: 'object' }, disabled: { control: 'boolean' }, filter: { control: 'boolean' } }
+  argTypes: { value: { control: 'object' },
+    multiple: { control: 'boolean' },
+    filter: { control: 'boolean' },
+    filterPlaceholder: { control: 'text' },
+    filterMatchMode: { control: 'inline-radio', options: ['contains', 'startsWith', 'endsWith', 'equals', 'notEquals'] },
+    invalid: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    metaKeySelection: { control: 'boolean' },
+    autoOptionFocus: { control: 'boolean' },
+    selectOnFocus: { control: 'boolean' },
+    focusOnHover: { control: 'boolean' }
+  }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;
