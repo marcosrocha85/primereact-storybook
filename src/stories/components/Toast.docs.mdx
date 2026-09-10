@@ -6,7 +6,7 @@ import exampleSource from "./Toast.examples.tsx?raw";
 
 <Title>Toast</Title>
 
-<Subtitle>Temporary notification.</Subtitle>
+<Subtitle>Temporary notification displayed in an overlay with severity, dismissal, and lifetime options.</Subtitle>
 
 ## Usage
 
@@ -16,35 +16,47 @@ import exampleSource from "./Toast.examples.tsx?raw";
 
 ## Variations
 
-### top-right
+### Severities
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'top-right' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-wrap gap-2">
+  <Example initialArgs={{ messageSeverity: 'success' }} />
+  <Example initialArgs={{ messageSeverity: 'info' }} />
+  <Example initialArgs={{ messageSeverity: 'warn' }} />
+  <Example initialArgs={{ messageSeverity: 'error' }} />
+</div>
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'top-right' }} />"} language="tsx" />
+<Source code={"<div className=\"flex flex-wrap gap-2\">\n  <Example initialArgs={{ messageSeverity: 'success' }} />\n  <Example initialArgs={{ messageSeverity: 'info' }} />\n  <Example initialArgs={{ messageSeverity: 'warn' }} />\n  <Example initialArgs={{ messageSeverity: 'error' }} />\n</div>"} language="tsx" />
 
-### top-left
+### Positions
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'top-left' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-wrap gap-2">
+  <Example initialArgs={{ position: 'top-left' }} />
+  <Example initialArgs={{ position: 'top-center' }} />
+  <Example initialArgs={{ position: 'bottom-right' }} />
+  <Example initialArgs={{ position: 'bottom-center' }} />
+</div>
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'top-left' }} />"} language="tsx" />
+<Source code={"<div className=\"flex flex-wrap gap-2\">\n  <Example initialArgs={{ position: 'top-left' }} />\n  <Example initialArgs={{ position: 'top-center' }} />\n  <Example initialArgs={{ position: 'bottom-right' }} />\n  <Example initialArgs={{ position: 'bottom-center' }} />\n</div>"} language="tsx" />
 
-### bottom-right
+### Dismissible
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'bottom-right' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ messageClosable: true, messageSticky: true }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'bottom-right' }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ messageClosable: true, messageSticky: true }} />"} language="tsx" />
 
-### bottom-left
+### Automatic dismissal
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'bottom-left' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ messageClosable: false, messageLife: 3000 }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'bottom-left' }} />"} language="tsx" />
-
-### center
-
-<div className="component-example sb-unstyled"><Example initialArgs={{ position: 'center' }} /></div>
-
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ position: 'center' }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ messageClosable: false, messageLife: 3000 }} />"} language="tsx" />
 
 ## Playground
 
