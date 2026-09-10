@@ -289,6 +289,32 @@ all inherited DOM events, lifecycle timing, refs, and every native prop
 combination remain source-inspected or forwarded but are not exhaustively
 tested.
 
+### Tree API audit — issue #67
+
+Inspected the Button documentation/story reference, the Tree generator entry and generated files,
+the Sakai UI Kit Tree example at `vendor/sakai-react/app/(main)/uikit/tree/page.tsx`, and the
+installed PrimeReact `tree.d.ts`, `treenode.d.ts`, and implementation. This inventory records
+source-inspection evidence for the issue; it is not exhaustive behavioral testing.
+
+| Native surface | Treatment |
+| --- | --- |
+| `value` (`TreeNode[]`) and `TreeNode` fields (`id`, `key`, `label`, `data`, `icon`, `children`, `style`, `className`, `droppable`, `draggable`, `selectable`, `leaf`, `expanded`) | Forwarded unchanged through `args`; the generated example supplies a nested model. Curated examples use keys, labels, and children; arbitrary node data, icons, styling, drag/drop flags, lazy leaves, and per-node expansion remain available through native args but are outside curated examples. |
+| `selectionMode` (`single`, `multiple`, `checkbox`) and `selectionKeys` (`string`, keyed multiple model, keyed checkbox model, `null`) | Exposed through focused Controls and passed through unchanged. The Summary curates all three modes. The playground synchronizes the exact native `event.value`, preserving scalar, object, and null value modes. |
+| `expandedKeys`, `metaKeySelection`, `propagateSelectionUp`, `propagateSelectionDown` | `expandedKeys` is exposed and synchronized through `onToggle`; the other selection behavior props remain forwarded unchanged and outside focused Controls. Expand/collapse and checkbox propagation are native behaviors. |
+| `disabled`, `loading`, `loadingIcon`, `checkboxIcon`, `collapseIcon`, `expandIcon`, `dragdropScope` | `disabled` and `loading` are exposed through focused Controls; all are forwarded unchanged. Loading, disabled, custom icons, and drag/drop scope remain native options; only loading and disabled are curated in Summary. |
+| `filter`, `filterDelay`, `filterValue`, `filterBy`, `filterMode`, `filterPlaceholder`, `filterLocale`, `filterIcon`, `filterTemplate`, `emptyMessage` | `filter` and `filterMode` are exposed through focused Controls and forwarded unchanged. Filtering and strict filtering are curated in Summary. Controlled filter values, locale, custom icons/templates, empty content, delay, and alternate fields remain available through native args. |
+| `showHeader`, `header`, `footer`, `togglerTemplate`, `nodeTemplate`, `children` | `showHeader` is exposed; all template/content props are forwarded unchanged and remain outside curated examples. Header/footer, filter templates, node/toggler templates, and arbitrary children retain their native React node/function forms. |
+| `id`, `className`, `style`, `contentClassName`, `contentStyle`, `ariaLabel`, `ariaLabelledby`, inherited DOM attributes/events | Forwarded unchanged through `{...args}`. Focus, keyboard, mouse, pointer, touch, drag, clipboard, animation, transition, ARIA, data, and global HTML attributes are intentionally outside curated Controls. |
+| `pt`, `ptOptions`, `unstyled` | Forwarded unchanged; the story supplies no PT defaults and does not replace user object/function entries. Native root, loading, filter, node, toggler, checkbox, label, header/footer, droppoint, and lifecycle PT sections remain available. |
+| `onSelectionChange`, `onContextMenuSelectionChange`, `onSelect`, `onUnselect`, `onExpand`, `onCollapse`, `onToggle`, `onDragDrop`, `onContextMenu`, `onFilterValueChange`, `onNodeClick`, `onNodeDoubleClick` | `onToggle` and `onSelectionChange` are adapted only to synchronize controlled Storybook args, then invoke the supplied callback with the original PrimeReact event. Every other callback is forwarded unchanged. |
+| Ref methods `filter` and `getElement`; nested models, alternate templates, and value modes | Native ref methods remain available but are not used by the playground. TreeNode models and callback/template forms are source-inspected and not exhaustively tested; no wrapper-specific model or selection mode is invented. |
+
+The existing focused browser check verifies Tree expansion and checkbox selection, alongside the
+Summary/Default contract, copyable sources, Controls placement, and desktop/mobile rendering.
+Callback preservation, scalar and multiple selection values, filtering modes, drag/drop events,
+custom templates, PT callbacks, inherited DOM events, custom node models, and ref methods remain
+forwarded or source-inspected but are not exhaustively browser-tested.
+
 ### ScrollPanel API inventory — issue #50
 
 Inspected the Button documentation/story reference, the ScrollPanel generator
