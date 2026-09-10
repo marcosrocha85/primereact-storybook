@@ -163,6 +163,25 @@ Inspected the Button docs/story, the DataView generator entry and generated file
 
 The inventory is based on source inspection and does not claim exhaustive testing. Focused browser coverage verifies pagination, Summary structure, list/grid rendering at desktop and mobile widths, and the Default source panel. The contract test verifies native prop identity, the custom item-template fallback, supplied item-template callbacks, PT, inherited attributes and `onPage` preservation. Sorting, lazy/server paging, custom paginator templates, list templates, arbitrary item models, PT callbacks, inherited events, ref methods and DataViewLayoutOptions are forwarded or documented but not exhaustively browser-tested.
 
+## Dialog review — issue #24
+
+Inspected the Button docs/story reference, the Dialog generator entry and generated files, the Sakai UI Kit overlay examples at `vendor/sakai-react/app/(main)/uikit/overlay/page.tsx`, and the installed PrimeReact `dialog.d.ts` and implementation. The Summary now contains local, stateful examples for the base dialog, a confirmation footer, maximization, positioning, and dismissable modal mask. Default exposes one controlled Dialog instance with an explicit open trigger and synchronizes visibility through `useArgs`.
+
+### API inventory
+
+| Native surface | Treatment |
+| --- | --- |
+| `visible`, `onHide`, `onShow` | `visible` is exposed as a Control. The playground adapts `onHide` only to set `visible: false`, then invokes the supplied callback; `onShow` is forwarded through a wrapper that invokes the supplied callback. |
+| `header`, `footer`, `children`, `content`, `icons` | Forwarded unchanged. The default child content is used only when `args.children` is absent; React node and function template modes remain available through native args. |
+| `modal`, `dismissableMask`, `closeOnEscape`, `closable`, `showCloseIcon`, `focusOnShow`, `draggable`, `resizable`, `keepInViewport`, `blockScroll`, `position`, `maximizable`, `maximized`, `minX`, `minY` | Forwarded unchanged. The core modal, dismissal, close, maximization, and position options are exposed in the curated Controls; the remaining behavior is available through native args but not independently demonstrated. |
+| `style`, `className`, `headerClassName`, `headerStyle`, `contentClassName`, `contentStyle`, `maskClassName`, `maskStyle`, `id`, `rtl` | Forwarded unchanged; only `style` is exposed as a generic object Control. |
+| `appendTo`, `baseZIndex`, `transitionOptions`, `unstyled`, `pt`, `ptOptions` | Forwarded unchanged, preserving the native value modes, transition configuration, styling boundary, and pass-through customization. No wrapper PT defaults replace user entries. |
+| `ariaCloseIconLabel`, `closeIcon`, `maximizeIcon`, `minimizeIcon` | Forwarded unchanged; icon value/function modes and accessible close-label customization are outside the curated Controls. |
+| `onClick`, `onMaskClick`, `onMaximize`, `onDrag`, `onDragStart`, `onDragEnd`, `onResize`, `onResizeStart`, `onResizeEnd` | Forwarded unchanged. The story does not intercept these callbacks. |
+| Inherited DOM attributes and component-base props | Forwarded by `{...args}`, including `data-*`, `aria-*`, `role`, `tabIndex`, DOM handlers, and other supported native attributes. |
+
+The inventory is source inspection, not exhaustive behavioral testing. Focused browser coverage verifies open, close, reopen, Summary structure, Controls placement, copyable source, and desktop/mobile rendering. The contract test verifies native props, child/template values, pass-through objects, inherited attributes, and supplied callbacks across the intercepted `onHide` path. Dragging, resizing, every template function, transition/append targets, PT callbacks, imperative methods, and all inherited DOM events remain forwarded but are not exhaustively tested.
+
 ## Validation
 
 - `npm run build`: passed. Earlier TypeScript failures in vendored UI Kit pages are no longer pulled into the component build because examples no longer import those pages; no compiler options or vendor files were weakened.

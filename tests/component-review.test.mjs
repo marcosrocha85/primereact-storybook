@@ -52,6 +52,23 @@ for (const name of components) {
   });
 }
 
+test('Dialog: open, close and reopen at desktop and mobile widths', async () => {
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await open('Dialog');
+    const root = page.locator('#storybook-root');
+    const dialog = page.locator('.p-dialog');
+    assert.equal(await dialog.count(), 0, 'Dialog starts closed');
+    await root.getByRole('button', { name: 'Open Dialog' }).click();
+    await dialog.waitFor();
+    assert.equal(await dialog.getByText('Dialog content.').count(), 1);
+    await dialog.getByRole('button', { name: 'Close' }).click();
+    await dialog.waitFor({ state: 'detached' });
+    await root.getByRole('button', { name: 'Open Dialog' }).click();
+    await dialog.waitFor();
+  }
+});
+
 test('Calendar: Sakai variations, date Controls, formatting and reset', async () => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto(`${baseURL}/?path=/docs/components-calendar-summary--summary`);

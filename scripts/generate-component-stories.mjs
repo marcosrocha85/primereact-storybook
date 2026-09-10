@@ -551,10 +551,27 @@ function productTemplate(product: (typeof products)[number], layout?: string) {
     prime: 'dialog',
     importName: 'Dialog',
     extraImports: `import { Button } from 'primereact/button';`,
-    description: 'Modal window.',
-    args: `{ header: 'Dialog', modal: true, visible: false, style: { width: '32rem', maxWidth: '90vw' } }`,
-    argTypes: `{ header: { control: 'text' }, modal: { control: 'boolean' }, visible: { control: 'boolean' } }`,
-    playground: `<><Button label="Open Dialog" onClick={() => updateArgs({ visible: true })} /><Dialog {...args} onHide={() => { updateArgs({ visible: false }); args.onHide?.(); } }><p>Dialog content.</p></Dialog></>`,
+    description: 'Modal window for focused content, confirmation flows, and forms.',
+    docsImports: `import { Button } from "primereact/button";`,
+    args: `{ header: 'Dialog', modal: true, visible: false, closable: true, closeOnEscape: true, dismissableMask: false, maximizable: false, position: 'center', style: { width: '32rem', maxWidth: '90vw' } }`,
+    argTypes: `{
+    header: { control: 'text' },
+    modal: { control: 'boolean' },
+    visible: { control: 'boolean' },
+    closable: { control: 'boolean' },
+    closeOnEscape: { control: 'boolean' },
+    dismissableMask: { control: 'boolean' },
+    maximizable: { control: 'boolean' },
+    position: { control: 'select', options: ['center', 'top', 'bottom', 'left', 'right', 'top-left', 'top-right', 'bottom-left', 'bottom-right'] },
+    style: { control: 'object' }
+  }`,
+    playground: `<><Button label="Open Dialog" onClick={() => updateArgs({ visible: true })} /><Dialog {...args} onShow={() => { args.onShow?.(); }} onHide={() => { updateArgs({ visible: false }); args.onHide?.(); }}>{args.children ?? <p>Dialog content.</p>}</Dialog></>`,
+    docsVariations: [
+      { title: 'Confirmation footer', code: `<Example initialArgs={{ header: 'Confirmation', footer: <div className="flex justify-content-end gap-2"><Button label="Cancel" text /><Button label="Confirm" /></div> }} />` },
+      { title: 'Maximizable', code: `<Example initialArgs={{ maximizable: true }} />` },
+      { title: 'Position', code: `<Example initialArgs={{ position: 'top-right' }} />` },
+      { title: 'Dismissable mask', code: `<Example initialArgs={{ dismissableMask: true }} />` }
+    ],
   },
   {
     name: 'OverlayPanel',

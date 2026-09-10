@@ -1,12 +1,13 @@
 import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Example } from "./Dialog.examples";
 import exampleSource from "./Dialog.examples.tsx?raw";
+import { Button } from "primereact/button";
 
 <Meta title="Components/Dialog/Summary" />
 
 <Title>Dialog</Title>
 
-<Subtitle>Modal window.</Subtitle>
+<Subtitle>Modal window for focused content, confirmation flows, and forms.</Subtitle>
 
 ## Usage
 
@@ -16,7 +17,37 @@ import exampleSource from "./Dialog.examples.tsx?raw";
 
 ## Variations
 
-The usage example shows the base composition. Use Default to explore the documented properties.
+### Confirmation footer
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ header: 'Confirmation', footer: <div className="flex justify-content-end gap-2"><Button label="Cancel" text /><Button label="Confirm" /></div> }} />
+</div>
+
+<Source code={"<Example initialArgs={{ header: 'Confirmation', footer: <div className=\"flex justify-content-end gap-2\"><Button label=\"Cancel\" text /><Button label=\"Confirm\" /></div> }} />"} language="tsx" />
+
+### Maximizable
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ maximizable: true }} />
+</div>
+
+<Source code={"<Example initialArgs={{ maximizable: true }} />"} language="tsx" />
+
+### Position
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ position: 'top-right' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ position: 'top-right' }} />"} language="tsx" />
+
+### Dismissable mask
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ dismissableMask: true }} />
+</div>
+
+<Source code={"<Example initialArgs={{ dismissableMask: true }} />"} language="tsx" />
 
 ## Playground
 
