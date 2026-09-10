@@ -1,10 +1,11 @@
-import { useState, type ComponentProps } from 'react';
+import { useState } from 'react';
 import { ListBox } from 'primereact/listbox';
+import type { ListBoxProps } from 'primereact/listbox';
 
 const cityOptions = [{ name: 'New York', code: 'NY' }, { name: 'Rome', code: 'RM' }, { name: 'London', code: 'LDN' }];
 
-export type ExampleArgs = ComponentProps<typeof ListBox>;
-export const defaultArgs: ExampleArgs = { value: null, options: cityOptions, optionLabel: 'name' };
+export type ExampleArgs = ListBoxProps;
+export const defaultArgs: ExampleArgs = { value: null, options: cityOptions, optionLabel: 'name', multiple: false, filter: false, invalid: false, disabled: false };
 
 export function Playground({ args, updateArgs }: {
   args: ExampleArgs;
