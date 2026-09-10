@@ -395,7 +395,7 @@ All 67 components pass the same browser checks at 1280×900 and 390×900: exactl
 | Sidebar | [#53](https://github.com/marcosrocha85/primereact-storybook/issues/53) | Open; close; reopen |
 | Skeleton | [#54](https://github.com/marcosrocha85/primereact-storybook/issues/54) | Presentation and curated visual variations; state-changing interactions not applicable |
 | Slider | [#55](https://github.com/marcosrocha85/primereact-storybook/issues/55) | Arrow-key value change |
-| SplitButton | [#56](https://github.com/marcosrocha85/primereact-storybook/issues/56) | Primary-action feedback; menu commands wired |
+| SplitButton | [#56](https://github.com/marcosrocha85/primereact-storybook/issues/56) | Primary-action feedback; menu commands wired; native API inventory below |
 | Splitter | [#57](https://github.com/marcosrocha85/primereact-storybook/issues/57) | Pointer resizing |
 | Steps | [#58](https://github.com/marcosrocha85/primereact-storybook/issues/58) | Step selection |
 | TabMenu | [#59](https://github.com/marcosrocha85/primereact-storybook/issues/59) | Active item change |
@@ -425,6 +425,22 @@ The inventory below is based on the installed PrimeReact `SidebarProps`, `Sideba
 | Nested models, alternate value modes, and imperative methods | No option/value model applies. Native `getElement()`, `getMask()`, and `getCloseIcon()` ref methods remain outside Controls and are source-inspected. |
 
 The API inventory is source inspection, not exhaustive behavioral testing. `tests/sidebar-contract.test.mjs` verifies representative inherited attributes, PT options, custom content, visual props, and supplied `onHide` preservation. The browser check verifies open, close, reopen, Summary/Default structure, copyable sources, Controls placement, and desktop/mobile rendering. Header/icon/content callback forms, transition variants, mask behavior for every position, Escape/focus paths, refs, and every native prop combination remain forwarded but are not exhaustively tested.
+
+### SplitButton API inventory — issue #56
+
+The inventory below is based on the installed PrimeReact `SplitButtonProps`, `SplitButtonPassThroughOptions`, `MenuItem`, and implementation, plus the Sakai UI Kit SplitButton example in `vendor/sakai-react/app/(main)/uikit/button/page.tsx`. It records source inspection for this issue; it is not exhaustive interaction testing.
+
+| API surface | Treatment |
+| --- | --- |
+| `label`, `icon`, `severity`, `size`, `text`, `rounded`, `raised`, `outlined`, `loading`, `disabled` | Exposed through focused Default Controls and passed through unchanged. The icon select follows the Button contract and includes the no-icon option. All native severity values, including `contrast`, are available in the select. |
+| `model` and `MenuItem` fields (`id`, `label`, `icon`, `url`, `items`, `expanded`, `disabled`, `visible`, `target`, `separator`, `style`, `className`, `command`, `template`, `data`) | Used by the playground's default menu and passed through when supplied. The demo adds a feedback command only when a supplied item has no command; supplied commands are preserved. Nested models, links, separators, templates, and item metadata are intentionally outside the curated Controls. |
+| `buttonClassName`, `menuStyle`, `menuClassName`, `menuButtonClassName`, `buttonProps`, `menuButtonProps`, `dropdownIcon`, `loadingIcon`, `buttonTemplate` | Passed through unchanged by `{...args}`; intentionally outside Controls because they target nested elements or accept JSX/template values. |
+| `appendTo`, `tooltip`, `tooltipOptions`, `transitionOptions`, `visible`, `className`, `style`, `id`, `children`, inherited HTML attributes and DOM callbacks | Passed through unchanged by `{...args}`; not represented as curated visual examples. |
+| `onClick`, `onShow`, `onHide` | `onClick` is adapted only to show primary-action feedback, then invokes the supplied callback with the original event. `onShow` and `onHide` are passed through unchanged. The primary callback path and menu command feedback are browser-tested; supplied callback preservation is source-inspected. |
+| `pt`, `ptOptions`, `unstyled` | Passed through unchanged. Root, icon, nested buttons, menu, menu items, tooltip, hooks, and transition pass-through sections remain available; no wrapper defaults replace user entries. |
+| Ref methods and state (`getElement`, `getModel`, `getOverlay`, `overlayVisible`) | Native imperative/state surface remains outside Controls and is source-inspected. No value mode or controlled selection model applies. |
+
+The Default playground intentionally supplies fallback menu items for a useful standalone demo. A caller-provided `model` is not narrowed or discarded; its items and commands are preserved, with feedback added only to command-less items. Header/template forms, custom pass-through functions, overlay lifecycle, refs, and every native prop combination remain forwarded but are not exhaustively tested.
 
 ### Password API inventory — issue #45
 

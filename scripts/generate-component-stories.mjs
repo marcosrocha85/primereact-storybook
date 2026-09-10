@@ -16,19 +16,51 @@ const components = [
     importName: 'SplitButton',
     hooks: `const [action, setAction] = useState('No action yet');`,
     description: 'Split action button with a primary action and an options menu.',
-    args: `{ label: 'Save', icon: 'pi pi-check', severity: 'secondary' }`,
+    args: `{ label: 'Save', icon: 'pi pi-check', severity: 'secondary', size: undefined, text: false, rounded: false, raised: false, outlined: false, loading: false, disabled: false }`,
     argTypes: `{
     label: { control: 'text' },
     icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] },
-    severity: { control: 'select', options: [undefined, 'secondary', 'success', 'info', 'warning', 'help', 'danger'] },
+    severity: { control: 'select', options: [undefined, 'secondary', 'success', 'info', 'warning', 'help', 'danger', 'contrast'] },
+    size: { control: 'inline-radio', options: [undefined, 'small', 'large'] },
+    text: { control: 'boolean' },
+    rounded: { control: 'boolean' },
+    raised: { control: 'boolean' },
+    outlined: { control: 'boolean' },
+    loading: { control: 'boolean' },
     disabled: { control: 'boolean' }
   }`,
-    renderPrefix: `const splitItems = [
+    renderPrefix: `const splitItems: MenuItem[] = [
   { label: 'Update', icon: 'pi pi-refresh' },
   { label: 'Delete', icon: 'pi pi-times' },
   { label: 'Home', icon: 'pi pi-home' }
 ];`,
-    playground: `<><SplitButton {...args} onClick={(event) => { setAction('Save selected'); args.onClick?.(event); }} model={splitItems.map((item) => ({ ...item, command: () => setAction(item.label + ' selected') }))} /><p role="status">{action}</p></>`,
+    playground: `<><SplitButton {...args} onClick={(event) => { setAction('Save selected'); args.onClick?.(event); }} model={(args.model ?? splitItems).map((item) => ({ ...item, command: item.command ?? (() => setAction(item.label + ' selected')) }))} /><p role="status">{action}</p></>`,
+    extraImports: `import type { MenuItem } from 'primereact/menuitem';`,
+    docsVariations: [
+      { title: 'Severities', code: `<div className="flex flex-wrap gap-2">
+  <Example initialArgs={{ severity: undefined }} />
+  <Example initialArgs={{ severity: 'secondary' }} />
+  <Example initialArgs={{ severity: 'success' }} />
+  <Example initialArgs={{ severity: 'info' }} />
+  <Example initialArgs={{ severity: 'warning' }} />
+  <Example initialArgs={{ severity: 'danger' }} />
+</div>` },
+      { title: 'Styles and states', code: `<div className="flex flex-wrap gap-2">
+  <Example initialArgs={{ outlined: true }} />
+  <Example initialArgs={{ text: true }} />
+  <Example initialArgs={{ rounded: true }} />
+  <Example initialArgs={{ raised: true }} />
+  <Example initialArgs={{ loading: true }} />
+  <Example initialArgs={{ disabled: true }} />
+</div>` },
+      { title: 'Sizes', code: `<div className="flex flex-wrap align-items-center gap-2">
+  <Example initialArgs={{ size: 'small' }} />
+  <Example />
+  <Example initialArgs={{ size: 'large' }} />
+</div>` },
+      { title: 'Menu commands', code: `<Example />
+// Select the arrow to open Update, Delete, and Home commands.` }
+    ],
   },
   {
     name: 'InputText',
