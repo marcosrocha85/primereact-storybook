@@ -632,9 +632,17 @@ const components = [
     importName: 'SelectButton',
     description: 'Button-based selection control.',
     renderPrefix: `const selectOptions = [{ name: 'Option 1', code: 'O1' }, { name: 'Option 2', code: 'O2' }, { name: 'Option 3', code: 'O3' }];`,
-    args: `{ value: null, options: selectOptions, optionLabel: 'name', multiple: false }`,
-    argTypes: `{ multiple: { control: 'boolean' }, disabled: { control: 'boolean' } }`,
+    args: `{ value: null, options: selectOptions, optionLabel: 'name', multiple: false, allowEmpty: true, invalid: false, disabled: false }`,
+    argTypes: `{ multiple: { control: 'boolean' }, allowEmpty: { control: 'boolean' }, invalid: { control: 'boolean' }, disabled: { control: 'boolean' } }`,
     playground: `<SelectButton {...args} onChange={(event) => { updateArgs({ value: event.value }); args.onChange?.(event); } } />`,
+    docsVariations: [
+      { title: 'Multiple selection', code: `<Example initialArgs={{ multiple: true, value: ['O1'] }} />` },
+      { title: 'Clearable selection', code: `<Example initialArgs={{ value: 'O2', allowEmpty: true }} />` },
+      { title: 'Invalid and disabled states', code: `<div className="flex flex-wrap gap-3">
+  <Example initialArgs={{ invalid: true }} />
+  <Example initialArgs={{ disabled: true, value: 'O1' }} />
+</div>` }
+    ],
   },
   {
     name: 'Slider',

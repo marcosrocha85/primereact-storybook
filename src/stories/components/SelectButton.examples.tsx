@@ -4,7 +4,7 @@ import { SelectButton } from 'primereact/selectbutton';
 const selectOptions = [{ name: 'Option 1', code: 'O1' }, { name: 'Option 2', code: 'O2' }, { name: 'Option 3', code: 'O3' }];
 
 export type ExampleArgs = ComponentProps<typeof SelectButton>;
-export const defaultArgs: ExampleArgs = { value: null, options: selectOptions, optionLabel: 'name', multiple: false };
+export const defaultArgs: ExampleArgs = { value: null, options: selectOptions, optionLabel: 'name', multiple: false, allowEmpty: true, invalid: false, disabled: false };
 
 export function Playground({ args, updateArgs }: {
   args: ExampleArgs;

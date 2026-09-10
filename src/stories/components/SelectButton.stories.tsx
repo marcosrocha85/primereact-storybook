@@ -9,11 +9,11 @@ const meta = {
   component: SelectButton,
   parameters: {
     layout: 'centered',
-    controls: { include: ["value","multiple","disabled"] },
+    controls: { include: ["value","multiple","allowEmpty","invalid","disabled"] },
     docs: { description: { component: 'Button-based selection control.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { value: { control: 'object' }, multiple: { control: 'boolean' }, disabled: { control: 'boolean' } }
+  argTypes: { value: { control: 'object' }, multiple: { control: 'boolean' }, allowEmpty: { control: 'boolean' }, invalid: { control: 'boolean' }, disabled: { control: 'boolean' } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;

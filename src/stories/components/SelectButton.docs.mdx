@@ -16,11 +16,32 @@ import exampleSource from "./SelectButton.examples.tsx?raw";
 
 ## Variations
 
-### Disabled
+### Multiple selection
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ multiple: true, value: ['O1'] }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ multiple: true, value: ['O1'] }} />"} language="tsx" />
+
+### Clearable selection
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ value: 'O2', allowEmpty: true }} />
+</div>
+
+<Source code={"<Example initialArgs={{ value: 'O2', allowEmpty: true }} />"} language="tsx" />
+
+### Invalid and disabled states
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-wrap gap-3">
+  <Example initialArgs={{ invalid: true }} />
+  <Example initialArgs={{ disabled: true, value: 'O1' }} />
+</div>
+</div>
+
+<Source code={"<div className=\"flex flex-wrap gap-3\">\n  <Example initialArgs={{ invalid: true }} />\n  <Example initialArgs={{ disabled: true, value: 'O1' }} />\n</div>"} language="tsx" />
 
 ## Playground
 

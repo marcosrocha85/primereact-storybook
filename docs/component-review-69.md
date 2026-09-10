@@ -39,6 +39,23 @@ The inventory below is based on the installed PrimeReact `InputMaskProps` and `I
 | InputMask templates / nested models / alternate value objects | Not applicable | InputMask exposes no item model, option collection, header/footer/item templates, or object-valued selection mode. Its nested contract is the inherited input element and passthrough options. |
 | `label`, `floatLabel` | Story-only adaptation | These are not native InputMask props. They provide the Sakai form composition and are removed before native props are forwarded; supplied `id` is retained for label association. |
 
+### SelectButton API inventory — issue #52
+
+The inventory below is based on the installed PrimeReact `SelectButtonProps` declaration and implementation, the SelectButton styling in `vendor/sakai-react`, and the Button documentation/story pattern. It records the native contract reviewed for this issue; it is not exhaustive interaction testing.
+
+| API surface | Status in the curated story | Evidence / scope decision |
+| --- | --- | --- |
+| `options`, `optionLabel`, `optionValue`, `optionDisabled`, `dataKey` | Passed through unchanged; object options and label/value/disabled field modes are used by the examples; only `value` is exposed as an object Control | The native implementation resolves primitive and object option values and compares with `dataKey`. Alternate option shapes remain available through native args and are outside the curated Controls. |
+| `value` | Adapted only for controlled Storybook synchronization | The wrapper stores the exact native `event.value` in Storybook args, preserving scalar values for single selection and arrays for multiple selection. |
+| `multiple`, `allowEmpty`, `unselectable`, `invalid`, `disabled`, `tabIndex` | `multiple`, `allowEmpty`, `invalid`, and `disabled` are exposed through focused Default Controls; all are passed through unchanged | Single, multiple, clearable, invalid, and disabled states are curated in Summary. Deprecated `unselectable` and keyboard/tab behavior remain native args and are source-inspected. |
+| `itemTemplate`, `children` | Passed through unchanged; intentionally outside curated Controls | Native item rendering remains available, including arbitrary React nodes/functions and children. The examples use the default option-label rendering. |
+| `tooltip`, `tooltipOptions`, `ariaLabelledBy`, inherited `HTMLAttributes<HTMLDivElement>` | Passed through unchanged; intentionally outside curated Controls | Root DOM attributes, ARIA/data attributes, class/style, DOM callbacks, tooltip configuration, and focus configuration remain available through `ExampleArgs`. |
+| `pt`, `ptOptions`, `unstyled` | Passed through unchanged; intentionally outside curated Controls | Native root/button/label/tooltip pass-through sections and lifecycle hooks are not replaced or merged with story defaults. |
+| `onChange` | Adapted and preserved | The wrapper updates the controlled value, then invokes the supplied callback with the exact original PrimeReact event; the focused contract test asserts both paths. |
+| Templates, nested option models, alternate value modes, and imperative methods | Native-only or not applicable to the curated examples | `SelectItemOptionsType` supports primitive/object option models and item templates; there are no nested component collections or alternate selection modes beyond single/multiple values. Native `focus()` and `getElement()` remain outside Controls and are source-inspected. |
+
+The API inventory is source inspection, not exhaustive behavioral testing. `tests/selectbutton-contract.test.mjs` verifies representative object options, multiple values, inherited attributes, PT, item templates, and supplied `onChange` preservation. The component browser check verifies selection retention, Summary/Default structure, copyable sources, Controls placement, and desktop/mobile rendering. Every option model, callback form, PT callback, tooltip combination, keyboard path, ref method, and inherited DOM event remains forwarded but is not exhaustively tested.
+
 ### InputNumber API inventory — issue #31
 
 The inventory below is based on the installed PrimeReact `InputNumberProps` declaration and InputNumber implementation, plus the Sakai UI Kit input, invalid-state, and float-label examples. It records the native contract reviewed for this issue; it is not exhaustive interaction testing.
