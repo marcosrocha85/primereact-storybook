@@ -24,6 +24,7 @@ try {
       assert.ok(data[key].trim(), `Empty ${key}`);
     }
     assert.ok(!/[\r\n]/.test(data.pr_title), 'PR title must be one line');
+    assert.match(data.pr_title, /^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9][a-z0-9._/-]*\))?!?: \S(?:.*\S)?$/, 'PR/commit title must use Conventional Commits');
     assert.ok(Array.isArray(data.validations) && data.validations.length > 0, 'Missing validation evidence');
     assert.ok(data.validations.every(check => typeof check.command === 'string' && check.status === 'passed'), 'A validation failed or was blocked');
     for (const command of ['npm run build', 'npm run build-storybook', 'git diff --check']) {

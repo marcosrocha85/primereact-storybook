@@ -37,10 +37,7 @@ const format = (options, params, payload) => {
   const percentage = Math.floor(params.progress * 100);
   const duration = Math.round(((params.stopTime || Date.now()) - params.startTime) / 1000);
   const elapsed = cliProgress.Format.TimeFormat(duration, options, 1);
-  const eta = params.value > 0 && Number.isFinite(params.eta)
-    ? cliProgress.Format.TimeFormat(params.eta, options, 5)
-    : 'calculating';
-  return `[${bar}] ${String(percentage).padStart(3)}% | ${payload.index}/${params.total} [#${payload.issue}] ${payload.phase} | elapsed ${elapsed} | ETA ${eta}`;
+  return `[${bar}] ${String(percentage).padStart(3)}% | ${payload.index}/${params.total} [#${payload.issue}] ${payload.phase} | elapsed ${elapsed}`;
 };
 
 const progress = new cliProgress.MultiBar({
@@ -52,8 +49,6 @@ const progress = new cliProgress.MultiBar({
   gracefulExit: false,
   hideCursor: true,
   linewrap: false,
-  etaAsynchronousUpdate: true,
-  etaBuffer: 3,
   fps: 4,
   stream: process.stdout
 });
