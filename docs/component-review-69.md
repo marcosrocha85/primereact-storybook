@@ -140,6 +140,28 @@ The inventory is source inspection, not exhaustive behavioral testing. The focus
 
 ## Component audit
 
+### Skeleton API inventory — issue #54
+
+Inspected the Button documentation/story reference, Sakai's Skeleton example at
+`vendor/sakai-react/app/(main)/uikit/misc/page.tsx`, and the installed PrimeReact
+`skeleton.d.ts` and implementation. This inventory records the native contract reviewed
+for this issue; it is source-inspection evidence, not exhaustive behavioral testing.
+
+| API surface | Treatment |
+| --- | --- |
+| `shape`, `size`, `width`, `height`, `borderRadius`, `animation` | Exposed through focused Default Controls and passed through unchanged. Rectangle/circle, square sizing, content dimensions, custom radius, wave animation, and the static `none` animation are curated in Summary. |
+| `className`, `style`, `id`, `aria-*`, `data-*`, inherited `HTMLAttributes<HTMLDivElement>` | Passed through unchanged by `{...args}`; intentionally outside the curated visual Controls. |
+| `children` | Passed through unchanged by the story contract; the native Skeleton implementation renders its placeholder as a leaf element, so children are not a curated composition. |
+| `pt`, `ptOptions`, `unstyled` | Passed through unchanged; root and lifecycle pass-through options remain available through native args, with no wrapper defaults replacing user entries. |
+| DOM event callbacks and other inherited attributes | Passed through unchanged by the native component; no callback is intercepted because Skeleton has no state-changing event API. Focus, pointer, keyboard, form, clipboard, drag, animation, and transition handlers are source-inspected and not exhaustively tested. |
+| Nested models, templates, selection/value modes, component callbacks, imperative methods | Not applicable or native-only. Skeleton has no option collection, nested item model, render-template API, selection/value model, or component event callbacks; its native `getElement()` ref method remains outside Controls. |
+
+The API inventory is source inspection, not exhaustive interaction testing. The generic
+component-review browser test verifies Summary/Default navigation, Controls placement,
+copyable sources, runtime safety, and desktop/mobile rendering for Skeleton. Every native
+attribute combination, pass-through callback form, ref method, and custom composition remains
+forwarded or source-inspected but is not exhaustively tested.
+
 ### RadioButton API inventory — issue #48
 
 Inspected the Button documentation/story reference, Sakai's input UI Kit source at

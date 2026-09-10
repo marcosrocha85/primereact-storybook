@@ -2,7 +2,7 @@ import { useState, type ComponentProps } from 'react';
 import { Skeleton } from 'primereact/skeleton';
 
 export type ExampleArgs = ComponentProps<typeof Skeleton>;
-export const defaultArgs: ExampleArgs = { width: '10rem', height: '2rem', borderRadius: '16px' };
+export const defaultArgs: ExampleArgs = { width: '10rem', height: '2rem', borderRadius: '16px', animation: 'wave' };
 
 export function Playground({ args, updateArgs }: {
   args: ExampleArgs;
