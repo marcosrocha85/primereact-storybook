@@ -1,12 +1,13 @@
 import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Example } from "./Menu.examples";
 import exampleSource from "./Menu.examples.tsx?raw";
+import { Menu } from "primereact/menu";
 
 <Meta title="Components/Menu/Summary" />
 
 <Title>Menu</Title>
 
-<Subtitle>Simple vertical menu or popup menu.</Subtitle>
+<Subtitle>Vertical navigation and command menu with inline and popup layouts.</Subtitle>
 
 ## Usage
 
@@ -16,11 +17,33 @@ import exampleSource from "./Menu.examples.tsx?raw";
 
 ## Variations
 
-### Popup
+### Nested navigation
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ popup: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Menu model={[{
+  label: 'Customers',
+  icon: 'pi pi-users',
+  items: [{ label: 'New customer', icon: 'pi pi-user-plus' }, { label: 'Directory', icon: 'pi pi-list' }]
+}, { label: 'Orders', icon: 'pi pi-shopping-cart' }]} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ popup: true }} />"} language="tsx" />
+<Source code={"<Menu model={[{\n  label: 'Customers',\n  icon: 'pi pi-users',\n  items: [{ label: 'New customer', icon: 'pi pi-user-plus' }, { label: 'Directory', icon: 'pi pi-list' }]\n}, { label: 'Orders', icon: 'pi pi-shopping-cart' }]} />"} language="tsx" />
+
+### Separators and disabled items
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Menu model={[{ label: 'Save', icon: 'pi pi-save' }, { separator: true }, { label: 'Delete', icon: 'pi pi-trash', disabled: true }]} />
+</div>
+
+<Source code={"<Menu model={[{ label: 'Save', icon: 'pi pi-save' }, { separator: true }, { label: 'Delete', icon: 'pi pi-trash', disabled: true }]} />"} language="tsx" />
+
+### Popup menu
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ popup: true, popupAlignment: 'right' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ popup: true, popupAlignment: 'right' }} />"} language="tsx" />
 
 ## Playground
 

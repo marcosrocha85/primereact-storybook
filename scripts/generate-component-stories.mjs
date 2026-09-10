@@ -983,10 +983,31 @@ import { menuWithActions } from '../menuExamples';`,
   const [action, setAction] = useState('No action yet');`,
     extraImports: `import { Button } from 'primereact/button';
 import { menuWithActions } from '../menuExamples';`,
-    description: 'Simple vertical menu or popup menu.',
+    description: 'Vertical navigation and command menu with inline and popup layouts.',
     renderPrefix: `const items = [{ label: 'Save', icon: 'pi pi-save' }, { label: 'Update', icon: 'pi pi-refresh' }];`,
-    args: `{ model: items }`,
-    argTypes: `{ popup: { control: 'boolean' } }`,
+    args: `{ model: items, popup: false, popupAlignment: 'left', closeOnEscape: true, autoZIndex: true, baseZIndex: 0, tabIndex: 0 }`,
+    argTypes: `{
+    model: { control: 'object', description: 'MenuItem[] model. Edit labels, icons, separators, disabled/visible states, nested items, URLs, and command data.' },
+    popup: { control: 'boolean', description: 'Render the menu as an overlay opened by the supplied trigger.' },
+    popupAlignment: { control: 'inline-radio', options: ['left', 'right'] },
+    closeOnEscape: { control: 'boolean' },
+    autoZIndex: { control: 'boolean' },
+    baseZIndex: { control: 'number' },
+    tabIndex: { control: 'number' },
+    'aria-label': { control: 'text' },
+    className: { control: 'text' },
+    style: { control: 'object' }
+  }`,
+    docsImports: `import { Menu } from "primereact/menu";`,
+    docsVariations: [
+      { title: 'Nested navigation', code: `<Menu model={[{
+  label: 'Customers',
+  icon: 'pi pi-users',
+  items: [{ label: 'New customer', icon: 'pi pi-user-plus' }, { label: 'Directory', icon: 'pi pi-list' }]
+}, { label: 'Orders', icon: 'pi pi-shopping-cart' }]} />` },
+      { title: 'Separators and disabled items', code: `<Menu model={[{ label: 'Save', icon: 'pi pi-save' }, { separator: true }, { label: 'Delete', icon: 'pi pi-trash', disabled: true }]} />` },
+      { title: 'Popup menu', code: `<Example initialArgs={{ popup: true, popupAlignment: 'right' }} />` }
+    ],
     playground: `<><>{args.popup && <Button label="Open menu" onClick={(event) => ref.current?.toggle(event)} />}<Menu {...args} model={menuWithActions(args.model ?? [], setAction)} ref={ref} /></><p role="status">{action}</p></>`,
   },
   {

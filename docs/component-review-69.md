@@ -88,6 +88,21 @@ The inventory below is based on the installed PrimeReact `MegaMenuProps`, `MenuI
 
 The inventory is source inspection, not exhaustive behavioral testing. The focused contract test verifies recursive model decoration, supplied leaf-command preservation, and passthrough spread. The component browser check verifies nested submenu opening, supplied command feedback, Summary/Default structure, copyable sources, and desktop/mobile rendering. Every `MenuItem` property, icon function, PT callback, inherited DOM event, and ref method remains forwarded but is not exhaustively tested.
 
+### Menu API audit — issue #38
+
+The inventory below is based on the installed PrimeReact `MenuProps`, `MenuItem` model, pass-through declarations, and implementation, plus the Sakai UI Kit menu source. It records the native contract reviewed for this issue; it is not exhaustive interaction testing.
+
+| API surface | Treatment |
+| --- | --- |
+| `model` (`MenuItem[]`, including nested items) | Exposed as an object Control and adapted only to decorate leaf commands with local feedback. The recursive adapter preserves every item property, nested structure, and each supplied `item.command` before reporting the selected label. |
+| `popup`, `popupAlignment`, `closeOnEscape`, `autoZIndex`, `baseZIndex`, `tabIndex` | Exposed where they define the documented inline/popup compositions and passed through unchanged. Popup opening uses the native `toggle` ref method; Escape behavior remains native. |
+| `appendTo`, `transitionOptions`, `onShow`, `onHide`, `onFocus`, `onBlur` | Passed through unchanged by `{...args}` and intentionally outside the curated Controls because their native element/function and callback forms are not represented by object Controls. |
+| `aria-label`, inherited `HTMLAttributes<HTMLDivElement>`, `children`, `className`, `style` | Forwarded unchanged. `aria-label`, `className`, and `style` are exposed as focused Controls; other ARIA/data attributes and DOM events remain available through native story args. |
+| `pt`, `ptOptions`, `unstyled` | Passed through unchanged; no wrapper pass-through defaults replace caller values. Native root, menu, content, submenu header, menuitem, action, icon, label, separator, hook, and transition sections remain available. |
+| Selection/value modes, filtering, templates, and imperative methods | Not applicable or native-only. Menu has no selection value model or filtering API; `toggle`, `show`, `hide`, `getElement`, and `getTarget` remain available through the native ref and are outside Controls. |
+
+The inventory is source inspection, not exhaustive behavioral testing. The focused contract test verifies native prop spreading, popup alignment Controls, ref usage, recursive command preservation, and generator consistency. The component browser checks popup opening, Escape dismissal, command feedback, Summary/Default structure, copyable sources, and desktop/mobile rendering. Every `MenuItem` field, PT callback, inherited DOM event, transition option, append target, and ref method remains forwarded but is not exhaustively tested.
+
 ## Component audit
 
 All 67 components pass the same browser checks at 1280×900 and 390×900: exactly one Default, an indexed Summary, the common section order, no Summary Controls, copyable source, no runtime exceptions, loaded example images, and preserved icon fonts. The table lists additional checks; presentation-only components have no state-changing action to exercise. This covers the documented examples, not every upstream prop combination. “Wired” explicitly denotes source inspection in addition to the automated interactions listed, not an independently exercised gesture.
