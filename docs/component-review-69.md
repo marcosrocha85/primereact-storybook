@@ -764,3 +764,32 @@ Validation for this revision:
 - `STORYBOOK_URL=http://127.0.0.1:4173 LD_LIBRARY_PATH=/tmp/sakai-browser-libs/usr/lib/x86_64-linux-gnu node --test --test-name-pattern='Divider' tests/component-review.test.mjs`: passed at 1280px and 390px. Covers Summary/Default indexing, no Summary Controls, copyable source, responsive rendering, and no runtime exceptions.
 - Playwright screenshots inspected at 1280px and 390px: passed; styles, alignment examples, vertical composition, source blocks, and mobile wrapping are visible without clipping.
 - `git diff --check`: passed.
+
+### Knob API audit — issue #35
+
+Inspected the Button documentation/story reference, the Knob generator entry and generated
+files, the Sakai UI Kit input example at `vendor/sakai-react/app/(main)/uikit/input/page.tsx`,
+and the installed PrimeReact `knob/knob.d.ts` and implementation. The Sakai example uses a
+controlled value, a `-50` to `50` range, step `10`, a percentage value template, and the native
+`onChange` callback. The curated Summary covers that percentage range, size/stroke, value
+display, read-only, and disabled variations.
+
+| Native surface | Treatment |
+| --- | --- |
+| `value`, `min`, `max`, `step` | Exposed as numeric Controls and forwarded unchanged. The numeric value model is retained; the playground adapts only `onChange` to synchronize the controlled value. |
+| `size`, `strokeWidth`, `showValue`, `valueTemplate` | Exposed as Controls and forwarded unchanged. Summary demonstrates size/stroke and value-display/template variations. |
+| `disabled`, `readOnly` | Exposed as boolean Controls and forwarded unchanged. Summary demonstrates both non-editable states. PrimeReact disables the slider role's tab stop for either state. |
+| `name`, `valueColor`, `rangeColor`, `textColor`, `id`, `className`, `style`, `tabIndex` | Exposed where useful or forwarded unchanged through `{...args}`. Color strings, custom identifiers, styling, and keyboard tab order are not transformed. |
+| `aria-*`, `data-*`, inherited `HTMLAttributes<HTMLDivElement>` and DOM events | Forwarded unchanged through the native props spread. This includes accessible slider attributes, focus/keyboard/mouse/pointer/touch/drag/clipboard/animation/transition handlers, and other inherited attributes. |
+| `onChange` | Wrapped only to call `updateArgs({ value: event.value })`, then invokes the supplied callback with the original event. No callback is dropped or synthesized. |
+| `pt`, `ptOptions`, `unstyled` | Forwarded unchanged. Native PT sections are `root`, `svg`, `range`, `value`, `label`, and `hooks`; user entries are not replaced by wrapper defaults. |
+| `children` | Forwarded unchanged as part of the native contract; Knob's rendered SVG remains controlled by PrimeReact. |
+| Templates, nested models, selection modes, and value modes | No nested item model, selection mode, or render-template API exists. `valueTemplate` is a string token template; `value` is numeric only. |
+| Ref and imperative API | The native ref and `getElement()` remain available through PrimeReact; the story does not adapt them. |
+
+The inventory is source inspection, not exhaustive behavioral testing. The focused contract test
+verifies representative native props, PT configuration, inherited callbacks, original-event
+callback forwarding, and value synchronization. The existing browser test verifies keyboard
+ArrowRight value change. Mouse/touch dragging, Home/End/PageUp/PageDown, every inherited DOM
+event, PT callback/hook forms, imperative methods, and all visual color combinations remain
+forwarded but are not exhaustively tested.

@@ -444,10 +444,39 @@ const components = [
     name: 'Knob',
     prime: 'knob',
     importName: 'Knob',
-    description: 'Circular numeric control.',
-    args: `{ value: 20, min: 0, max: 100, step: 1 }`,
-    argTypes: `{ value: { control: 'number' }, min: { control: 'number' }, max: { control: 'number' }, step: { control: 'number' }, disabled: { control: 'boolean' } }`,
+    description: 'Circular numeric control for bounded values, keyboard input, and read-only or disabled states.',
+    args: `{ value: 20, min: 0, max: 100, step: 1, size: 100, disabled: false, readOnly: false, showValue: true, strokeWidth: 14, valueTemplate: '{value}' }`,
+    argTypes: `{
+    value: { control: 'number' },
+    min: { control: 'number' },
+    max: { control: 'number' },
+    step: { control: 'number' },
+    size: { control: 'number' },
+    disabled: { control: 'boolean' },
+    readOnly: { control: 'boolean' },
+    showValue: { control: 'boolean' },
+    strokeWidth: { control: 'number' },
+    valueTemplate: { control: 'text' },
+    name: { control: 'text' },
+    tabIndex: { control: 'number' },
+    valueColor: { control: 'text' },
+    rangeColor: { control: 'text' },
+    textColor: { control: 'text' }
+  }`,
     playground: `<Knob {...args} onChange={(event) => { updateArgs({ value: event.value }); args.onChange?.(event); } } />`,
+    docsVariations: [
+      { title: 'Percentage range', code: `<Example initialArgs={{ value: 20, min: -50, max: 50, step: 10, valueTemplate: '{value}%' }} />` },
+      { title: 'Size and stroke', code: `<div className="flex flex-wrap align-items-center gap-3">
+  <Example initialArgs={{ size: 80, strokeWidth: 8 }} />
+  <Example initialArgs={{ size: 120, strokeWidth: 18 }} />
+</div>` },
+      { title: 'Value display', code: `<div className="flex flex-wrap align-items-center gap-3">
+  <Example initialArgs={{ showValue: false }} />
+  <Example initialArgs={{ valueTemplate: '{value}%' }} />
+</div>` },
+      { title: 'Read-only', code: `<Example initialArgs={{ value: 42, readOnly: true }} />` },
+      { title: 'Disabled', code: `<Example initialArgs={{ disabled: true }} />` }
+    ],
   },
   {
     name: 'ListBox',

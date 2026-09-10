@@ -2,7 +2,7 @@ import { useState, type ComponentProps } from 'react';
 import { Knob } from 'primereact/knob';
 
 export type ExampleArgs = ComponentProps<typeof Knob>;
-export const defaultArgs: ExampleArgs = { value: 20, min: 0, max: 100, step: 1 };
+export const defaultArgs: ExampleArgs = { value: 20, min: 0, max: 100, step: 1, size: 100, disabled: false, readOnly: false, showValue: true, strokeWidth: 14, valueTemplate: '{value}' };
 
 export function Playground({ args, updateArgs }: {
   args: ExampleArgs;

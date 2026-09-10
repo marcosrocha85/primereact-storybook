@@ -9,11 +9,27 @@ const meta = {
   component: Knob,
   parameters: {
     layout: 'centered',
-    controls: { include: ["value","min","max","step","disabled"] },
-    docs: { description: { component: 'Circular numeric control.' }, source: { code: exampleSource } }
+    controls: { include: ["value","min","max","step","size","disabled","readOnly","showValue","strokeWidth","valueTemplate","name","tabIndex","valueColor","rangeColor","textColor"] },
+    docs: { description: { component: 'Circular numeric control for bounded values, keyboard input, and read-only or disabled states.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { value: { control: 'number' }, min: { control: 'number' }, max: { control: 'number' }, step: { control: 'number' }, disabled: { control: 'boolean' } }
+  argTypes: {
+    value: { control: 'number' },
+    min: { control: 'number' },
+    max: { control: 'number' },
+    step: { control: 'number' },
+    size: { control: 'number' },
+    disabled: { control: 'boolean' },
+    readOnly: { control: 'boolean' },
+    showValue: { control: 'boolean' },
+    strokeWidth: { control: 'number' },
+    valueTemplate: { control: 'text' },
+    name: { control: 'text' },
+    tabIndex: { control: 'number' },
+    valueColor: { control: 'text' },
+    rangeColor: { control: 'text' },
+    textColor: { control: 'text' }
+  }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;
