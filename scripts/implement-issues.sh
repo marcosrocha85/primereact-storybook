@@ -71,7 +71,18 @@ repo='marcosrocha85/primereact-storybook'
 timeout_seconds=${CHECK_TIMEOUT_SECONDS:-1200}
 [[ "$timeout_seconds" =~ ^[1-9][0-9]*$ ]] || die 'CHECK_TIMEOUT_SECONDS must be a positive integer'
 run_dir=''
-trap 'code=$?; if ((code)); then printf "Stopped. Existing work and branches were preserved. Logs: %s\n" "${run_dir:-not started}" >&2; fi' EXIT
+progress_renderer_pid=''
+cleanup_progress() {
+  [[ -z "$progress_renderer_pid" ]] || kill "$progress_renderer_pid" 2>/dev/null || true
+  [[ -z "$progress_renderer_pid" ]] || wait "$progress_renderer_pid" 2>/dev/null || true
+  progress_renderer_pid=''
+}
+on_exit() {
+  local code=$?
+  cleanup_progress
+  if ((code)); then printf 'Stopped. Existing work and branches were preserved. Logs: %s\n' "${run_dir:-not started}" >&2; fi
+}
+trap on_exit EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
 
@@ -123,6 +134,26 @@ progress_status() {
     printf '%s\n' "$line"
   fi
 }
+progress_update() {
+  local phase=$1
+  printf '%s\n' "$phase" > "$issue_dir/phase"
+  if [[ ! -t 1 ]]; then
+    progress_status "$phase"
+    return
+  fi
+  node "$progress_script" update "$progress_state" "$batch_total" "$batch_completed" \
+    "$current_index" "$current_issue" "$issue_title" "$phase" "$issue_dir/phase"
+  if [[ -z "$progress_renderer_pid" ]]; then
+    node "$progress_script" render "$progress_state" &
+    progress_renderer_pid=$!
+  fi
+}
+finish_progress() {
+  [[ -n "$progress_renderer_pid" ]] || return 0
+  node "$progress_script" finish "$progress_state"
+  wait "$progress_renderer_pid"
+  progress_renderer_pid=''
+}
 run_logged() {
   local log_file=$1 status
   shift
@@ -130,7 +161,7 @@ run_logged() {
     return 0
   else
     status=$?
-    if [[ -t 1 ]]; then printf '\r\033[2K' >&2; fi
+    cleanup_progress
     printf 'Command failed:' >&2
     printf ' %q' "$@" >&2
     printf '\n' >&2
@@ -139,37 +170,20 @@ run_logged() {
   fi
 }
 run_with_status() {
-  local issue_directory=$1 fallback_phase=$2 ticker_pid status
+  local issue_directory=$1 fallback_phase=$2 status
   shift 2
-  if [[ ! -t 1 ]]; then "$@"; return; fi
-  printf '%s\n' "$fallback_phase" > "$issue_directory/phase"
-  (
-    while :; do
-      phase="$(<"$issue_directory/phase")"
-      progress_status "${phase:-$fallback_phase}" inline
-      sleep 1
-    done
-  ) &
-  ticker_pid=$!
+  progress_update "$fallback_phase"
   if "$@" > "$issue_directory/runner.log" 2>&1; then status=0; else status=$?; fi
-  kill "$ticker_pid" 2>/dev/null || true
-  wait "$ticker_pid" 2>/dev/null || true
-  printf '\r\033[2K'
-  if ((status != 0)); then tail -20 "$issue_directory/runner.log" >&2; fi
+  if ((status != 0)); then
+    cleanup_progress
+    tail -20 "$issue_directory/runner.log" >&2
+  fi
   return "$status"
 }
 wait_with_status() {
-  local seconds=$1 phase=$2 tick
-  if [[ ! -t 1 ]]; then
-    printf 'Waiting: %s\n' "$phase"
-    sleep "$seconds"
-    return
-  fi
-  for ((tick = 0; tick < seconds; tick++)); do
-    progress_status "$phase" inline
-    sleep 1
-  done
-  printf '\r\033[2K'
+  local seconds=$1 phase=$2
+  progress_update "$phase"
+  sleep "$seconds"
 }
 
 require_no_operation
@@ -222,6 +236,8 @@ else
   fi
 fi
 support_dir="$run_dir/support"
+progress_script="$root/scripts/issue-runner/progress.mjs"
+progress_state="$run_dir/progress.json"
 printf 'Logs: %s\n' "$run_dir"
 if "$use_qwen"; then
   node "$support_dir/delegation.mjs" "${QWEN_MODEL:-qwen/qwen3-30b-a3b}" "${QWEN_BASE_URL:-http://127.0.0.1:1234/v1}"
@@ -251,14 +267,15 @@ for issue in "${issues[@]}"; do
   operations_log="$issue_dir/operations.log"
   gh issue view "$issue" --repo "$repo" --json number,state,title,body,comments,assignees > "$issue_dir/issue.json"
   issue_title="$(field title < "$issue_dir/issue.json")"
-  printf '\n========== %d/%d [#%s] %s ==========\n' "$((batch_completed + 1))" "$batch_total" "$issue" "$issue_title"
-  progress_status 'preparing'
+  if [[ ! -t 1 ]]; then
+    printf '\n========== %d/%d [#%s] %s ==========\n' "$current_index" "$batch_total" "$issue" "$issue_title"
+  fi
+  progress_update 'preparing'
   if [[ "$(field state < "$issue_dir/issue.json")" == CLOSED ]]; then
     [[ -z "$resume_dir" ]] || die 'Resumed issue was closed externally; inspect preserved work'
-    printf '#%s is closed; skipping.\n' "$issue"
     batch_completed=$((batch_completed + 1))
     current_started=$SECONDS
-    progress_status 'closed; skipped'
+    progress_update 'closed; skipped'
     continue
   fi
   # Read every page; Codex decides semantic dependencies from this live context.
@@ -289,10 +306,8 @@ for issue in "${issues[@]}"; do
     printf 'Selected issue: #%s\nRepository: %s\nPrepared branch: %s\nBase commit: %s\nRead-only context directory: %s\n\n' "$issue" "$repo" "$branch" "$base_sha" "$issue_dir"
     cat "$support_dir/prompt.md"
   } > "$issue_dir/prompt.md"
-  printf '\nImplementing #%s on %s\n' "$issue" "$branch"
-  progress_status 'Codex implementation'
   run_with_status "$issue_dir" 'Codex implementation' node "$support_dir/recover.mjs" run "$issue_dir" "$root" "${codex_args[@]}"
-  progress_status 'validation passed; preparing delivery'
+  progress_update 'validation passed; preparing delivery'
   [[ "$(git branch --show-current)" == "$branch" && "$(git rev-parse HEAD)" == "$base_sha" ]] || die 'Codex changed the branch or committed unexpectedly.'
   node "$support_dir/verify.mjs" result "$issue_dir/result.json" "$issue_dir/files.list"
   git diff --check
@@ -310,8 +325,7 @@ for issue in "${issues[@]}"; do
   run_logged "$operations_log" git push -u origin "$branch"
   gh pr create --repo "$repo" --base main --head "$branch" --title "$title" --body-file "$issue_dir/pr-body.md" > "$issue_dir/pr-url.txt"
   pr_url="$(cat "$issue_dir/pr-url.txt")"
-  printf 'PR: %s\n' "$pr_url"
-  progress_status 'waiting for GitHub checks and merge'
+  progress_update 'waiting for GitHub checks and merge'
   deadline=$((SECONDS + timeout_seconds))
   merge_requested=false
   while :; do
@@ -350,6 +364,7 @@ for issue in "${issues[@]}"; do
   duration_samples=$((duration_samples + 1))
   batch_completed=$((batch_completed + 1))
   current_started=$SECONDS
-  printf '#%s merged; main is clean.\n' "$issue"
-  progress_status 'completed'
+  progress_update 'completed'
 done
+
+finish_progress

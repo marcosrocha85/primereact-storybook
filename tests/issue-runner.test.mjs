@@ -23,6 +23,8 @@ function fixture(scenario = '', extraEnv = {}) {
   fs.mkdirSync(path.join(repo, 'scripts'));
   fs.cpSync(path.join(project, 'scripts/issue-runner'), path.join(repo, 'scripts/issue-runner'), { recursive: true });
   fs.copyFileSync(path.join(project, 'scripts/implement-issues.sh'), path.join(repo, 'scripts/implement-issues.sh'));
+  fs.symlinkSync(path.join(project, 'node_modules'), path.join(repo, 'node_modules'), 'dir');
+  fs.writeFileSync(path.join(repo, '.gitignore'), 'node_modules\n');
   fs.writeFileSync(path.join(repo, 'AGENTS.md'), 'Follow the issue acceptance criteria.\n');
   git('add', '.');
   git('commit', '-m', 'initial');
@@ -51,6 +53,7 @@ if(program==='codex'){
  const prompt=fs.readFileSync(0,'utf8');
  const issue=Number(prompt.match(/Selected issue: #(\\d+)/)[1]);
  const role=prompt.includes('Role: Codex planner.')?'plan':prompt.includes('Role: Codex reviewer.')?'review':prompt.includes('Role: Qwen implementer.')?'qwen':'codex';
+ if(process.env.RUNNER_TEST_TTY==='1')Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,350);
  console.log('live-model-output:'+role+':'+issue);
  state.calls??=[];state.calls.push({role,issue,args});
  if(role==='plan'){
@@ -132,7 +135,9 @@ if(args[0]==='repo'&&args[1]==='view'){
   const runOptions = { cwd: repo, encoding: 'utf8', timeout: 30000,
     env: { ...gitEnv, PATH: `${bin}:${process.env.PATH}`, RUNNER_TEST_STATE: state, CHECK_TIMEOUT_SECONDS: '3', ...extraEnv } };
   const run = (...args) => spawnSync('bash', ['scripts/implement-issues.sh', ...args], runOptions);
-  const runTty = (...args) => spawnSync('script', ['-qfec', `bash scripts/implement-issues.sh ${args.join(' ')}`, '/dev/null'], runOptions);
+  const runTty = (...args) => spawnSync('script', ['-qfec', `bash scripts/implement-issues.sh ${args.join(' ')}`, '/dev/null'], {
+    ...runOptions, env: { ...runOptions.env, RUNNER_TEST_TTY: '1' }
+  });
   const runAsync = (...args) => new Promise((resolve, reject) => {
     const child = spawn('bash', ['scripts/implement-issues.sh', ...args], runOptions);
     let stdout = '', stderr = '';
@@ -188,10 +193,11 @@ test('interactive terminal redraws one compact status line without raw model out
     const result = runTty('13');
     assert.equal(result.status, 0, result.stderr + result.stdout);
     assert.match(result.stdout, /========== 1\/1 \[#13\] Review ==========/);
-    assert.match(result.stdout, /\x1b\[2K\[------------------------\]/);
+    assert.match(result.stdout, /\[------------------------\]/);
     assert.doesNotMatch(result.stdout, /\\n\[/, 'Status uses a real line break');
     assert.doesNotMatch(result.stdout + result.stderr, /Switched to|Already up to date|From |To \/tmp\//, 'Routine Git output remains in operations.log');
     assert.doesNotMatch(result.stdout, /live-model-output|live-validation/);
+    assert.equal((result.stdout.match(/Codex implementation(?: \(attempt \d+\))? \|/g) ?? []).length, 1, 'Codex phase is rendered once instead of duplicated');
   });
 });
 
