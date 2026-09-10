@@ -43,6 +43,7 @@ const option=name=>args[args.indexOf(name)+1];
 const json=value=>console.log(JSON.stringify(value));
 if(program==='npm'){
  state.builds=(state.builds??0)+1;save();
+ console.log('live-validation:'+state.builds);
  if(state.scenario==='actual-build-failure'||(state.scenario==='build-fails-once'&&state.builds===1))process.exit(1);
  process.exit(0);
 }
@@ -50,6 +51,7 @@ if(program==='codex'){
  const prompt=fs.readFileSync(0,'utf8');
  const issue=Number(prompt.match(/Selected issue: #(\\d+)/)[1]);
  const role=prompt.includes('Role: Codex planner.')?'plan':prompt.includes('Role: Codex reviewer.')?'review':prompt.includes('Role: Qwen implementer.')?'qwen':'codex';
+ console.log('live-model-output:'+role+':'+issue);
  state.calls??=[];state.calls.push({role,issue,args});
  if(role==='plan'){
   state.events.push('plan:'+issue);save();
@@ -151,6 +153,11 @@ test('runner implements two issues sequentially and removes only its merged bran
     git('branch', 'unrelated');
     const result = run('13', '#14');
     assert.equal(result.status, 0, result.stderr + result.stdout);
+    assert.match(result.stdout, /========== 1\/2 \[#13\] Review ==========/);
+    assert.match(result.stdout, /\[------------------------\]\s+0% \| 1\/2 \[#13\] preparing \| elapsed \d+s \| ETA calculating/);
+    assert.match(result.stdout, /live-model-output:codex:13/);
+    assert.match(result.stdout, /live-validation:1/);
+    assert.match(result.stdout, /\[########################\] 100% \| 2\/2 \[#14\] completed/);
     assert.deepEqual(state().events, ['codex:13', 'pr:13', 'merge:13', 'codex:14', 'pr:14', 'merge:14']);
     assert.equal(git('branch', '--show-current'), 'main');
     assert.equal(git('status', '--porcelain'), '');
