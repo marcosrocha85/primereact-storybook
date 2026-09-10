@@ -9,11 +9,11 @@ const meta = {
   component: FileUpload,
   parameters: {
     layout: 'centered',
-    controls: { include: ["mode","chooseLabel","auto","multiple"] },
-    docs: { description: { component: 'Basic or advanced file upload.' }, source: { code: exampleSource } }
+    controls: { include: ["mode","chooseLabel","uploadLabel","cancelLabel","accept","maxFileSize","multiple","auto","customUpload","disabled"] },
+    docs: { description: { component: 'File selection and upload queue with basic and advanced modes. The default playground simulates completion locally without a network request.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { mode: { control: 'inline-radio', options: ['basic', 'advanced'] }, chooseLabel: { control: 'text' }, auto: { control: 'boolean' }, multiple: { control: 'boolean' } }
+  argTypes: { mode: { control: 'inline-radio', options: ['basic', 'advanced'] }, chooseLabel: { control: 'text' }, uploadLabel: { control: 'text' }, cancelLabel: { control: 'text' }, accept: { control: 'text' }, maxFileSize: { control: 'number' }, multiple: { control: 'boolean' }, auto: { control: 'boolean' }, customUpload: { control: 'boolean', description: 'Use the local simulated handler by default. Disable to use PrimeReact native upload behavior.' }, disabled: { control: 'boolean' } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;

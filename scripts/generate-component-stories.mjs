@@ -939,12 +939,29 @@ function productTemplate(product: (typeof products)[number]) {
     prime: 'fileupload',
     importName: 'FileUpload',
     hooks: `const ref = useRef<FileUpload>(null);
-  const [result, setResult] = useState('Select a file to simulate an upload. Files stay in this browser.');`,
-    extraImports: `import { Button } from 'primereact/button';`,
-    description: 'Basic or advanced file upload.',
-    args: `{ mode: 'basic', name: 'demo[]', accept: 'image/*', maxFileSize: 1000000, chooseLabel: 'Choose' }`,
-    argTypes: `{ mode: { control: 'inline-radio', options: ['basic', 'advanced'] }, chooseLabel: { control: 'text' }, auto: { control: 'boolean' }, multiple: { control: 'boolean' } }`,
-    playground: `<><FileUpload {...args} pt={{ uploadButton: { root: { 'aria-hidden': false } }, cancelButton: { root: { 'aria-hidden': false } }, removeButton: { root: { 'aria-label': 'Remove file' } }, ...args.pt }} ref={ref} customUpload uploadHandler={(event) => { setResult(event.files.length + ' file(s) processed locally.'); event.options.clear(); args.uploadHandler?.(event); }} onClear={() => { args.onClear?.(); }} /><p role="status">{result}</p></>`,
+  const [result, setResult] = useState('Select a file to simulate an upload. Files stay in this browser.');
+  const pt = args.pt;
+  const mergedPt = {
+    ...pt,
+    uploadButton: { root: { 'aria-hidden': false }, ...pt?.uploadButton },
+    cancelButton: { root: { 'aria-hidden': false }, ...pt?.cancelButton },
+    removeButton: { root: { 'aria-label': 'Remove file' }, ...pt?.removeButton }
+  };
+  const uploadHandler = args.customUpload === false ? args.uploadHandler : (event: Parameters<NonNullable<ExampleArgs['uploadHandler']>>[0]) => {
+    event.options.clear();
+    args.uploadHandler?.(event);
+    setResult(event.files.length + ' file(s) processed locally.');
+  };`,
+    description: 'File selection and upload queue with basic and advanced modes. The default playground simulates completion locally without a network request.',
+    args: `{ mode: 'advanced', name: 'demo[]', accept: 'image/*', maxFileSize: 1000000, chooseLabel: 'Choose', uploadLabel: 'Upload', cancelLabel: 'Clear', multiple: false, auto: false, customUpload: true, disabled: false }`,
+    argTypes: `{ mode: { control: 'inline-radio', options: ['basic', 'advanced'] }, chooseLabel: { control: 'text' }, uploadLabel: { control: 'text' }, cancelLabel: { control: 'text' }, accept: { control: 'text' }, maxFileSize: { control: 'number' }, multiple: { control: 'boolean' }, auto: { control: 'boolean' }, customUpload: { control: 'boolean', description: 'Use the local simulated handler by default. Disable to use PrimeReact native upload behavior.' }, disabled: { control: 'boolean' } }`,
+    playground: `<><FileUpload {...args} pt={mergedPt} ref={ref} uploadHandler={uploadHandler} onClear={() => { setResult('Select a file to simulate an upload. Files stay in this browser.'); args.onClear?.(); }} /><p role="status">{result}</p></>`,
+    docsVariations: [
+      { title: 'Basic mode', code: `<Example initialArgs={{ mode: 'basic', chooseLabel: 'Choose image' }} />` },
+      { title: 'Advanced multiple selection', code: `<Example initialArgs={{ mode: 'advanced', multiple: true, chooseLabel: 'Select images' }} />` },
+      { title: 'Automatic local upload', code: `<Example initialArgs={{ mode: 'advanced', auto: true, customUpload: true }} />` },
+      { title: 'Disabled state', code: `<Example initialArgs={{ disabled: true }} />` }
+    ],
   },
   {
     name: 'Chart',

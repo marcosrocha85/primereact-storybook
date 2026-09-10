@@ -6,7 +6,7 @@ import exampleSource from "./FileUpload.examples.tsx?raw";
 
 <Title>FileUpload</Title>
 
-<Subtitle>Basic or advanced file upload.</Subtitle>
+<Subtitle>File selection and upload queue with basic and advanced modes. The default playground simulates completion locally without a network request.</Subtitle>
 
 ## Usage
 
@@ -16,17 +16,37 @@ import exampleSource from "./FileUpload.examples.tsx?raw";
 
 ## Variations
 
-### basic
+### Basic mode
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ mode: 'basic' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ mode: 'basic', chooseLabel: 'Choose image' }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ mode: 'basic' }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ mode: 'basic', chooseLabel: 'Choose image' }} />"} language="tsx" />
 
-### advanced
+### Advanced multiple selection
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ mode: 'advanced' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ mode: 'advanced', multiple: true, chooseLabel: 'Select images' }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ mode: 'advanced' }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ mode: 'advanced', multiple: true, chooseLabel: 'Select images' }} />"} language="tsx" />
+
+### Automatic local upload
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ mode: 'advanced', auto: true, customUpload: true }} />
+</div>
+
+<Source code={"<Example initialArgs={{ mode: 'advanced', auto: true, customUpload: true }} />"} language="tsx" />
+
+### Disabled state
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ disabled: true }} />
+</div>
+
+<Source code={"<Example initialArgs={{ disabled: true }} />"} language="tsx" />
 
 ## Playground
 

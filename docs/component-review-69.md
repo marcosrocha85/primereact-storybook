@@ -485,6 +485,40 @@ Validation for this revision:
 - Summary and Default screenshots inspected at 1280px and 390px. Icons, labels, images and removal controls are aligned; mobile examples wrap without clipping. Source blocks scroll horizontally.
 - `git diff --check`: passed.
 
+### FileUpload API audit — issue #28
+
+Inspected the Button reference, the Sakai file UI kit source at
+`vendor/sakai-react/app/(main)/uikit/file/page.tsx`, and the installed PrimeReact
+`fileupload/fileupload.d.ts` and implementation. The Summary now covers basic,
+advanced, multiple, automatic-local-upload, and disabled compositions. The Default
+keeps one FileUpload instance and uses the local custom-upload handler by default so
+the documented playground does not issue a POST request.
+
+| Native surface | Treatment |
+| --- | --- |
+| `mode`, `name`, `url`, `multiple`, `accept`, `removeIcon`, `disabled`, `auto`, `maxFileSize`, `invalidFileSizeMessageSummary`, `invalidFileSizeMessageDetail`, `style`, `className`, `withCredentials`, `previewWidth`, `chooseLabel`, `selectedFileLabel`, `uploadLabel`, `cancelLabel`, `chooseOptions`, `uploadOptions`, `cancelOptions`, `customUpload`, `headerClassName`, `headerStyle`, `contentClassName`, `contentStyle` | Forwarded unchanged by the native props spread. The Default exposes the common mode, labels, file filter, size limit, multiple, auto, custom-upload, and disabled controls; the remaining layout and transport options remain available through native story args. `customUpload` is not forced: setting it to `false` restores native PrimeReact upload behavior. |
+| `headerTemplate`, `itemTemplate`, `emptyTemplate`, `progressBarTemplate`, `children` | Forwarded unchanged. React nodes and function-valued templates are source-inspected and intentionally outside the JSON/text Controls. |
+| `onBeforeUpload`, `onBeforeSend`, `onBeforeDrop`, `onBeforeSelect`, `onUpload`, `onError`, `onSelect`, `onProgress`, `onValidationFail`, `onRemove` | Passed through unchanged, including event objects and return behavior. These callbacks are source-inspected; the local browser check exercises selection, removal, and successful simulated upload. |
+| `uploadHandler` | Adapted only while `customUpload` is enabled: the local handler updates observable status, clears the queue, then invokes the supplied callback with the original event. When `customUpload` is `false`, the supplied handler is passed through unchanged. |
+| `onClear` | Adapted only to reset the local status, then invokes the supplied callback unchanged. |
+| `pt`, `ptOptions`, `unstyled` | Forwarded with local accessibility defaults for upload/cancel/remove controls. User PT sections are retained and section objects are shallow-merged so unrelated entries do not remove those defaults; function-valued PT entries remain native and are source-inspected. Native sections include root, input, buttonbar, choose/upload/cancel/remove controls and icons, content, progress, message, file details, badge, actions, label, and hooks. |
+| `ref`, `upload`, `clear`, `formatSize`, `onFileSelect`, `getElement`, `getInput`, `getFiles`, `setFiles`, `getUploadedFiles`, `setUploadedFiles` | Native imperative API remains available through the forwarded ref; the story only uses the ref to retain the component's native instance contract and does not replace its methods. |
+| Value/selection model | Not applicable as a controlled prop. File selection and queue state are managed internally by PrimeReact; the story observes upload status without narrowing accepted `File` values. |
+
+The API inventory is source inspection, not exhaustive behavioral testing of every
+inherited DOM attribute, template, PT callback, transport option, or imperative method.
+The focused browser assertion verifies local file selection, upload completion, no POST
+request, responsive Summary/Default structure, and copyable source behavior.
+
+Validation for this revision:
+- `node scripts/generate-component-stories.mjs`: passed; generated output remained scoped to FileUpload and preserved the five manual components.
+- `node --test tests/component-generator.test.mjs`: passed.
+- `STORYBOOK_URL=http://127.0.0.1:4173 LD_LIBRARY_PATH=/tmp/sakai-browser-libs/usr/lib/x86_64-linux-gnu node --test --test-name-pattern='FileUpload' tests/component-review.test.mjs`: passed; Summary/Default structure, desktop/mobile rendering, local file selection, simulated completion, and no POST request.
+- Playwright screenshot inspection at 390px: passed; upload controls wrap cleanly and status text remains readable without clipping.
+- `npm run build`: passed.
+- `npm run build-storybook`: passed; existing large-chunk and plugin-timing warnings remain.
+- `git diff --check`: passed.
+
 ## Dropdown review — issue #26
 
 Inspected the Button documentation/story reference, the Dropdown generator entry and generated files, the Sakai UI Kit Dropdown uses in form layout, input, float-label, invalid-state, list, and table examples, and the installed PrimeReact `dropdown.d.ts` and implementation. The Summary now uses local stateful examples for filtering, filled/invalid, editable/clearable, and disabled states. Default keeps one controlled Dropdown instance and synchronizes its selected value through `useArgs`.
