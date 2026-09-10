@@ -841,11 +841,34 @@ function productTemplate(product: Product) {
     name: 'Tree',
     prime: 'tree',
     importName: 'Tree',
-    description: 'Expandable hierarchical structure.',
+    description: 'Hierarchical data with expansion, selection, filtering, and drag-and-drop states.',
     renderPrefix: `const nodes = [{ key: '0', label: 'Documents', children: [{ key: '0-0', label: 'Work' }] }];`,
     args: `{ value: nodes, selectionMode: 'checkbox', selectionKeys: {}, expandedKeys: {} }`,
-    argTypes: `{ filter: { control: 'boolean' }, expandedKeys: { control: 'object' }, selectionKeys: { control: 'object' } }`,
+    argTypes: `{
+    selectionMode: { control: 'inline-radio', options: [undefined, 'single', 'multiple', 'checkbox'] },
+    filter: { control: 'boolean' },
+    filterMode: { control: 'inline-radio', options: ['lenient', 'strict'] },
+    disabled: { control: 'boolean' },
+    loading: { control: 'boolean' },
+    showHeader: { control: 'boolean' },
+    expandedKeys: { control: 'object' },
+    selectionKeys: { control: 'object' }
+  }`,
     playground: `<Tree {...args} onToggle={(event) => { updateArgs({ expandedKeys: event.value }); args.onToggle?.(event); }} onSelectionChange={(event) => { updateArgs({ selectionKeys: event.value }); args.onSelectionChange?.(event); }} />`,
+    docsVariations: [
+      { title: 'Selection modes', code: `<div className="flex flex-column gap-3">
+  <Example initialArgs={{ selectionMode: 'single', selectionKeys: null }} />
+  <Example initialArgs={{ selectionMode: 'multiple', selectionKeys: {} }} />
+  <Example initialArgs={{ selectionMode: 'checkbox', selectionKeys: {} }} />
+</div>` },
+      { title: 'Filtering', code: `<Example initialArgs={{ filter: true, filterPlaceholder: 'Search files' }} />` },
+      { title: 'States', code: `<div className="flex flex-column gap-3">
+  <Example initialArgs={{ loading: true }} />
+  <Example initialArgs={{ disabled: true }} />
+  <Example initialArgs={{ showHeader: false }} />
+</div>` },
+      { title: 'Strict filtering', code: `<Example initialArgs={{ filter: true, filterMode: 'strict', filterPlaceholder: 'Search descendants' }} />` }
+    ],
   },
   {
     name: 'TreeTable',

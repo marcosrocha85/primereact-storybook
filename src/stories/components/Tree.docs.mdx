@@ -6,7 +6,7 @@ import exampleSource from "./Tree.examples.tsx?raw";
 
 <Title>Tree</Title>
 
-<Subtitle>Expandable hierarchical structure.</Subtitle>
+<Subtitle>Hierarchical data with expansion, selection, filtering, and drag-and-drop states.</Subtitle>
 
 ## Usage
 
@@ -16,11 +16,45 @@ import exampleSource from "./Tree.examples.tsx?raw";
 
 ## Variations
 
-### Filter
+### Selection modes
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ filter: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-column gap-3">
+  <Example initialArgs={{ selectionMode: 'single', selectionKeys: null }} />
+  <Example initialArgs={{ selectionMode: 'multiple', selectionKeys: {} }} />
+  <Example initialArgs={{ selectionMode: 'checkbox', selectionKeys: {} }} />
+</div>
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ filter: true }} />"} language="tsx" />
+<Source code={"<div className=\"flex flex-column gap-3\">\n  <Example initialArgs={{ selectionMode: 'single', selectionKeys: null }} />\n  <Example initialArgs={{ selectionMode: 'multiple', selectionKeys: {} }} />\n  <Example initialArgs={{ selectionMode: 'checkbox', selectionKeys: {} }} />\n</div>"} language="tsx" />
+
+### Filtering
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ filter: true, filterPlaceholder: 'Search files' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ filter: true, filterPlaceholder: 'Search files' }} />"} language="tsx" />
+
+### States
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-column gap-3">
+  <Example initialArgs={{ loading: true }} />
+  <Example initialArgs={{ disabled: true }} />
+  <Example initialArgs={{ showHeader: false }} />
+</div>
+</div>
+
+<Source code={"<div className=\"flex flex-column gap-3\">\n  <Example initialArgs={{ loading: true }} />\n  <Example initialArgs={{ disabled: true }} />\n  <Example initialArgs={{ showHeader: false }} />\n</div>"} language="tsx" />
+
+### Strict filtering
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ filter: true, filterMode: 'strict', filterPlaceholder: 'Search descendants' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ filter: true, filterMode: 'strict', filterPlaceholder: 'Search descendants' }} />"} language="tsx" />
 
 ## Playground
 

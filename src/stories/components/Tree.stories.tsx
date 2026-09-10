@@ -9,11 +9,20 @@ const meta = {
   component: Tree,
   parameters: {
     layout: 'centered',
-    controls: { include: ["filter","expandedKeys","selectionKeys"] },
-    docs: { description: { component: 'Expandable hierarchical structure.' }, source: { code: exampleSource } }
+    controls: { include: ["selectionMode","filter","filterMode","disabled","loading","showHeader","expandedKeys","selectionKeys"] },
+    docs: { description: { component: 'Hierarchical data with expansion, selection, filtering, and drag-and-drop states.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { filter: { control: 'boolean' }, expandedKeys: { control: 'object' }, selectionKeys: { control: 'object' } }
+  argTypes: {
+    selectionMode: { control: 'inline-radio', options: [undefined, 'single', 'multiple', 'checkbox'] },
+    filter: { control: 'boolean' },
+    filterMode: { control: 'inline-radio', options: ['lenient', 'strict'] },
+    disabled: { control: 'boolean' },
+    loading: { control: 'boolean' },
+    showHeader: { control: 'boolean' },
+    expandedKeys: { control: 'object' },
+    selectionKeys: { control: 'object' }
+  }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;
