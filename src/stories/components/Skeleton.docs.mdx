@@ -1,12 +1,13 @@
 import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Example } from "./Skeleton.examples";
 import exampleSource from "./Skeleton.examples.tsx?raw";
+import { Skeleton } from "primereact/skeleton";
 
 <Meta title="Components/Skeleton/Summary" />
 
 <Title>Skeleton</Title>
 
-<Subtitle>Loading placeholder.</Subtitle>
+<Subtitle>Loading placeholder for reserving space while content is unavailable.</Subtitle>
 
 ## Usage
 
@@ -16,11 +17,37 @@ import exampleSource from "./Skeleton.examples.tsx?raw";
 
 ## Variations
 
-### circle
+### Shapes and sizes
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ shape: 'circle' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Skeleton shape="circle" size="4rem" />
+<Skeleton width="10rem" height="1rem" />
+<Skeleton width="5rem" height="1rem" />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ shape: 'circle' }} />"} language="tsx" />
+<Source code={"<Skeleton shape=\"circle\" size=\"4rem\" />\n<Skeleton width=\"10rem\" height=\"1rem\" />\n<Skeleton width=\"5rem\" height=\"1rem\" />"} language="tsx" />
+
+### Content placeholder
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex align-items-center gap-2">
+  <Skeleton shape="circle" size="4rem" />
+  <div className="flex flex-column gap-2">
+    <Skeleton width="10rem" />
+    <Skeleton width="5rem" />
+  </div>
+</div>
+</div>
+
+<Source code={"<div className=\"flex align-items-center gap-2\">\n  <Skeleton shape=\"circle\" size=\"4rem\" />\n  <div className=\"flex flex-column gap-2\">\n    <Skeleton width=\"10rem\" />\n    <Skeleton width=\"5rem\" />\n  </div>\n</div>"} language="tsx" />
+
+### Static loading state
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Skeleton width="100%" height="8rem" animation="none" />
+</div>
+
+<Source code={"<Skeleton width=\"100%\" height=\"8rem\" animation=\"none\" />"} language="tsx" />
 
 ## Playground
 

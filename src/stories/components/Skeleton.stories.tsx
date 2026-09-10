@@ -9,11 +9,11 @@ const meta = {
   component: Skeleton,
   parameters: {
     layout: 'centered',
-    controls: { include: ["width","height","borderRadius","shape"] },
-    docs: { description: { component: 'Loading placeholder.' }, source: { code: exampleSource } }
+    controls: { include: ["width","height","size","borderRadius","shape","animation"] },
+    docs: { description: { component: 'Loading placeholder for reserving space while content is unavailable.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { width: { control: 'text' }, height: { control: 'text' }, borderRadius: { control: 'text' }, shape: { control: 'select', options: [undefined, 'circle'] } }
+  argTypes: { width: { control: 'text' }, height: { control: 'text' }, size: { control: 'text' }, borderRadius: { control: 'text' }, shape: { control: 'select', options: [undefined, 'rectangle', 'circle'] }, animation: { control: 'inline-radio', options: ['wave', 'none'] } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;
