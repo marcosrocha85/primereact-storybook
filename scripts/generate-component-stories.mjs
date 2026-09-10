@@ -90,15 +90,48 @@ const components = [
     name: 'InputTextarea',
     prime: 'inputtextarea',
     importName: 'InputTextarea',
-    description: 'Multi-line text field.',
-    args: `{ value: '', placeholder: 'Your Message', rows: 5, cols: 30, autoResize: false }`,
+    description: 'Multi-line text field for messages, descriptions, and longer form input, with validation and resize states.',
+    args: `{ value: '', placeholder: 'Your Message', rows: 5, cols: 30, autoResize: false, disabled: false, invalid: false, readOnly: false, variant: undefined }`,
     argTypes: `{
     placeholder: { control: 'text' },
     rows: { control: 'number' },
     cols: { control: 'number' },
     autoResize: { control: 'boolean' },
-    disabled: { control: 'boolean' }
+    disabled: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    readOnly: { control: 'boolean' },
+    variant: { control: 'inline-radio', options: [undefined, 'outlined', 'filled'] }
   }`,
+    docsImports: `import { InputTextarea } from 'primereact/inputtextarea';`,
+    docsVariations: [
+      {
+        title: 'States',
+        code: `<InputTextarea placeholder="Default" rows={4} />
+<InputTextarea placeholder="Disabled" rows={4} disabled />
+<InputTextarea value="Read-only value" rows={4} readOnly />
+<InputTextarea placeholder="Invalid" rows={4} invalid />`
+      },
+      {
+        title: 'Variants',
+        code: `<InputTextarea placeholder="Outlined" rows={4} variant="outlined" />
+<InputTextarea placeholder="Filled" rows={4} variant="filled" />`
+      },
+      {
+        title: 'Auto resize',
+        code: `<InputTextarea
+  value="This textarea grows as its content changes."
+  autoResize
+  rows={2}
+/>`
+      },
+      {
+        title: 'Form composition',
+        code: `<div className="flex flex-column gap-2">
+  <label htmlFor="description">Description</label>
+  <InputTextarea id="description" rows={4} placeholder="Describe the request" />
+</div>`
+      }
+    ],
     playground: `<InputTextarea {...args} value={args.value ?? ''} onChange={(event) => { updateArgs({ value: event.target.value }); args.onChange?.(event); } } />`,
   },
 

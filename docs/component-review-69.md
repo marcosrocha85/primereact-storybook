@@ -163,6 +163,21 @@ The inventory below is based on the installed PrimeReact `InputTextProps` declar
 
 The inventory is source inspection, not exhaustive behavioral testing. The focused contract test verifies representative native attributes, pass-through objects, intercepted value synchronization, and supplied callback preservation. The component browser check verifies text entry and clearing plus the shared Summary/Default, Controls, source, and desktop/mobile checks. Keyfilter behavior, tooltip rendering, PT callback forms, refs, and every inherited DOM attribute combination remain forwarded but are not exhaustively tested.
 
+### InputTextarea API inventory — issue #34
+
+Inspected the Button docs/story reference, the InputTextarea generator entry and generated files, the Sakai UI Kit input, invalid-state, and float-label examples under `vendor/sakai-react`, and the installed PrimeReact `inputtextarea.d.ts` and implementation. The Summary now uses local static examples with copyable sources for states, variants, auto-resize, and form composition. Default remains one controlled textarea and synchronizes its value through `useArgs` while preserving the supplied `onChange` callback.
+
+| API surface | Treatment |
+| --- | --- |
+| `value` (`string \| undefined`) | Adapted only for controlled Storybook synchronization; nullish values render as the native empty string and the supplied `onChange` receives the original event. |
+| `autoResize`, `invalid`, `variant`, `keyfilter`, `tooltip`, `tooltipOptions` | Forwarded unchanged. Auto-resize, invalid, and outlined/filled states are curated in Summary or Default Controls; key filtering and tooltip configuration remain native args outside the curated Controls. |
+| Native textarea attributes and events | Forwarded unchanged through `{...args}`, including `rows`, `cols`, `placeholder`, `required`, `name`, `id`, `maxLength`, `tabIndex`, `readOnly`, `disabled`, `className`, `style`, `aria-*`, `data-*`, form attributes, focus, blur, input, keyboard, paste, composition, drag, touch, and clipboard handlers. |
+| `onChange` | Adapted to update the controlled value, then invokes the supplied callback with the exact original event. This is covered by `tests/inputtextarea-contract.test.mjs`. |
+| `pt`, `ptOptions`, `unstyled`, `children` | Forwarded unchanged; root, tooltip, lifecycle hooks, pass-through value/function forms, explicit children, and unstyled behavior remain available outside curated Controls. No wrapper PT defaults replace user customizations. |
+| Templates, nested models, alternate value/selection modes, imperative methods | Not applicable or native-only. InputTextarea has no option collection, item model, render-template, or alternate selection value; its textarea ref and DOM methods remain outside the curated Controls. |
+
+The inventory is source inspection, not exhaustive behavioral testing. The focused contract test verifies representative textarea attributes, pass-through values, inherited callbacks, and intercepted value synchronization. The component browser check verifies text entry and clearing, Summary/Default structure, copyable sources, Controls placement, runtime errors, and desktop/mobile rendering. Keyfilter enforcement, auto-resize height changes, tooltip rendering, PT callback forms, refs, and every inherited DOM attribute combination remain forwarded but are not exhaustively tested.
+
 ### Fieldset review — issue #27
 
 Inspected the Button docs/story reference, the Fieldset generator entry and generated files, the Sakai UI Kit panel example at `vendor/sakai-react/app/(main)/uikit/panel/page.tsx`, and the installed PrimeReact `fieldset.d.ts` and implementation. The Summary now documents static, toggleable, initially collapsed, and custom-icon compositions. Default exposes one controlled Fieldset and synchronizes `collapsed` through `useArgs` while preserving the supplied `onToggle` callback.
