@@ -1702,9 +1702,14 @@ import { Avatar } from "primereact/avatar";`,
     prime: 'scrolltop',
     importName: 'ScrollTop',
     description: 'Shortcut to scroll back to the top.',
-    args: `{ threshold: 100, behavior: 'smooth' }`,
-    argTypes: `{ threshold: { control: 'number' }, behavior: { control: 'inline-radio', options: ['smooth', 'auto'] } }`,
-    playground: `<div style={{ height: '12rem', overflow: 'auto', position: 'relative' }}><div style={{ height: '30rem', padding: '1rem' }}>Scroll down inside this panel.</div><ScrollTop {...args} target="parent" /></div>`,
+    args: `{ target: 'parent', threshold: 100, icon: undefined, behavior: 'smooth' }`,
+    argTypes: `{ target: { control: 'inline-radio', options: ['window', 'parent'] }, threshold: { control: 'number' }, icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] }, behavior: { control: 'inline-radio', options: ['smooth', 'auto'] }, className: { control: 'text' }, style: { control: 'object' } }`,
+    playground: `<div style={{ height: '12rem', overflow: 'auto', position: 'relative' }}><div style={{ height: '30rem', padding: '1rem' }}>Scroll down inside this panel.</div><ScrollTop {...args} /></div>`,
+    docsVariations: [
+      { title: 'Custom icon', code: `<Example initialArgs={{ icon: 'pi pi-arrow-up' }} />`, source: `exampleSource + "\\n// Use a custom icon:\\n<Example initialArgs={{ icon: 'pi pi-arrow-up' }} />"` },
+      { title: 'Automatic scroll behavior', code: `<Example initialArgs={{ behavior: 'auto' }} />`, source: `exampleSource + "\\n// Scroll to the top without animation:\\n<Example initialArgs={{ behavior: 'auto' }} />"` },
+      { title: 'Lower visibility threshold', code: `<Example initialArgs={{ threshold: 20 }} />`, source: `exampleSource + "\\n// Show the control after a short scroll:\\n<Example initialArgs={{ threshold: 20 }} />"` }
+    ],
   }
 ];
 

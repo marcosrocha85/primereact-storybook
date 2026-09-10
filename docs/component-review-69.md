@@ -190,6 +190,32 @@ Validation for this revision:
 - Manual Playwright visual inspection at 1280px and 390px: passed; curated examples render without runtime errors or layout clipping. A direct browser interaction also verified selecting the fifth star and clearing it with the cancel control.
 - `git diff --check`: passed.
 
+### ScrollTop API inventory — issue #51
+
+Inspected the Button documentation/story reference, the ScrollTop generator
+entry and generated files, the Sakai UI Kit `misc` example at
+`vendor/sakai-react/app/(main)/uikit/misc/page.tsx`, and the installed
+PrimeReact `scrolltop.d.ts` and implementation. This inventory records
+source-inspection evidence; it is not exhaustive behavioral testing.
+
+| Native API surface | Treatment |
+| --- | --- |
+| `target`, `threshold`, `icon`, `behavior` | Exposed through Default Controls and passed through unchanged. The playground defaults to `target="parent"` so its local overflow panel is usable; changing the target remains supported. The Summary covers custom icon, automatic behavior, and threshold variations. |
+| `className`, `style` | Exposed through Default Controls and passed through unchanged for positioning and custom styling. |
+| `transitionOptions`, `pt`, `ptOptions`, `unstyled` | Passed through unchanged through `{...args}`; intentionally outside the curated Controls. Native transition and pass-through sections (`root`, `icon`, `transition`, and `hooks`) remain available. |
+| `onShow`, `onHide` | Passed through unchanged. The story does not intercept these lifecycle callbacks because no wrapper feedback is needed. |
+| `children`, inherited DOM attributes/events and ref methods | Passed through by the native component contract or remain native-only; intentionally outside curated examples and Controls. ScrollTop has no item model, selection/value mode, or render-template API. `getElement()` remains available through a native ref. |
+
+The focused contract test verifies representative native props, inherited
+attributes, PT configuration, children and callback identity remain on the
+ScrollTop element inside the local playground. The component browser check
+verifies returning the parent scroll container to the top, Summary variations,
+Summary/Default structure, copyable sources, Controls placement, and desktop /
+mobile rendering. Window-target behavior, custom transition/PT callback forms,
+all inherited DOM events, lifecycle timing, refs, and every native prop
+combination remain source-inspected or forwarded but are not exhaustively
+tested.
+
 ### ScrollPanel API inventory — issue #50
 
 Inspected the Button documentation/story reference, the ScrollPanel generator

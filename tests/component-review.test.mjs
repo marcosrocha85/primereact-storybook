@@ -775,6 +775,14 @@ test('scroll containers, resizable panels and removable chips work', async () =>
   await container.evaluate((element) => { element.scrollTop = 300; });
   await page.locator('.p-scrolltop').click();
   await page.waitForFunction(() => document.querySelector('#storybook-root [style*="overflow: auto"]')?.scrollTop === 0);
+  await page.goto(`${baseURL}/?path=/docs/components-scrolltop-summary--summary`);
+  const scrollTopSummary = page.frameLocator('#storybook-preview-iframe');
+  await scrollTopSummary.locator('.sbdocs-content h1').waitFor();
+  assert.deepEqual(await scrollTopSummary.locator('.sbdocs-content h3').allTextContents(), ['Custom icon', 'Automatic scroll behavior', 'Lower visibility threshold']);
+  assert.equal(await scrollTopSummary.locator('.docblock-argstable').count(), 0);
+  assert.equal(await scrollTopSummary.locator('.docblock-source').count(), 4);
+  await scrollTopSummary.getByRole('link', { name: 'Default', exact: true }).click();
+  await scrollTopSummary.locator('#storybook-root').waitFor();
   await open('ScrollPanel');
   const content = page.locator('.p-scrollpanel-content');
   await content.evaluate((element) => { element.scrollTop = 200; });

@@ -9,11 +9,11 @@ const meta = {
   component: ScrollTop,
   parameters: {
     layout: 'centered',
-    controls: { include: ["threshold","behavior"] },
+    controls: { include: ["target","threshold","icon","behavior","className","style"] },
     docs: { description: { component: 'Shortcut to scroll back to the top.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { threshold: { control: 'number' }, behavior: { control: 'inline-radio', options: ['smooth', 'auto'] } }
+  argTypes: { target: { control: 'inline-radio', options: ['window', 'parent'] }, threshold: { control: 'number' }, icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] }, behavior: { control: 'inline-radio', options: ['smooth', 'auto'] }, className: { control: 'text' }, style: { control: 'object' } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;

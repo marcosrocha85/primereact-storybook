@@ -16,7 +16,29 @@ import exampleSource from "./ScrollTop.examples.tsx?raw";
 
 ## Variations
 
-The usage example shows the base composition. Use Default to explore the documented properties.
+### Custom icon
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ icon: 'pi pi-arrow-up' }} />
+</div>
+
+<Source code={exampleSource + "\n// Use a custom icon:\n<Example initialArgs={{ icon: 'pi pi-arrow-up' }} />"} language="tsx" />
+
+### Automatic scroll behavior
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ behavior: 'auto' }} />
+</div>
+
+<Source code={exampleSource + "\n// Scroll to the top without animation:\n<Example initialArgs={{ behavior: 'auto' }} />"} language="tsx" />
+
+### Lower visibility threshold
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ threshold: 20 }} />
+</div>
+
+<Source code={exampleSource + "\n// Show the control after a short scroll:\n<Example initialArgs={{ threshold: 20 }} />"} language="tsx" />
 
 ## Playground
 
