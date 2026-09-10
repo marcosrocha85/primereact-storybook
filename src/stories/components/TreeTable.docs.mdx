@@ -6,7 +6,7 @@ import exampleSource from "./TreeTable.examples.tsx?raw";
 
 <Title>TreeTable</Title>
 
-<Subtitle>Hierarchical table.</Subtitle>
+<Subtitle>Hierarchical data displayed in columns, with expansion, selection, filtering, sorting, and pagination support.</Subtitle>
 
 ## Usage
 
@@ -16,7 +16,44 @@ import exampleSource from "./TreeTable.examples.tsx?raw";
 
 ## Variations
 
-The usage example shows the base composition. Use Default to explore the documented properties.
+### Selection modes
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-column gap-3">
+  <Example initialArgs={{ selectionMode: 'single', selectionKeys: null }} />
+  <Example initialArgs={{ selectionMode: 'multiple', selectionKeys: {} }} />
+  <Example initialArgs={{ selectionMode: 'checkbox', selectionKeys: {} }} />
+</div>
+</div>
+
+<Source code={"<div className=\"flex flex-column gap-3\">\n  <Example initialArgs={{ selectionMode: 'single', selectionKeys: null }} />\n  <Example initialArgs={{ selectionMode: 'multiple', selectionKeys: {} }} />\n  <Example initialArgs={{ selectionMode: 'checkbox', selectionKeys: {} }} />\n</div>"} language="tsx" />
+
+### Table styles
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-column gap-3">
+  <Example initialArgs={{ showGridlines: true }} />
+  <Example initialArgs={{ stripedRows: true, rowHover: true }} />
+</div>
+</div>
+
+<Source code={"<div className=\"flex flex-column gap-3\">\n  <Example initialArgs={{ showGridlines: true }} />\n  <Example initialArgs={{ stripedRows: true, rowHover: true }} />\n</div>"} language="tsx" />
+
+### Filtering and pagination
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ paginator: true, rows: 1, filters: { name: { value: 'React', matchMode: 'contains' } } }} />
+</div>
+
+<Source code={"<Example initialArgs={{ paginator: true, rows: 1, filters: { name: { value: 'React', matchMode: 'contains' } } }} />"} language="tsx" />
+
+### Loading state
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ loading: true }} />
+</div>
+
+<Source code={"<Example initialArgs={{ loading: true }} />"} language="tsx" />
 
 ## Playground
 

@@ -875,11 +875,37 @@ function productTemplate(product: Product) {
     prime: 'treetable',
     importName: 'TreeTable',
     extraImports: `import { Column } from 'primereact/column';`,
-    description: 'Hierarchical table.',
+    description: 'Hierarchical data displayed in columns, with expansion, selection, filtering, sorting, and pagination support.',
     renderPrefix: `const nodes = [{ key: '0', data: { name: 'Applications', size: '100kb', type: 'Folder' }, children: [{ key: '0-0', data: { name: 'React', size: '25kb', type: 'Folder' } }] }];`,
-    args: `{ value: nodes, selectionMode: 'checkbox', selectionKeys: {}, expandedKeys: {} }`,
-    argTypes: `{ showGridlines: { control: 'boolean' }, expandedKeys: { control: 'object' }, selectionKeys: { control: 'object' } }`,
-    playground: `<TreeTable {...args} onToggle={(event) => { updateArgs({ expandedKeys: event.value }); args.onToggle?.(event); }} onSelectionChange={(event) => { updateArgs({ selectionKeys: typeof event.value === 'string' ? { [event.value]: true } : event.value }); args.onSelectionChange?.(event); }}><Column field="name" header="Name" expander /><Column field="size" header="Size" /><Column field="type" header="Type" /></TreeTable>`,
+    args: `{ value: nodes, selectionMode: 'checkbox', selectionKeys: {}, expandedKeys: {}, showGridlines: false, stripedRows: false, rowHover: false, paginator: false, filterMode: 'lenient' }`,
+    argTypes: `{
+    selectionMode: { control: 'inline-radio', options: [undefined, 'single', 'multiple', 'checkbox'] },
+    expandedKeys: { control: 'object', description: 'Keys of expanded nodes.' },
+    selectionKeys: { control: 'object', description: 'Selection state. The native string/object/array value modes remain supported.' },
+    showGridlines: { control: 'boolean' },
+    stripedRows: { control: 'boolean' },
+    rowHover: { control: 'boolean' },
+    paginator: { control: 'boolean' },
+    rows: { control: 'number' },
+    filterMode: { control: 'inline-radio', options: ['lenient', 'strict'] },
+    loading: { control: 'boolean' },
+    resizableColumns: { control: 'boolean' },
+    reorderableColumns: { control: 'boolean' }
+  }`,
+    playground: `<TreeTable {...args} onToggle={(event) => { updateArgs({ expandedKeys: event.value }); args.onToggle?.(event); }} onSelectionChange={(event) => { updateArgs({ selectionKeys: event.value }); args.onSelectionChange?.(event); }}><Column field="name" header="Name" expander filter={Boolean(args.filters)} /><Column field="size" header="Size" /><Column field="type" header="Type" /></TreeTable>`,
+    docsVariations: [
+      { title: 'Selection modes', code: `<div className="flex flex-column gap-3">
+  <Example initialArgs={{ selectionMode: 'single', selectionKeys: null }} />
+  <Example initialArgs={{ selectionMode: 'multiple', selectionKeys: {} }} />
+  <Example initialArgs={{ selectionMode: 'checkbox', selectionKeys: {} }} />
+</div>` },
+      { title: 'Table styles', code: `<div className="flex flex-column gap-3">
+  <Example initialArgs={{ showGridlines: true }} />
+  <Example initialArgs={{ stripedRows: true, rowHover: true }} />
+</div>` },
+      { title: 'Filtering and pagination', code: `<Example initialArgs={{ paginator: true, rows: 1, filters: { name: { value: 'React', matchMode: 'contains' } } }} />` },
+      { title: 'Loading state', code: `<Example initialArgs={{ loading: true }} />` }
+    ],
   },
   {
     name: 'Toolbar',

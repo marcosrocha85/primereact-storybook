@@ -1510,3 +1510,29 @@ The existing combined browser check verifies focus display and Tab dismissal. Ca
 custom target elements/refs, callback PT forms, data attributes, mouse tracking geometry, lifecycle
 timing, ref methods, and every native option combination remain forwarded but are not exhaustively
 tested.
+
+### TreeTable API audit — issue #68
+
+Inspected the Button documentation/story reference, the TreeTable generator entry and generated
+files, the Sakai UI Kit TreeTable usage at `vendor/sakai-react/app/(main)/uikit/tree/page.tsx`,
+and the installed PrimeReact `treetable.d.ts`, `column.d.ts`, and implementation. The Summary
+curates expansion, selection modes, gridline/striped/hover styles, filtering with pagination, and
+loading. Default remains one native TreeTable instance with three native Column children.
+
+| Native surface | Treatment |
+| --- | --- |
+| `value`, `selectionMode`, `selectionKeys`, `expandedKeys` | `value` and the Column composition are supplied by the example; `selectionMode`, `selectionKeys`, and `expandedKeys` are exposed through focused Controls. The wrapper stores the exact native `event.value`, preserving single-string, object, array, and null selection modes. |
+| `showGridlines`, `stripedRows`, `rowHover`, `paginator`, `rows`, `filterMode`, `loading`, `resizableColumns`, `reorderableColumns` | Exposed through focused Controls and forwarded unchanged. The Summary demonstrates representative supported combinations. |
+| `children` / `Column` model | Forwarded as native children. Column field/header/expander composition is fixed for the curated playground; custom Column props, templates, column groups, frozen columns, and arbitrary children remain available through the native API but are outside the focused Controls. |
+| `onToggle`, `onSelectionChange` | Adapted only for controlled Storybook synchronization, then invoked with the original PrimeReact event. No selection mode is narrowed or coerced. Expansion and checkbox selection are covered by the focused component browser check. |
+| Other callbacks: `onExpand`, `onCollapse`, `onSelect`, `onUnselect`, `onSort`, `onFilter`, `onPage`, `onContextMenu`, row/resize/reorder/state callbacks, and `onValueChange` | Forwarded unchanged through the native props spread; the playground does not replace or synthesize them. |
+| Sorting, filtering, pagination, lazy/stateful data, resize/reorder, scroll, headers/footers, icons, and custom state persistence | Passed through unchanged when supplied through native args and intentionally outside the focused Controls where values require functions, DOM nodes, complex metadata, or custom templates. |
+| `pt`, `ptOptions`, `unstyled`, class/style/id, ARIA/data attributes, inherited `HTMLAttributes<HTMLDivElement>`, and DOM events | Forwarded unchanged by `{...args}`. Native root/table/header/body/row/cell/toggler/checkbox/filter/paginator pass-through sections and user customizations are not replaced by story defaults. |
+| Nested models, alternate value modes, templates, and imperative API | TreeNode data, selection-key objects, filter/sort metadata, Column children, and `togglerTemplate` remain native. The class ref API is outside Controls; no wrapper-specific model or imperative abstraction is introduced. |
+
+This inventory is source inspection, not exhaustive interaction testing. The focused browser check
+verifies Summary/Default structure, no Summary Controls, copyable sources, desktop/mobile rendering,
+node expansion, and checkbox selection. It does not exhaustively test custom templates, every
+selection-key shape, supplied callback invocation, PT callback forms, inherited DOM events, sorting,
+filter metadata, pagination events, lazy/stateful persistence, resize/reorder, scroll layouts,
+Column groups, or ref methods; those remain forwarded native behavior.
