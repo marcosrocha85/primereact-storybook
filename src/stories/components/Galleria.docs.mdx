@@ -6,7 +6,7 @@ import exampleSource from "./Galleria.examples.tsx?raw";
 
 <Title>Galleria</Title>
 
-<Subtitle>Image gallery.</Subtitle>
+<Subtitle>Responsive image gallery with thumbnails, indicators, navigation, captions, and optional fullscreen viewing.</Subtitle>
 
 ## Usage
 
@@ -16,7 +16,37 @@ import exampleSource from "./Galleria.examples.tsx?raw";
 
 ## Variations
 
-The usage example shows the base composition. Use Default to explore the documented properties.
+### Indicators and captions
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ showIndicators: true, showIndicatorsOnItem: true, caption: (item) => <span>{item.alt}</span> }} />
+</div>
+
+<Source code={"<Example initialArgs={{ showIndicators: true, showIndicatorsOnItem: true, caption: (item) => <span>{item.alt}</span> }} />"} language="tsx" />
+
+### Top thumbnails
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ thumbnailsPosition: 'top', numVisible: 3 }} />
+</div>
+
+<Source code={"<Example initialArgs={{ thumbnailsPosition: 'top', numVisible: 3 }} />"} language="tsx" />
+
+### Responsive thumbnails
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ numVisible: 3, responsiveOptions: [{ breakpoint: '560px', numVisible: 1 }] }} />
+</div>
+
+<Source code={"<Example initialArgs={{ numVisible: 3, responsiveOptions: [{ breakpoint: '560px', numVisible: 1 }] }} />"} language="tsx" />
+
+### Fullscreen viewing
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ fullScreen: true }} />
+</div>
+
+<Source code={"<Example initialArgs={{ fullScreen: true }} />"} language="tsx" />
 
 ## Playground
 

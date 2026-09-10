@@ -928,11 +928,38 @@ function productTemplate(product: (typeof products)[number]) {
     name: 'Galleria',
     prime: 'galleria',
     importName: 'Galleria',
-    description: 'Image gallery.',
+    description: 'Responsive image gallery with thumbnails, indicators, navigation, captions, and optional fullscreen viewing.',
     renderPrefix: `const images = [1, 2, 3].map((index) => ({ itemImageSrc: './demo/images/galleria/galleria' + index + '.jpg', thumbnailImageSrc: './demo/images/galleria/galleria' + index + 's.jpg', alt: 'Landscape ' + index }));`,
-    args: `{ value: images, numVisible: 1, circular: true, showItemNavigators: true }`,
-    argTypes: `{ numVisible: { control: 'number' }, circular: { control: 'boolean' }, showItemNavigators: { control: 'boolean' } }`,
-    playground: `<Galleria {...args} item={(item: (typeof images)[number]) => <img src={item.itemImageSrc} alt={item.alt} style={{ width: '100%' }} />} thumbnail={(item: (typeof images)[number]) => <img src={item.thumbnailImageSrc} alt={item.alt} />} style={{ maxWidth: '420px' }} />`,
+    args: `{ value: images, activeIndex: 0, numVisible: 1, circular: true, showItemNavigators: true, showThumbnails: true, showIndicators: false, fullScreen: false, style: { maxWidth: '420px', width: '100%' } }`,
+    argTypes: `{
+    activeIndex: { control: { type: 'number', min: 0, max: 2, step: 1 }, description: 'Zero-based active image index.' },
+    numVisible: { control: { type: 'number', min: 1, max: 3, step: 1 } },
+    responsiveOptions: { control: 'object' },
+    circular: { control: 'boolean' },
+    showItemNavigators: { control: 'boolean' },
+    showItemNavigatorsOnHover: { control: 'boolean' },
+    showThumbnails: { control: 'boolean' },
+    thumbnailsPosition: { control: 'inline-radio', options: ['bottom', 'top', 'left', 'right'] },
+    showIndicators: { control: 'boolean' },
+    showIndicatorsOnItem: { control: 'boolean' },
+    indicatorsPosition: { control: 'inline-radio', options: ['bottom', 'top', 'left', 'right'] },
+    fullScreen: { control: 'boolean' },
+    autoPlay: { control: 'boolean' },
+    transitionInterval: { control: 'number' }
+  }`,
+    hooks: `const itemTemplate = (item: (typeof images)[number]) => <img src={item.itemImageSrc} alt={item.alt} style={{ width: '100%', display: 'block' }} />;
+  const thumbnailTemplate = (item: (typeof images)[number]) => <img src={item.thumbnailImageSrc} alt={item.alt} style={{ width: '100%', display: 'block' }} />;
+  const onItemChange = args.activeIndex === undefined ? args.onItemChange : (event: Parameters<NonNullable<ExampleArgs['onItemChange']>>[0]) => {
+    updateArgs({ activeIndex: event.index });
+    args.onItemChange?.(event);
+  };`,
+    playground: `<Galleria {...args} item={args.item === undefined ? itemTemplate : args.item} thumbnail={args.thumbnail === undefined ? thumbnailTemplate : args.thumbnail} onItemChange={onItemChange} />`,
+    docsVariations: [
+      { title: 'Indicators and captions', code: `<Example initialArgs={{ showIndicators: true, showIndicatorsOnItem: true, caption: (item) => <span>{item.alt}</span> }} />` },
+      { title: 'Top thumbnails', code: `<Example initialArgs={{ thumbnailsPosition: 'top', numVisible: 3 }} />` },
+      { title: 'Responsive thumbnails', code: `<Example initialArgs={{ numVisible: 3, responsiveOptions: [{ breakpoint: '560px', numVisible: 1 }] }} />` },
+      { title: 'Fullscreen viewing', code: `<Example initialArgs={{ fullScreen: true }} />` }
+    ],
   },
   {
     name: 'FileUpload',

@@ -112,6 +112,24 @@ Inspected the Button docs/story reference, the Fieldset generator entry and gene
 
 The inventory is based on source inspection and does not claim exhaustive behavioral testing. The focused contract test verifies native children including explicit `null`, inherited attributes, PT values, fallback content, and the supplied `onToggle` callback. The component browser check verifies collapse/expand at desktop and mobile widths. Icon functions, transition lifecycle configuration, all PT callback forms, ref methods, and every inherited DOM event remain forwarded but are not exhaustively exercised.
 
+### Galleria review — issue #29
+
+Inspected the Button docs/story reference, the Galleria generator entry and generated files, the Sakai UI Kit media source at `vendor/sakai-react/app/(main)/uikit/media/page.tsx`, and the installed PrimeReact `galleria.d.ts` and implementation. The Summary now contains local image-gallery examples for indicators/captions, thumbnail positioning, responsive thumbnails, and fullscreen viewing. Default exposes one gallery instance with controlled active-index synchronization; image paths remain relative to the Storybook base path.
+
+| Native surface | Treatment |
+| --- | --- |
+| `value`, `activeIndex`, `responsiveOptions`, `numVisible` | Forwarded unchanged. The curated Default exposes these values; `activeIndex` is synchronized through `onItemChange` when controlled. |
+| Item rendering: `item`, `thumbnail`, `indicator`, `caption`, `header`, `footer`, `children` | Forwarded. The default image templates are supplied only when `item`/`thumbnail` are `undefined`; explicit values, including `null`, are preserved. Other template slots remain available through native args and are demonstrated in Summary where relevant. |
+| Navigation/display: `showItemNavigators`, `showThumbnailNavigators`, `showItemNavigatorsOnHover`, `changeItemOnIndicatorHover`, `circular`, `showThumbnails`, `thumbnailsPosition`, `showIndicators`, `showIndicatorsOnItem`, `indicatorsPosition` | Forwarded unchanged. Relevant layout and navigation properties are exposed as Controls; all supported positions remain available. |
+| Fullscreen/slideshow: `fullScreen`, `autoPlay`, `transitionInterval`, `baseZIndex`, `transitionOptions` | Forwarded unchanged. Fullscreen and autoplay are curated Controls; transition configuration and layering remain native but outside the curated Controls. |
+| Icons: `closeIcon`, `itemNextIcon`, `itemPrevIcon`, `nextThumbnailIcon`, `prevThumbnailIcon` | Forwarded unchanged, including native `IconType` function/node value modes; not exposed as free-text Controls. |
+| Lifecycle: `onItemChange`, `onShow`, `onHide` | `onItemChange` is wrapped only when `activeIndex` is controlled to synchronize the playground, then invokes the supplied callback with the original event. Lifecycle callbacks are forwarded unchanged. |
+| `pt`, `ptOptions`, `unstyled` | Forwarded unchanged. Root, item, thumbnail, navigation, indicator, caption, fullscreen mask, transition and lifecycle pass-through sections retain their native object/function forms; no wrapper PT defaults replace user entries. |
+| Inherited `HTMLAttributes<HTMLDivElement>` and component-base values | Forwarded by `{...args}`, including `id`, `className`, `style`, `role`, `aria-*`, `data-*`, DOM events and `ref`; no native value mode is narrowed. |
+| Imperative ref API | `show`, `hide`, `isAutoPlayActive`, `startSlideShow`, `stopSlideShow`, `getElement`, and `getMask` remain native and outside the curated Controls. |
+
+The API inventory is source inspection, not exhaustive behavioral testing. The focused contract test verifies arbitrary gallery models, templates, explicit `null` templates, inherited attributes, PT values, lifecycle/event callbacks, and controlled versus uncontrolled `activeIndex`. The shared browser check verifies Summary/Default structure, copyable sources, desktop/mobile rendering, loaded image assets, and next-image navigation. Responsive breakpoints, fullscreen/slideshow gestures, every icon/template/PT callback form, imperative methods, transition configuration, and all inherited DOM events remain forwarded but are not exhaustively exercised.
+
 ### ConfirmPopup API audit — issue #20
 
 Source inspection covered the installed `ConfirmPopupProps` type, PrimeReact implementation, and the Sakai UI Kit menu/confirmation route. The story forwards the complete native props object; it adapts only `target`, `visible`/`onHide`, `accept`, and `reject` to connect the trigger and observable feedback. Supplied `onHide`, `accept`, and `reject` callbacks remain invoked.
