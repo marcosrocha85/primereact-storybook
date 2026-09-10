@@ -97,6 +97,21 @@ All 67 components pass the same browser checks at 1280×900 and 390×900: exactl
 | Tree | [#67](https://github.com/marcosrocha85/primereact-storybook/issues/67) | Expand; checkbox selection |
 | TreeTable | [#68](https://github.com/marcosrocha85/primereact-storybook/issues/68) | Expand; checkbox selection |
 
+### Fieldset review — issue #27
+
+Inspected the Button docs/story reference, the Fieldset generator entry and generated files, the Sakai UI Kit panel example at `vendor/sakai-react/app/(main)/uikit/panel/page.tsx`, and the installed PrimeReact `fieldset.d.ts` and implementation. The Summary now documents static, toggleable, initially collapsed, and custom-icon compositions. Default exposes one controlled Fieldset and synchronizes `collapsed` through `useArgs` while preserving the supplied `onToggle` callback.
+
+| Native surface | Treatment |
+| --- | --- |
+| `legend`, `toggleable`, `collapsed`, `expandIcon`, `collapseIcon` | Forwarded unchanged; the curated Default exposes these as text, boolean, and select Controls. `collapsed` and icon Controls are shown only when `toggleable` is enabled. Icon string options are curated examples; native React-node/function icon values remain supported through props. |
+| `children` | Forwarded unchanged, including explicit `null`. The story-only `contentText` fallback is used only when `children` is `undefined`, so native content remains authoritative. |
+| `onToggle` | Adapted only to synchronize the controlled `collapsed` arg, then invokes the supplied callback with the original event. `onExpand`, `onCollapse`, and `onClick` are forwarded unchanged. |
+| `transitionOptions`, `unstyled`, `className`, `style`, inherited `HTMLAttributes<HTMLFieldSetElement>` | Forwarded unchanged and outside the curated Controls. This includes `id`, `role`, `aria-*`, `data-*`, DOM event handlers, and native style/class attributes. |
+| `pt`, `ptOptions` | Forwarded unchanged. Root, legend, toggler, toggler icon, legend title, toggleable content, content, hooks, and transition pass-through value/function forms remain available; no wrapper PT defaults replace user entries. |
+| Ref API (`getElement`, `getContent`) | Source-inspected and retained by PrimeReact; not exposed as a Control or independently exercised in this focused review. |
+
+The inventory is based on source inspection and does not claim exhaustive behavioral testing. The focused contract test verifies native children including explicit `null`, inherited attributes, PT values, fallback content, and the supplied `onToggle` callback. The component browser check verifies collapse/expand at desktop and mobile widths. Icon functions, transition lifecycle configuration, all PT callback forms, ref methods, and every inherited DOM event remain forwarded but are not exhaustively exercised.
+
 ### ConfirmPopup API audit — issue #20
 
 Source inspection covered the installed `ConfirmPopupProps` type, PrimeReact implementation, and the Sakai UI Kit menu/confirmation route. The story forwards the complete native props object; it adapts only `target`, `visible`/`onHide`, `accept`, and `reject` to connect the trigger and observable feedback. Supplied `onHide`, `accept`, and `reject` callbacks remain invoked.
