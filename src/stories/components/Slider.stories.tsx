@@ -9,11 +9,11 @@ const meta = {
   component: Slider,
   parameters: {
     layout: 'centered',
-    controls: { include: ["value","min","max","step","disabled"] },
-    docs: { description: { component: 'Range value control.' }, source: { code: exampleSource } }
+    controls: { include: ["value","min","max","step","orientation","range","disabled","ariaLabelledBy"] },
+    docs: { description: { component: 'Bounded numeric control with single-value, range, horizontal, vertical, and disabled states.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { value: { control: 'number' }, min: { control: 'number' }, max: { control: 'number' }, step: { control: 'number' }, disabled: { control: 'boolean' } }
+  argTypes: { value: { control: 'object', description: 'Number for a single handle or a two-number tuple when range is enabled.' }, min: { control: 'number' }, max: { control: 'number' }, step: { control: 'number' }, orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] }, range: { control: 'boolean' }, disabled: { control: 'boolean' }, ariaLabelledBy: { control: 'text' } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;

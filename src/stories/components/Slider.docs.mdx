@@ -6,7 +6,7 @@ import exampleSource from "./Slider.examples.tsx?raw";
 
 <Title>Slider</Title>
 
-<Subtitle>Range value control.</Subtitle>
+<Subtitle>Bounded numeric control with single-value, range, horizontal, vertical, and disabled states.</Subtitle>
 
 ## Usage
 
@@ -16,11 +16,37 @@ import exampleSource from "./Slider.examples.tsx?raw";
 
 ## Variations
 
+### Range selection
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ value: [25, 75], range: true }} />
+</div>
+
+<Source code={"<Example initialArgs={{ value: [25, 75], range: true }} />"} language="tsx" />
+
+### Step interval
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ value: 40, min: 0, max: 200, step: 20 }} />
+</div>
+
+<Source code={"<Example initialArgs={{ value: 40, min: 0, max: 200, step: 20 }} />"} language="tsx" />
+
+### Vertical orientation
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ value: 65, orientation: 'vertical' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ value: 65, orientation: 'vertical' }} />"} language="tsx" />
+
 ### Disabled
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ disabled: true }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ disabled: true }} />"} language="tsx" />
 
 ## Playground
 

@@ -648,10 +648,16 @@ const components = [
     name: 'Slider',
     prime: 'slider',
     importName: 'Slider',
-    description: 'Range value control.',
-    args: `{ value: 50, min: 0, max: 100, step: 1 }`,
-    argTypes: `{ value: { control: 'number' }, min: { control: 'number' }, max: { control: 'number' }, step: { control: 'number' }, disabled: { control: 'boolean' } }`,
-    playground: `<div style={{ width: '18rem', maxWidth: '100%' }}><Slider {...args} onChange={(event) => { updateArgs({ value: event.value }); args.onChange?.(event); } } /></div>`,
+    description: 'Bounded numeric control with single-value, range, horizontal, vertical, and disabled states.',
+    args: `{ value: 50, min: 0, max: 100, step: 1, orientation: 'horizontal', range: false, disabled: false }`,
+    argTypes: `{ value: { control: 'object', description: 'Number for a single handle or a two-number tuple when range is enabled.' }, min: { control: 'number' }, max: { control: 'number' }, step: { control: 'number' }, orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] }, range: { control: 'boolean' }, disabled: { control: 'boolean' }, ariaLabelledBy: { control: 'text' } }`,
+    playground: `<div style={{ width: args.orientation === 'vertical' ? '4rem' : '18rem', height: args.orientation === 'vertical' ? '12rem' : undefined, maxWidth: '100%' }}><Slider {...args} onChange={(event) => { updateArgs({ value: event.value }); args.onChange?.(event); } } /></div>`,
+    docsVariations: [
+      { title: 'Range selection', code: `<Example initialArgs={{ value: [25, 75], range: true }} />` },
+      { title: 'Step interval', code: `<Example initialArgs={{ value: 40, min: 0, max: 200, step: 20 }} />` },
+      { title: 'Vertical orientation', code: `<Example initialArgs={{ value: 65, orientation: 'vertical' }} />` },
+      { title: 'Disabled', code: `<Example initialArgs={{ disabled: true }} />` }
+    ],
   },
   {
     name: 'ToggleButton',

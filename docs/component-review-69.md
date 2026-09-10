@@ -1103,6 +1103,41 @@ Validation for this revision:
 - Playwright screenshots inspected at 1280px and 390px: passed; styles, alignment examples, vertical composition, source blocks, and mobile wrapping are visible without clipping.
 - `git diff --check`: passed.
 
+### Slider API audit — issue #55
+
+Inspected the Button documentation/story reference, the Slider generator entry and generated
+files, the Sakai UI Kit input and table examples at `vendor/sakai-react/app/(main)/uikit`, and
+the installed PrimeReact `slider/slider.d.ts` and implementation. This inventory records the
+native contract reviewed for this issue; it is source inspection, not exhaustive interaction
+testing.
+
+| Native surface | Treatment |
+| --- | --- |
+| `value`, `min`, `max`, `step` | Exposed in Default Controls. Both native value modes are retained: a number for one handle and a two-number tuple for `range`; the wrapper only synchronizes the emitted value. |
+| `orientation`, `range`, `disabled`, `ariaLabelledBy` | Exposed with all native orientation and boolean modes, and passed through unchanged. Summary covers range, vertical, and disabled compositions. |
+| `onChange` | Adapted only to update the controlled Storybook value, then invokes the supplied callback with the original PrimeReact event. |
+| `onSlideEnd` | Passed through unchanged; no wrapper callback replaces it. |
+| `pt`, `ptOptions`, `unstyled` | Passed through unchanged and intentionally outside curated Controls. Native root, range, handle, and lifecycle-hook pass-through sections remain available; no wrapper PT defaults replace user entries. |
+| `children`, `className`, `style`, `id`, `tabIndex`, `aria-*`, `data-*` and inherited `HTMLDivElement` attributes/events | Passed through unchanged by `{...args}`. The playground changes only its outer sizing container for vertical orientation; it does not alter Slider props. |
+| Nested models, templates, selection modes, and imperative methods | Not applicable beyond the native numeric/tuple value mode and `children` slot. Slider has no item model or render-template API; its native `getElement()` remains available through a ref and is not adapted by the story. |
+
+The focused contract test verifies representative numeric and tuple values, orientation/range
+props, inherited attributes, PT configuration, `onSlideEnd`, and preservation of the supplied
+`onChange` callback while synchronizing the value. The browser check verifies ArrowRight value
+change and the shared Summary/Default, Controls, copyable-source, runtime, and responsive
+rendering behavior. Mouse/touch dragging, Home/End/Page keys, every inherited DOM event, PT
+callback/hook forms, refs, and every native prop combination remain source-inspected and are
+not exhaustively tested.
+
+Validation for this revision:
+- `node scripts/generate-component-stories.mjs`: passed; generated output remained scoped to Slider.
+- `node --test tests/slider-contract.test.mjs tests/component-generator.test.mjs`: passed, 3 tests.
+- `npm run build`: passed.
+- `npm run build-storybook`: passed; existing large-chunk and plugin-timing warnings remain.
+- `STORYBOOK_URL=http://127.0.0.1:4173 LD_LIBRARY_PATH=/tmp/sakai-browser-libs/usr/lib/x86_64-linux-gnu node --test --test-name-pattern='Slider, Knob, Rating and ColorPicker' tests/component-review.test.mjs`: passed, 1 test against the static build.
+- Playwright screenshots inspected at 1280px and 390px for Summary and Default; passed without component clipping. The initial browser run against the Vite landing build was invalid for Storybook and was not counted; the static Storybook rerun passed.
+- `git diff --check`: passed.
+
 ### Knob API audit — issue #35
 
 Inspected the Button documentation/story reference, the Knob generator entry and generated
