@@ -1094,12 +1094,41 @@ import { menuWithActions } from '../menuExamples';`,
     name: 'Messages',
     prime: 'messages',
     importName: 'Messages',
-    hooks: `const ref = useRef<Messages>(null);`,
-    extraImports: `import { Button } from 'primereact/button';`,
-    description: 'Programmatic message list.',
-    args: `{}`,
-    argTypes: `{ className: { control: 'text' }, style: { control: 'object' } }`,
-    playground: `<><Messages {...args} ref={ref} /><Button label="Show messages" onClick={() => ref.current?.show({ severity: 'success', summary: 'Success', detail: 'Action completed', life: 3000 })} /><Button label="Clear" outlined onClick={() => ref.current?.clear()} /></>`,
+    extraImports: `import type { MessagesMessage } from 'primereact/messages';
+import { Button } from 'primereact/button';`,
+    hooks: `const ref = useRef<Messages>(null);
+  const { messageSeverity, messageSummary, messageDetail, messageClosable, messageSticky, ...messagesProps } = args;`,
+    exampleType: `ComponentProps<typeof Messages> & {
+  messageSeverity: MessagesMessage['severity'];
+  messageSummary: string;
+  messageDetail: string;
+  messageClosable: boolean;
+  messageSticky: boolean;
+}`,
+    description: 'Programmatic list of inline messages with severity, dismissal, and lifetime options.',
+    args: `{ messageSeverity: 'success', messageSummary: 'Success', messageDetail: 'Action completed', messageClosable: true, messageSticky: false }`,
+    argTypes: `{
+    messageSeverity: { control: 'select', options: [undefined, 'success', 'info', 'warn', 'error', 'secondary', 'contrast'], description: 'Severity used by the demo Show button.' },
+    messageSummary: { control: 'text', description: 'Summary used by the demo Show button.' },
+    messageDetail: { control: 'text', description: 'Detail used by the demo Show button.' },
+    messageClosable: { control: 'boolean', description: 'Whether the demo message can be dismissed.' },
+    messageSticky: { control: 'boolean', description: 'Whether the demo message remains until cleared.' },
+    className: { control: 'text' },
+    style: { control: 'object' }
+  }`,
+    playground: `<><Messages {...messagesProps} ref={ref} /><Button label="Show messages" onClick={() => ref.current?.show({ severity: messageSeverity, summary: messageSummary, detail: messageDetail, closable: messageClosable, sticky: messageSticky, life: messageSticky ? undefined : 3000 })} /><Button label="Clear" outlined onClick={() => ref.current?.clear()} /></>`,
+    docsVariations: [
+      { title: 'Severities', code: `<div className="flex flex-column gap-2">
+  <Example initialArgs={{ messageSeverity: 'success' }} />
+  <Example initialArgs={{ messageSeverity: 'info' }} />
+  <Example initialArgs={{ messageSeverity: 'warn' }} />
+  <Example initialArgs={{ messageSeverity: 'error' }} />
+  <Example initialArgs={{ messageSeverity: 'secondary' }} />
+  <Example initialArgs={{ messageSeverity: 'contrast' }} />
+</div>` },
+      { title: 'Dismissible message', code: `<Example initialArgs={{ messageClosable: true, messageSticky: true }} />` },
+      { title: 'Automatic dismissal', code: `<Example initialArgs={{ messageClosable: false, messageSticky: false }} />` }
+    ],
   },
   {
     name: 'Message',
