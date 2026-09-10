@@ -138,6 +138,22 @@ The inventory below is based on the installed PrimeReact `MenuProps`, `MenuItem`
 
 The inventory is source inspection, not exhaustive behavioral testing. The focused contract test verifies native prop spreading, popup alignment Controls, ref usage, recursive command preservation, and generator consistency. The component browser checks popup opening, Escape dismissal, command feedback, Summary/Default structure, copyable sources, and desktop/mobile rendering. Every `MenuItem` field, PT callback, inherited DOM event, transition option, append target, and ref method remains forwarded but is not exhaustively tested.
 
+### TieredMenu API audit — issue #62
+
+Inspected the Button documentation/story reference, the TieredMenu generator entry and generated files, the Sakai UI Kit menu source at `vendor/sakai-react/app/(main)/uikit/menu/page.tsx`, and the installed PrimeReact `TieredMenuProps`, `MenuItem`, pass-through declarations, and implementation. This inventory records source-inspection evidence for the issue; it is not exhaustive interaction testing.
+
+| API surface | Treatment |
+| --- | --- |
+| `model` (`MenuItem[]`, including recursively nested items) | Exposed as an object Control and adapted only to decorate leaf items for observable feedback. The recursive adapter preserves nested arrays, every supplied item property, and each supplied `item.command` before reporting the selected label. |
+| `MenuItem` fields: `id`, `label`, `icon`, `url`, `items`, `expanded`, `disabled`, `visible`, `target`, `separator`, `style`, `className`, `command`, `template`, `data` | Forwarded unchanged inside `model`; nested navigation, icons, separators, disabled items, and commands are curated in Summary. URLs, targets, templates, arbitrary data, visibility, expanded state, and custom item styling remain available through native args but outside the curated examples. |
+| `popup`, `autoZIndex`, `breakpoint`, `scrollHeight`, `baseZIndex`, `tabIndex` | Exposed through focused Default Controls and passed through unchanged. Inline, popup, and responsive layouts are curated in Summary; popup opening uses the native `toggle` ref method and Escape dismissal remains native. |
+| `appendTo`, `transitionOptions`, `submenuIcon`, `onShow`, `onHide`, `onFocus`, `onBlur` | Passed through unchanged by `{...args}` and intentionally outside the curated Controls because they accept DOM elements, transition objects, React/icon functions, or callbacks not represented by object Controls. |
+| `aria-*`, inherited `HTMLAttributes<HTMLDivElement>`, `children`, `className`, `style` | Forwarded unchanged. `aria-label`, `className`, and `style` are exposed as focused Controls; other ARIA/data attributes and DOM handlers remain available through native story args. |
+| `pt`, `ptOptions`, `unstyled` | Passed through unchanged; no wrapper pass-through defaults replace caller values. Native root, menu, submenu, menuitem, action, icon, label, submenu icon, separator, lifecycle, and transition sections remain available. |
+| Selection/value modes, filtering, templates, and imperative methods | TieredMenu has no separate controlled selection/value or filtering API. `MenuItem.template` remains part of the native model, while `toggle` and `getElement` remain available through the native ref and outside Controls. |
+
+The inventory is source inspection, not exhaustive behavioral testing. The component browser checks nested command feedback, popup trigger and Escape dismissal, Summary/Default structure, copyable sources, and desktop/mobile rendering. Every `MenuItem` field, PT callback, inherited DOM event, transition option, append target, callback form, and ref method remains forwarded or source-inspected but is not exhaustively tested.
+
 ## Component audit
 
 ### Skeleton API inventory — issue #54

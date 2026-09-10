@@ -549,6 +549,22 @@ test('popup menus and ContextMenu have working mouse and keyboard triggers', asy
   await page.getByRole('status').filter({ hasText: 'Delete selected' }).waitFor();
 });
 
+test('TieredMenu: nested commands and Summary stay aligned', async () => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(`${baseURL}/?path=/docs/components-tieredmenu-summary--summary`);
+  const preview = page.frameLocator('#storybook-preview-iframe');
+  await preview.locator('.sbdocs-content h1').waitFor();
+  assert.deepEqual(await preview.locator('.sbdocs-content h3').allTextContents(), ['Nested navigation', 'Separators and disabled items', 'Popup menu', 'Responsive menu']);
+  assert.equal(await preview.locator('.docblock-argstable').count(), 0, 'Summary has no Controls');
+  assert.ok(await preview.locator('.docblock-source').count() >= 5, 'Summary examples have copyable source');
+  await preview.getByRole('link', { name: 'Default', exact: true }).click();
+  const root = preview.locator('#storybook-root');
+  await root.locator('.p-tieredmenu').waitFor();
+  await root.getByRole('menuitem', { name: 'Customers', exact: true }).click();
+  await root.getByRole('menuitem', { name: 'New customer', exact: true }).click();
+  await root.getByRole('status').filter({ hasText: 'New customer selected' }).waitFor();
+});
+
 test('PickList transfers items', async () => {
   await open('PickList');
   await page.getByRole('option', { name: 'Bamboo Watch' }).click();
