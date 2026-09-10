@@ -6,7 +6,7 @@ import exampleSource from "./MultiSelect.examples.tsx?raw";
 
 <Title>MultiSelect</Title>
 
-<Subtitle>Multiple-option selector.</Subtitle>
+<Subtitle>Select multiple options from a collection, with filtering, chips, validation, and disabled states.</Subtitle>
 
 ## Usage
 
@@ -16,17 +16,40 @@ import exampleSource from "./MultiSelect.examples.tsx?raw";
 
 ## Variations
 
-### Filter
+### Filterable options
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ filter: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ filter: true, filterPlaceholder: 'Search countries' }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ filter: true }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ filter: true, filterPlaceholder: 'Search countries' }} />"} language="tsx" />
+
+### Filled and invalid states
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-column gap-3" style={{ maxWidth: '20rem' }}>
+  <Example initialArgs={{ variant: 'filled', value: [{ name: 'Australia', code: 'AU' }] }} />
+  <Example initialArgs={{ invalid: true }} />
+</div>
+</div>
+
+<Source code={"<div className=\"flex flex-column gap-3\" style={{ maxWidth: '20rem' }}>\n  <Example initialArgs={{ variant: 'filled', value: [{ name: 'Australia', code: 'AU' }] }} />\n  <Example initialArgs={{ invalid: true }} />\n</div>"} language="tsx" />
+
+### Clearable selection
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ showClear: true, value: [{ name: 'Brazil', code: 'BR' }] }} />
+</div>
+
+<Source code={"<Example initialArgs={{ showClear: true, value: [{ name: 'Brazil', code: 'BR' }] }} />"} language="tsx" />
 
 ### Disabled
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ disabled: true, value: [{ name: 'Germany', code: 'DE' }] }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ disabled: true, value: [{ name: 'Germany', code: 'DE' }] }} />"} language="tsx" />
 
 ## Playground
 

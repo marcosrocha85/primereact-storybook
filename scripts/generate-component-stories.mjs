@@ -514,11 +514,29 @@ const components = [
     name: 'MultiSelect',
     prime: 'multiselect',
     importName: 'MultiSelect',
-    description: 'Multiple-option selector.',
+    description: 'Select multiple options from a collection, with filtering, chips, validation, and disabled states.',
     renderPrefix: `const countryOptions = [{ name: 'Australia', code: 'AU' }, { name: 'Brazil', code: 'BR' }, { name: 'Germany', code: 'DE' }];`,
-    args: `{ value: [], placeholder: 'Select Countries', options: countryOptions, optionLabel: 'name', display: 'chip' }`,
-    argTypes: `{ placeholder: { control: 'text' }, display: { control: 'select', options: ['comma', 'chip'] }, filter: { control: 'boolean' }, disabled: { control: 'boolean' } }`,
+    args: `{ value: [], placeholder: 'Select countries', options: countryOptions, optionLabel: 'name', display: 'chip', filter: false, invalid: false, disabled: false, variant: 'outlined', showClear: false }`,
+    argTypes: `{
+    placeholder: { control: 'text' },
+    display: { control: 'inline-radio', options: ['comma', 'chip'] },
+    filter: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    variant: { control: 'inline-radio', options: ['outlined', 'filled'] },
+    showClear: { control: 'boolean' },
+    maxSelectedLabels: { control: 'number' },
+    disabled: { control: 'boolean' }
+  }`,
     playground: `<MultiSelect {...args} onChange={(event) => { updateArgs({ value: event.value ?? [] }); args.onChange?.(event); } } />`,
+    docsVariations: [
+      { title: 'Filterable options', code: `<Example initialArgs={{ filter: true, filterPlaceholder: 'Search countries' }} />` },
+      { title: 'Filled and invalid states', code: `<div className="flex flex-column gap-3" style={{ maxWidth: '20rem' }}>
+  <Example initialArgs={{ variant: 'filled', value: [{ name: 'Australia', code: 'AU' }] }} />
+  <Example initialArgs={{ invalid: true }} />
+</div>` },
+      { title: 'Clearable selection', code: `<Example initialArgs={{ showClear: true, value: [{ name: 'Brazil', code: 'BR' }] }} />` },
+      { title: 'Disabled', code: `<Example initialArgs={{ disabled: true, value: [{ name: 'Germany', code: 'DE' }] }} />` }
+    ],
   },
   {
     name: 'Password',
