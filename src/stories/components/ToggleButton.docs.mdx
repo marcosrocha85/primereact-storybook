@@ -6,7 +6,7 @@ import exampleSource from "./ToggleButton.examples.tsx?raw";
 
 <Title>ToggleButton</Title>
 
-<Subtitle>On/off toggle button.</Subtitle>
+<Subtitle>On/off toggle button with labels, icons, and disabled or invalid states.</Subtitle>
 
 ## Usage
 
@@ -16,11 +16,27 @@ import exampleSource from "./ToggleButton.examples.tsx?raw";
 
 ## Variations
 
-### Disabled
+### Icons and icon position
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-wrap gap-2">
+  <Example initialArgs={{ onIcon: 'pi pi-check', offIcon: 'pi pi-times' }} />
+  <Example initialArgs={{ iconPos: 'right' }} />
+</div>
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+<Source code={"<div className=\"flex flex-wrap gap-2\">\n  <Example initialArgs={{ onIcon: 'pi pi-check', offIcon: 'pi pi-times' }} />\n  <Example initialArgs={{ iconPos: 'right' }} />\n</div>"} language="tsx" />
+
+### Invalid and disabled states
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-wrap gap-2">
+  <Example initialArgs={{ invalid: true }} />
+  <Example initialArgs={{ disabled: true }} />
+</div>
+</div>
+
+<Source code={"<div className=\"flex flex-wrap gap-2\">\n  <Example initialArgs={{ invalid: true }} />\n  <Example initialArgs={{ disabled: true }} />\n</div>"} language="tsx" />
 
 ## Playground
 

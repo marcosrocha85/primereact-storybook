@@ -695,10 +695,20 @@ const components = [
     name: 'ToggleButton',
     prime: 'togglebutton',
     importName: 'ToggleButton',
-    description: 'On/off toggle button.',
-    args: `{ checked: true, onLabel: 'Yes', offLabel: 'No', onIcon: 'pi pi-check', offIcon: 'pi pi-times' }`,
-    argTypes: `{ checked: { control: 'boolean' }, onLabel: { control: 'text' }, offLabel: { control: 'text' }, disabled: { control: 'boolean' } }`,
-    playground: `<ToggleButton {...args} aria-label="ToggleButton" onChange={(event) => { updateArgs({ checked: event.value }); args.onChange?.(event); } } />`,
+    description: 'On/off toggle button with labels, icons, and disabled or invalid states.',
+    args: `{ checked: true, onLabel: 'Enabled', offLabel: 'Disabled', onIcon: 'pi pi-check', offIcon: 'pi pi-times', iconPos: 'left', invalid: false, disabled: false, readonly: false, 'aria-label': 'ToggleButton' }`,
+    argTypes: `{ checked: { control: 'boolean' }, onLabel: { control: 'text' }, offLabel: { control: 'text' }, onIcon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] }, offIcon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] }, iconPos: { control: 'inline-radio', options: ['left', 'right'] }, invalid: { control: 'boolean' }, disabled: { control: 'boolean' }, readonly: { control: 'boolean' }, tooltip: { control: 'text' }, 'aria-label': { control: 'text' } }`,
+    playground: `<ToggleButton {...args} onChange={(event) => { updateArgs({ checked: event.value }); args.onChange?.(event); } } />`,
+    docsVariations: [
+      { title: 'Icons and icon position', code: `<div className="flex flex-wrap gap-2">
+  <Example initialArgs={{ onIcon: 'pi pi-check', offIcon: 'pi pi-times' }} />
+  <Example initialArgs={{ iconPos: 'right' }} />
+</div>` },
+      { title: 'Invalid and disabled states', code: `<div className="flex flex-wrap gap-2">
+  <Example initialArgs={{ invalid: true }} />
+  <Example initialArgs={{ disabled: true }} />
+</div>` }
+    ],
   },
   {
     name: 'DataTable',

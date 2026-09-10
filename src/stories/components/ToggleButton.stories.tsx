@@ -9,11 +9,11 @@ const meta = {
   component: ToggleButton,
   parameters: {
     layout: 'centered',
-    controls: { include: ["checked","onLabel","offLabel","disabled"] },
-    docs: { description: { component: 'On/off toggle button.' }, source: { code: exampleSource } }
+    controls: { include: ["checked","onLabel","offLabel","onIcon","offIcon","iconPos","invalid","disabled","readonly","tooltip","aria-label"] },
+    docs: { description: { component: 'On/off toggle button with labels, icons, and disabled or invalid states.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { checked: { control: 'boolean' }, onLabel: { control: 'text' }, offLabel: { control: 'text' }, disabled: { control: 'boolean' } }
+  argTypes: { checked: { control: 'boolean' }, onLabel: { control: 'text' }, offLabel: { control: 'text' }, onIcon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] }, offIcon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] }, iconPos: { control: 'inline-radio', options: ['left', 'right'] }, invalid: { control: 'boolean' }, disabled: { control: 'boolean' }, readonly: { control: 'boolean' }, tooltip: { control: 'text' }, 'aria-label': { control: 'text' } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;
