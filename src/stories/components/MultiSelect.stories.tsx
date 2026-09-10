@@ -9,11 +9,20 @@ const meta = {
   component: MultiSelect,
   parameters: {
     layout: 'centered',
-    controls: { include: ["value","placeholder","display","filter","disabled"] },
-    docs: { description: { component: 'Multiple-option selector.' }, source: { code: exampleSource } }
+    controls: { include: ["value","placeholder","display","filter","invalid","variant","showClear","maxSelectedLabels","disabled"] },
+    docs: { description: { component: 'Select multiple options from a collection, with filtering, chips, validation, and disabled states.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { value: { control: 'object' }, placeholder: { control: 'text' }, display: { control: 'select', options: ['comma', 'chip'] }, filter: { control: 'boolean' }, disabled: { control: 'boolean' } }
+  argTypes: { value: { control: 'object' },
+    placeholder: { control: 'text' },
+    display: { control: 'inline-radio', options: ['comma', 'chip'] },
+    filter: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    variant: { control: 'inline-radio', options: ['outlined', 'filled'] },
+    showClear: { control: 'boolean' },
+    maxSelectedLabels: { control: 'number' },
+    disabled: { control: 'boolean' }
+  }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;

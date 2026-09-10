@@ -4,7 +4,7 @@ import { MultiSelect } from 'primereact/multiselect';
 const countryOptions = [{ name: 'Australia', code: 'AU' }, { name: 'Brazil', code: 'BR' }, { name: 'Germany', code: 'DE' }];
 
 export type ExampleArgs = ComponentProps<typeof MultiSelect>;
-export const defaultArgs: ExampleArgs = { value: [], placeholder: 'Select Countries', options: countryOptions, optionLabel: 'name', display: 'chip' };
+export const defaultArgs: ExampleArgs = { value: [], placeholder: 'Select countries', options: countryOptions, optionLabel: 'name', display: 'chip', filter: false, invalid: false, disabled: false, variant: 'outlined', showClear: false };
 
 export function Playground({ args, updateArgs }: {
   args: ExampleArgs;
