@@ -1385,10 +1385,46 @@ import { menuWithActions } from '../menuExamples';`,
     importName: 'Toast',
     extraImports: `import { Button } from 'primereact/button';`,
     hooks: `const ref = useRef<Toast>(null);`,
-    description: 'Temporary notification.',
-    args: `{ position: 'top-right' }`,
-    argTypes: `{ position: { control: 'select', options: ['top-right', 'top-left', 'bottom-right', 'bottom-left', 'center'] } }`,
-    playground: `<><Toast {...args} ref={ref} /><Button label="Show toast" onClick={() => ref.current?.show({ severity: 'success', summary: 'Success', detail: 'Action completed', life: 3000 })} /><Button label="Clear" outlined onClick={() => ref.current?.clear()} /></>`,
+    description: 'Temporary notification displayed in an overlay with severity, dismissal, and lifetime options.',
+    exampleType: `ComponentProps<typeof Toast> & {
+  messageSeverity: 'success' | 'info' | 'warn' | 'error' | 'secondary' | 'contrast';
+  messageSummary: string;
+  messageDetail: string;
+  messageClosable: boolean;
+  messageSticky: boolean;
+  messageLife: number;
+}`,
+    args: `{ position: 'top-right', messageSeverity: 'success', messageSummary: 'Success', messageDetail: 'Action completed', messageClosable: true, messageSticky: false, messageLife: 3000 }`,
+    argTypes: `{
+    position: { control: 'select', options: ['center', 'top-center', 'top-left', 'top-right', 'bottom-center', 'bottom-left', 'bottom-right'] },
+    messageSeverity: { control: 'select', options: ['success', 'info', 'warn', 'error', 'secondary', 'contrast'], description: 'Severity used by the demo Show toast button.' },
+    messageSummary: { control: 'text', description: 'Summary used by the demo Show toast button.' },
+    messageDetail: { control: 'text', description: 'Detail used by the demo Show toast button.' },
+    messageClosable: { control: 'boolean', description: 'Whether the toast message can be dismissed manually.' },
+    messageSticky: { control: 'boolean', description: 'Whether the toast message remains until cleared.' },
+    messageLife: { control: 'number', description: 'Automatic dismissal delay in milliseconds when the message is not sticky.' },
+    className: { control: 'text' },
+    style: { control: 'object' }
+  }`,
+    playground: `<><Toast {...toastProps} ref={ref} /><Button label="Show toast" onClick={() => ref.current?.show({ severity: messageSeverity, summary: messageSummary, detail: messageDetail, closable: messageClosable, sticky: messageSticky, life: messageSticky ? undefined : messageLife })} /><Button label="Clear" outlined onClick={() => ref.current?.clear()} /></>`,
+    hooks: `const ref = useRef<Toast>(null);
+  const { messageSeverity, messageSummary, messageDetail, messageClosable, messageSticky, messageLife, ...toastProps } = args;`,
+    docsVariations: [
+      { title: 'Severities', code: `<div className="flex flex-wrap gap-2">
+  <Example initialArgs={{ messageSeverity: 'success' }} />
+  <Example initialArgs={{ messageSeverity: 'info' }} />
+  <Example initialArgs={{ messageSeverity: 'warn' }} />
+  <Example initialArgs={{ messageSeverity: 'error' }} />
+</div>` },
+      { title: 'Positions', code: `<div className="flex flex-wrap gap-2">
+  <Example initialArgs={{ position: 'top-left' }} />
+  <Example initialArgs={{ position: 'top-center' }} />
+  <Example initialArgs={{ position: 'bottom-right' }} />
+  <Example initialArgs={{ position: 'bottom-center' }} />
+</div>` },
+      { title: 'Dismissible', code: `<Example initialArgs={{ messageClosable: true, messageSticky: true }} />` },
+      { title: 'Automatic dismissal', code: `<Example initialArgs={{ messageClosable: false, messageLife: 3000 }} />` }
+    ],
   },
   {
     name: 'Messages',

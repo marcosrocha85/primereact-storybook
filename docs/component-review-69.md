@@ -23,6 +23,24 @@ Sakai UI Kit sources under `vendor/sakai-react/app/(main)/uikit` were inspected 
 | Default controls/code are incomplete | Several story definitions exposed no Controls; static snippets omitted implemented handlers. | Each generated Default exposes supported properties; Code is enabled globally and includes the example implementation. |
 | Demo media assumes deployment at domain root | Image paths started with `/demo/`. | Local gallery/image samples use `./demo/` so assets resolve relative to the Storybook deployment path. |
 
+### Toast API inventory — issue #63
+
+Inspected the Button documentation/story reference, the Toast generator entry and generated files, the Sakai UI Kit message, file, and overlay examples under `vendor/sakai-react`, and the installed PrimeReact `toast.d.ts` and implementation. This inventory records source-reviewed behavior; it is not exhaustive interaction testing.
+
+| Native surface | Treatment |
+| --- | --- |
+| `position` | Exposed through a select with all seven native positions and passed through unchanged. Summary curates top, bottom, and center placements. |
+| `baseZIndex`, `transitionOptions`, `appendTo` | Passed through unchanged; intentionally outside curated Controls because transition objects and DOM/callback append targets are not useful JSON Controls. |
+| `className`, `style`, `id`, `children`, and inherited `HTMLAttributes<HTMLDivElement>` | Passed through unchanged by the native props spread; intentionally outside most curated examples. This includes ARIA/data attributes, DOM events, focus/keyboard/mouse/pointer/touch/drag/clipboard/composition handlers, and global HTML attributes. |
+| `content` | Passed through unchanged. Native node and function forms remain available for headless/custom rendering and are outside the curated examples. |
+| `pt`, `ptOptions`, `unstyled` | Passed through unchanged. Native root, message, content, icon, text, summary, detail, close button, close-button icon, transition, and hooks sections remain available, including object/function forms and merge configuration. No wrapper PT defaults replace user entries. |
+| `onClick`, `onRemove`, `onShow`, `onHide`, `onMouseEnter`, `onMouseLeave` | Passed through unchanged. The story does not intercept or replace supplied callbacks. Their message/lifecycle event payloads and native cancellation behavior remain native-only. |
+| `ToastMessage` fields: `severity`, `summary`, `detail`, `content`, `closable`, `icon`, `closeIcon`, `sticky`, `life`, `className`, `style`, `contentClassName`, `contentStyle`, `pt`, `ptOptions`, `unstyled` | The story-only message controls adapt severity, summary, detail, closability, stickiness, and life into the object supplied to the native `show` ref method. The complete message model, including node/function content, custom icons, classes/styles, nested PT, and arrays passed to `show`, remains available programmatically and is not narrowed. |
+| Imperative ref methods `show`, `replace`, `remove`, `clear`, `getElement` | Native ref is forwarded; Default uses only `show` and `clear` for observable feedback. Other methods remain outside Controls. |
+| Nested models, selection/value modes, and component templates | No option collection or selection/value model applies. `content` is the sole component-level template and message-level custom content is native-only; no wrapper-specific model or alternate value mode is invented. |
+
+The Summary now contains local, stateful examples with copyable sources for severity, position, dismissible/sticky, and automatic-dismissal behavior. Default remains one Toast instance and synchronizes only Storybook args used by the playground; native callbacks and props are forwarded. The focused browser check covers show/clear feedback, Summary/Default structure, Controls placement, copyable sources, and desktop/mobile rendering. Severity rendering, close-button interaction, sticky timeout behavior, supplied callbacks, custom content/templates, PT callbacks, transition modes, append targets, inherited DOM events, arbitrary message arrays, and ref methods other than `show`/`clear` are source-inspected and not exhaustively browser-tested.
+
 ### InputMask API inventory — issue #30
 
 The inventory below is based on the installed PrimeReact `InputMaskProps` and `InputTextProps` declarations plus the installed InputMask implementation. It records the contract reviewed for this issue; it is not an exhaustive interaction test.
