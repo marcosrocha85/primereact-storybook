@@ -6,7 +6,7 @@ import exampleSource from "./MegaMenu.examples.tsx?raw";
 
 <Title>MegaMenu</Title>
 
-<Subtitle>Large grouped menu.</Subtitle>
+<Subtitle>Grouped navigation menu that opens multi-column submenus.</Subtitle>
 
 ## Usage
 
@@ -16,17 +16,29 @@ import exampleSource from "./MegaMenu.examples.tsx?raw";
 
 ## Variations
 
-### horizontal
+### Vertical layout
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ orientation: 'horizontal' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ orientation: 'vertical', breakpoint: '767px' }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ orientation: 'horizontal' }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ orientation: 'vertical', breakpoint: '767px' }} />"} language="tsx" />
 
-### vertical
+### Responsive menu
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ orientation: 'vertical' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ breakpoint: '900px', scrollHeight: '240px' }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ orientation: 'vertical' }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ breakpoint: '900px', scrollHeight: '240px' }} />"} language="tsx" />
+
+### Custom submenu icon
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ submenuIcon: 'pi pi-angle-right' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ submenuIcon: 'pi pi-angle-right' }} />"} language="tsx" />
 
 ## Playground
 
