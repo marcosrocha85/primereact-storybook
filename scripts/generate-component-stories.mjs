@@ -1248,11 +1248,33 @@ const items: MenuItem[] = [
   const [action, setAction] = useState('No action yet');`,
     extraImports: `import { Button } from 'primereact/button';
 import { menuWithActions } from '../menuExamples';`,
-    description: 'Hierarchical menu.',
-    renderPrefix: `const items = [{ label: 'Customers', icon: 'pi pi-fw pi-table', items: [{ label: 'New', icon: 'pi pi-fw pi-plus' }] }];`,
-    args: `{ model: items }`,
-    argTypes: `{ popup: { control: 'boolean' } }`,
-    playground: `<><>{args.popup && <Button label="Open menu" onClick={(event) => ref.current?.toggle(event)} />}<TieredMenu {...args} model={menuWithActions(args.model ?? [], setAction)} ref={ref} /></><p role="status">{action}</p></>`,
+    description: 'Hierarchical navigation menu with nested items, command actions, and inline or popup layouts.',
+    renderPrefix: `const items = [{ label: 'Customers', icon: 'pi pi-fw pi-users', items: [{ label: 'New customer', icon: 'pi pi-fw pi-user-plus' }, { label: 'Directory', icon: 'pi pi-fw pi-list' }] }, { label: 'Orders', icon: 'pi pi-fw pi-shopping-cart' }];`,
+    args: `{ model: items, popup: false, autoZIndex: true, breakpoint: undefined, scrollHeight: '400px', baseZIndex: 0, tabIndex: 0 }`,
+    argTypes: `{
+    model: { control: 'object', description: 'MenuItem[] model. Edit nested items, icons, separators, disabled/visible states, URLs, templates, and commands.' },
+    popup: { control: 'boolean', description: 'Render the menu as an overlay opened by the supplied trigger.' },
+    autoZIndex: { control: 'boolean' },
+    breakpoint: { control: 'text', description: 'Responsive max-width boundary, such as 767px.' },
+    scrollHeight: { control: 'text', description: 'Maximum responsive menu height.' },
+    baseZIndex: { control: 'number' },
+    tabIndex: { control: 'number' },
+    'aria-label': { control: 'text' },
+    className: { control: 'text' },
+    style: { control: 'object' }
+  }`,
+    docsImports: `import { TieredMenu } from "primereact/tieredmenu";`,
+    playground: `<div style={{ width: 'min(32rem, calc(100vw - 2rem))', maxWidth: '100%', minWidth: 0 }}><>{args.popup && <Button label="Open menu" onClick={(event) => ref.current?.toggle(event)} />}<TieredMenu {...args} model={menuWithActions(args.model ?? [], setAction)} ref={ref} /></><p role="status">{action}</p></div>`,
+    docsVariations: [
+      { title: 'Nested navigation', code: `<TieredMenu model={[{
+  label: 'Customers',
+  icon: 'pi pi-users',
+  items: [{ label: 'New customer', icon: 'pi pi-user-plus' }, { label: 'Directory', icon: 'pi pi-list' }]
+}, { label: 'Orders', icon: 'pi pi-shopping-cart' }]} />` },
+      { title: 'Separators and disabled items', code: `<TieredMenu model={[{ label: 'Save', icon: 'pi pi-save' }, { separator: true }, { label: 'Delete', icon: 'pi pi-trash', disabled: true }]} />` },
+      { title: 'Popup menu', code: `<Example initialArgs={{ popup: true }} />` },
+      { title: 'Responsive menu', code: `<Example initialArgs={{ breakpoint: '767px', scrollHeight: '12rem' }} />` }
+    ],
   },
   {
     name: 'Menu',

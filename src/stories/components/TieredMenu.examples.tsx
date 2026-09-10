@@ -3,10 +3,10 @@ import { TieredMenu } from 'primereact/tieredmenu';
 import { Button } from 'primereact/button';
 import { menuWithActions } from '../menuExamples';
 
-const items = [{ label: 'Customers', icon: 'pi pi-fw pi-table', items: [{ label: 'New', icon: 'pi pi-fw pi-plus' }] }];
+const items = [{ label: 'Customers', icon: 'pi pi-fw pi-users', items: [{ label: 'New customer', icon: 'pi pi-fw pi-user-plus' }, { label: 'Directory', icon: 'pi pi-fw pi-list' }] }, { label: 'Orders', icon: 'pi pi-fw pi-shopping-cart' }];
 
 export type ExampleArgs = ComponentProps<typeof TieredMenu>;
-export const defaultArgs: ExampleArgs = { model: items };
+export const defaultArgs: ExampleArgs = { model: items, popup: false, autoZIndex: true, breakpoint: undefined, scrollHeight: '400px', baseZIndex: 0, tabIndex: 0 };
 
 export function Playground({ args, updateArgs }: {
   args: ExampleArgs;
@@ -14,7 +14,7 @@ export function Playground({ args, updateArgs }: {
 }) {
   const ref = useRef<TieredMenu>(null);
   const [action, setAction] = useState('No action yet');
-  return (<><>{args.popup && <Button label="Open menu" onClick={(event) => ref.current?.toggle(event)} />}<TieredMenu {...args} model={menuWithActions(args.model ?? [], setAction)} ref={ref} /></><p role="status">{action}</p></>);
+  return (<div style={{ width: 'min(32rem, calc(100vw - 2rem))', maxWidth: '100%', minWidth: 0 }}><>{args.popup && <Button label="Open menu" onClick={(event) => ref.current?.toggle(event)} />}<TieredMenu {...args} model={menuWithActions(args.model ?? [], setAction)} ref={ref} /></><p role="status">{action}</p></div>);
 }
 
 export function Example({ initialArgs = {} }: { initialArgs?: Partial<ExampleArgs> }) {

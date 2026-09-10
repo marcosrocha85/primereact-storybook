@@ -9,11 +9,22 @@ const meta = {
   component: TieredMenu,
   parameters: {
     layout: 'centered',
-    controls: { include: ["popup"] },
-    docs: { description: { component: 'Hierarchical menu.' }, source: { code: exampleSource } }
+    controls: { include: ["model","popup","autoZIndex","breakpoint","scrollHeight","baseZIndex","tabIndex","aria-label","className","style"] },
+    docs: { description: { component: 'Hierarchical navigation menu with nested items, command actions, and inline or popup layouts.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { popup: { control: 'boolean' } }
+  argTypes: {
+    model: { control: 'object', description: 'MenuItem[] model. Edit nested items, icons, separators, disabled/visible states, URLs, templates, and commands.' },
+    popup: { control: 'boolean', description: 'Render the menu as an overlay opened by the supplied trigger.' },
+    autoZIndex: { control: 'boolean' },
+    breakpoint: { control: 'text', description: 'Responsive max-width boundary, such as 767px.' },
+    scrollHeight: { control: 'text', description: 'Maximum responsive menu height.' },
+    baseZIndex: { control: 'number' },
+    tabIndex: { control: 'number' },
+    'aria-label': { control: 'text' },
+    className: { control: 'text' },
+    style: { control: 'object' }
+  }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;
