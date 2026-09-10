@@ -1186,11 +1186,17 @@ const items: MenuItem[] = [
     name: 'Steps',
     prime: 'steps',
     importName: 'Steps',
-    description: 'Step-based flow.',
-    renderPrefix: `const items = [{ label: 'Personal' }, { label: 'Seat' }, { label: 'Payment' }];`,
-    args: `{ model: items, activeIndex: 0, readOnly: false }`,
-    argTypes: `{ activeIndex: { control: 'number' } }`,
-    playground: `<Steps {...args} onSelect={(event) => { updateArgs({ activeIndex: event.index }); args.onSelect?.(event); } } />`,
+    extraImports: `import type { MenuItem } from 'primereact/menuitem';`,
+    description: 'Workflow step indicator with selectable, disabled, icon, and read-only states.',
+    renderPrefix: `const items: MenuItem[] = [{ label: 'Personal' }, { label: 'Seat' }, { label: 'Payment' }];`,
+    args: `{ model: items, activeIndex: 0, readOnly: false, className: '', style: {} }`,
+    argTypes: `{ model: { control: 'object', description: 'MenuItem[] used to render the workflow steps.' }, activeIndex: { control: 'number' }, readOnly: { control: 'boolean' }, className: { control: 'text' }, style: { control: 'object' } }`,
+    playground: `<div style={{ width: 'min(40rem, calc(100vw - 2rem))', maxWidth: '100%', minWidth: 0 }}><Steps {...args} onSelect={(event) => { updateArgs({ activeIndex: event.index }); args.onSelect?.(event); } } /></div>`,
+    docsVariations: [
+      { title: 'Icons', code: `<div style={{ width: '100%' }}><Example initialArgs={{ model: [{ label: 'Personal', icon: 'pi pi-user' }, { label: 'Seat', icon: 'pi pi-ticket' }, { label: 'Payment', icon: 'pi pi-credit-card' }] }} /></div>`, source: `exampleSource + "\\n// Add icons to the workflow steps:\\n<div style={{ width: '100%' }}><Example initialArgs={{ model: [{ label: 'Personal', icon: 'pi pi-user' }, { label: 'Seat', icon: 'pi pi-ticket' }, { label: 'Payment', icon: 'pi pi-credit-card' }] }} /></div>"` },
+      { title: 'Disabled step', code: `<div style={{ width: '100%' }}><Example initialArgs={{ model: [{ label: 'Personal' }, { label: 'Seat', disabled: true }, { label: 'Payment' }], readOnly: false }} /></div>`, source: `exampleSource + "\\n// Disable an unavailable step:\\n<div style={{ width: '100%' }}><Example initialArgs={{ model: [{ label: 'Personal' }, { label: 'Seat', disabled: true }, { label: 'Payment' }], readOnly: false }} /></div>"` },
+      { title: 'Read-only', code: `<div style={{ width: '100%' }}><Example initialArgs={{ activeIndex: 1, readOnly: true }} /></div>`, source: `exampleSource + "\\n// Render a non-interactive progress indicator:\\n<div style={{ width: '100%' }}><Example initialArgs={{ activeIndex: 1, readOnly: true }} /></div>"` }
+    ],
   },
   {
     name: 'TabMenu',

@@ -1261,3 +1261,28 @@ browser check verifies pointer resizing, Summary/Default structure, copyable sou
 placement, and desktop/mobile rendering. Stateful persistence, keyboard and touch resize paths,
 custom panel templates/children, every inherited DOM event, PT callback form, callback invocation,
 and the imperative ref method remain forwarded or source-inspected but are not exhaustively tested.
+
+### Steps API audit — issue #58
+
+Inspected the Button documentation/story reference, the Steps generator entry and generated files,
+the installed PrimeReact `steps.d.ts`, `menuitem.d.ts`, and implementation. The curated Summary
+covers the default workflow, icon-bearing steps, a disabled step, and the read-only progress state.
+Default remains one native Steps instance with Controls for the model, active index, read-only
+state, class name, and style.
+
+| Native surface | Treatment |
+| --- | --- |
+| `model`, `activeIndex`, `readOnly` | Exposed through focused Controls and forwarded unchanged. The model retains the native `MenuItem[]` shape and the playground adapts only selection to synchronize `activeIndex`. |
+| `MenuItem` fields: `id`, `label`, `icon`, `url`, `items`, `expanded`, `disabled`, `visible`, `target`, `separator`, `style`, `className`, `command`, `template`, `data` | Forwarded unchanged inside `model`; icons and disabled state are curated in Summary. Nested menu fields, URLs/targets, commands, templates, arbitrary data, and custom item styling remain available programmatically but are outside the curated examples. |
+| `onSelect` | Adapted and preserved. The wrapper calls `updateArgs({ activeIndex: event.index })`, then invokes the supplied callback with the exact original PrimeReact event. |
+| `className`, `style`, `id`, `aria-*`, `data-*`, inherited `HTMLAttributes<HTMLDivElement>`, and DOM events | Forwarded unchanged through `{...args}`. This includes focus, blur, keyboard, mouse, pointer, touch, drag, clipboard, animation, transition, and capture handlers. |
+| `pt`, `ptOptions`, `unstyled` | Forwarded unchanged; no wrapper PT defaults replace caller values. Native root/menu/menuitem/action/step/label/icon pass-through sections and their callback forms remain available. |
+| `children` and ref/imperative API | Forwarded as part of the native contract; `children` is not used by the curated examples. The native `getElement()` method remains outside Controls. |
+| Templates, nested models, selection/value modes, and alternate value modes | Steps has a `MenuItem[]` model and per-item `template`, but no separate controlled selection/value mode or nested rendered component collection. Native template and command behavior remain available without a story adapter. |
+
+This inventory is source inspection, not exhaustive behavioral testing. The focused contract test
+verifies representative model fields, inherited attributes, PT, `unstyled`, and the original
+supplied callback path. The component browser check verifies selection retention, Summary/Default
+structure, copyable sources, Controls placement, and desktop/mobile rendering. Keyboard navigation,
+URL navigation, item commands/templates, PT callbacks, every inherited DOM event, ref methods, and
+all MenuItem combinations remain forwarded but are not exhaustively tested.

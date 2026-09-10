@@ -9,11 +9,11 @@ const meta = {
   component: Steps,
   parameters: {
     layout: 'centered',
-    controls: { include: ["activeIndex"] },
-    docs: { description: { component: 'Step-based flow.' }, source: { code: exampleSource } }
+    controls: { include: ["model","activeIndex","readOnly","className","style"] },
+    docs: { description: { component: 'Workflow step indicator with selectable, disabled, icon, and read-only states.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { activeIndex: { control: 'number' } }
+  argTypes: { model: { control: 'object', description: 'MenuItem[] used to render the workflow steps.' }, activeIndex: { control: 'number' }, readOnly: { control: 'boolean' }, className: { control: 'text' }, style: { control: 'object' } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;
