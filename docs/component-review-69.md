@@ -108,7 +108,7 @@ All 67 components pass the same browser checks at 1280×900 and 390×900: exactl
 | InputMask | [#30](https://github.com/marcosrocha85/primereact-storybook/issues/30) | Masked input formatting and retention; API inventory above; source-inspected callback and passthrough preservation |
 | InputNumber | [#31](https://github.com/marcosrocha85/primereact-storybook/issues/31) | Decimal/currency entry and formatting; spinner layouts, validation states, API inventory and callback forwarding |
 | InputSwitch | [#32](https://github.com/marcosrocha85/primereact-storybook/issues/32) | Click and Space toggle; disabled |
-| InputText | [#33](https://github.com/marcosrocha85/primereact-storybook/issues/33) | Text entry and clearing |
+| InputText | [#33](https://github.com/marcosrocha85/primereact-storybook/issues/33) | Text entry and clearing; API inventory, controlled value synchronization, and callback/passthrough preservation |
 | InputTextarea | [#34](https://github.com/marcosrocha85/primereact-storybook/issues/34) | Text entry and clearing |
 | Knob | [#35](https://github.com/marcosrocha85/primereact-storybook/issues/35) | Arrow-key value change |
 | ListBox | [#36](https://github.com/marcosrocha85/primereact-storybook/issues/36) | Option selection |
@@ -146,6 +146,22 @@ All 67 components pass the same browser checks at 1280×900 and 390×900: exactl
 | Tooltip | [#66](https://github.com/marcosrocha85/primereact-storybook/issues/66) | Keyboard focus/blur; visible tooltip exposed to accessibility tree |
 | Tree | [#67](https://github.com/marcosrocha85/primereact-storybook/issues/67) | Expand; checkbox selection |
 | TreeTable | [#68](https://github.com/marcosrocha85/primereact-storybook/issues/68) | Expand; checkbox selection |
+
+### InputText API inventory — issue #33
+
+The inventory below is based on the installed PrimeReact `InputTextProps` declaration and implementation, plus the Sakai input, invalid-state, and variant examples. It records the native contract reviewed for this issue; it is not exhaustive interaction testing.
+
+| API surface | Treatment |
+| --- | --- |
+| `value` (`string \| null \| undefined`) | Adapted only for controlled Storybook synchronization; nullish values render as the native empty string and the supplied `onChange` receives the original event. |
+| `invalid`, `disabled`, `readOnly`, `variant`, `placeholder` | Exposed through Default Controls where they represent useful documented states and passed through unchanged. Summary curates disabled, read-only, invalid, outlined, and filled examples. |
+| `keyfilter`, `validateOnly`, `required`, `name`, `id`, `type`, `size`, `maxLength`, `tabIndex`, `autoFocus`, `className`, `style`, `tooltip`, `tooltipOptions`, `unstyled`, `pt`, `ptOptions`, `children` | Passed through unchanged; common validation controls are exposed while the complete native and pass-through surface remains available through `args` outside the curated Controls. |
+| Inherited `React.InputHTMLAttributes<HTMLInputElement>` properties and DOM events | Passed through unchanged, including standard input attributes, `aria-*`/`data-*`, form attributes, mouse, keyboard, composition, drag, touch, focus, selection, and clipboard events. The wrapper only intercepts `onChange` for value synchronization. |
+| `onChange` | Adapted to update the controlled value, then preserved with the exact supplied event; callback forwarding is covered by `tests/inputtext-contract.test.mjs`. |
+| `onInput`, `onBeforeInput`, `onKeyDown`, `onPaste`, `onFocus`, `onBlur` | Passed through unchanged. The wrapper does not replace these callbacks; representative identity preservation is covered by the focused contract test. |
+| Templates, nested models, alternate value/selection modes, imperative methods | Not applicable or native-only. InputText has no option collection, item model, template, or alternate selection value; its ref and DOM methods remain outside the curated Controls. |
+
+The inventory is source inspection, not exhaustive behavioral testing. The focused contract test verifies representative native attributes, pass-through objects, intercepted value synchronization, and supplied callback preservation. The component browser check verifies text entry and clearing plus the shared Summary/Default, Controls, source, and desktop/mobile checks. Keyfilter behavior, tooltip rendering, PT callback forms, refs, and every inherited DOM attribute combination remain forwarded but are not exhaustively tested.
 
 ### Fieldset review — issue #27
 

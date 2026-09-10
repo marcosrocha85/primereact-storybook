@@ -1,12 +1,13 @@
 import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Example } from "./InputText.examples";
 import exampleSource from "./InputText.examples.tsx?raw";
+import { InputText } from 'primereact/inputtext';
 
 <Meta title="Components/InputText/Summary" />
 
 <Title>InputText</Title>
 
-<Subtitle>Base text field used in forms, filters, and search inputs.</Subtitle>
+<Subtitle>Base text field used in forms, filters, and search inputs, with validation and variant states.</Subtitle>
 
 ## Usage
 
@@ -16,17 +17,62 @@ import exampleSource from "./InputText.examples.tsx?raw";
 
 ## Variations
 
-### Disabled
+### States
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<InputText placeholder="Default" />
+<InputText placeholder="Disabled" disabled />
+<InputText placeholder="Read-only" value="Read-only value" readOnly />
+<InputText placeholder="Invalid" invalid />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+<Source code={"<InputText placeholder=\"Default\" />\n<InputText placeholder=\"Disabled\" disabled />\n<InputText placeholder=\"Read-only\" value=\"Read-only value\" readOnly />\n<InputText placeholder=\"Invalid\" invalid />"} language="tsx" />
 
-### Invalid
+### Variants
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ invalid: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<InputText placeholder="Outlined" variant="outlined" />
+<InputText placeholder="Filled" variant="filled" />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ invalid: true }} />"} language="tsx" />
+<Source code={"<InputText placeholder=\"Outlined\" variant=\"outlined\" />\n<InputText placeholder=\"Filled\" variant=\"filled\" />"} language="tsx" />
+
+### Form composition
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-column gap-2">
+  <label htmlFor="email">Email</label>
+  <InputText id="email" type="email" placeholder="you@example.com" />
+</div>
+</div>
+
+<Source code={"<div className=\"flex flex-column gap-2\">\n  <label htmlFor=\"email\">Email</label>\n  <InputText id=\"email\" type=\"email\" placeholder=\"you@example.com\" />\n</div>"} language="tsx" />
+
+### Icons
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<span className="p-input-icon-left">
+  <i className="pi pi-user" />
+  <InputText placeholder="Username" />
+</span>
+<span className="p-input-icon-right">
+  <InputText placeholder="Search" />
+  <i className="pi pi-search" />
+</span>
+</div>
+
+<Source code={"<span className=\"p-input-icon-left\">\n  <i className=\"pi pi-user\" />\n  <InputText placeholder=\"Username\" />\n</span>\n<span className=\"p-input-icon-right\">\n  <InputText placeholder=\"Search\" />\n  <i className=\"pi pi-search\" />\n</span>"} language="tsx" />
+
+### Float label
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<span className="p-float-label">
+  <InputText id="username" />
+  <label htmlFor="username">Username</label>
+</span>
+</div>
+
+<Source code={"<span className=\"p-float-label\">\n  <InputText id=\"username\" />\n  <label htmlFor=\"username\">Username</label>\n</span>"} language="tsx" />
 
 ## Playground
 
