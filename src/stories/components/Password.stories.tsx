@@ -9,11 +9,11 @@ const meta = {
   component: Password,
   parameters: {
     layout: 'centered',
-    controls: { include: ["value","placeholder","feedback","toggleMask","disabled"] },
+    controls: { include: ["value","placeholder","feedback","toggleMask","disabled","invalid","readOnly","variant"] },
     docs: { description: { component: 'Password input with feedback.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { value: { control: 'text' }, placeholder: { control: 'text' }, feedback: { control: 'boolean' }, toggleMask: { control: 'boolean' }, disabled: { control: 'boolean' } }
+  argTypes: { value: { control: 'text' }, placeholder: { control: 'text' }, feedback: { control: 'boolean' }, toggleMask: { control: 'boolean' }, disabled: { control: 'boolean' }, invalid: { control: 'boolean' }, readOnly: { control: 'boolean' }, variant: { control: 'inline-radio', options: [undefined, 'outlined', 'filled'] } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;

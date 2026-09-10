@@ -210,6 +210,25 @@ All 67 components pass the same browser checks at 1280×900 and 390×900: exactl
 | Tree | [#67](https://github.com/marcosrocha85/primereact-storybook/issues/67) | Expand; checkbox selection |
 | TreeTable | [#68](https://github.com/marcosrocha85/primereact-storybook/issues/68) | Expand; checkbox selection |
 
+### Password API inventory — issue #45
+
+The inventory below is based on the installed PrimeReact `PasswordProps` declaration and implementation, plus the Sakai invalid-state and authentication examples under `vendor/sakai-react`. It records the native contract reviewed for this issue; it is not exhaustive interaction testing.
+
+| API surface | Treatment |
+| --- | --- |
+| `value` (`string \| undefined`) and `defaultValue` | Adapted only for controlled Storybook synchronization; nullish `value` renders as the native empty string and the supplied `onChange` receives the original event. `defaultValue` remains available through native args. |
+| `feedback`, `toggleMask`, `invalid`, `variant`, `placeholder`, `disabled`, `readOnly` | Exposed through Default Controls where they represent documented Password behavior and passed through unchanged. Summary curates feedback, mask toggling, invalid, disabled, read-only, and outlined/filled variants. |
+| `inputId`, `inputRef`, `inputStyle`, `inputClassName`, `id`, `className`, `style`, `required`, `name`, `type`, `size`, `maxLength`, `tabIndex`, `autoFocus`, `keyfilter`, `tooltip`, `tooltipOptions` | Passed through unchanged; the input-specific and inherited HTML input properties remain available through native story args and are outside the curated Controls. |
+| `promptLabel`, `weakLabel`, `mediumLabel`, `strongLabel`, `mediumRegex`, `strongRegex` | Passed through unchanged; feedback labels and strength thresholds remain native configuration and are outside the curated examples. |
+| `showIcon`, `hideIcon`, `icon`, `header`, `content`, `footer`, `appendTo`, `panelStyle`, `panelClassName`, `transitionOptions` | Passed through unchanged. These template, overlay, icon, and transition APIs are native-only and intentionally outside the curated Controls. |
+| `pt`, `ptOptions`, `unstyled`, `children` | Passed through unchanged. Native root, input, panel, meter, label, icon, transition, and lifecycle pass-through sections remain available; no wrapper defaults replace user customizations. |
+| Inherited input attributes and DOM events | Forwarded unchanged through `{...args}`, including ARIA/data attributes, form attributes, focus, blur, keyboard, composition, clipboard, drag, touch, and selection events. The wrapper only intercepts `onChange` for value synchronization. |
+| `onChange` | Adapted to update the controlled value, then invokes the supplied callback with the exact original event; covered by `tests/password-contract.test.mjs`. |
+| `onInput`, `onShow`, `onHide` | Passed through unchanged. The wrapper does not replace these callbacks; their runtime behavior is native and not exhaustively tested here. |
+| Imperative methods | Native-only: `focus`, `toggleMask`, `getElement`, `getOverlay`, and `getInput` remain available through the native ref and outside Controls. |
+
+The focused contract test verifies representative native attributes, pass-through objects, intercepted value synchronization, and supplied callback preservation. The component browser check verifies text entry and clearing plus the shared Summary/Default, Controls, source, and desktop/mobile checks. Strength calculations, mask toggle keyboard behavior, templates, overlay lifecycle callbacks, PT callback forms, refs, and every inherited DOM attribute combination remain source-inspected or forwarded but are not exhaustively tested.
+
 ### InputText API inventory — issue #33
 
 The inventory below is based on the installed PrimeReact `InputTextProps` declaration and implementation, plus the Sakai input, invalid-state, and variant examples. It records the native contract reviewed for this issue; it is not exhaustive interaction testing.
