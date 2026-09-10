@@ -98,7 +98,7 @@ format_duration() {
   fi
 }
 progress_status() {
-  local phase=$1 width=24 filled empty percent elapsed eta='calculating' complete_bar pending_bar
+  local phase=$1 mode=${2:-line} width=24 filled empty percent elapsed eta='calculating' complete_bar pending_bar prefix='' suffix='\n'
   ((batch_total > 0)) || return
   filled=$((batch_completed * width / batch_total))
   empty=$((width - filled))
@@ -114,9 +114,44 @@ progress_status() {
   printf -v pending_bar '%*s' "$empty" ''
   complete_bar=${complete_bar// /#}
   pending_bar=${pending_bar// /-}
-  printf '\n[%s%s] %3d%% | %d/%d [#%s] %s | elapsed %s | ETA %s\n' \
+  if [[ "$mode" == inline ]]; then prefix=$'\r\033[2K'; suffix=''; else prefix='\n'; fi
+  printf '%s[%s%s] %3d%% | %d/%d [#%s] %s | elapsed %s | ETA %s%b' \
+    "$prefix" \
     "$complete_bar" "$pending_bar" "$percent" "$current_index" "$batch_total" \
-    "${current_issue:--}" "$phase" "$(format_duration "$elapsed")" "$eta"
+    "${current_issue:--}" "$phase" "$(format_duration "$elapsed")" "$eta" "$suffix"
+}
+run_with_status() {
+  local issue_directory=$1 fallback_phase=$2 ticker_pid status
+  shift 2
+  if [[ ! -t 1 ]]; then "$@"; return; fi
+  printf '%s\n' "$fallback_phase" > "$issue_directory/phase"
+  (
+    while :; do
+      phase="$(<"$issue_directory/phase")"
+      progress_status "${phase:-$fallback_phase}" inline
+      sleep 1
+    done
+  ) &
+  ticker_pid=$!
+  if "$@" > "$issue_directory/runner.log" 2>&1; then status=0; else status=$?; fi
+  kill "$ticker_pid" 2>/dev/null || true
+  wait "$ticker_pid" 2>/dev/null || true
+  printf '\r\033[2K'
+  if ((status != 0)); then tail -20 "$issue_directory/runner.log" >&2; fi
+  return "$status"
+}
+wait_with_status() {
+  local seconds=$1 phase=$2 tick
+  if [[ ! -t 1 ]]; then
+    printf 'Waiting: %s\n' "$phase"
+    sleep "$seconds"
+    return
+  fi
+  for ((tick = 0; tick < seconds; tick++)); do
+    progress_status "$phase" inline
+    sleep 1
+  done
+  printf '\r\033[2K'
 }
 
 require_no_operation
@@ -237,8 +272,8 @@ for issue in "${issues[@]}"; do
   } > "$issue_dir/prompt.md"
   printf '\nImplementing #%s on %s\n' "$issue" "$branch"
   progress_status 'Codex implementation'
-  node "$support_dir/recover.mjs" run "$issue_dir" "$root" "${codex_args[@]}"
-  progress_status 'validated; preparing delivery'
+  run_with_status "$issue_dir" 'Codex implementation' node "$support_dir/recover.mjs" run "$issue_dir" "$root" "${codex_args[@]}"
+  progress_status 'validation passed; preparing delivery'
   [[ "$(git branch --show-current)" == "$branch" && "$(git rev-parse HEAD)" == "$base_sha" ]] || die 'Codex changed the branch or committed unexpectedly.'
   node "$support_dir/verify.mjs" result "$issue_dir/result.json" "$issue_dir/files.list"
   git diff --check
@@ -271,10 +306,8 @@ for issue in "${issues[@]}"; do
       gh pr merge "$pr_url" --repo "$repo" --squash --match-head-commit "$head_sha"
       merge_requested=true
     else
-      printf 'Waiting for GitHub checks/merge: %s\n' "$pr_url"
-      progress_status 'waiting for GitHub checks and merge'
       remaining=$((deadline - SECONDS))
-      sleep "$((remaining < 10 ? remaining : 10))"
+      wait_with_status "$((remaining < 10 ? remaining : 10))" 'waiting for GitHub checks and merge'
     fi
   done
   require_clean
