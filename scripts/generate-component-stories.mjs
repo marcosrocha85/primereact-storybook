@@ -1436,9 +1436,36 @@ const options: ChartOptions = {
     name: 'ProgressBar',
     prime: 'progressbar',
     importName: 'ProgressBar',
-    description: 'Progress indicator.',
-    args: `{ value: 50, showValue: true }`,
-    argTypes: `{ value: { control: 'number' }, showValue: { control: 'boolean' }, mode: { control: 'select', options: ['determinate', 'indeterminate'] } }`,
+    description: 'Progress indicator for determinate completion values and indeterminate activity.',
+    args: `{ value: 50, showValue: true, unit: '%', mode: 'determinate', color: undefined }`,
+    argTypes: `{
+    value: { control: 'number', description: 'Determinate progress from 0 to 100.' },
+    showValue: { control: 'boolean' },
+    unit: { control: 'text' },
+    mode: { control: 'select', options: ['determinate', 'indeterminate'] },
+    color: { control: 'text' }
+  }`,
+    docsVariations: [
+      {
+        title: 'Determinate values',
+        code: `<div className="flex flex-column gap-3">
+  <Example initialArgs={{ value: 25 }} />
+  <Example initialArgs={{ value: 75 }} />
+</div>`,
+      },
+      {
+        title: 'Indeterminate',
+        code: `<Example initialArgs={{ mode: 'indeterminate' }} />`,
+      },
+      {
+        title: 'Hidden value',
+        code: `<Example initialArgs={{ value: 50, showValue: false }} />`,
+      },
+      {
+        title: 'Custom unit and color',
+        code: `<Example initialArgs={{ value: 65, unit: ' completed', color: '#10b981' }} />`,
+      },
+    ],
     playground: `<div style={{ width: '24rem', maxWidth: '100%' }}><ProgressBar {...args} /></div>`,
   },
   {

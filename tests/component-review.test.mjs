@@ -52,6 +52,37 @@ for (const name of components) {
   });
 }
 
+test('ProgressBar: curated modes, display options and Controls', async () => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(`${baseURL}/?path=/docs/components-progressbar-summary--summary`);
+  const preview = page.frameLocator('#storybook-preview-iframe');
+  await preview.locator('.sbdocs-content h1').waitFor();
+  assert.deepEqual(await preview.locator('.sbdocs-content h3').allTextContents(), ['Determinate values', 'Indeterminate', 'Hidden value', 'Custom unit and color']);
+  assert.equal(await preview.locator('.docblock-argstable').count(), 0, 'Summary has no Controls');
+  assert.ok(await preview.locator('.docblock-source').count() >= 5, 'Summary examples have copyable source');
+  assert.equal(await preview.locator('.component-example .p-progressbar').count(), 6);
+  assert.equal(await preview.locator('.component-example .p-progressbar-label').count(), 4);
+  assert.equal(await preview.locator('.component-example .p-progressbar-indeterminate').count(), 1);
+  await preview.getByRole('link', { name: 'Default', exact: true }).click();
+  await preview.locator('#storybook-root .p-progressbar').waitFor();
+  assert.equal(await preview.locator('#storybook-root .p-progressbar').count(), 1);
+  await page.getByRole('tab', { name: 'Controls' }).click();
+  await page.locator('#control-value').fill('75');
+  await preview.locator('#storybook-root .p-progressbar-value').waitFor();
+  assert.equal(await preview.locator('#storybook-root .p-progressbar-label').innerText(), '75%');
+  await page.locator('#control-showValue').focus();
+  await page.locator('#control-showValue').press('Space');
+  await preview.locator('#storybook-root .p-progressbar-label').waitFor({ state: 'detached' });
+  await page.locator('#control-mode').selectOption({ label: 'indeterminate' });
+  await preview.locator('#storybook-root .p-progressbar-indeterminate').waitFor();
+  assert.equal(await preview.locator('#storybook-root .p-progressbar-label').count(), 0);
+  await page.locator('#control-mode').selectOption({ label: 'determinate' });
+  await preview.locator('#storybook-root .p-progressbar-determinate').waitFor();
+  await page.getByRole('tab', { name: 'Code', exact: true }).click();
+  await page.getByRole('button', { name: /Copy/ }).waitFor();
+  assert.match(await page.getByRole('tabpanel').innerText(), /<ProgressBar \{\.\.\.args\}/);
+});
+
 test('Dialog: open, close and reopen at desktop and mobile widths', async () => {
   for (const width of [1280, 390]) {
     await page.setViewportSize({ width, height: 900 });

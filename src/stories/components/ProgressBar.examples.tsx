@@ -2,7 +2,7 @@ import { useState, type ComponentProps } from 'react';
 import { ProgressBar } from 'primereact/progressbar';
 
 export type ExampleArgs = ComponentProps<typeof ProgressBar>;
-export const defaultArgs: ExampleArgs = { value: 50, showValue: true };
+export const defaultArgs: ExampleArgs = { value: 50, showValue: true, unit: '%', mode: 'determinate', color: undefined };
 
 export function Playground({ args, updateArgs }: {
   args: ExampleArgs;
