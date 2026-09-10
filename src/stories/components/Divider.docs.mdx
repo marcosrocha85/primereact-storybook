@@ -1,12 +1,13 @@
 import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Example } from "./Divider.examples";
 import exampleSource from "./Divider.examples.tsx?raw";
+import { Divider } from "primereact/divider";
 
 <Meta title="Components/Divider/Summary" />
 
 <Title>Divider</Title>
 
-<Subtitle>Visual separator.</Subtitle>
+<Subtitle>Visual separator for dividing content into related sections.</Subtitle>
 
 ## Usage
 
@@ -16,7 +17,35 @@ import exampleSource from "./Divider.examples.tsx?raw";
 
 ## Variations
 
-The usage example shows the base composition. Use Default to explore the documented properties.
+### Border styles
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Divider type="solid">Solid</Divider>
+<Divider type="dashed">Dashed</Divider>
+<Divider type="dotted">Dotted</Divider>
+</div>
+
+<Source code={"<Divider type=\"solid\">Solid</Divider>\n<Divider type=\"dashed\">Dashed</Divider>\n<Divider type=\"dotted\">Dotted</Divider>"} language="tsx" />
+
+### Horizontal alignment
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ align: 'left', children: 'Left' }} />
+<Example initialArgs={{ align: 'center', children: 'Center' }} />
+<Example initialArgs={{ align: 'right', children: 'Right' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ align: 'left', children: 'Left' }} />\n<Example initialArgs={{ align: 'center', children: 'Center' }} />\n<Example initialArgs={{ align: 'right', children: 'Right' }} />"} language="tsx" />
+
+### Vertical layout
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ layout: 'vertical', align: 'top', children: 'Top' }} />
+<Example initialArgs={{ layout: 'vertical', align: 'center', children: 'Center' }} />
+<Example initialArgs={{ layout: 'vertical', align: 'bottom', children: 'Bottom' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ layout: 'vertical', align: 'top', children: 'Top' }} />\n<Example initialArgs={{ layout: 'vertical', align: 'center', children: 'Center' }} />\n<Example initialArgs={{ layout: 'vertical', align: 'bottom', children: 'Bottom' }} />"} language="tsx" />
 
 ## Playground
 
