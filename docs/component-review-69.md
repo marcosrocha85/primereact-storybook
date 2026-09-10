@@ -409,6 +409,31 @@ All 67 components pass the same browser checks at 1280×900 and 390×900: exactl
 | Tree | [#67](https://github.com/marcosrocha85/primereact-storybook/issues/67) | Expand; checkbox selection |
 | TreeTable | [#68](https://github.com/marcosrocha85/primereact-storybook/issues/68) | Expand; checkbox selection |
 
+### TabMenu API audit — issue #59
+
+Inspected the Button documentation/story reference, the TabMenu generator entry and generated files,
+the Sakai UI Kit menu example at `vendor/sakai-react/app/(main)/uikit/menu/page.tsx`, and the installed
+PrimeReact `tabmenu.d.ts`, `menuitem.d.ts`, and implementation. The curated Summary covers the base
+navigation, icon, disabled-item, and link/active-item compositions. Default remains one native TabMenu
+instance with Controls for the model, active index, class name, and style.
+
+| Native surface | Treatment |
+| --- | --- |
+| `model`, `activeIndex` | `model` is exposed as a `MenuItem[]` object Control and forwarded unchanged. `activeIndex` is exposed and adapted only to synchronize the controlled playground after selection. |
+| `MenuItem` fields: `id`, `label`, `icon`, `url`, `items`, `expanded`, `disabled`, `visible`, `target`, `separator`, `style`, `className`, `command`, `template`, `data` | Forwarded unchanged inside `model`. Icons, disabled state, links, and active selection are curated; nested items, commands, templates, arbitrary data, visibility, targets, and custom item styling remain available through native args but outside the curated examples. |
+| `onTabChange` | Adapted only to call `updateArgs({ activeIndex: event.index })`, then invokes the supplied callback with the exact original PrimeReact event. |
+| `className`, `style`, `id`, `aria-*`, `data-*`, inherited `HTMLAttributes<HTMLDivElement>`, and DOM events | Forwarded unchanged through `{...args}`. This includes focus, blur, keyboard, mouse, pointer, touch, drag, clipboard, animation, transition, and capture handlers. |
+| `pt`, `ptOptions`, `unstyled` | Forwarded unchanged. Native root, menu, menuitem, action, icon, label, inkbar, and lifecycle pass-through sections and their callback forms remain available; no wrapper PT defaults replace caller values. |
+| `children` and ref/imperative API | Retained by the native props contract; children are not needed by TabMenu's model-driven rendering and are outside the curated examples. The native `getElement()` method remains outside Controls. |
+| Templates, nested models, and selection/value modes | TabMenu has a flat `MenuItem[]` model and no alternate controlled value mode. Per-item icon/template/command forms and nested MenuItem fields remain native-supported; no wrapper narrows them. |
+
+This inventory is source inspection, not exhaustive behavioral testing. The focused contract test verifies
+representative MenuItem fields, inherited attributes, PT, `unstyled`, and supplied `onTabChange` preservation.
+The component browser check verifies active-item selection, Summary/Default structure, copyable sources,
+Controls placement, runtime safety, and desktop/mobile rendering. Keyboard navigation, URL navigation,
+commands/templates, PT callbacks, every inherited DOM event, ref methods, and all MenuItem combinations
+remain forwarded but are not exhaustively tested.
+
 ### Sidebar API inventory — issue #53
 
 The inventory below is based on the installed PrimeReact `SidebarProps`, `SidebarPassThroughOptions`, and Sidebar implementation, the Button story/documentation reference, and the Sakai UI Kit overlay example at `vendor/sakai-react/app/(main)/uikit/overlay/page.tsx`. It records the native contract reviewed for this issue; it is not exhaustive interaction testing.

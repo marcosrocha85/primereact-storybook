@@ -6,7 +6,7 @@ import exampleSource from "./TabMenu.examples.tsx?raw";
 
 <Title>TabMenu</Title>
 
-<Subtitle>Tabbed menu.</Subtitle>
+<Subtitle>Tabbed menu for navigation and command items, with active, disabled, icon, and link states.</Subtitle>
 
 ## Usage
 
@@ -16,7 +16,29 @@ import exampleSource from "./TabMenu.examples.tsx?raw";
 
 ## Variations
 
-The usage example shows the base composition. Use Default to explore the documented properties.
+### Icons
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ model: [{ label: 'Dashboard', icon: 'pi pi-home' }, { label: 'Calendar', icon: 'pi pi-calendar' }, { label: 'Settings', icon: 'pi pi-cog' }] }} />
+</div>
+
+<Source code={"<Example initialArgs={{ model: [{ label: 'Dashboard', icon: 'pi pi-home' }, { label: 'Calendar', icon: 'pi pi-calendar' }, { label: 'Settings', icon: 'pi pi-cog' }] }} />"} language="tsx" />
+
+### Disabled item
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ model: [{ label: 'Available' }, { label: 'Disabled', disabled: true }, { label: 'Another item' }] }} />
+</div>
+
+<Source code={"<Example initialArgs={{ model: [{ label: 'Available' }, { label: 'Disabled', disabled: true }, { label: 'Another item' }] }} />"} language="tsx" />
+
+### Links and active item
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ activeIndex: 1, model: [{ label: 'Documentation', url: '#documentation' }, { label: 'Examples', url: '#examples' }] }} />
+</div>
+
+<Source code={"<Example initialArgs={{ activeIndex: 1, model: [{ label: 'Documentation', url: '#documentation' }, { label: 'Examples', url: '#examples' }] }} />"} language="tsx" />
 
 ## Playground
 
