@@ -841,3 +841,30 @@ callback forwarding, and value synchronization. The existing browser test verifi
 ArrowRight value change. Mouse/touch dragging, Home/End/PageUp/PageDown, every inherited DOM
 event, PT callback/hook forms, imperative methods, and all visual color combinations remain
 forwarded but are not exhaustively tested.
+
+### Menubar API audit — issue #39
+
+Inspected the Button documentation/story reference, the Menubar generator entry and generated
+files, the Sakai UI Kit Menubar example at `vendor/sakai-react/app/(main)/uikit/menu/page.tsx`,
+and the installed PrimeReact `menubar.d.ts`, `menuitem.d.ts`, and implementation. The curated
+Summary covers nested navigation, separators, disabled items, start/end content, and custom menu
+icons. Default remains one Menubar instance with Controls for the model and presentation/accessibility
+props. Command feedback is demo-only and preserves supplied item commands.
+
+| Native surface | Treatment |
+| --- | --- |
+| `model` | Exposed as an object Control and forwarded with its `MenuItem[]` shape. The story recursively decorates leaf commands for observable feedback and preserves existing commands; nested `MenuItem[]` and `MenuItem[][]` models retain their grouping. |
+| `MenuItem` fields: `id`, `label`, `icon`, `url`, `items`, `expanded`, `disabled`, `visible`, `target`, `separator`, `style`, `className`, `command`, `template`, `data` | Forwarded unchanged except for the demo command wrapper. The Summary demonstrates nested items, icons, separators, and disabled state; URLs, targets, templates, arbitrary data, and custom styles remain available through the model but are outside the curated examples. |
+| `start`, `end` | Forwarded unchanged. Both React-node and function template forms remain native; the Summary demonstrates node content. |
+| `menuIcon`, `submenuIcon` | Exposed as select Controls with documented string examples; PrimeReact's icon function/React-node value forms remain available programmatically. |
+| `ariaLabel`, `ariaLabelledBy`, `className`, `style`, `unstyled` | Exposed or forwarded unchanged. |
+| `pt`, `ptOptions` | Forwarded unchanged with no wrapper PT defaults. Native root/menu/menuitem/content/action/icon/label/submenu/submenuIcon/separator/button/popupIcon/start/end/hooks sections and their callback forms remain available. |
+| `onFocus`, `onBlur`, inherited `HTMLAttributes<HTMLDivElement>` and DOM events | Forwarded through `{...args}` unchanged, including `id`, `role`, `data-*`, `aria-*`, keyboard, focus, pointer, mouse, touch, drag, clipboard, animation, transition, and capture handlers. |
+| Ref and imperative API | Native ref methods `getElement()`, `getRootMenu()`, and `getMenuButton()` remain available; the story does not adapt or expose them as Controls. |
+| Selection/value modes and nested component models | Menubar has no controlled selection/value API. Its nested model is the `MenuItem` structure above; no separate selection adapter is introduced. |
+
+This inventory is source inspection, not exhaustive behavioral testing. The focused browser check
+verifies nested leaf command feedback, Summary structure, copyable sources, and no Summary Controls.
+The command helper's source preserves supplied command callbacks; PT callbacks, function templates,
+URLs/navigation, mobile menu interaction, inherited events, imperative methods, and every MenuItem
+value combination remain forwarded but are not exhaustively browser-tested.

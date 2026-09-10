@@ -6,20 +6,19 @@ function isGrouped(items: MenuItem[] | MenuItem[][]): items is MenuItem[][] {
 
 export function menuWithActions(items: MenuItem[], onAction: (action: string) => void): MenuItem[] {
   return items.map((item) => {
-    if (item.items) {
-      return {
-        ...item,
-        items: isGrouped(item.items)
-          ? item.items.map((group) => menuWithActions(group, onAction))
-          : menuWithActions(item.items, onAction)
-      };
-    }
+    const withAction = (event: Parameters<NonNullable<MenuItem['command']>>[0]) => {
+      item.command?.(event);
+      onAction(`${item.label ?? 'Action'} selected`);
+    };
+    const nextItem = item.items || item.command
+      ? { ...item, ...(item.command ? { command: withAction } : {}) }
+      : { ...item, command: withAction };
+    if (!item.items) return nextItem;
     return {
-      ...item,
-      command: (event) => {
-        item.command?.(event);
-        onAction(`${item.label ?? 'Action'} selected`);
-      }
+      ...nextItem,
+      items: isGrouped(item.items)
+        ? item.items.map((group) => menuWithActions(group, onAction))
+        : menuWithActions(item.items, onAction)
     };
   });
 }
