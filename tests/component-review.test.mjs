@@ -762,10 +762,22 @@ test('menus and action buttons report the selected action', async () => {
   await page.getByText('Videos', { exact: true }).click();
   await page.getByText('Video 1.1', { exact: true }).click();
   await page.getByRole('status').filter({ hasText: 'Video 1.1 selected' }).waitFor();
-  for (const name of ['Toolbar', 'SplitButton']) {
+  for (const name of ['Toolbar']) {
     await open(name);
     await page.getByRole('button', { name: 'Save', exact: true }).click();
     await page.getByRole('status').filter({ hasText: 'Save selected' }).waitFor();
+  }
+});
+
+test('SplitButton: primary action and menu commands report feedback', async () => {
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await open('SplitButton');
+    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await page.getByRole('status').filter({ hasText: 'Save selected' }).waitFor();
+    await page.locator('#storybook-root .p-splitbutton-menubutton').click();
+    await page.getByRole('menuitem', { name: 'Update', exact: true }).click();
+    await page.getByRole('status').filter({ hasText: 'Update selected' }).waitFor();
   }
 });
 

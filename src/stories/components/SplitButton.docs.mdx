@@ -16,41 +16,56 @@ import exampleSource from "./SplitButton.examples.tsx?raw";
 
 ## Variations
 
-### secondary
+### Severities
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'secondary' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-wrap gap-2">
+  <Example initialArgs={{ severity: undefined }} />
+  <Example initialArgs={{ severity: 'secondary' }} />
+  <Example initialArgs={{ severity: 'success' }} />
+  <Example initialArgs={{ severity: 'info' }} />
+  <Example initialArgs={{ severity: 'warning' }} />
+  <Example initialArgs={{ severity: 'danger' }} />
+</div>
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'secondary' }} />"} language="tsx" />
+<Source code={"<div className=\"flex flex-wrap gap-2\">\n  <Example initialArgs={{ severity: undefined }} />\n  <Example initialArgs={{ severity: 'secondary' }} />\n  <Example initialArgs={{ severity: 'success' }} />\n  <Example initialArgs={{ severity: 'info' }} />\n  <Example initialArgs={{ severity: 'warning' }} />\n  <Example initialArgs={{ severity: 'danger' }} />\n</div>"} language="tsx" />
 
-### success
+### Styles and states
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'success' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-wrap gap-2">
+  <Example initialArgs={{ outlined: true }} />
+  <Example initialArgs={{ text: true }} />
+  <Example initialArgs={{ rounded: true }} />
+  <Example initialArgs={{ raised: true }} />
+  <Example initialArgs={{ loading: true }} />
+  <Example initialArgs={{ disabled: true }} />
+</div>
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'success' }} />"} language="tsx" />
+<Source code={"<div className=\"flex flex-wrap gap-2\">\n  <Example initialArgs={{ outlined: true }} />\n  <Example initialArgs={{ text: true }} />\n  <Example initialArgs={{ rounded: true }} />\n  <Example initialArgs={{ raised: true }} />\n  <Example initialArgs={{ loading: true }} />\n  <Example initialArgs={{ disabled: true }} />\n</div>"} language="tsx" />
 
-### info
+### Sizes
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'info' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<div className="flex flex-wrap align-items-center gap-2">
+  <Example initialArgs={{ size: 'small' }} />
+  <Example />
+  <Example initialArgs={{ size: 'large' }} />
+</div>
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'info' }} />"} language="tsx" />
+<Source code={"<div className=\"flex flex-wrap align-items-center gap-2\">\n  <Example initialArgs={{ size: 'small' }} />\n  <Example />\n  <Example initialArgs={{ size: 'large' }} />\n</div>"} language="tsx" />
 
-### warning
+### Menu commands
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'warning' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example />
+// Select the arrow to open Update, Delete, and Home commands.
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'warning' }} />"} language="tsx" />
-
-### help
-
-<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'help' }} /></div>
-
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'help' }} />"} language="tsx" />
-
-### danger
-
-<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'danger' }} /></div>
-
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'danger' }} />"} language="tsx" />
+<Source code={"<Example />\n// Select the arrow to open Update, Delete, and Home commands."} language="tsx" />
 
 ## Playground
 
