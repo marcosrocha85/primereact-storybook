@@ -865,10 +865,36 @@ function productTemplate(product: Product) {
     prime: 'tabview',
     importName: 'TabView',
     extraImports: `import { TabPanel } from 'primereact/tabview';`,
-    description: 'Tabbed navigation.',
-    args: `{ activeIndex: 0 }`,
-    argTypes: `{ activeIndex: { control: 'number' } }`,
-    playground: `<TabView {...args} onTabChange={(event) => { updateArgs({ activeIndex: event.index }); args.onTabChange?.(event); } }><TabPanel header="Header I"><p>Content I</p></TabPanel><TabPanel header="Header II"><p>Content II</p></TabPanel></TabView>`,
+    description: 'Tabbed navigation for organizing related content into panels.',
+    exampleType: `ComponentProps<typeof TabView> & {
+  firstHeader?: string;
+  secondHeader?: string;
+  thirdHeader?: string;
+  firstContent?: string;
+  secondContent?: string;
+  thirdContent?: string;
+}`,
+    args: `{ activeIndex: 0, renderActiveOnly: true, scrollable: false, firstHeader: 'Overview', secondHeader: 'Details', thirdHeader: 'Activity', firstContent: 'Keep the primary summary in the first panel.', secondContent: 'Place supporting information in a separate panel.', thirdContent: 'Use the final panel for recent activity or updates.' }`,
+    argTypes: `{ activeIndex: { control: 'number' }, renderActiveOnly: { control: 'boolean' }, scrollable: { control: 'boolean' }, firstHeader: { control: 'text' }, secondHeader: { control: 'text' }, thirdHeader: { control: 'text' }, firstContent: { control: 'text' }, secondContent: { control: 'text' }, thirdContent: { control: 'text' } }`,
+    hooks: `const { firstHeader, secondHeader, thirdHeader, firstContent, secondContent, thirdContent, children, ...tabViewProps } = args;`,
+    playground: `<TabView {...tabViewProps} onTabChange={(event) => { updateArgs({ activeIndex: event.index }); args.onTabChange?.(event); }}>{children !== undefined ? children : [<TabPanel key="first" header={firstHeader}>{firstContent}</TabPanel>, <TabPanel key="second" header={secondHeader}>{secondContent}</TabPanel>, <TabPanel key="third" header={thirdHeader}>{thirdContent}</TabPanel>]}</TabView>`,
+    docsImports: `import { TabPanel, TabView } from "primereact/tabview";`,
+    docsVariations: [
+      { title: 'Disabled tab', code: `<TabView activeIndex={0}>
+  <TabPanel header="Available">This panel can be selected.</TabPanel>
+  <TabPanel header="Disabled" disabled>This panel is unavailable.</TabPanel>
+</TabView>` },
+      { title: 'Closable tabs with icons', code: `<TabView activeIndex={0}>
+  <TabPanel header="Profile" leftIcon="pi pi-user" closable>Profile details.</TabPanel>
+  <TabPanel header="Settings" leftIcon="pi pi-cog" closable>Application settings.</TabPanel>
+</TabView>` },
+      { title: 'Scrollable tab headers', code: `<TabView scrollable>
+  <TabPanel header="Overview">Overview content.</TabPanel>
+  <TabPanel header="Details">Details content.</TabPanel>
+  <TabPanel header="Activity">Activity content.</TabPanel>
+  <TabPanel header="History">History content.</TabPanel>
+</TabView>` }
+    ],
   },
 
   {
