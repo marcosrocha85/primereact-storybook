@@ -130,8 +130,9 @@ if(args[0]==='repo'&&args[1]==='view'){
 `;
   for (const command of ['codex', 'gh', 'npm']) fs.writeFileSync(path.join(bin, command), mock, { mode: 0o755 });
   const runOptions = { cwd: repo, encoding: 'utf8', timeout: 30000,
-    env: { ...gitEnv, PATH: `${bin}:${process.env.PATH}`, RUNNER_TEST_STATE: state, CHECK_TIMEOUT_SECONDS: '1', ...extraEnv } };
+    env: { ...gitEnv, PATH: `${bin}:${process.env.PATH}`, RUNNER_TEST_STATE: state, CHECK_TIMEOUT_SECONDS: '3', ...extraEnv } };
   const run = (...args) => spawnSync('bash', ['scripts/implement-issues.sh', ...args], runOptions);
+  const runTty = (...args) => spawnSync('script', ['-qfec', `bash scripts/implement-issues.sh ${args.join(' ')}`, '/dev/null'], runOptions);
   const runAsync = (...args) => new Promise((resolve, reject) => {
     const child = spawn('bash', ['scripts/implement-issues.sh', ...args], runOptions);
     let stdout = '', stderr = '';
@@ -140,7 +141,7 @@ if(args[0]==='repo'&&args[1]==='view'){
     child.on('error', reject);
     child.on('close', status => resolve({ status, stdout, stderr }));
   });
-  return { repo, git, run, runAsync, setScenario: scenario => { const value = JSON.parse(fs.readFileSync(state, 'utf8')); value.scenario = scenario; fs.writeFileSync(state, JSON.stringify(value)); }, checkpoint: () => path.join(repo, '.git/codex-issue-runs', fs.readdirSync(path.join(repo, '.git/codex-issue-runs'))[0]), state: () => JSON.parse(fs.readFileSync(state, 'utf8')), cleanup: () => fs.rmSync(temp, { recursive: true, force: true }) };
+  return { repo, git, run, runTty, runAsync, setScenario: scenario => { const value = JSON.parse(fs.readFileSync(state, 'utf8')); value.scenario = scenario; fs.writeFileSync(state, JSON.stringify(value)); }, checkpoint: () => path.join(repo, '.git/codex-issue-runs', fs.readdirSync(path.join(repo, '.git/codex-issue-runs'))[0]), state: () => JSON.parse(fs.readFileSync(state, 'utf8')), cleanup: () => fs.rmSync(temp, { recursive: true, force: true }) };
 }
 
 function withFixture(scenario, fn) {
@@ -155,8 +156,8 @@ test('runner implements two issues sequentially and removes only its merged bran
     assert.equal(result.status, 0, result.stderr + result.stdout);
     assert.match(result.stdout, /========== 1\/2 \[#13\] Review ==========/);
     assert.match(result.stdout, /\[------------------------\]\s+0% \| 1\/2 \[#13\] preparing \| elapsed \d+s \| ETA calculating/);
-    assert.match(result.stdout, /live-model-output:codex:13/);
-    assert.match(result.stdout, /live-validation:1/);
+    assert.doesNotMatch(result.stdout, /live-model-output:codex:13/, 'Raw model output remains in codex.log');
+    assert.doesNotMatch(result.stdout, /live-validation:1/, 'Raw validation output remains in validation.log');
     assert.match(result.stdout, /\[########################\] 100% \| 2\/2 \[#14\] completed/);
     assert.deepEqual(state().events, ['codex:13', 'pr:13', 'merge:13', 'codex:14', 'pr:14', 'merge:14']);
     assert.equal(git('branch', '--show-current'), 'main');
@@ -179,6 +180,16 @@ test('dry-run and invalid/duplicate input never invoke Codex or GitHub mutations
     assert.notEqual(run('13', 'bad-input').status, 0);
     assert.notEqual(run().status, 0);
     assert.deepEqual(state().events, []);
+  });
+});
+
+test('interactive terminal redraws one compact status line without raw model output', () => {
+  withFixture('', ({ runTty }) => {
+    const result = runTty('13');
+    assert.equal(result.status, 0, result.stderr + result.stdout);
+    assert.match(result.stdout, /========== 1\/1 \[#13\] Review ==========/);
+    assert.match(result.stdout, /\x1b\[2K\[------------------------\]/);
+    assert.doesNotMatch(result.stdout, /live-model-output|live-validation/);
   });
 });
 
@@ -278,16 +289,14 @@ test('independent validator runs affected browser tests on its own static server
       fs.mkdirSync(path.join(repo, 'storybook-static'));
       fs.writeFileSync(path.join(repo, 'storybook-static/index.html'), 'Owned static artifact');
       fs.mkdirSync(path.join(repo, 'tests'));
-      fs.writeFileSync(path.join(repo, 'tests/component-review.test.mjs'), `
-        import { test } from 'node:test';
+      fs.writeFileSync(path.join(repo, 'tests/component-review.test.mjs'), `import { test } from 'node:test';
         import assert from 'node:assert/strict';
         test('Carousel: browser artifact', async () => {
           assert.match(process.env.STORYBOOK_URL, /^http:\\/\\/127\\.0\\.0\\.1:/);
           assert.equal(await (await fetch(process.env.STORYBOOK_URL)).text(), 'Owned static artifact');
           assert.equal((await fetch(process.env.STORYBOOK_URL + '/%2e%2e/AGENTS.md')).status, 404);
         });
-        test('Unrelated: must not run', () => assert.fail('Unrelated test executed'));
-      `);
+        test('Unrelated: must not run', () => assert.fail('Unrelated test executed'));\n`);
       const list = path.join(evidence, 'files.list');
       fs.writeFileSync(list, 'src/stories/components/Carousel.stories.tsx\0');
       const result = spawnSync(process.execPath, ['scripts/issue-runner/validate.mjs', list, evidence], {
@@ -299,6 +308,23 @@ test('independent validator runs affected browser tests on its own static server
       assert.equal(results.length, 4);
       assert.ok(results.every(result => result.code === 0));
       assert.equal(git('branch', '--show-current'), 'main');
+    } finally { fs.rmSync(evidence, { recursive: true, force: true }); }
+  });
+});
+
+test('independent validator checks whitespace in new untracked files', () => {
+  withFixture('', ({ repo }) => {
+    const evidence = fs.mkdtempSync(path.join(os.tmpdir(), 'sakai-validation-'));
+    try {
+      fs.writeFileSync(path.join(repo, 'new-file.txt'), 'content\n\n');
+      const list = path.join(evidence, 'files.list');
+      fs.writeFileSync(list, 'new-file.txt\0');
+      const result = spawnSync(process.execPath, ['scripts/issue-runner/validate.mjs', list, evidence], {
+        cwd: repo, encoding: 'utf8', timeout: 15000,
+        env: { ...gitEnv, PATH: `${path.join(path.dirname(repo), 'bin')}:${process.env.PATH}`, RUNNER_TEST_STATE: path.join(path.dirname(repo), 'state.json') }
+      });
+      assert.notEqual(result.status, 0);
+      assert.match(fs.readFileSync(path.join(evidence, 'validation.log'), 'utf8'), /new blank line at EOF/);
     } finally { fs.rmSync(evidence, { recursive: true, force: true }); }
   });
 });

@@ -8,24 +8,25 @@ const files = fs.readFileSync(fileList, 'utf8').split('\0').filter(Boolean);
 const log = fs.openSync(path.join(evidence, 'validation.log'), 'w');
 const results = [];
 let server;
+let temporaryIndex;
 async function run(command, args, env = process.env) {
   console.log(`Validate: ${command} ${args.join(' ')}`);
   fs.writeSync(log, `\n$ ${command} ${args.join(' ')}\n`);
-  const child = spawn(command, args, { env, stdio: ['ignore', 'pipe', 'pipe'] });
-  child.stdout.on('data', chunk => {
-    fs.writeSync(log, chunk);
-    process.stdout.write(chunk);
-  });
-  child.stderr.on('data', chunk => {
-    fs.writeSync(log, chunk);
-    process.stderr.write(chunk);
-  });
+  const child = spawn(command, args, { env, stdio: ['ignore', log, log] });
   const code = await new Promise((resolve, reject) => {
     child.once('error', reject);
     child.once('exit', resolve);
   });
   results.push({ command, args, code });
   if (code !== 0) throw new Error(`Validation failed: ${command} ${args.join(' ')}`);
+}
+async function prepareTemporaryIndex(args, env) {
+  const child = spawn('git', args, { env, stdio: ['ignore', log, log] });
+  const code = await new Promise((resolve, reject) => {
+    child.once('error', reject);
+    child.once('exit', resolve);
+  });
+  if (code !== 0) throw new Error(`Unable to prepare temporary validation index: git ${args.join(' ')}`);
 }
 try {
   await run('npm', ['run', 'build']);
@@ -59,13 +60,18 @@ try {
   } else if (files.includes('tests/component-review.test.mjs')) {
     throw new Error('Browser test changed without an identifiable component; a scoped validation plan is required');
   }
-  await run('git', ['diff', '--check']);
+  temporaryIndex = path.join(evidence, `validation-index-${process.pid}`);
+  const indexEnv = { ...process.env, GIT_INDEX_FILE: temporaryIndex };
+  await prepareTemporaryIndex(['read-tree', 'HEAD'], indexEnv);
+  await prepareTemporaryIndex(['add', '-A'], indexEnv);
+  await run('git', ['diff', '--cached', '--check'], indexEnv);
 } catch (error) {
   console.error(error.message);
   process.exitCode = 1;
 } finally {
   server?.closeAllConnections();
   server?.close();
+  if (temporaryIndex) fs.rmSync(temporaryIndex, { force: true });
   fs.closeSync(log);
   fs.writeFileSync(path.join(evidence, 'validation.json'), JSON.stringify(results, null, 2));
 }
