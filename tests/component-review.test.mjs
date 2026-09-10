@@ -405,6 +405,25 @@ test('icon Controls select and clear PrimeIcons like Button', async () => {
   }
 });
 
+test('Tag: curated severities, rounded style and controls', async () => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(`${baseURL}/?path=/docs/components-tag-summary--summary`);
+  const preview = page.frameLocator('#storybook-preview-iframe');
+  await preview.locator('.sbdocs-content h1').waitFor();
+  assert.deepEqual(await preview.locator('.sbdocs-content h3').allTextContents(), ['Severities', 'Rounded', 'Icons']);
+  assert.equal(await preview.locator('.docblock-argstable').count(), 0, 'Summary has no Controls');
+  assert.ok(await preview.locator('.docblock-source').count() >= 4, 'Summary examples have copyable source');
+  assert.equal(await preview.locator('.component-example .p-tag').count(), 16);
+  await page.goto(`${baseURL}/?path=/story/components-tag--default`);
+  await preview.locator('#storybook-root .p-tag').waitFor();
+  await page.getByRole('tab', { name: 'Controls' }).click();
+  await page.locator('#control-severity').selectOption({ label: 'secondary' });
+  await page.locator('#control-rounded').focus();
+  await page.locator('#control-rounded').press('Space');
+  await preview.locator('#storybook-root .p-tag.p-tag-secondary.p-tag-rounded').waitFor();
+  assert.equal(await preview.locator('#storybook-root .p-tag').count(), 1);
+});
+
 test('boolean inputs respond to clicks and keyboard, and respect disabled', async () => {
   for (const name of ['Checkbox', 'InputSwitch', 'ToggleButton', 'RadioButton']) {
     await open(name, 'checked:!false');

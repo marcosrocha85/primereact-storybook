@@ -409,6 +409,38 @@ All 67 components pass the same browser checks at 1280×900 and 390×900: exactl
 | Tree | [#67](https://github.com/marcosrocha85/primereact-storybook/issues/67) | Expand; checkbox selection |
 | TreeTable | [#68](https://github.com/marcosrocha85/primereact-storybook/issues/68) | Expand; checkbox selection |
 
+### Tag API audit — issue #61
+
+Inspected the Button documentation/story reference, the Tag generator entry and generated files, the Sakai UI Kit
+Tag examples at `vendor/sakai-react/app/(main)/uikit/misc/page.tsx`, and the installed PrimeReact `tag.d.ts` and
+implementation. The Summary now curates severity, rounded, and icon compositions. Default remains one native Tag
+instance with Controls for value, severity, rounded, and icon.
+
+| Native surface | Treatment |
+| --- | --- |
+| `value` (`ReactNode`) | Exposed as a text Control for the common label case and forwarded unchanged. Rich React-node values remain available through native args but are outside the curated Control. |
+| `severity` (`success`, `info`, `warning`, `danger`, `secondary`, `contrast`, `null`, `undefined`) | Exposed as a select Control with all documented visual values plus the no-severity option; forwarded unchanged. All severity styles are curated in Summary. |
+| `rounded` | Exposed as a boolean Control and forwarded unchanged. Rounded severity combinations are curated in Summary. |
+| `icon` (`IconType<TagProps>`) | Exposed as the Button-standard select options, including the no-icon option; forwarded unchanged. Native React-node/function icon forms remain available through native args and are outside the curated Control. |
+| `children` | Forwarded unchanged. The native child slot remains available for custom content; the curated examples use `value`. |
+| `className`, `style`, `id`, `aria-*`, `data-*`, inherited `HTMLAttributes<HTMLSpanElement>`, and DOM events | Forwarded unchanged through `{...args}`. These include focus, keyboard, mouse, pointer, touch, clipboard, animation, transition, and capture handlers; no wrapper event is synthesized. |
+| `pt`, `ptOptions`, `unstyled` | Forwarded unchanged. Native root, icon, value, and lifecycle pass-through sections retain their object/function forms; no wrapper defaults replace user values. |
+| Templates, nested models, selection/value modes, and imperative API | Tag has no item model, selection mode, or render-template collection. The native `getElement()` ref method remains available outside Controls. `icon` supports native node/function forms but is not exhaustively rendered here. |
+
+This inventory is source inspection, not exhaustive behavioral testing. The focused Tag browser check verifies the
+Summary/Default structure, no Summary Controls, copyable sources, all curated severity/rounded/icon compositions,
+single-instance Default rendering, Controls synchronization, and desktop rendering; the shared component check also
+verifies mobile rendering and runtime safety. Rich `value`/`children` nodes, icon functions, PT callbacks and merge
+options, unstyled mode, refs, every inherited DOM event, and all prop combinations remain native and are not
+exhaustively tested. Tag has no state-changing callback to intercept, so callback preservation is not applicable.
+
+Issue #61 validation: `node scripts/generate-component-stories.mjs` passed with deterministic output;
+`node --test tests/component-generator.test.mjs` passed (1 test); `npm run build` passed;
+`npm run build-storybook` passed with the repository's existing large-chunk and plugin-timing warnings;
+`STORYBOOK_URL=http://127.0.0.1:6018 LD_LIBRARY_PATH=/tmp/sakai-browser-libs/usr/lib/x86_64-linux-gnu node --test --test-name-pattern='^(Tag: curated|Tag: only|icon Controls)' tests/component-review.test.mjs`
+passed (3 tests), including Summary/Default at desktop/mobile widths, curated Tag Controls, and icon selection/reset;
+`git diff --check` passed. The temporary static server on port 6018 was stopped after validation.
+
 ### TabMenu API audit — issue #59
 
 Inspected the Button documentation/story reference, the TabMenu generator entry and generated files,
