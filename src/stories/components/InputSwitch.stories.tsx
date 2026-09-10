@@ -9,11 +9,11 @@ const meta = {
   component: InputSwitch,
   parameters: {
     layout: 'centered',
-    controls: { include: ["checked","disabled"] },
+    controls: { include: ["checked","disabled","invalid"] },
     docs: { description: { component: 'Boolean toggle switch.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { checked: { control: 'boolean' }, disabled: { control: 'boolean' } }
+  argTypes: { checked: { control: 'boolean' }, disabled: { control: 'boolean' }, invalid: { control: 'boolean' } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;

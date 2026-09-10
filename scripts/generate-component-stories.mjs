@@ -352,9 +352,17 @@ const components = [
     prime: 'inputswitch',
     importName: 'InputSwitch',
     description: 'Boolean toggle switch.',
-    args: `{ checked: true }`,
-    argTypes: `{ checked: { control: 'boolean' }, disabled: { control: 'boolean' } }`,
-    playground: `<InputSwitch {...args} aria-label="InputSwitch" onChange={(event) => { updateArgs({ checked: event.value }); args.onChange?.(event); } } />`,
+    args: `{ checked: true, disabled: false, invalid: false }`,
+    argTypes: `{ checked: { control: 'boolean' }, disabled: { control: 'boolean' }, invalid: { control: 'boolean' } }`,
+    hooks: `const { onChange, ...inputSwitchArgs } = args;
+  const ariaLabel = inputSwitchArgs['aria-label'] ?? 'InputSwitch';
+`,
+    playground: `<InputSwitch {...inputSwitchArgs} aria-label={ariaLabel} onChange={(event) => { updateArgs({ checked: event.value }); onChange?.(event); }} />`,
+    docsVariations: [
+      { title: 'Unchecked', code: `<Example initialArgs={{ checked: false }} />` },
+      { title: 'Invalid', code: `<Example initialArgs={{ invalid: true }} />` },
+      { title: 'Disabled', code: `<Example initialArgs={{ disabled: true }} />` }
+    ],
   },
   {
     name: 'Knob',
