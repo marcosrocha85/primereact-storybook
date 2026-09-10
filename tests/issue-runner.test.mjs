@@ -189,6 +189,8 @@ test('interactive terminal redraws one compact status line without raw model out
     assert.equal(result.status, 0, result.stderr + result.stdout);
     assert.match(result.stdout, /========== 1\/1 \[#13\] Review ==========/);
     assert.match(result.stdout, /\x1b\[2K\[------------------------\]/);
+    assert.doesNotMatch(result.stdout, /\\n\[/, 'Status uses a real line break');
+    assert.doesNotMatch(result.stdout + result.stderr, /Switched to|Already up to date|From |To \/tmp\//, 'Routine Git output remains in operations.log');
     assert.doesNotMatch(result.stdout, /live-model-output|live-validation/);
   });
 });

@@ -98,7 +98,7 @@ format_duration() {
   fi
 }
 progress_status() {
-  local phase=$1 mode=${2:-line} width=24 filled empty percent elapsed eta='calculating' complete_bar pending_bar prefix='' suffix='\n'
+  local phase=$1 mode=${2:-line} width=24 filled empty percent elapsed eta='calculating' complete_bar pending_bar line
   ((batch_total > 0)) || return
   filled=$((batch_completed * width / batch_total))
   empty=$((width - filled))
@@ -114,11 +114,29 @@ progress_status() {
   printf -v pending_bar '%*s' "$empty" ''
   complete_bar=${complete_bar// /#}
   pending_bar=${pending_bar// /-}
-  if [[ "$mode" == inline ]]; then prefix=$'\r\033[2K'; suffix=''; else prefix='\n'; fi
-  printf '%s[%s%s] %3d%% | %d/%d [#%s] %s | elapsed %s | ETA %s%b' \
-    "$prefix" \
+  printf -v line '[%s%s] %3d%% | %d/%d [#%s] %s | elapsed %s | ETA %s' \
     "$complete_bar" "$pending_bar" "$percent" "$current_index" "$batch_total" \
-    "${current_issue:--}" "$phase" "$(format_duration "$elapsed")" "$eta" "$suffix"
+    "${current_issue:--}" "$phase" "$(format_duration "$elapsed")" "$eta"
+  if [[ "$mode" == inline ]]; then
+    printf '\r\033[2K%s' "$line"
+  else
+    printf '%s\n' "$line"
+  fi
+}
+run_logged() {
+  local log_file=$1 status
+  shift
+  if "$@" >> "$log_file" 2>&1; then
+    return 0
+  else
+    status=$?
+    if [[ -t 1 ]]; then printf '\r\033[2K' >&2; fi
+    printf 'Command failed:' >&2
+    printf ' %q' "$@" >&2
+    printf '\n' >&2
+    tail -20 "$log_file" >&2
+    return "$status"
+  fi
 }
 run_with_status() {
   local issue_directory=$1 fallback_phase=$2 ticker_pid status
@@ -230,6 +248,7 @@ for issue in "${issues[@]}"; do
   fi
   issue_dir="$run_dir/issue-$issue"
   mkdir -p "$issue_dir"
+  operations_log="$issue_dir/operations.log"
   gh issue view "$issue" --repo "$repo" --json number,state,title,body,comments,assignees > "$issue_dir/issue.json"
   issue_title="$(field title < "$issue_dir/issue.json")"
   printf '\n========== %d/%d [#%s] %s ==========\n' "$((batch_completed + 1))" "$batch_total" "$issue" "$issue_title"
@@ -250,12 +269,12 @@ for issue in "${issues[@]}"; do
   if [[ -z "$resume_dir" ]]; then
     if git show-ref --verify --quiet "refs/heads/$branch"; then die "Branch already exists: $branch"; fi
     [[ -z "$(git ls-remote --heads origin "refs/heads/$branch")" ]] || die "Remote branch already exists: $branch"
-    git pull --ff-only origin main
-    git fetch --prune origin
+    run_logged "$operations_log" git pull --ff-only origin main
+    run_logged "$operations_log" git fetch --prune origin
     base_sha="$(git rev-parse HEAD)"
     [[ "$base_sha" == "$(git rev-parse origin/main)" ]] || die 'Local main contains unpublished commits.'
     require_clean
-    git switch -c "$branch"
+    run_logged "$operations_log" git switch -c "$branch"
     if "$use_qwen"; then
       node "$support_dir/recover.mjs" init "$issue_dir" "$root" qwen "${QWEN_MODEL:-qwen/qwen3-30b-a3b}" "${QWEN_BASE_URL:-http://127.0.0.1:1234/v1}"
     else
@@ -285,10 +304,10 @@ for issue in "${issues[@]}"; do
   node "$support_dir/recover.mjs" delivery "$issue_dir" "$root"
   git add -- "${changed_files[@]}"
   git diff --cached --check
-  git commit -m "$title"
+  run_logged "$operations_log" git commit -m "$title"
   head_sha="$(git rev-parse HEAD)"
   require_clean
-  git push -u origin "$branch"
+  run_logged "$operations_log" git push -u origin "$branch"
   gh pr create --repo "$repo" --base main --head "$branch" --title "$title" --body-file "$issue_dir/pr-body.md" > "$issue_dir/pr-url.txt"
   pr_url="$(cat "$issue_dir/pr-url.txt")"
   printf 'PR: %s\n' "$pr_url"
@@ -303,7 +322,7 @@ for issue in "${issues[@]}"; do
     if [[ "$state" == ready ]] && ! "$merge_requested"; then
       require_clean
       [[ "$(git rev-parse HEAD)" == "$head_sha" && "$(git branch --show-current)" == "$branch" ]] || die 'Local branch changed after validation.'
-      gh pr merge "$pr_url" --repo "$repo" --squash --match-head-commit "$head_sha"
+      run_logged "$operations_log" gh pr merge "$pr_url" --repo "$repo" --squash --match-head-commit "$head_sha"
       merge_requested=true
     else
       remaining=$((deadline - SECONDS))
@@ -312,19 +331,19 @@ for issue in "${issues[@]}"; do
   done
   require_clean
   [[ "$(git rev-parse "$branch")" == "$head_sha" ]] || die 'Branch gained commits after the PR was merged.'
-  git switch main
-  git pull --ff-only origin main
+  run_logged "$operations_log" git switch main
+  run_logged "$operations_log" git pull --ff-only origin main
   merge_sha="$(field mergeCommit.oid < "$issue_dir/pr.json")"
   git merge-base --is-ancestor "$merge_sha" HEAD || die 'Merged commit is missing from local main.'
   [[ "$(gh issue view "$issue" --repo "$repo" --json state --jq .state)" == CLOSED ]] || die "Issue #$issue did not close after merge."
   remote_head="$(git ls-remote --heads origin "refs/heads/$branch")"
   if [[ -n "$remote_head" ]]; then
     [[ "${remote_head%%$'\t'*}" == "$head_sha" ]] || die 'Remote branch gained commits; preserving it.'
-    git push --force-with-lease="refs/heads/$branch:$head_sha" origin --delete "$branch"
+    run_logged "$operations_log" git push --force-with-lease="refs/heads/$branch:$head_sha" origin --delete "$branch"
   fi
   # Squash does not preserve ancestry; the merged PR's exact head was verified above.
-  git branch -D "$branch"
-  git fetch --prune origin
+  run_logged "$operations_log" git branch -D "$branch"
+  run_logged "$operations_log" git fetch --prune origin
   require_clean
   issue_duration=$((SECONDS - current_started))
   duration_sum=$((duration_sum + issue_duration))
