@@ -9,11 +9,24 @@ const meta = {
   component: Tooltip,
   parameters: {
     layout: 'centered',
-    controls: { include: ["content","position"] },
-    docs: { description: { component: 'Contextual hint.' }, source: { code: exampleSource } }
+    controls: { include: ["content","position","event","disabled","showOnDisabled","mouseTrack","mouseTrackLeft","mouseTrackTop","showDelay","hideDelay","closeOnEscape","autoHide"] },
+    docs: { description: { component: 'Contextual hint attached to a target element, with hover, focus, placement, and timing options.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { content: { control: 'text' }, position: { control: 'select', options: ['top', 'bottom', 'left', 'right'] } }
+  argTypes: {
+    content: { control: 'text' },
+    position: { control: 'select', options: ['top', 'bottom', 'left', 'right', 'mouse'] },
+    event: { control: 'inline-radio', options: ['hover', 'focus', 'both'] },
+    disabled: { control: 'boolean' },
+    showOnDisabled: { control: 'boolean' },
+    mouseTrack: { control: 'boolean' },
+    mouseTrackLeft: { control: { type: 'number', min: 0, step: 1 } },
+    mouseTrackTop: { control: { type: 'number', min: 0, step: 1 } },
+    showDelay: { control: { type: 'number', min: 0, step: 100 } },
+    hideDelay: { control: { type: 'number', min: 0, step: 100 } },
+    closeOnEscape: { control: 'boolean' },
+    autoHide: { control: 'boolean' }
+  }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;

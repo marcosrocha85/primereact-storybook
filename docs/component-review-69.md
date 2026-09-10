@@ -1458,3 +1458,29 @@ copyable sources, and desktop/mobile rendering. Supplied templates, rich childre
 forms, unstyled mode, inherited DOM events, the imperative ref method, and every slot combination
 remain native and are not exhaustively tested; supplied root callbacks are not intercepted by
 the playground.
+
+### Tooltip API audit — issue #66
+
+Inspected the Button documentation/story reference, the Tooltip generator entry and generated
+files, the Sakai UI Kit Tooltip usage at `vendor/sakai-react/app/(main)/uikit/overlay/page.tsx`,
+and the installed PrimeReact `tooltip.d.ts`, `tooltipoptions.d.ts`, and implementation. The
+curated Summary covers positions, hover/focus event modes, mouse tracking, and timing/dismissal.
+Default remains one native Tooltip instance attached to one demo button.
+
+| Native surface | Treatment |
+| --- | --- |
+| `content`, `position`, `event`, `disabled`, `showOnDisabled`, `mouseTrack`, `mouseTrackLeft`, `mouseTrackTop`, `showDelay`, `hideDelay`, `closeOnEscape`, `autoHide` | Exposed through focused Default Controls and forwarded unchanged. The Summary curates the common placement, trigger, tracking, timing, and dismissal combinations. |
+| `target` | Forwarded unchanged when supplied. The playground supplies a generated selector only when no target is provided, so the default remains visible without narrowing the native target union of selector, element, array, or ref. |
+| `appendTo`, `at`, `my`, `hideEvent`, `showEvent`, `updateDelay`, `autoZIndex`, `baseZIndex`, `className`, `style`, `unstyled` | Forwarded unchanged through `{...args}` and intentionally outside the focused Controls. Native positioning, event-name, layering, styling, and unstyled options remain available. |
+| `pt`, `ptOptions` | Forwarded unchanged with an accessibility default merged into `pt.root`. Object and callback root pass-through values are preserved, and unrelated user PT entries remain intact; the default only supplies `aria-hidden={false}` when the caller does not override it. |
+| `onBeforeShow`, `onBeforeHide`, `onShow`, `onHide` | Forwarded unchanged through `{...args}`. The playground does not intercept or synthesize lifecycle callbacks. |
+| `id`, `children`, and tooltip data attributes | Forwarded unchanged. Tooltip's native `id`/children and `data-pr-*` target integration remain outside the curated examples; the data attributes are consumed on target elements by PrimeReact's global tooltip integration. |
+| Pass-through sections, nested models, selection/value modes, templates, and imperative API | Tooltip exposes `root`, `arrow`, `text`, and lifecycle PT sections but no item model, selection/value mode, or template API. `updateTargetEvents`, `loadTargetEvents`, `unloadTargetEvents`, `getElement`, `getTarget`, `show`, and `hide` remain native ref methods outside Controls. |
+
+This inventory is source inspection, not exhaustive behavioral testing. The focused Tooltip browser
+check verifies the four Summary variations, no Summary Controls, copyable sources, single-instance
+Default rendering, position/content Controls, focus-triggered display, and desktop/mobile widths.
+The existing combined browser check verifies focus display and Tab dismissal. Callback invocation,
+custom target elements/refs, callback PT forms, data attributes, mouse tracking geometry, lifecycle
+timing, ref methods, and every native option combination remain forwarded but are not exhaustively
+tested.

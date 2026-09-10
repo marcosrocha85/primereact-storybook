@@ -782,6 +782,32 @@ test('Image preview, Galleria, Carousel and Tooltip work', async () => {
   await page.getByRole('tooltip').waitFor({ state: 'hidden' });
 });
 
+test('Tooltip: positions, show events, Controls and copyable sources', async () => {
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(`${baseURL}/?path=/docs/components-tooltip-summary--summary`);
+    const preview = page.frameLocator('#storybook-preview-iframe');
+    await preview.locator('.sbdocs-content h1').waitFor();
+    assert.deepEqual(await preview.locator('.sbdocs-content h3').allTextContents(), ['Positions', 'Show events', 'Mouse tracking', 'Timing and dismissal']);
+    assert.equal(await preview.locator('.docblock-argstable').count(), 0, 'Summary has no Controls');
+    assert.ok(await preview.locator('.docblock-source').count() >= 5, 'Summary examples have copyable sources');
+  }
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(`${baseURL}/?path=/story/components-tooltip--default`);
+  const preview = page.frameLocator('#storybook-preview-iframe');
+  const root = preview.locator('#storybook-root');
+  await root.getByRole('button', { name: 'Hover or focus me' }).waitFor();
+  await page.getByRole('tab', { name: 'Controls' }).waitFor();
+  await page.getByRole('tab', { name: 'Controls' }).click();
+  await page.locator('#control-content').fill('Updated tooltip');
+  await page.locator('#control-position').selectOption({ label: 'bottom' });
+  await root.getByRole('button', { name: 'Hover or focus me' }).focus();
+  await preview.getByRole('tooltip').filter({ hasText: 'Updated tooltip' }).waitFor();
+  await page.getByRole('tab', { name: 'Code', exact: true }).click();
+  await page.getByRole('button', { name: /Copy/ }).waitFor();
+  assert.match(await page.getByRole('tabpanel').innerText(), /<Tooltip \{\.\.\.args\}/);
+});
+
 test('Controls reflect interaction and reset it', async () => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto(`${baseURL}/?path=/story/components-checkbox--default`);
