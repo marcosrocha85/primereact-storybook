@@ -80,7 +80,7 @@ if(program==='codex'){
   state.events.push('review:'+issue);save();
   if(args.includes('--sandbox')||!args.includes('default_permissions="issue_runner_readonly"')||!args.includes('permissions.issue_runner_readonly={ extends = ":read-only", network = { enabled = true } }')||args.includes('--ignore-user-config'))throw Error('Reviewer isolation/config wrong');
   if(!state.builds)throw Error('Review occurred before controller validation');
-  const result={status:'ready',blocker_kind:'none',blockers:[],recovery_notes:'Reviewed diff and controller logs',pr_title:'Codex reviewed component '+issue,pr_body:'Codex plan and review, Qwen implementation; controller checks passed.',changed_files:['component-'+issue+'.txt'],validations:['npm run build','npm run build-storybook','git diff --check'].map(command=>({command,status:'passed'})),api_review_complete:true};
+  const result={status:'ready',blocker_kind:'none',blockers:[],recovery_notes:'Reviewed diff and controller logs',pr_title:'docs(component-'+issue+'): review component documentation',pr_body:'Codex plan and review, Qwen implementation; controller checks passed.',changed_files:['component-'+issue+'.txt'],validations:['npm run build','npm run build-storybook','git diff --check'].map(command=>({command,status:'passed'})),api_review_complete:true};
   const reviews=state.events.filter(event=>event==='review:'+issue).length;
   if(state.scenario==='review-blocked'||(state.scenario==='review-once'&&reviews===1)){result.status='blocked';result.blocker_kind='technical';result.blockers=['Missing planned behavior'];result.recovery_notes='Correct missing behavior on next Qwen attempt';}
   if(state.scenario==='review-edits')fs.writeFileSync('reviewer-edit.txt','Must be preserved and rejected');
@@ -91,7 +91,8 @@ if(program==='codex'){
  fs.writeFileSync('component-'+issue+'.txt','implemented '+issue+'\\n');
  if(state.scenario==='unexpected-commit'){git('add','.');git('commit','-m','Unexpected commit');}
  const attempt=state.events.filter(event=>event==='codex:'+issue).length;
- const result={blocker_kind:'none',recovery_notes:'Implementation inspected',status:'ready',pr_title:'Review component '+issue,pr_body:'Scoped implementation and validation.',changed_files:['component-'+issue+'.txt'],validations:['npm run build','npm run build-storybook','git diff --check'].map(command=>({command,status:'passed'})),api_review_complete:true,blockers:[]};
+ const result={blocker_kind:'none',recovery_notes:'Implementation inspected',status:'ready',pr_title:'docs(component-'+issue+'): review component documentation',pr_body:'Scoped implementation and validation.',changed_files:['component-'+issue+'.txt'],validations:['npm run build','npm run build-storybook','git diff --check'].map(command=>({command,status:'passed'})),api_review_complete:true,blockers:[]};
+ if(state.scenario==='non-semantic-title')result.pr_title='Review component '+issue;
  if(state.scenario==='blocked') {result.status='blocked';result.blocker_kind='external';result.blockers=['Dependency unresolved'];}
  if(state.scenario==='technical-stuck'||(state.scenario==='technical-once'&&attempt===1)){result.status='blocked';result.blocker_kind='technical';result.blockers=['Regression failed'];result.recovery_notes='Reproduced wrapper failure';}
  if(state.scenario==='progress-but-blocked'){result.status='blocked';result.blocker_kind='technical';result.blockers=['Still failing'];result.recovery_notes='Hypothesis '+attempt;fs.writeFileSync('component-'+issue+'.txt','attempt '+attempt);}
@@ -160,7 +161,8 @@ test('runner implements two issues sequentially and removes only its merged bran
     const result = run('13', '#14');
     assert.equal(result.status, 0, result.stderr + result.stdout);
     assert.match(result.stdout, /========== 1\/2 \[#13\] Review ==========/);
-    assert.match(result.stdout, /\[------------------------\]\s+0% \| 1\/2 \[#13\] preparing \| elapsed \d+s \| ETA calculating/);
+    assert.match(result.stdout, /\[------------------------\]\s+0% \| 1\/2 \[#13\] preparing \| elapsed \d+s/);
+    assert.doesNotMatch(result.stdout, /ETA/);
     assert.doesNotMatch(result.stdout, /live-model-output:codex:13/, 'Raw model output remains in codex.log');
     assert.doesNotMatch(result.stdout, /live-validation:1/, 'Raw validation output remains in validation.log');
     assert.match(result.stdout, /\[########################\] 100% \| 2\/2 \[#14\] completed/);
@@ -212,6 +214,16 @@ test('dirty trees and existing PRs are preserved without starting an implementat
     assert.notEqual(run('13').status, 0);
     assert.deepEqual(state().events, []);
     assert.equal(git('branch', '--show-current'), 'main');
+  });
+});
+
+test('runner rejects a non-Conventional Commit title before delivery', () => {
+  withFixture('non-semantic-title', ({ run, state, git }) => {
+    const result = run('13');
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /Conventional Commits/);
+    assert.ok(!state().events.includes('pr:13'));
+    assert.equal(git('branch', '--show-current'), 'codex/issue-13');
   });
 });
 

@@ -109,25 +109,19 @@ format_duration() {
   fi
 }
 progress_status() {
-  local phase=$1 mode=${2:-line} width=24 filled empty percent elapsed eta='calculating' complete_bar pending_bar line
+  local phase=$1 mode=${2:-line} width=24 filled empty percent elapsed complete_bar pending_bar line
   ((batch_total > 0)) || return
   filled=$((batch_completed * width / batch_total))
   empty=$((width - filled))
   percent=$((batch_completed * 100 / batch_total))
   elapsed=$((SECONDS - batch_started))
-  if ((duration_samples > 0)); then
-    local average=$((duration_sum / duration_samples)) remaining
-    remaining=$((average * (batch_total - batch_completed) - (SECONDS - current_started)))
-    ((remaining > 0)) || remaining=0
-    eta="$(format_duration "$remaining")"
-  fi
   printf -v complete_bar '%*s' "$filled" ''
   printf -v pending_bar '%*s' "$empty" ''
   complete_bar=${complete_bar// /#}
   pending_bar=${pending_bar// /-}
-  printf -v line '[%s%s] %3d%% | %d/%d [#%s] %s | elapsed %s | ETA %s' \
+  printf -v line '[%s%s] %3d%% | %d/%d [#%s] %s | elapsed %s' \
     "$complete_bar" "$pending_bar" "$percent" "$current_index" "$batch_total" \
-    "${current_issue:--}" "$phase" "$(format_duration "$elapsed")" "$eta"
+    "${current_issue:--}" "$phase" "$(format_duration "$elapsed")"
   if [[ "$mode" == inline ]]; then
     printf '\r\033[2K%s' "$line"
   else
@@ -248,16 +242,12 @@ codex_args=(-a never exec --sandbox workspace-write -c sandbox_workspace_write.n
 batch_total=${#issues[@]}
 batch_completed=0
 batch_started=$SECONDS
-duration_sum=0
-duration_samples=0
-current_started=$SECONDS
 current_issue=''
 current_index=0
 
 for issue in "${issues[@]}"; do
   current_issue=$issue
   current_index=$((batch_completed + 1))
-  current_started=$SECONDS
   if [[ -z "$resume_dir" ]]; then
     require_clean
     [[ "$(git branch --show-current)" == main ]] || die 'Expected main before starting the next issue.'
@@ -274,7 +264,6 @@ for issue in "${issues[@]}"; do
   if [[ "$(field state < "$issue_dir/issue.json")" == CLOSED ]]; then
     [[ -z "$resume_dir" ]] || die 'Resumed issue was closed externally; inspect preserved work'
     batch_completed=$((batch_completed + 1))
-    current_started=$SECONDS
     progress_update 'closed; skipped'
     continue
   fi
@@ -359,11 +348,7 @@ for issue in "${issues[@]}"; do
   run_logged "$operations_log" git branch -D "$branch"
   run_logged "$operations_log" git fetch --prune origin
   require_clean
-  issue_duration=$((SECONDS - current_started))
-  duration_sum=$((duration_sum + issue_duration))
-  duration_samples=$((duration_samples + 1))
   batch_completed=$((batch_completed + 1))
-  current_started=$SECONDS
   progress_update 'completed'
 done
 
