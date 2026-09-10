@@ -56,6 +56,23 @@ The inventory below is based on the installed PrimeReact `InputNumberProps` decl
 
 The API inventory is source inspection, not exhaustive behavioral testing. The focused contract test verifies representative formatting, constraint, input-attribute, PT, inherited-prop, and callback forwarding, including the intercepted supplied `onValueChange`. The browser check verifies decimal/currency entry, Summary/Default structure, copyable sources, Controls placement, and desktop/mobile rendering. Every locale, rounding mode, icon function, PT callback, imperative method, inherited DOM event, and native prop combination remains forwarded but is not exhaustively tested.
 
+### InputSwitch API inventory — issue #32
+
+The inventory below is based on the installed PrimeReact `InputSwitchProps` declaration and implementation, plus the Sakai UI Kit input example. It records the native contract reviewed for this issue; it is not exhaustive interaction testing.
+
+| API surface | Treatment |
+| --- | --- |
+| `checked`, `trueValue`, `falseValue` | `checked` is adapted only to synchronize the controlled playground after `onChange`; `trueValue` and `falseValue` are forwarded unchanged, including non-boolean values. The curated Controls expose boolean `checked`; alternate value modes remain available through native args and are not narrowed by the story. |
+| `disabled`, `invalid`, `autoFocus`, `inputId`, `inputRef`, `name`, `tabIndex`, `tooltip`, `tooltipOptions`, `className`, `style`, `unstyled` | Forwarded unchanged. `disabled` and `invalid` are exposed as curated Controls; focus, input identity, tooltip, styling, and unstyled behavior remain native args outside the curated Controls. |
+| `onChange` | Adapted only to update `checked` for the controlled playground, then invokes the supplied callback with the exact original PrimeReact event. |
+| `onFocus`, `onBlur` | Forwarded unchanged; the wrapper does not replace focus lifecycle callbacks. |
+| `pt`, `ptOptions`, `children` | Forwarded unchanged. Root, input, slider, tooltip, and hook pass-through sections retain their native object/function forms; no wrapper PT defaults replace user entries. The native children slot remains available. |
+| Inherited `HTMLAttributes<HTMLDivElement>` | Forwarded through `{...args}`, including `id`, `role`, `aria-*`, `data-*`, DOM event handlers, `className`, and `style`. The story supplies `aria-label="InputSwitch"` only when the caller has not supplied one, so a supplied accessible name is preserved. |
+| Nested models, templates, selection modes, alternate component value objects | Not applicable. InputSwitch has no option collection, item model, or render-template API; its native alternate value mode is the `trueValue`/`falseValue` pair above. |
+| Imperative ref API | Native `focus`, `getElement`, and `getInput` methods remain available through PrimeReact refs and are outside the curated Controls. |
+
+The inventory is source inspection, not exhaustive behavioral testing. The focused contract test verifies native true/false values, inherited attributes, PT, children, and the supplied change/focus/blur callbacks across the intercepted change path. The component browser check verifies click and Space toggling, disabled behavior, Summary/Default structure, copyable source, and desktop/mobile rendering. Every pass-through callback form, tooltip/transition behavior, ref method, and inherited DOM event remains forwarded but is not exhaustively tested.
+
 ## Component audit
 
 All 67 components pass the same browser checks at 1280×900 and 390×900: exactly one Default, an indexed Summary, the common section order, no Summary Controls, copyable source, no runtime exceptions, loaded example images, and preserved icon fonts. The table lists additional checks; presentation-only components have no state-changing action to exercise. This covers the documented examples, not every upstream prop combination. “Wired” explicitly denotes source inspection in addition to the automated interactions listed, not an independently exercised gesture.

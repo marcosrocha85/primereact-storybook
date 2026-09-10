@@ -16,11 +16,29 @@ import exampleSource from "./InputSwitch.examples.tsx?raw";
 
 ## Variations
 
+### Unchecked
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ checked: false }} />
+</div>
+
+<Source code={"<Example initialArgs={{ checked: false }} />"} language="tsx" />
+
+### Invalid
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ invalid: true }} />
+</div>
+
+<Source code={"<Example initialArgs={{ invalid: true }} />"} language="tsx" />
+
 ### Disabled
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ disabled: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ disabled: true }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ disabled: true }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ disabled: true }} />"} language="tsx" />
 
 ## Playground
 
