@@ -5,13 +5,13 @@ import { Column } from 'primereact/column';
 const nodes = [{ key: '0', data: { name: 'Applications', size: '100kb', type: 'Folder' }, children: [{ key: '0-0', data: { name: 'React', size: '25kb', type: 'Folder' } }] }];
 
 export type ExampleArgs = ComponentProps<typeof TreeTable>;
-export const defaultArgs: ExampleArgs = { value: nodes, selectionMode: 'checkbox', selectionKeys: {}, expandedKeys: {} };
+export const defaultArgs: ExampleArgs = { value: nodes, selectionMode: 'checkbox', selectionKeys: {}, expandedKeys: {}, showGridlines: false, stripedRows: false, rowHover: false, paginator: false, filterMode: 'lenient' };
 
 export function Playground({ args, updateArgs }: {
   args: ExampleArgs;
   updateArgs: (changes: Partial<ExampleArgs>) => void;
 }) {
-  return (<TreeTable {...args} onToggle={(event) => { updateArgs({ expandedKeys: event.value }); args.onToggle?.(event); }} onSelectionChange={(event) => { updateArgs({ selectionKeys: typeof event.value === 'string' ? { [event.value]: true } : event.value }); args.onSelectionChange?.(event); }}><Column field="name" header="Name" expander /><Column field="size" header="Size" /><Column field="type" header="Type" /></TreeTable>);
+  return (<TreeTable {...args} onToggle={(event) => { updateArgs({ expandedKeys: event.value }); args.onToggle?.(event); }} onSelectionChange={(event) => { updateArgs({ selectionKeys: event.value }); args.onSelectionChange?.(event); }}><Column field="name" header="Name" expander filter={Boolean(args.filters)} /><Column field="size" header="Size" /><Column field="type" header="Type" /></TreeTable>);
 }
 
 export function Example({ initialArgs = {} }: { initialArgs?: Partial<ExampleArgs> }) {
