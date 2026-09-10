@@ -779,6 +779,13 @@ test('scroll containers, resizable panels and removable chips work', async () =>
   const content = page.locator('.p-scrollpanel-content');
   await content.evaluate((element) => { element.scrollTop = 200; });
   assert.ok(await content.evaluate((element) => element.scrollTop) > 0);
+  await page.goto(`${baseURL}/?path=/docs/components-scrollpanel-summary--summary`);
+  const summary = page.frameLocator('#storybook-preview-iframe');
+  await summary.locator('.sbdocs-content h1').waitFor();
+  assert.equal(await summary.locator('.docblock-argstable').count(), 0);
+  assert.equal(await summary.locator('.docblock-source').count(), 2);
+  await summary.locator('.p-scrollpanel-content').nth(1).evaluate((element) => { element.scrollLeft = 200; });
+  assert.ok(await summary.locator('.p-scrollpanel-content').nth(1).evaluate((element) => element.scrollWidth > element.clientWidth));
   await open('Splitter');
   const panel = page.locator('.p-splitter-panel').first();
   const before = await panel.evaluate((element) => element.getBoundingClientRect().width);
