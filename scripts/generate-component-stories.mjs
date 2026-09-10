@@ -1781,10 +1781,28 @@ import { Avatar } from "primereact/avatar";`,
     name: 'Tag',
     prime: 'tag',
     importName: 'Tag',
-    description: 'Status label.',
+    description: 'Status label for categorizing content with severity, icon, and rounded styles.',
     args: `{ value: 'Primary', severity: undefined, rounded: false, icon: undefined }`,
-    argTypes: `{ value: { control: 'text' }, severity: { control: 'select', options: [undefined, 'success', 'info', 'warning', 'danger'] }, rounded: { control: 'boolean' }, icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] } }`,
+    argTypes: `{ value: { control: 'text' }, severity: { control: 'select', options: [undefined, 'secondary', 'success', 'info', 'warning', 'danger', 'contrast'] }, rounded: { control: 'boolean' }, icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] } }`,
+    docsImports: `import { Tag } from "primereact/tag";`,
     playground: `<Tag {...args} />`,
+    docsVariations: [
+      { title: 'Severities', code: `<Tag value="Primary" />
+  <Tag value="Secondary" severity="secondary" />
+  <Tag value="Success" severity="success" />
+  <Tag value="Info" severity="info" />
+  <Tag value="Warning" severity="warning" />
+  <Tag value="Danger" severity="danger" />
+  <Tag value="Contrast" severity="contrast" />` },
+      { title: 'Rounded', code: `<Tag value="Primary" rounded />
+  <Tag value="Success" severity="success" rounded />
+  <Tag value="Info" severity="info" rounded />
+  <Tag value="Warning" severity="warning" rounded />
+  <Tag value="Danger" severity="danger" rounded />` },
+      { title: 'Icons', code: `<Tag value="Checked" icon="pi pi-check" severity="success" />
+  <Tag value="Search" icon="pi pi-search" severity="info" />
+  <Tag value="Bookmarked" icon="pi pi-bookmark" />` }
+    ],
   },
   {
     name: 'Chip',

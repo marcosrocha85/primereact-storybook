@@ -1,12 +1,13 @@
 import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Example } from "./Tag.examples";
 import exampleSource from "./Tag.examples.tsx?raw";
+import { Tag } from "primereact/tag";
 
 <Meta title="Components/Tag/Summary" />
 
 <Title>Tag</Title>
 
-<Subtitle>Status label.</Subtitle>
+<Subtitle>Status label for categorizing content with severity, icon, and rounded styles.</Subtitle>
 
 ## Usage
 
@@ -16,35 +17,41 @@ import exampleSource from "./Tag.examples.tsx?raw";
 
 ## Variations
 
-### success
+### Severities
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'success' }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Tag value="Primary" />
+  <Tag value="Secondary" severity="secondary" />
+  <Tag value="Success" severity="success" />
+  <Tag value="Info" severity="info" />
+  <Tag value="Warning" severity="warning" />
+  <Tag value="Danger" severity="danger" />
+  <Tag value="Contrast" severity="contrast" />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'success' }} />"} language="tsx" />
-
-### info
-
-<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'info' }} /></div>
-
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'info' }} />"} language="tsx" />
-
-### warning
-
-<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'warning' }} /></div>
-
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'warning' }} />"} language="tsx" />
-
-### danger
-
-<div className="component-example sb-unstyled"><Example initialArgs={{ severity: 'danger' }} /></div>
-
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ severity: 'danger' }} />"} language="tsx" />
+<Source code={"<Tag value=\"Primary\" />\n  <Tag value=\"Secondary\" severity=\"secondary\" />\n  <Tag value=\"Success\" severity=\"success\" />\n  <Tag value=\"Info\" severity=\"info\" />\n  <Tag value=\"Warning\" severity=\"warning\" />\n  <Tag value=\"Danger\" severity=\"danger\" />\n  <Tag value=\"Contrast\" severity=\"contrast\" />"} language="tsx" />
 
 ### Rounded
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ rounded: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Tag value="Primary" rounded />
+  <Tag value="Success" severity="success" rounded />
+  <Tag value="Info" severity="info" rounded />
+  <Tag value="Warning" severity="warning" rounded />
+  <Tag value="Danger" severity="danger" rounded />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ rounded: true }} />"} language="tsx" />
+<Source code={"<Tag value=\"Primary\" rounded />\n  <Tag value=\"Success\" severity=\"success\" rounded />\n  <Tag value=\"Info\" severity=\"info\" rounded />\n  <Tag value=\"Warning\" severity=\"warning\" rounded />\n  <Tag value=\"Danger\" severity=\"danger\" rounded />"} language="tsx" />
+
+### Icons
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Tag value="Checked" icon="pi pi-check" severity="success" />
+  <Tag value="Search" icon="pi pi-search" severity="info" />
+  <Tag value="Bookmarked" icon="pi pi-bookmark" />
+</div>
+
+<Source code={"<Tag value=\"Checked\" icon=\"pi pi-check\" severity=\"success\" />\n  <Tag value=\"Search\" icon=\"pi pi-search\" severity=\"info\" />\n  <Tag value=\"Bookmarked\" icon=\"pi pi-bookmark\" />"} language="tsx" />
 
 ## Playground
 

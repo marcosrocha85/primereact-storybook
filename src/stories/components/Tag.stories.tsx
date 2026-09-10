@@ -10,10 +10,10 @@ const meta = {
   parameters: {
     layout: 'centered',
     controls: { include: ["value","severity","rounded","icon"] },
-    docs: { description: { component: 'Status label.' }, source: { code: exampleSource } }
+    docs: { description: { component: 'Status label for categorizing content with severity, icon, and rounded styles.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { value: { control: 'text' }, severity: { control: 'select', options: [undefined, 'success', 'info', 'warning', 'danger'] }, rounded: { control: 'boolean' }, icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] } }
+  argTypes: { value: { control: 'text' }, severity: { control: 'select', options: [undefined, 'secondary', 'success', 'info', 'warning', 'danger', 'contrast'] }, rounded: { control: 'boolean' }, icon: { control: 'select', options: [undefined, 'pi pi-check', 'pi pi-search', 'pi pi-bookmark', 'pi pi-star-fill'] } }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;
