@@ -6,14 +6,21 @@ import exampleSource from './Messages.examples.tsx?raw';
 
 const meta = {
   title: 'Components/Messages',
-  component: Messages,
   parameters: {
     layout: 'centered',
-    controls: { include: ["className","style"] },
-    docs: { description: { component: 'Programmatic message list.' }, source: { code: exampleSource } }
+    controls: { include: ["messageSeverity","messageSummary","messageDetail","messageClosable","messageSticky","className","style"] },
+    docs: { description: { component: 'Programmatic list of inline messages with severity, dismissal, and lifetime options.' }, source: { code: exampleSource } }
   },
   args: defaultArgs,
-  argTypes: { className: { control: 'text' }, style: { control: 'object' } }
+  argTypes: {
+    messageSeverity: { control: 'select', options: [undefined, 'success', 'info', 'warn', 'error', 'secondary', 'contrast'], description: 'Severity used by the demo Show button.' },
+    messageSummary: { control: 'text', description: 'Summary used by the demo Show button.' },
+    messageDetail: { control: 'text', description: 'Detail used by the demo Show button.' },
+    messageClosable: { control: 'boolean', description: 'Whether the demo message can be dismissed.' },
+    messageSticky: { control: 'boolean', description: 'Whether the demo message remains until cleared.' },
+    className: { control: 'text' },
+    style: { control: 'object' }
+  }
 } satisfies Meta<ExampleArgs>;
 
 export default meta;
