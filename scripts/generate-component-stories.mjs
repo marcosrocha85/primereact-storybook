@@ -543,9 +543,25 @@ const components = [
     prime: 'password',
     importName: 'Password',
     description: 'Password input with feedback.',
-    args: `{ value: '', placeholder: 'Password', feedback: true, toggleMask: true }`,
-    argTypes: `{ placeholder: { control: 'text' }, feedback: { control: 'boolean' }, toggleMask: { control: 'boolean' }, disabled: { control: 'boolean' } }`,
+    args: `{ value: '', placeholder: 'Password', feedback: true, toggleMask: true, disabled: false, invalid: false, readOnly: false, variant: undefined }`,
+    argTypes: `{ placeholder: { control: 'text' }, feedback: { control: 'boolean' }, toggleMask: { control: 'boolean' }, disabled: { control: 'boolean' }, invalid: { control: 'boolean' }, readOnly: { control: 'boolean' }, variant: { control: 'inline-radio', options: [undefined, 'outlined', 'filled'] } }`,
     playground: `<Password {...args} value={args.value ?? ''} onChange={(event) => { updateArgs({ value: event.target.value }); args.onChange?.(event); } } />`,
+    docsImports: `import { Password } from 'primereact/password';`,
+    docsVariations: [
+      { title: 'States', code: `<Password placeholder="Default" />
+<Password placeholder="Disabled" disabled />
+<Password placeholder="Read-only" value="Read-only value" readOnly />
+<Password placeholder="Invalid" invalid />` },
+      { title: 'Feedback', code: `<Password placeholder="With feedback" feedback />
+<Password placeholder="Without feedback" feedback={false} />` },
+      { title: 'Toggle mask', code: `<Password placeholder="Show password" toggleMask />` },
+      { title: 'Variants', code: `<Password placeholder="Outlined" variant="outlined" />
+<Password placeholder="Filled" variant="filled" />` },
+      { title: 'Form composition', code: `<div className="flex flex-column gap-2">
+  <label htmlFor="password">Password</label>
+  <Password inputId="password" placeholder="Enter your password" toggleMask />
+</div>` }
+    ]
   },
   {
     name: 'RadioButton',

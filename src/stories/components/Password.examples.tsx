@@ -2,7 +2,7 @@ import { useState, type ComponentProps } from 'react';
 import { Password } from 'primereact/password';
 
 export type ExampleArgs = ComponentProps<typeof Password>;
-export const defaultArgs: ExampleArgs = { value: '', placeholder: 'Password', feedback: true, toggleMask: true };
+export const defaultArgs: ExampleArgs = { value: '', placeholder: 'Password', feedback: true, toggleMask: true, disabled: false, invalid: false, readOnly: false, variant: undefined };
 
 export function Playground({ args, updateArgs }: {
   args: ExampleArgs;
