@@ -504,10 +504,20 @@ function productTemplate(product: (typeof products)[number], layout?: string) {
     name: 'Fieldset',
     prime: 'fieldset',
     importName: 'Fieldset',
-    description: 'Semantic grouping container with a legend.',
-    args: `{ legend: 'Legend', toggleable: true, collapsed: false }`,
-    argTypes: `{ legend: { control: 'text' }, toggleable: { control: 'boolean' } }`,
-    playground: `<Fieldset {...args} onToggle={(event) => { updateArgs({ collapsed: event.value }); args.onToggle?.(event); }}><p>Fieldset content.</p></Fieldset>`,
+    description: 'Semantic grouping container with an optional legend and collapsible content.',
+    exampleType: `ComponentProps<typeof Fieldset> & {
+  contentText?: string;
+}`,
+    args: `{ legend: 'Legend', toggleable: true, collapsed: false, expandIcon: undefined, collapseIcon: undefined, contentText: 'Fieldset content.' }`,
+    argTypes: `{ legend: { control: 'text' }, toggleable: { control: 'boolean' }, collapsed: { control: 'boolean', if: { arg: 'toggleable', truthy: true } }, expandIcon: { control: 'select', options: [undefined, 'pi pi-plus', 'pi pi-chevron-down', 'pi pi-angle-down', 'pi pi-caret-down'], if: { arg: 'toggleable', truthy: true } }, collapseIcon: { control: 'select', options: [undefined, 'pi pi-minus', 'pi pi-chevron-up', 'pi pi-angle-up', 'pi pi-caret-up'], if: { arg: 'toggleable', truthy: true } }, contentText: { control: 'text', description: 'Fallback content. Native children take precedence, including null.' } }`,
+    hooks: `const { contentText, children, ...fieldsetProps } = args;`,
+    playground: `<Fieldset {...fieldsetProps} onToggle={(event) => { updateArgs({ collapsed: event.value }); args.onToggle?.(event); }}>{children !== undefined ? children : <p className="m-0 line-height-3">{contentText}</p>}</Fieldset>`,
+    docsVariations: [
+      { title: 'Static fieldset', code: `<Example initialArgs={{ toggleable: false, legend: 'Account details' }} />`, source: 'exampleSource + ' + JSON.stringify("\n// Render a static fieldset:\n<Example initialArgs={{ toggleable: false, legend: 'Account details' }} />") },
+      { title: 'Toggleable', code: `<Example initialArgs={{ toggleable: true, legend: 'Preferences' }} />`, source: 'exampleSource + ' + JSON.stringify("\n// Render a toggleable fieldset:\n<Example initialArgs={{ toggleable: true, legend: 'Preferences' }} />") },
+      { title: 'Collapsed by default', code: `<Example initialArgs={{ toggleable: true, collapsed: true, legend: 'Advanced settings' }} />`, source: 'exampleSource + ' + JSON.stringify("\n// Render a collapsed fieldset:\n<Example initialArgs={{ toggleable: true, collapsed: true, legend: 'Advanced settings' }} />") },
+      { title: 'Custom toggle icons', code: `<Example initialArgs={{ toggleable: true, expandIcon: 'pi pi-chevron-down', collapseIcon: 'pi pi-chevron-up', legend: 'Notifications' }} />`, source: 'exampleSource + ' + JSON.stringify("\n// Render custom toggle icons:\n<Example initialArgs={{ toggleable: true, expandIcon: 'pi pi-chevron-down', collapseIcon: 'pi pi-chevron-up', legend: 'Notifications' }} />") }
+    ],
   },
   {
     name: 'Card',

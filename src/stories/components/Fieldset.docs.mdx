@@ -6,7 +6,7 @@ import exampleSource from "./Fieldset.examples.tsx?raw";
 
 <Title>Fieldset</Title>
 
-<Subtitle>Semantic grouping container with a legend.</Subtitle>
+<Subtitle>Semantic grouping container with an optional legend and collapsible content.</Subtitle>
 
 ## Usage
 
@@ -16,11 +16,37 @@ import exampleSource from "./Fieldset.examples.tsx?raw";
 
 ## Variations
 
+### Static fieldset
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ toggleable: false, legend: 'Account details' }} />
+</div>
+
+<Source code={exampleSource + "\n// Render a static fieldset:\n<Example initialArgs={{ toggleable: false, legend: 'Account details' }} />"} language="tsx" />
+
 ### Toggleable
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ toggleable: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ toggleable: true, legend: 'Preferences' }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ toggleable: true }} />"} language="tsx" />
+<Source code={exampleSource + "\n// Render a toggleable fieldset:\n<Example initialArgs={{ toggleable: true, legend: 'Preferences' }} />"} language="tsx" />
+
+### Collapsed by default
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ toggleable: true, collapsed: true, legend: 'Advanced settings' }} />
+</div>
+
+<Source code={exampleSource + "\n// Render a collapsed fieldset:\n<Example initialArgs={{ toggleable: true, collapsed: true, legend: 'Advanced settings' }} />"} language="tsx" />
+
+### Custom toggle icons
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ toggleable: true, expandIcon: 'pi pi-chevron-down', collapseIcon: 'pi pi-chevron-up', legend: 'Notifications' }} />
+</div>
+
+<Source code={exampleSource + "\n// Render custom toggle icons:\n<Example initialArgs={{ toggleable: true, expandIcon: 'pi pi-chevron-down', collapseIcon: 'pi pi-chevron-up', legend: 'Notifications' }} />"} language="tsx" />
 
 ## Playground
 
