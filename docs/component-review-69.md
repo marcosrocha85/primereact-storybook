@@ -907,3 +907,31 @@ verifies nested leaf command feedback, Summary structure, copyable sources, and 
 The command helper's source preserves supplied command callbacks; PT callbacks, function templates,
 URLs/navigation, mobile menu interaction, inherited events, imperative methods, and every MenuItem
 value combination remain forwarded but are not exhaustively browser-tested.
+
+### OrderList API audit — issue #43
+
+Inspected the Button documentation/story reference, the OrderList generator entry and generated
+files, the Sakai UI Kit list example at `vendor/sakai-react/app/(main)/uikit/list/page.tsx`, and
+the installed PrimeReact `orderlist.d.ts` and implementation. The Sakai example uses a controlled
+object collection, `dataKey`, a custom item template, responsive styling, and the native reorder
+callback. The curated Summary covers the default list, filtering, drag-and-drop, and responsive
+breakpoint compositions. Default remains one controlled OrderList instance.
+
+| Native surface | Treatment |
+| --- | --- |
+| `value`, `dataKey`, `itemTemplate` | `value` is adapted only to synchronize the controlled story after reorder; `dataKey` is forwarded unchanged. The default template is used only when no native `itemTemplate` is supplied, so custom React-node/function templates remain supported. |
+| `header`, `listStyle`, `breakpoint`, `dragdrop`, `filter`, `filterBy`, `filterMatchMode`, `filterPlaceholder`, `filterLocale` | Forwarded unchanged. Header, filtering, match modes, drag-and-drop, and responsive breakpoint are exposed through focused Controls or Summary examples; list styling, locale, and custom placeholder remain available through native args. |
+| `autoOptionFocus`, `focusOnHover`, `tabIndex`, `ariaLabel`, `ariaLabelledBy` | Exposed or forwarded unchanged. Focus behavior is represented by Controls; listbox keyboard navigation and accessible naming remain native. |
+| `moveUpIcon`, `moveTopIcon`, `moveDownIcon`, `moveBottomIcon`, `filterIcon` | Forwarded unchanged, including PrimeReact `IconType` string, node, and function forms. Icon customization is outside the curated Controls. |
+| `filterTemplate` and filter callbacks | `filterTemplate` is forwarded unchanged, including its native `filter` and `reset` options. The installed `OrderListProps` declaration exposes no separate typed filter callback; filtering remains native/internal and the playground does not synthesize one. |
+| `onChange` | Adapted only to call `updateArgs({ value: event.value })`, then invokes the supplied callback with the original PrimeReact reorder event. The Code panel and focused browser check verify the preserved callback path and selected-item reordering. |
+| `pt`, `ptOptions`, `unstyled` | Forwarded unchanged. Native root, controls, button, container, header, list, item, droppoint, icon, filter input/icon/container, and lifecycle-hook pass-through sections retain their value/function forms; no wrapper PT defaults replace caller entries. |
+| `children`, inherited `HTMLAttributes<HTMLDivElement>`, `id`, `className`, `style`, `title`, `data-*`, `aria-*`, and DOM events | Forwarded unchanged through the native props spread. These include focus, blur, keyboard, mouse, pointer, touch, drag, clipboard, animation, transition, and capture event handlers. |
+| Nested models, selection/value modes, templates, and imperative API | The component has an object-array `value` model and an `itemTemplate`; it has no separate nested option model or alternate selection/value mode. The native `getElement()` ref method remains available and is outside Controls. |
+
+This inventory is source inspection, not exhaustive behavioral testing. The focused browser check
+verifies moving a selected item upward, filtering, Summary/Default structure, copyable sources,
+Controls placement, responsive rendering, and no runtime exceptions. Custom item templates, drag
+pointer sequences, filter templates/locales, icon function forms, PT callbacks, inherited DOM
+events, keyboard multi-selection, and the imperative ref method remain forwarded but are not
+exhaustively tested.

@@ -6,7 +6,7 @@ import exampleSource from "./OrderList.examples.tsx?raw";
 
 <Title>OrderList</Title>
 
-<Subtitle>Orderable list.</Subtitle>
+<Subtitle>Orderable list used by Sakai for reordering, filtering, and drag-and-drop collections.</Subtitle>
 
 ## Usage
 
@@ -16,11 +16,29 @@ import exampleSource from "./OrderList.examples.tsx?raw";
 
 ## Variations
 
-### Filter
+### Filtering
 
-<div className="component-example sb-unstyled"><Example initialArgs={{ filter: true }} /></div>
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ filter: true, filterPlaceholder: 'Search products' }} />
+</div>
 
-<Source code={exampleSource + "\n// Render this variation:\n<Example initialArgs={{ filter: true }} />"} language="tsx" />
+<Source code={"<Example initialArgs={{ filter: true, filterPlaceholder: 'Search products' }} />"} language="tsx" />
+
+### Drag and drop
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ dragdrop: true }} />
+</div>
+
+<Source code={"<Example initialArgs={{ dragdrop: true }} />"} language="tsx" />
+
+### Responsive list
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ breakpoint: '640px', className: 'w-full' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ breakpoint: '640px', className: 'w-full' }} />"} language="tsx" />
 
 ## Playground
 
