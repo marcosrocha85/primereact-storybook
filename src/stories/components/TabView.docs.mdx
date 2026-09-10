@@ -1,12 +1,13 @@
 import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Example } from "./TabView.examples";
 import exampleSource from "./TabView.examples.tsx?raw";
+import { TabPanel, TabView } from "primereact/tabview";
 
 <Meta title="Components/TabView/Summary" />
 
 <Title>TabView</Title>
 
-<Subtitle>Tabbed navigation.</Subtitle>
+<Subtitle>Tabbed navigation for organizing related content into panels.</Subtitle>
 
 ## Usage
 
@@ -16,7 +17,40 @@ import exampleSource from "./TabView.examples.tsx?raw";
 
 ## Variations
 
-The usage example shows the base composition. Use Default to explore the documented properties.
+### Disabled tab
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<TabView activeIndex={0}>
+  <TabPanel header="Available">This panel can be selected.</TabPanel>
+  <TabPanel header="Disabled" disabled>This panel is unavailable.</TabPanel>
+</TabView>
+</div>
+
+<Source code={"<TabView activeIndex={0}>\n  <TabPanel header=\"Available\">This panel can be selected.</TabPanel>\n  <TabPanel header=\"Disabled\" disabled>This panel is unavailable.</TabPanel>\n</TabView>"} language="tsx" />
+
+### Closable tabs with icons
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<TabView activeIndex={0}>
+  <TabPanel header="Profile" leftIcon="pi pi-user" closable>Profile details.</TabPanel>
+  <TabPanel header="Settings" leftIcon="pi pi-cog" closable>Application settings.</TabPanel>
+</TabView>
+</div>
+
+<Source code={"<TabView activeIndex={0}>\n  <TabPanel header=\"Profile\" leftIcon=\"pi pi-user\" closable>Profile details.</TabPanel>\n  <TabPanel header=\"Settings\" leftIcon=\"pi pi-cog\" closable>Application settings.</TabPanel>\n</TabView>"} language="tsx" />
+
+### Scrollable tab headers
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<TabView scrollable>
+  <TabPanel header="Overview">Overview content.</TabPanel>
+  <TabPanel header="Details">Details content.</TabPanel>
+  <TabPanel header="Activity">Activity content.</TabPanel>
+  <TabPanel header="History">History content.</TabPanel>
+</TabView>
+</div>
+
+<Source code={"<TabView scrollable>\n  <TabPanel header=\"Overview\">Overview content.</TabPanel>\n  <TabPanel header=\"Details\">Details content.</TabPanel>\n  <TabPanel header=\"Activity\">Activity content.</TabPanel>\n  <TabPanel header=\"History\">History content.</TabPanel>\n</TabView>"} language="tsx" />
 
 ## Playground
 

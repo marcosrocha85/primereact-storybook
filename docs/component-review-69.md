@@ -434,6 +434,32 @@ Controls placement, runtime safety, and desktop/mobile rendering. Keyboard navig
 commands/templates, PT callbacks, every inherited DOM event, ref methods, and all MenuItem combinations
 remain forwarded but are not exhaustively tested.
 
+### TabView API audit — issue #60
+
+Inspected the Button documentation/story reference, the TabView generator entry and generated files,
+the Sakai UI Kit TabView example at `vendor/sakai-react/app/(main)/uikit/panel/page.tsx`, and the installed
+PrimeReact `tabview.d.ts` and implementation. The Summary now curates the base, disabled, closable/icon,
+and scrollable compositions. Default remains one native TabView instance with editable panel text and
+Controls for active selection and rendering behavior.
+
+| Native surface | Treatment |
+| --- | --- |
+| `activeIndex`, `renderActiveOnly`, `scrollable` | Forwarded unchanged. `activeIndex` is adapted only to synchronize the controlled playground after selection; the native numeric index mode is retained. The common rendering and scrollable header variations are exposed through Controls and Summary. |
+| `children` and TabPanel models | Forwarded unchanged. The playground supplies three fallback `TabPanel` children only when `children` is `undefined`; supplied children, including `null`, remain authoritative. Native `TabPanel` fields `closable`, `className`, `contentStyle`, `contentClassName`, `header`, `headerTemplate`, `headerStyle`, `headerClassName`, `leftIcon`, `rightIcon`, `prevButton`, `nextButton`, `closeIcon`, `disabled`, `pt`, `ptOptions`, `style`, `unstyled`, and `visible` remain available. Header icons, disabled state, and closable tabs are curated in Summary. |
+| `onBeforeTabChange`, `onBeforeTabClose`, `onTabClose` | Forwarded unchanged. The wrapper does not synthesize, suppress, or alter close/guard callbacks. |
+| `onTabChange` | Adapted only to call `updateArgs({ activeIndex: event.index })`, then invokes the supplied callback with the exact original PrimeReact event. This is covered by `tests/tabview-contract.test.mjs`. |
+| `id`, `className`, `style`, `aria-*`, `data-*`, inherited `HTMLAttributes<HTMLDivElement>`, and DOM events | Forwarded unchanged through `{...tabViewProps}`. This includes focus, blur, keyboard, mouse, pointer, touch, drag, clipboard, animation, transition, and capture handlers. |
+| `panelContainerClassName`, `panelContainerStyle`, `pt`, `ptOptions`, `unstyled` | Forwarded unchanged. Native root, navigation container/content/list, inkbar, scroll buttons/icons, panel container, tab, TabPanel root/header/action/title/content, and lifecycle pass-through value/function forms remain available; no wrapper PT defaults replace caller values. |
+| Templates and icons | TabPanel `headerTemplate` and the `leftIcon`, `rightIcon`, `prevButton`, `nextButton`, and `closeIcon` `IconType` values support native React node/function forms. These remain forwarded and are represented only by static string-icon examples where useful. |
+| Ref and imperative API | Native `reset()` and `getElement()` remain available through the component ref and outside Controls. TabPanel has no separate selection/value mode or imperative API. |
+
+This inventory is source inspection, not exhaustive behavioral testing. The focused contract test verifies
+representative native props, explicit children, pass-through values, controlled active-index synchronization,
+and supplied `onTabChange` preservation. The component browser check verifies active-tab selection, Summary/Default
+structure, copyable sources, Controls placement, runtime safety, and desktop/mobile rendering. Close prevention,
+close callbacks, keyboard navigation, scroll-button behavior, custom header/icon/template functions, PT callback
+forms, refs, lifecycle hooks, and every inherited DOM event remain forwarded but are not exhaustively tested.
+
 ### Sidebar API inventory — issue #53
 
 The inventory below is based on the installed PrimeReact `SidebarProps`, `SidebarPassThroughOptions`, and Sidebar implementation, the Button story/documentation reference, and the Sakai UI Kit overlay example at `vendor/sakai-react/app/(main)/uikit/overlay/page.tsx`. It records the native contract reviewed for this issue; it is not exhaustive interaction testing.
