@@ -1,12 +1,13 @@
 import { Meta, Source, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Example } from "./Menubar.examples";
 import exampleSource from "./Menubar.examples.tsx?raw";
+import { Menubar } from "primereact/menubar";
 
 <Meta title="Components/Menubar/Summary" />
 
 <Title>Menubar</Title>
 
-<Subtitle>Primary horizontal menu.</Subtitle>
+<Subtitle>Primary horizontal navigation with nested menu items and command feedback. Native menu item commands, templates, URLs, pass-through props, and inherited attributes remain available through the component props.</Subtitle>
 
 ## Usage
 
@@ -16,7 +17,37 @@ import exampleSource from "./Menubar.examples.tsx?raw";
 
 ## Variations
 
-The usage example shows the base composition. Use Default to explore the documented properties.
+### Nested navigation
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ model: [{ label: 'Products', icon: 'pi pi-box', items: [{ label: 'New product' }, { label: 'Catalog' }] }, { label: 'Orders', icon: 'pi pi-shopping-cart' }] }} />
+</div>
+
+<Source code={"<Example initialArgs={{ model: [{ label: 'Products', icon: 'pi pi-box', items: [{ label: 'New product' }, { label: 'Catalog' }] }, { label: 'Orders', icon: 'pi pi-shopping-cart' }] }} />"} language="tsx" />
+
+### Separators and disabled items
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ model: [{ label: 'Save', icon: 'pi pi-save' }, { separator: true }, { label: 'Delete', icon: 'pi pi-trash', disabled: true }] }} />
+</div>
+
+<Source code={"<Example initialArgs={{ model: [{ label: 'Save', icon: 'pi pi-save' }, { separator: true }, { label: 'Delete', icon: 'pi pi-trash', disabled: true }] }} />"} language="tsx" />
+
+### Start and end content
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ start: <strong className="mr-3">Acme</strong>, end: <span className="text-color-secondary">Signed in</span> }} />
+</div>
+
+<Source code={"<Example initialArgs={{ start: <strong className=\"mr-3\">Acme</strong>, end: <span className=\"text-color-secondary\">Signed in</span> }} />"} language="tsx" />
+
+### Custom menu icons
+
+<div className="component-example sb-unstyled flex flex-wrap align-items-center gap-2">
+<Example initialArgs={{ menuIcon: 'pi pi-bars', submenuIcon: 'pi pi-chevron-down' }} />
+</div>
+
+<Source code={"<Example initialArgs={{ menuIcon: 'pi pi-bars', submenuIcon: 'pi pi-chevron-down' }} />"} language="tsx" />
 
 ## Playground
 

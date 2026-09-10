@@ -879,12 +879,33 @@ function productTemplate(product: (typeof products)[number], layout?: string) {
     prime: 'menubar',
     importName: 'Menubar',
     hooks: `const [action, setAction] = useState('No action yet');`,
-    extraImports: `import { menuWithActions } from '../menuExamples';`,
-    description: 'Primary horizontal menu.',
-    renderPrefix: `const menuItems = [{ label: 'File', icon: 'pi pi-fw pi-file' }, { label: 'Edit', icon: 'pi pi-fw pi-pencil' }];`,
-    args: `{ model: menuItems }`,
-    argTypes: `{ style: { control: 'object' }, model: { control: 'object' } }`,
-    playground: `<><Menubar {...args} model={menuWithActions(args.model ?? [], setAction)} /><p role="status">{action}</p></>`,
+    extraImports: `import type { MenuItem } from 'primereact/menuitem';
+import { menuWithActions } from '../menuExamples';`,
+    description: 'Primary horizontal navigation with nested menu items and command feedback. Native menu item commands, templates, URLs, pass-through props, and inherited attributes remain available through the component props.',
+    renderPrefix: `const menuItems: MenuItem[] = [
+  { label: 'File', icon: 'pi pi-fw pi-file', items: [{ label: 'New', icon: 'pi pi-plus' }, { label: 'Open', icon: 'pi pi-folder-open' }] },
+  { label: 'Edit', icon: 'pi pi-fw pi-pencil', items: [{ label: 'Undo', icon: 'pi pi-undo' }, { label: 'Redo', icon: 'pi pi-refresh' }] },
+  { label: 'Help', icon: 'pi pi-fw pi-question-circle' }
+];`,
+    args: `{ model: menuItems, ariaLabel: 'Main navigation', className: '', style: {} }`,
+    argTypes: `{
+    model: { control: 'object', description: 'MenuItem[] model. Edit labels, icons, nested items, separators, disabled/visible states, URLs, templates, and command data.' },
+    menuIcon: { control: 'select', options: [undefined, 'pi pi-bars', 'pi pi-list'] },
+    submenuIcon: { control: 'select', options: [undefined, 'pi pi-angle-down', 'pi pi-chevron-down', 'pi pi-angle-right'] },
+    ariaLabel: { control: 'text' },
+    ariaLabelledBy: { control: 'text' },
+    className: { control: 'text' },
+    style: { control: 'object' },
+    unstyled: { control: 'boolean' }
+  }`,
+    playground: `<div style={{ width: '100%', minWidth: 0 }}><Menubar {...args} model={menuWithActions(args.model ?? [], setAction)} /><p role="status">{action}</p></div>`,
+    docsImports: `import { Menubar } from "primereact/menubar";`,
+    docsVariations: [
+      { title: 'Nested navigation', code: `<Example initialArgs={{ model: [{ label: 'Products', icon: 'pi pi-box', items: [{ label: 'New product' }, { label: 'Catalog' }] }, { label: 'Orders', icon: 'pi pi-shopping-cart' }] }} />` },
+      { title: 'Separators and disabled items', code: `<Example initialArgs={{ model: [{ label: 'Save', icon: 'pi pi-save' }, { separator: true }, { label: 'Delete', icon: 'pi pi-trash', disabled: true }] }} />` },
+      { title: 'Start and end content', code: `<Example initialArgs={{ start: <strong className="mr-3">Acme</strong>, end: <span className="text-color-secondary">Signed in</span> }} />` },
+      { title: 'Custom menu icons', code: `<Example initialArgs={{ menuIcon: 'pi pi-bars', submenuIcon: 'pi pi-chevron-down' }} />` }
+    ],
   },
   {
     name: 'BreadCrumb',

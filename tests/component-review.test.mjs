@@ -69,6 +69,24 @@ test('Dialog: open, close and reopen at desktop and mobile widths', async () => 
   }
 });
 
+test('Menubar: nested commands report feedback and Summary stays control-free', async () => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(`${baseURL}/?path=/docs/components-menubar-summary--summary`);
+  const preview = page.frameLocator('#storybook-preview-iframe');
+  await preview.locator('.sbdocs-content h1').waitFor();
+  assert.deepEqual(await preview.locator('.sbdocs-content h3').allTextContents(), ['Nested navigation', 'Separators and disabled items', 'Start and end content', 'Custom menu icons']);
+  assert.equal(await preview.locator('.docblock-argstable').count(), 0, 'Summary has no Controls');
+  assert.ok(await preview.locator('.docblock-source').count() >= 5, 'Summary examples have copyable source');
+  await preview.getByRole('link', { name: 'Default', exact: true }).click();
+  const root = preview.locator('#storybook-root');
+  await root.locator('.p-menubar').waitFor();
+  await root.getByRole('menuitem', { name: 'File', exact: true }).click();
+  await root.getByRole('menuitem', { name: 'New', exact: true }).click();
+  await root.getByRole('status').filter({ hasText: 'New selected' }).waitFor();
+  await root.getByRole('menuitem', { name: 'Help', exact: true }).click();
+  await root.getByRole('status').filter({ hasText: 'Help selected' }).waitFor();
+});
+
 test('Calendar: Sakai variations, date Controls, formatting and reset', async () => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto(`${baseURL}/?path=/docs/components-calendar-summary--summary`);
